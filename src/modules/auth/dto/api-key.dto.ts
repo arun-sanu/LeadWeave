@@ -105,6 +105,12 @@ export class ValidateApiKeyResponseDto {
 
   @ApiPropertyOptional({ enum: ApiKeyRole, description: "The key's role; present only when valid." })
   role?: ApiKeyRole;
+
+  @ApiPropertyOptional({ description: 'The tenant company ID; present when tenant scoped.' })
+  companyId?: string;
+
+  @ApiPropertyOptional({ description: 'The user ID; present when authenticated via user token.' })
+  userId?: string;
 }
 
 export class UpdateApiKeyDto {
@@ -137,4 +143,16 @@ export class UpdateApiKeyDto {
   @IsOptional()
   @IsDateString()
   expiresAt?: string;
+}
+
+export class CreateSessionDto {
+  @ApiPropertyOptional({ description: 'API Key to authenticate with' })
+  @IsOptional()
+  @IsString()
+  apiKey?: string;
+
+  @ApiPropertyOptional({ description: 'Supabase Bearer Token to authenticate with' })
+  @IsOptional()
+  @IsString()
+  token?: string;
 }

@@ -148,6 +148,7 @@ describe('MessageService', () => {
       take: jest.Mock;
       andWhere: jest.Mock;
       getManyAndCount: jest.Mock;
+      getMany: jest.Mock;
     }
     const makeQb = (): QbMock => {
       const qb: QbMock = {
@@ -157,6 +158,7 @@ describe('MessageService', () => {
         take: jest.fn(),
         andWhere: jest.fn(),
         getManyAndCount: jest.fn().mockResolvedValue([[], 0]),
+        getMany: jest.fn().mockResolvedValue([]),
       };
       qb.where.mockReturnValue(qb);
       qb.orderBy.mockReturnValue(qb);
@@ -180,6 +182,14 @@ describe('MessageService', () => {
       await service.getMessages('sess-1', { limit: 999, offset: -5 });
       expect(qb.take).toHaveBeenCalledWith(100);
       expect(qb.skip).toHaveBeenCalledWith(0);
+    });
+
+    it('skips COUNT query when includeTotal is false', async () => {
+      const qb = makeQb();
+      (repository.createQueryBuilder as jest.Mock).mockReturnValue(qb);
+      await service.getMessages('sess-1', { includeTotal: false });
+      expect(qb.getMany).toHaveBeenCalled();
+      expect(qb.getManyAndCount).not.toHaveBeenCalled();
     });
   });
 

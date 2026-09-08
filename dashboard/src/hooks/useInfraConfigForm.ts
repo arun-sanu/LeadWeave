@@ -81,7 +81,7 @@ export function useInfraConfigForm(
     port: '5432',
     username: 'postgres',
     password: '',
-    database: 'openwa',
+    database: 'leadweave',
     schema: 'public',
     poolSize: 10,
     sslEnabled: false,
@@ -142,7 +142,7 @@ export function useInfraConfigForm(
       ...prev,
       type: (infraStatus.database.type as 'sqlite' | 'postgres') || 'sqlite',
       host: infraStatus.database.host || 'localhost',
-      // builtIn reflects whether OpenWA's bundled container is actually running (live), not saved intent.
+      // builtIn reflects whether LeadWeave's bundled container is actually running (live), not saved intent.
       builtIn: infraStatus.database.builtIn,
     }));
     setRedisConfig(prev => ({
@@ -217,7 +217,7 @@ export function useInfraConfigForm(
   // is actually running is reported by the card badge and, when the two differ, named by the card's
   // own notice.
   useEffect(() => {
-    const seed = savedConfig?.engine.type;
+    const seed = savedConfig?.engine?.type;
     if (!seed || engineHydrated.current || engineTouched.current) return;
     engineHydrated.current = true;
     setEngineConfig(prev => (prev.type === seed ? prev : { ...prev, type: seed }));

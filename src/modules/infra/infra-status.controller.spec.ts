@@ -160,9 +160,9 @@ describe('InfraStatusController.getStatus storage (reads the real storage.localP
     // `./uploads` fallback instead of the real path StorageService uses (`storage.localPath`).
     const status = await buildController({
       'storage.type': 'local',
-      'storage.localPath': '/srv/openwa/media',
+      'storage.localPath': '/srv/leadweave/media',
     }).getStatus();
-    expect(status.storage.path).toBe('/srv/openwa/media');
+    expect(status.storage.path).toBe('/srv/leadweave/media');
   });
 
   it('falls back to ./data/media (matching StorageService) when storage.localPath is unset', async () => {
@@ -171,9 +171,9 @@ describe('InfraStatusController.getStatus storage (reads the real storage.localP
   });
 
   it('reports the bucket in S3 mode so the active backend is visible', async () => {
-    const status = await buildController({ 'storage.type': 's3', 'storage.s3.bucket': 'my-openwa-bucket' }).getStatus();
+    const status = await buildController({ 'storage.type': 's3', 'storage.s3.bucket': 'my-leadweave-bucket' }).getStatus();
     expect(status.storage.type).toBe('s3');
-    expect(status.storage.bucket).toBe('my-openwa-bucket');
+    expect(status.storage.bucket).toBe('my-leadweave-bucket');
   });
 
   it('omits bucket in local mode (no fabricated field)', async () => {

@@ -26,9 +26,9 @@ const POSTGRES_ENABLED = process.env.DATABASE_TYPE === 'postgres';
   const connectionOptions = {
     host: process.env.DATABASE_HOST || 'localhost',
     port: Number(process.env.DATABASE_PORT || 5432),
-    username: process.env.DATABASE_USERNAME || 'openwa',
-    password: process.env.DATABASE_PASSWORD || 'openwa',
-    database: process.env.DATABASE_NAME || 'openwa',
+    username: process.env.DATABASE_USERNAME || 'leadweave',
+    password: process.env.DATABASE_PASSWORD || 'leadweave',
+    database: process.env.DATABASE_NAME || 'leadweave',
   };
 
   // The exact options shape app.module.ts hands to createBootDataSource for the postgres data

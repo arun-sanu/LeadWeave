@@ -19,9 +19,9 @@ const PG_OPTIONS: DataSourceOptions = {
   type: 'postgres',
   host: 'db',
   port: 5432,
-  username: 'openwa',
+  username: 'leadweave',
   password: 'secret',
-  database: 'openwa',
+  database: 'leadweave',
   // The app config still carries this; the factory takes over execution and must neutralize it.
   migrationsRun: true,
   migrationsTransactionMode: 'all',
@@ -116,9 +116,9 @@ describe('createBootDataSource (postgres boot migrations)', () => {
       expect.objectContaining({
         host: 'db',
         port: 5432,
-        user: 'openwa',
+        user: 'leadweave',
         password: 'secret',
-        database: 'openwa',
+        database: 'leadweave',
         connectionTimeoutMillis: 10000,
         options: '-c statement_timeout=0',
       }),
@@ -158,7 +158,7 @@ describe('createBootDataSource (postgres boot migrations)', () => {
   });
 
   it('keeps the default @nestjs/typeorm path for non-postgres options (no lock, no initialize)', async () => {
-    const sqliteOptions: DataSourceOptions = { type: 'better-sqlite3', database: './data/openwa.sqlite' };
+    const sqliteOptions: DataSourceOptions = { type: 'better-sqlite3', database: './data/leadweave.sqlite' };
     const dataSource = {
       initialize: jest.fn(() => Promise.resolve()),
       runMigrations: jest.fn(() => Promise.resolve()),
@@ -296,8 +296,8 @@ describe('createBootDataSource (postgres boot migrations)', () => {
       expect(clientCtor).toHaveBeenCalledWith(
         expect.objectContaining({
           host: 'db',
-          user: 'openwa',
-          database: 'openwa',
+          user: 'leadweave',
+          database: 'leadweave',
           options: '-c statement_timeout=0',
         }),
       );

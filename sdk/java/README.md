@@ -1,6 +1,6 @@
-# OpenWA Java SDK
+# LeadWeave Java SDK
 
-Official Java client for the [OpenWA](https://github.com/rmyndharis/OpenWA)
+Official Java client for the [LeadWeave](https://github.com/rmyndharis/LeadWeave)
 WhatsApp API Gateway.
 
 Hand-written against the exact API surface (paths, DTOs, response shapes) and
@@ -15,7 +15,7 @@ Java 17+, one runtime dependency ([Gson](https://github.com/google/gson)).
 ```xml
 <dependency>
   <groupId>com.rmyndharis</groupId>
-  <artifactId>openwa</artifactId>
+  <artifactId>leadweave</artifactId>
   <version>0.5.0</version>
 </dependency>
 ```
@@ -23,24 +23,24 @@ Java 17+, one runtime dependency ([Gson](https://github.com/google/gson)).
 **Gradle**
 
 ```groovy
-implementation 'com.rmyndharis:openwa:0.5.0'
+implementation 'com.rmyndharis:leadweave:0.5.0'
 ```
 
 ## Quickstart
 
 ```java
-import com.rmyndharis.openwa.OpenWAClient;
-import com.rmyndharis.openwa.model.MessageResponse;
-import com.rmyndharis.openwa.model.SendTextRequest;
+import com.rmyndharis.leadweave.LeadWeaveClient;
+import com.rmyndharis.leadweave.model.MessageResponse;
+import com.rmyndharis.leadweave.model.SendTextRequest;
 
-OpenWAClient client = new OpenWAClient("http://localhost:2785", "owa_k1_…");
+LeadWeaveClient client = new LeadWeaveClient("http://localhost:2785", "owa_k1_…");
 
 client.sessions.start("my-session");
 
 MessageResponse result = client.messages.sendText("my-session",
     SendTextRequest.builder()
         .chatId("628123456789@c.us")
-        .text("Hello from the OpenWA Java SDK!")
+        .text("Hello from the LeadWeave Java SDK!")
         .build());
 
 System.out.println(result.messageId());
@@ -50,10 +50,10 @@ For full control over configuration (timeout, default headers, a custom
 transport), build a `ClientConfig`:
 
 ```java
-import com.rmyndharis.openwa.ClientConfig;
+import com.rmyndharis.leadweave.ClientConfig;
 import java.time.Duration;
 
-OpenWAClient client = new OpenWAClient(ClientConfig.builder()
+LeadWeaveClient client = new LeadWeaveClient(ClientConfig.builder()
     .baseUrl("https://wa.example.com")
     .apiKey("owa_k1_…")
     .timeout(Duration.ofSeconds(15))
@@ -79,31 +79,31 @@ Errors are a typed, unchecked hierarchy — branch with `instanceof` or on
 `.status()`:
 
 ```java
-import com.rmyndharis.openwa.errors.OpenWAConflictError;
-import com.rmyndharis.openwa.errors.OpenWANotFoundError;
+import com.rmyndharis.leadweave.errors.LeadWeaveConflictError;
+import com.rmyndharis.leadweave.errors.LeadWeaveNotFoundError;
 
 try {
     client.messages.sendText("my-session", body);
-} catch (OpenWAConflictError e) {
+} catch (LeadWeaveConflictError e) {
     // 409 — engine not ready
-} catch (OpenWANotFoundError e) {
+} catch (LeadWeaveNotFoundError e) {
     // 404 — session or chat not found
 }
 ```
 
 | Class                           | HTTP | Meaning                                                 |
 | ------------------------------- | ---- | ------------------------------------------------------- |
-| `OpenWAAuthError`               | 401  | Missing or invalid API key                              |
-| `OpenWAForbiddenError`          | 403  | API key role insufficient                               |
-| `OpenWANotFoundError`           | 404  | Resource not found                                      |
-| `OpenWAConflictError`           | 409  | Engine not ready                                        |
-| `OpenWARateLimitError`          | 429  | Rate limited                                            |
-| `OpenWANotImplementedError`     | 501  | Active engine does not support the call                 |
-| `OpenWAServiceUnavailableError` | 503  | Engine did not confirm in time — the only retryable one |
-| `OpenWAApiError`                | —    | Any other non-2xx (carries `.status()`)                 |
-| `OpenWATimeoutError`            | —    | Request exceeded the configured timeout                 |
+| `LeadWeaveAuthError`               | 401  | Missing or invalid API key                              |
+| `LeadWeaveForbiddenError`          | 403  | API key role insufficient                               |
+| `LeadWeaveNotFoundError`           | 404  | Resource not found                                      |
+| `LeadWeaveConflictError`           | 409  | Engine not ready                                        |
+| `LeadWeaveRateLimitError`          | 429  | Rate limited                                            |
+| `LeadWeaveNotImplementedError`     | 501  | Active engine does not support the call                 |
+| `LeadWeaveServiceUnavailableError` | 503  | Engine did not confirm in time — the only retryable one |
+| `LeadWeaveApiError`                | —    | Any other non-2xx (carries `.status()`)                 |
+| `LeadWeaveTimeoutError`            | —    | Request exceeded the configured timeout                 |
 
-All extend `OpenWAError` (a `RuntimeException`).
+All extend `LeadWeaveError` (a `RuntimeException`).
 
 ## Reliability & security
 
@@ -113,7 +113,7 @@ All extend `OpenWAError` (a `RuntimeException`).
 - **No automatic retries.** A failed request throws immediately; wrap calls in
   your own backoff if you need retries (especially for `429`). Inject a custom
   `HttpTransport` for retry or observability middleware.
-- **Redirects are never followed.** A `3xx` surfaces as an `OpenWAApiError`
+- **Redirects are never followed.** A `3xx` surfaces as an `LeadWeaveApiError`
   rather than being followed, so the API key is never re-sent to a redirect
   target.
 - **Default per-request timeout** is 30 s (configurable). Path segments (chat /

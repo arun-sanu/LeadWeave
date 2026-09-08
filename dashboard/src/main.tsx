@@ -4,13 +4,9 @@ import { i18nReady } from './i18n';
 import './index.css';
 import App from './App.tsx';
 
-// Apply the stored theme BEFORE first paint: useTheme() only runs inside Layout, so standalone
-// routes (Login) otherwise flash the OS theme on reload even when the user explicitly picked one.
-// Mirrors applyTheme: an explicit choice sets data-theme; system/absent leaves it to the media query.
-const storedTheme = localStorage.getItem('openwa_theme');
-if (storedTheme === 'light' || storedTheme === 'dark') {
-  document.documentElement.setAttribute('data-theme', storedTheme);
-}
+// Apply the dark theme BEFORE first paint to avoid flash of white.
+// We strictly enforce dark mode per design guidelines.
+document.documentElement.setAttribute('data-theme', 'dark');
 
 // The active locale is fetched rather than bundled into the entry, so first paint waits for it —
 // otherwise the shell renders raw keys and swaps to real copy a tick later. A catalogue that fails

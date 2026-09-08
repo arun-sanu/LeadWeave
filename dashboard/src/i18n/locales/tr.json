@@ -6,7 +6,7 @@
     }
   },
   "common": {
-    "appName": "OpenWA",
+    "appName": "LeadWeave",
     "loading": "Yükleniyor...",
     "cancel": "İptal",
     "delete": "Sil",
@@ -63,7 +63,8 @@
     "messageTester": "Mesaj Test Aracı",
     "infrastructure": "Altyapı",
     "plugins": "Eklentiler",
-    "logs": "Kayıtlar (Logs)"
+    "logs": "Kayıtlar (Logs)",
+    "campaigns": "Kampanyalar"
   },
   "chats": {
     "media": {
@@ -121,7 +122,9 @@
     "tab": {
       "chats": "Sohbetler",
       "channels": "Kanallar",
-      "status": "Durum"
+      "status": "Durum",
+      "groups": "Gruplar",
+      "archive": "Arşiv"
     },
     "status": {
       "itemCount": "{{count}} güncelleme",
@@ -168,7 +171,15 @@
       "delivered": "İletildi",
       "read": "Okundu",
       "failed": "Başarısız"
-    }
+    },
+    "emptyGroups": "Grup yok",
+    "emptyArchive": "Arşivlenmiş sohbet yok",
+    "archiveChat": "Sohbeti arşivle",
+    "unarchiveChat": "Sohbeti arşivden çıkar",
+    "archivedSuccess": "Sohbet arşivlendi",
+    "unarchivedSuccess": "Sohbet arşivden çıkarıldı",
+    "archiveFailed": "Sohbet arşivlenemedi",
+    "unarchiveFailed": "Sohbet arşivden çıkarılamadı"
   },
   "errorBoundary": {
     "title": "Bir şeyler ters gitti",
@@ -185,7 +196,7 @@
     "connectionError": "Sunucuya bağlanılamadı. Lütfen tekrar deneyin.",
     "help": "Yardıma mı ihtiyacınız var?",
     "viewDocs": "Dokümantasyonu Görüntüle",
-    "footer": "Yudhi Armyndharis ve OpenWA Topluluğu tarafından ❤️ ile yapılmıştır",
+    "footer": "Yudhi Armyndharis ve LeadWeave Topluluğu tarafından ❤️ ile yapılmıştır",
     "version": "v{{version}} · {{date}}"
   },
   "dashboard": {
@@ -211,23 +222,7 @@
     "view": "Görüntüle",
     "disconnect": "Bağlantıyı Kes",
     "errorPrefix": "Hata: {{message}}",
-    "loadError": "Veriler yüklenemedi",
-    "charts": {
-      "title": "Mesaj Analitiği",
-      "period": {
-        "24h": "24 sa",
-        "7d": "7g",
-        "30d": "30g"
-      },
-      "overTime": "Zamana göre mesajlar",
-      "byType": "Türe göre mesajlar",
-      "topChats": "En popüler sohbetler",
-      "sent": "Gönderilen",
-      "received": "Alınan",
-      "messages": "Mesajlar",
-      "empty": "Bu dönemde mesaj aktivitesi bulunamadı.",
-      "error": "Mesaj analitiği yüklenemedi. Sunucu kayıtlarını kontrol edin."
-    }
+    "loadError": "Veriler yüklenemedi"
   },
   "sessionStatus": {
     "created": "Yeni",
@@ -694,7 +689,7 @@
       "postgres": "PostgreSQL",
       "postgresDesc": "Prodüksiyona hazır veritabanı",
       "useBuiltIn": "Dahili PostgreSQL Konteynerini Kullan",
-      "builtInDesc": "OpenWA sizin için bir PostgreSQL konteynerini yönetecektir",
+      "builtInDesc": "LeadWeave sizin için bir PostgreSQL konteynerini yönetecektir",
       "dbName": "Veritabanı Adı",
       "schema": "Şema (Schema)",
       "schemaDesc": "PostgreSQL şeması (SQLite için yok sayılır). Varsayılan 'public'. Şema zaten mevcut olmalıdır.",
@@ -729,7 +724,7 @@
       "enable": "Redis'i Etkinleştir",
       "enableDesc": "Önbelleğe alma, oturum depolama ve BullMQ kuyrukları için gereklidir",
       "useBuiltIn": "Dahili Redis Konteynerini Kullan",
-      "builtInDesc": "OpenWA sizin için bir Redis konteynerini yönetecektir",
+      "builtInDesc": "LeadWeave sizin için bir Redis konteynerini yönetecektir",
       "queueTitle": "BullMQ Kuyruk Sistemini Etkinleştir",
       "queueDesc": "Güvenilir mesaj ve webhook iletimi için mesaj kuyruklarını kullanın",
       "statsTitle": "Kuyruk İstatistikleri",
@@ -752,7 +747,7 @@
       "s3": "Amazon S3",
       "s3Desc": "Bulut depolama (S3 uyumlu)",
       "useBuiltIn": "Dahili MinIO Konteynerini Kullan",
-      "builtInDesc": "OpenWA sizin için bir MinIO (S3 uyumlu) konteynerini yönetecektir",
+      "builtInDesc": "LeadWeave sizin için bir MinIO (S3 uyumlu) konteynerini yönetecektir",
       "storagePath": "Depolama Yolu",
       "bucket": "Kova (Bucket) Adı",
       "region": "Bölge (Region)",
@@ -783,7 +778,7 @@
       "importFailed": "Veriler içe aktarılamadı",
       "importOk": "Veriler içe aktarıldı",
       "importConfirm": "İçe aktarma işlemi mevcut tüm verileri yedekle ({{rows}} satır) DEĞİŞTİRECEKTİR. Bu işlem geri alınamaz. Devam edilsin mi?",
-      "invalidFile": "Bu dosya geçerli bir OpenWA veri yedeği değil.",
+      "invalidFile": "Bu dosya geçerli bir LeadWeave veri yedeği değil.",
       "importTooLarge": "Yedekleme, istek sınırı için çok büyük. Sunucudaki BODY_SIZE_LIMIT değerini artırın ve tekrar deneyin."
     },
     "restart": {
@@ -822,7 +817,7 @@
     "uninstallConfirm": "\"{{name}}\" kaldırılsın mı? Bu işlem dosyalarını silecektir.",
     "empty": {
       "title": "Yüklü eklenti yok",
-      "description": "OpenWA'nın yapabileceklerini genişletmek için bir eklenti yükleyin."
+      "description": "LeadWeave'nın yapabileceklerini genişletmek için bir eklenti yükleyin."
     },
     "config": {
       "title": "{{name}} Yapılandır",
@@ -845,7 +840,7 @@
       "trustWarning": "Eklentiler, ağ geçidinin tüm süreç yetkileriyle çalışır — yalıtılmış alan (sandbox) çökmeleri kontrol altına alır, kötü amaçlı kodu değil. Yalnızca güvendiğiniz eklentileri yükleyin.",
       "choose": "Bir .zip dosyası seçin…",
       "tooLarge": "Dosya 5 MB sınırını aşıyor.",
-      "catalogHint": "Doğrudan OpenWA eklenti kataloğundan yükleyin. .zip dosyası SSRF koruması üzerinden sunucu tarafında çekilir, ardından doğrulanır ve korumalı alana alınır.",
+      "catalogHint": "Doğrudan LeadWeave eklenti kataloğundan yükleyin. .zip dosyası SSRF koruması üzerinden sunucu tarafında çekilir, ardından doğrulanır ve korumalı alana alınır.",
       "catalogTeaser": "Eklenti mi arıyorsunuz?",
       "catalogTeaserSuffix": "resmi pazar yerine göz atın.",
       "tabCatalog": "Katalog",

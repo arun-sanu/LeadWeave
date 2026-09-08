@@ -1,56 +1,56 @@
 # 29 - Engine Capability Matrix
 
 Three-way comparison of every capability: the **Baileys library** (`@whiskeysockets/baileys`
-7.0.0-rc13), the **whatsapp-web.js library** (1.34.7), and what **OpenWA actually exposes** through
-its adapter layer and REST API — including which "supported" cells only work because OpenWA patches
+7.0.0-rc13), the **whatsapp-web.js library** (1.34.7), and what **LeadWeave actually exposes** through
+its adapter layer and REST API — including which "supported" cells only work because LeadWeave patches
 the installed library. Coverage is total: all 112 `IWhatsAppEngine` methods (29.4), **all 152
 Baileys + 81 whatsapp-web.js library methods** (29.5), all 34 + 31 library events (29.5.4), and all
-8 install-time patches (29.3). If it exists upstream or in OpenWA, it has a row here.
+8 install-time patches (29.3). If it exists upstream or in LeadWeave, it has a row here.
 
 ## 29.1 How to read this matrix
 
 Statuses used in the tables:
 
-- **✅** — works end-to-end through the OpenWA adapter.
-- **✅🔧ⁿ** — works end-to-end, but **only because OpenWA patches the installed library** (patch
+- **✅** — works end-to-end through the LeadWeave adapter.
+- **✅🔧ⁿ** — works end-to-end, but **only because LeadWeave patches the installed library** (patch
   `🔧ⁿ`, see 29.3). On a stock, unpatched install of the library this cell would be broken.
-- **❌ gap** — _adapter-gap_: the underlying library HAS the capability; only the OpenWA adapter
+- **❌ gap** — _adapter-gap_: the underlying library HAS the capability; only the LeadWeave adapter
   wiring is missing. Fixable in this repo.
 - **❌ lib** — _library-limitation_: the underlying library exposes no first-class symbol for the
   operation. Not fixable without raw-proto/fork work or an event-cache hack.
-- **OpenWA REST** column — what a caller of the REST API gets: **✅** on any engine session,
+- **LeadWeave REST** column — what a caller of the REST API gets: **✅** on any engine session,
   **⚠️ `<engine>` only** when the answer depends on the session's engine (the other engine
   answers HTTP 501), **❌ 501** on both engines, and **⚙️ internal** for a method the REST surface
   never exposes because the gateway calls it itself (`probeLiveness`).
 
 Two complementary views:
 
-- **29.4 — the OpenWA contract view.** Rows are the 112 `IWhatsAppEngine` methods; use it to see
+- **29.4 — the LeadWeave contract view.** Rows are the 112 `IWhatsAppEngine` methods; use it to see
   what a REST caller gets per engine. Source of truth: `src/engine/engine-capability-matrix.ts`
   (per-cell `evidence` strings cite the exact library `file:symbol` inspected).
 - **29.5 — the full engine inventory.** Rows are **every method the installed libraries expose**,
-  each mapped to the OpenWA interface method that uses it (or marked unexposed). Use it as the
+  each mapped to the LeadWeave interface method that uses it (or marked unexposed). Use it as the
   implementation backlog: anything `❌ not exposed` with a library symbol behind it is wiring work,
   not research work. 29.5.3 distills the sweetest spot: capabilities **both** libraries already
-  have and only OpenWA lacks.
+  have and only LeadWeave lacks.
 
 ## 29.2 Adapter architecture
 
-OpenWA never calls a WhatsApp library directly from a controller. Every session owns one engine
+LeadWeave never calls a WhatsApp library directly from a controller. Every session owns one engine
 instance behind the neutral `IWhatsAppEngine` interface (112 methods +
 `EngineEventCallbacks`), and all modules go through it:
 
 ```mermaid
 flowchart LR
-    subgraph OpenWA["OpenWA"]
+    subgraph LeadWeave["LeadWeave"]
         API["REST API controllers"] --> SVC["Modules / services"]
         SVC --> IF["IWhatsAppEngine - 112 methods"]
         IF --> WA["WhatsAppWebJsAdapter"]
         IF --> BA["BaileysAdapter"]
-        SVC --> STORE["OpenWA-side stores"]
+        SVC --> STORE["LeadWeave-side stores"]
     end
-    WA --> WLIB["whatsapp-web.js 1.34.7<br/>+ 6 OpenWA patches"]
-    BA --> BLIB["@whiskeysockets/baileys 7.0.0-rc13<br/>+ 2 OpenWA patches"]
+    WA --> WLIB["whatsapp-web.js 1.34.7<br/>+ 6 LeadWeave patches"]
+    BA --> BLIB["@whiskeysockets/baileys 7.0.0-rc13<br/>+ 2 LeadWeave patches"]
     WLIB --> WEB["WhatsApp Web<br/>headless Chromium"]
     BLIB --> WAS["WhatsApp servers<br/>browser-free socket"]
     WA -.->|"not-available"| E["EngineNotSupportedError<br/>HTTP 501"]
@@ -82,7 +82,7 @@ Key adapter facts:
   refused option' is not 'not-available'.
 - **Inbound events** flow the other way: each adapter normalizes library events into the neutral
   `EngineEventCallbacks` (`onMessage`, `onMessageAck`, `onGroupEvent`, `onCall`, …), which the
-  session module turns into OpenWA webhook events. Which library events are consumed — and which
+  session module turns into LeadWeave webhook events. Which library events are consumed — and which
   are dropped — is listed in 29.5.4.
 - **Some REST reads bypass the engine entirely.** `GET …/status` reads are served from
   `StatusStoreService` (fed by inbound ingestion on both engines), so status-read parity holds at
@@ -123,9 +123,9 @@ methods where the symbol really serves eight still passes), it cannot separate a
 from an adapter method of the same name (`logout`), and it cannot see a mapping pointed at the
 wrong interface method. Those three remain reader-verified.
 
-## 29.3 Install-time patches OpenWA applies to the libraries
+## 29.3 Install-time patches LeadWeave applies to the libraries
 
-OpenWA ships eight exact, self-disabling source transforms over the installed engines. Each runs at
+LeadWeave ships eight exact, self-disabling source transforms over the installed engines. Each runs at
 `npm install` (`scripts/postinstall.js`, `--best-effort`) and again in the Docker production stage
 (**without** best-effort — dependency drift fails the image build). "Self-disabling" means the
 patcher no-ops once the fix is present upstream, and an unrecognized source shape fails loudly
@@ -184,7 +184,7 @@ else, which is the behaviour we would want and the same shape as `deleteProfileP
 indiscriminate `catch (ignoredError) { return false; }` appears **once**, in
 `transferChannelOwnership` (`Client.js:2627`).
 
-So it is not a house style, and the one method carrying it is the one OpenWA answers 501 for and
+So it is not a house style, and the one method carrying it is the one LeadWeave answers 501 for and
 never invokes (29.6.2). The patch would repair a path our code does not take. It is also not an
 upstream oversight but a deliberate design choice — a boolean return means discarding the cause — so
 unlike 🔧⁶ there is no upstream fix that would ever retire it.
@@ -194,17 +194,17 @@ opens `if (!channel) return false;` before its try, so its `false` conflates _ch
 _WhatsApp refused_, and the adapter answers 403 for both. That distinction is ours to make in our own
 adapter and involves no library change.
 
-## 29.4 Full capability matrix — the OpenWA contract view (112 methods)
+## 29.4 Full capability matrix — the LeadWeave contract view (112 methods)
 
-Legend recap: **✅** supported · **✅🔧ⁿ** supported via OpenWA patch `🔧ⁿ` (29.3) ·
+Legend recap: **✅** supported · **✅🔧ⁿ** supported via LeadWeave patch `🔧ⁿ` (29.3) ·
 **❌ gap** adapter-gap · **❌ lib** library-limitation. Column headers carry the engine-wide
 patch dependencies (🔧¹ message-id backport on wwjs; 🔧⁵ app-state bound on
-Baileys). The **OpenWA REST** column reads from the caller's side: ✅ works whatever engine the
+Baileys). The **LeadWeave REST** column reads from the caller's side: ✅ works whatever engine the
 session runs; ⚠️ depends on the session engine; ❌ 501 on both.
 
 ### 29.4.1 Session & connection
 
-| Method               | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST |
+| Method               | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
 | -------------------- | ------------------- | ---------------- | ----------- |
 | `initialize`         | ✅                  | ✅🔧⁴            | ✅          |
 | `disconnect`         | ✅                  | ✅               | ✅          |
@@ -225,7 +225,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.2 Sending messages
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST     |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
 | --------------------- | ------------------- | ---------------- | --------------- |
 | `sendTextMessage`     | ✅                  | ✅🔧³            | ✅              |
 | `sendImageMessage`    | ✅                  | ✅               | ✅              |
@@ -245,7 +245,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.3 Message management
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST  |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | --------------------- | ------------------- | ---------------- | ------------ |
 | `editMessage`         | ✅                  | ✅               | ✅           |
 | `deleteMessage`       | ✅                  | ✅               | ✅           |
@@ -258,7 +258,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.4 Chats
 
-| Method              | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST  |
+| Method              | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | ------------------- | ------------------- | ---------------- | ------------ |
 | `getChats`          | ✅                  | ✅               | ✅           |
 | `getChatHistory`    | ❌ lib              | ✅               | ⚠️ wwjs only |
@@ -271,7 +271,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.5 Contacts
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
 | --------------------- | ------------------- | ---------------- | ----------- |
 | `getContacts`         | ✅                  | ✅               | ✅          |
 | `getContactById`      | ✅                  | ✅               | ✅          |
@@ -289,7 +289,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.6 Groups
 
-| Method                           | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST     |
+| Method                           | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
 | -------------------------------- | ------------------- | ---------------- | --------------- |
 | `createGroup`                    | ✅                  | ❌               | ✅              |
 | `getGroups`                      | ✅                  | ✅               | ✅              |
@@ -317,7 +317,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.7 Channels
 
-| Method                     | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST     |
+| Method                     | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
 | -------------------------- | ------------------- | ---------------- | --------------- |
 | `createChannel`            | ✅🔧⁶               | ✅               | ✅              |
 | `deleteChannel`            | ✅                  | ✅               | ✅              |
@@ -332,7 +332,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.8 Status / stories
 
-| Method               | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST  |
+| Method               | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | -------------------- | ------------------- | ---------------- | ------------ |
 | `postTextStatus`     | ✅                  | ✅🔧²            | ✅           |
 | `postImageStatus`    | ✅                  | ✅🔧²            | ✅           |
@@ -349,7 +349,7 @@ answers 501.
 
 ### 29.4.9 Labels (WA Business)
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST     |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
 | --------------------- | ------------------- | ---------------- | --------------- |
 | `getLabels`           | ❌ lib              | ✅               | ⚠️ wwjs only    |
 | `getLabelById`        | ❌ lib              | ✅               | ⚠️ wwjs only    |
@@ -362,7 +362,7 @@ answers 501.
 
 ### 29.4.10 Catalog & products (WA Business)
 
-| Method        | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST     |
+| Method        | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
 | ------------- | ------------------- | ---------------- | --------------- |
 | `getCatalog`  | ✅                  | ❌ lib           | ⚠️ baileys only |
 | `getProducts` | ✅                  | ❌ lib           | ⚠️ baileys only |
@@ -370,7 +370,7 @@ answers 501.
 
 ### 29.4.11 Own profile & presence
 
-| Method                 | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST |
+| Method                 | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
 | ---------------------- | ------------------- | ---------------- | ----------- |
 | `setProfileName`       | ✅                  | ✅               | ✅          |
 | `setProfilePicture`    | ✅                  | ✅               | ✅          |
@@ -380,7 +380,7 @@ answers 501.
 
 ### 29.4.12 Presence & calls
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | OpenWA REST     |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
 | --------------------- | ------------------- | ---------------- | --------------- |
 | `subscribeToPresence` | ✅                  | ❌ lib           | ⚠️ baileys only |
 | `rejectCall`          | ✅                  | ✅               | ✅              |
@@ -392,10 +392,10 @@ work on any engine (89 fully supported + 2 store-backed status reads), **11** ar
 **9** are wwjs-only (the 2 store-backed rows excluded); `sendCatalog`, unavailable on both engines,
 is not exposed.
 
-## 29.5 Full engine method inventory — every library method, mapped to OpenWA
+## 29.5 Full engine method inventory — every library method, mapped to LeadWeave
 
 This is the backlog view: **all 152 Baileys socket methods and all 81 whatsapp-web.js Client
-methods**, each marked with where OpenWA uses it. The symbol list itself is gated:
+methods**, each marked with where LeadWeave uses it. The symbol list itself is gated:
 `check-upstream-surface.mjs` extracts the installed libraries' public surface and fails on any
 drift from `scripts/upstream-surface.snapshot.json`, so a library bump forces a review of this
 section. The exposure mapping is hand-maintained against the adapter sources
@@ -412,14 +412,14 @@ Exposure column values:
   wiring, health probes, helpers).
 - **🔩 plumbing** — E2EE/socket/media-transport internals that are adapter machinery, not user
   capabilities; correctly never exposed.
-- **❌ not exposed** — a real library capability with no OpenWA path. **This is the implementation
+- **❌ not exposed** — a real library capability with no LeadWeave path. **This is the implementation
   backlog.**
 
 ### 29.5.1 Baileys — 152 socket methods
 
 **Messaging & media** (19)
 
-| Library method                 | OpenWA exposure                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Library method                 | LeadWeave exposure                                                                                                                                                                                                                                                                                                                                                                                                             |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `getMediaHost`                 | 🔩 plumbing                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `readMessages`                 | ✅ `sendSeen`                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -443,7 +443,7 @@ Exposure column values:
 
 **Groups** (19)
 
-| Library method                   | OpenWA exposure                                                                         |
+| Library method                   | LeadWeave exposure                                                                         |
 | -------------------------------- | --------------------------------------------------------------------------------------- |
 | `groupAcceptInvite`              | ✅ `joinGroupViaInviteCode`                                                             |
 | `groupAcceptInviteV4`            | ❌ **not exposed**                                                                      |
@@ -466,9 +466,9 @@ Exposure column values:
 | `groupUpdateSubject`             | ✅ `setGroupSubject`                                                                    |
 
 **Communities** (23) — the largest single gap: an entire WhatsApp feature area (groups-of-groups)
-with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at all.
+with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API at all.
 
-| Library method                       | OpenWA exposure    |
+| Library method                       | LeadWeave exposure    |
 | ------------------------------------ | ------------------ |
 | `communityAcceptInvite`              | ❌ **not exposed** |
 | `communityAcceptInviteV4`            | ❌ **not exposed** |
@@ -496,7 +496,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Newsletters (channels)** (19)
 
-| Library method                | OpenWA exposure                              |
+| Library method                | LeadWeave exposure                              |
 | ----------------------------- | -------------------------------------------- |
 | `newsletterAdminCount`        | ❌ **not exposed**                           |
 | `newsletterChangeOwner`       | ✅ `transferChannelOwnership`                |
@@ -520,7 +520,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Business & catalog** (12)
 
-| Library method          | OpenWA exposure                                                                                    |
+| Library method          | LeadWeave exposure                                                                                    |
 | ----------------------- | -------------------------------------------------------------------------------------------------- |
 | `addOrEditQuickReply`   | ❌ **not exposed**                                                                                 |
 | `fetchMessageHistory`   | ❌ **not exposed**                                                                                 |
@@ -537,7 +537,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Labels** (6)
 
-| Library method       | OpenWA exposure                 |
+| Library method       | LeadWeave exposure                 |
 | -------------------- | ------------------------------- |
 | `addChatLabel`       | ✅ `addLabelToChat`             |
 | `addLabel`           | ✅ `upsertLabel`, `deleteLabel` |
@@ -548,7 +548,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Privacy & account settings** (13)
 
-| Library method                     | OpenWA exposure                                                                                                                                                                                      |
+| Library method                     | LeadWeave exposure                                                                                                                                                                                      |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `fetchPrivacySettings`             | ❌ **not exposed** — never called by the adapter; the library reaches it internally from `readMessages` (`sendSeen`), and its raw TypeError on an unanswered query is what forces the deadline bound |
 | `issuePrivacyTokens`               | ❌ **not exposed**                                                                                                                                                                                   |
@@ -566,7 +566,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Queries** (8)
 
-| Library method                 | OpenWA exposure         |
+| Library method                 | LeadWeave exposure         |
 | ------------------------------ | ----------------------- |
 | `executeUSyncQuery`            | ❌ **not exposed**      |
 | `fetchAccountReachoutTimelock` | ⚙️ internal wiring      |
@@ -579,7 +579,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Profile, contacts & presence** (12)
 
-| Library method           | OpenWA exposure                                                                                        |
+| Library method           | LeadWeave exposure                                                                                        |
 | ------------------------ | ------------------------------------------------------------------------------------------------------ |
 | `addOrEditContact`       | ✅ `upsertContact`                                                                                     |
 | `createCallLink`         | ✅ `createCallLink`                                                                                    |
@@ -596,7 +596,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Socket, session & plumbing** (21)
 
-| Library method                    | OpenWA exposure                                                                                                                                                             |
+| Library method                    | LeadWeave exposure                                                                                                                                                             |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `appPatch`                        | 🔩 plumbing                                                                                                                                                                 |
 | `assertSessions`                  | 🔩 plumbing                                                                                                                                                                 |
@@ -624,7 +624,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Session & connection** (16)
 
-| Library method             | OpenWA exposure                                                                                   |
+| Library method             | LeadWeave exposure                                                                                   |
 | -------------------------- | ------------------------------------------------------------------------------------------------- |
 | `cancelPairingCode`        | ❌ **not exposed** — session/transport setting, not a WhatsApp capability                         |
 | `constructor`              | — class plumbing (not a capability)                                                               |
@@ -645,7 +645,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Messages** (8)
 
-| Library method                 | OpenWA exposure                                                                                                                                                                                                                                                          |
+| Library method                 | LeadWeave exposure                                                                                                                                                                                                                                                          |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `getMessageById`               | ❌ **not exposed**                                                                                                                                                                                                                                                       |
 | `getPinnedMessages`            | ❌ **not exposed**                                                                                                                                                                                                                                                       |
@@ -658,7 +658,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Chats** (9)
 
-| Library method   | OpenWA exposure                                                                                                                                                                                                                                                                                                                                                                          |
+| Library method   | LeadWeave exposure                                                                                                                                                                                                                                                                                                                                                                          |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `archiveChat`    | ✅ `archiveChat`                                                                                                                                                                                                                                                                                                                                                                         |
 | `getChatById`    | ✅ `muteChannel`, `sendSeen`, `clearChatMessages`, `markUnread`, `deleteChat`, `sendChatState`, `getGroupInfo`, `addParticipants`, `leaveGroup`, `setGroupSubject`, `setGroupDescription`, `getGroupInviteCode`, `revokeGroupInviteCode`, `getChatLabels`, `replyToMessage`, `forwardMessage`, `reactToMessage`, `getMessageReactions`, `getChatHistory`, `deleteMessage`, `editMessage` |
@@ -672,7 +672,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Groups** (7)
 
-| Library method                   | OpenWA exposure                     |
+| Library method                   | LeadWeave exposure                     |
 | -------------------------------- | ----------------------------------- |
 | `acceptInvite`                   | ✅ `joinGroupViaInviteCode`         |
 | `approveGroupMembershipRequests` | ✅ `approveGroupMembershipRequests` |
@@ -684,7 +684,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Channels** (12)
 
-| Library method             | OpenWA exposure                                                                                      |
+| Library method             | LeadWeave exposure                                                                                      |
 | -------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `acceptChannelAdminInvite` | ❌ **not exposed**                                                                                   |
 | `createChannel`            | ✅ `createChannel`                                                                                   |
@@ -701,7 +701,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Labels** (5)
 
-| Library method      | OpenWA exposure                                                                                     |
+| Library method      | LeadWeave exposure                                                                                     |
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | `addOrRemoveLabels` | ✅ `addLabelToChat`, `removeLabelFromChat`                                                          |
 | `getChatLabels`     | ❌ **not exposed** — the adapter reads the chat and calls `Chat.getLabels()`, not the Client method |
@@ -711,7 +711,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Status & broadcasts** (3)
 
-| Library method        | OpenWA exposure         |
+| Library method        | LeadWeave exposure         |
 | --------------------- | ----------------------- |
 | `getBroadcastById`    | ✅ `getContactStatus`   |
 | `getBroadcasts`       | ✅ `getContactStatuses` |
@@ -719,7 +719,7 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Contacts & numbers** (11)
 
-| Library method                 | OpenWA exposure                                       |
+| Library method                 | LeadWeave exposure                                       |
 | ------------------------------ | ----------------------------------------------------- |
 | `deleteAddressbookContact`     | ✅ `deleteContact`                                    |
 | `getBlockedContacts`           | ✅ `getBlockedContacts`                               |
@@ -735,14 +735,14 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Business** (2)
 
-| Library method          | OpenWA exposure    |
+| Library method          | LeadWeave exposure    |
 | ----------------------- | ------------------ |
 | `addOrEditCustomerNote` | ❌ **not exposed** |
 | `getCustomerNote`       | ❌ **not exposed** |
 
 **Profile & presence** (7)
 
-| Library method            | OpenWA exposure           |
+| Library method            | LeadWeave exposure           |
 | ------------------------- | ------------------------- |
 | `deleteProfilePicture`    | ✅ `deleteProfilePicture` |
 | `getProfilePicUrl`        | ✅ `getProfilePicture`    |
@@ -754,11 +754,11 @@ with zero OpenWA surface. Baileys-only; whatsapp-web.js has no community API at 
 
 **Misc** (1)
 
-| Library method   | OpenWA exposure     |
+| Library method   | LeadWeave exposure     |
 | ---------------- | ------------------- |
 | `createCallLink` | ✅ `createCallLink` |
 
-### 29.5.3 Supported by BOTH libraries — missing only in OpenWA
+### 29.5.3 Supported by BOTH libraries — missing only in LeadWeave
 
 **Empty.** No capability has a first-class symbol on both engines and no `IWhatsAppEngine` method.
 
@@ -780,12 +780,12 @@ search — would be store-backed), **poll-vote read** (wwjs `getPollVotes`; Bail
 
 ### 29.5.4 Events inventory — all 34 Baileys + 31 wwjs events
 
-OpenWA consumes events by normalizing them into `EngineEventCallbacks`; anything else is dropped.
+LeadWeave consumes events by normalizing them into `EngineEventCallbacks`; anything else is dropped.
 "Consumed" below means referenced by the adapter code.
 
 **Baileys (34):**
 
-| Event                       | OpenWA                                              |     | Event                            | OpenWA                          |
+| Event                       | LeadWeave                                              |     | Event                            | LeadWeave                          |
 | --------------------------- | --------------------------------------------------- | --- | -------------------------------- | ------------------------------- |
 | `messages.upsert`           | ✅                                                  |     | `chats.lock`                     | ❌                              |
 | `messages.update`           | ✅                                                  |     | `message-capping.update`         | ❌                              |
@@ -807,7 +807,7 @@ OpenWA consumes events by normalizing them into `EngineEventCallbacks`; anything
 
 **whatsapp-web.js (31):**
 
-| Event                       | OpenWA       |     | Event                  | OpenWA                                                                          |
+| Event                       | LeadWeave       |     | Event                  | LeadWeave                                                                          |
 | --------------------------- | ------------ | --- | ---------------------- | ------------------------------------------------------------------------------- |
 | `message`                   | ✅           |     | `change_battery`       | ❌                                                                              |
 | `message_create`            | ✅           |     | `change_state`         | ❌                                                                              |
@@ -854,7 +854,7 @@ adapter boundary — none silently stubs.
 | Method                     | Cause | What's missing (evidence)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | -------------------------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `subscribeToChannel`       | gap   | `Client.subscribeToChannel(channelId)` (`Client.js:2542`) takes a channel **id** and resolves a boolean — it cannot satisfy the subscribe-by-invite-code contract alone. Correct wiring is two-step: `getChannelByInviteCode(inviteCode)` (`Client.js:1716`) → `subscribeToChannel(channel.id)`, unverified against a live session (the previous one-step call was a phantom success). The one remaining wwjs adapter-gap.                                                                                                                                                                                                                                                                                                                     |
-| `createGroup`              | lib   | `Client.createGroup` exists and is typed `Promise<CreateGroupResult \| string>`, but its injected evaluate reaches a WhatsApp Web internal that no longer exposes `findImpl` (`Client.js:2325`). Measured live on **two** builds — `2.3000.1044858477-alpha` auto-resolved and `2.3000.1044770897-alpha` pinned — both `TypeError: this.findImpl is not a function`, reaching the caller as a bare 500. Bare and `@c.us`-qualified participant ids fail identically, so the id shape is not the variable; varying the build is what separates this from registry pin drift. `findImpl` is in neither the installed `Client.js` nor any OpenWA patcher, so it belongs to the page and cannot be patched around. Baileys serves this capability. |
+| `createGroup`              | lib   | `Client.createGroup` exists and is typed `Promise<CreateGroupResult \| string>`, but its injected evaluate reaches a WhatsApp Web internal that no longer exposes `findImpl` (`Client.js:2325`). Measured live on **two** builds — `2.3000.1044858477-alpha` auto-resolved and `2.3000.1044770897-alpha` pinned — both `TypeError: this.findImpl is not a function`, reaching the caller as a bare 500. Bare and `@c.us`-qualified participant ids fail identically, so the id shape is not the variable; varying the build is what separates this from registry pin drift. `findImpl` is in neither the installed `Client.js` nor any LeadWeave patcher, so it belongs to the page and cannot be patched around. Baileys serves this capability. |
 | `demoteChannelAdmin`       | lib   | `Client.demoteChannelAdmin` exists (`index.d.ts:35`) but its page body calls `window.require('WAWebDemoteNewsletterAdminAction').demoteNewsletterAdmin` (`Client.js:1907-1925`), and a module probe on a live session (Web `2.3000.1044824727-alpha`, unpinned) returned that module resolving with `demoteNewsletterAdmin: undefined`. The sibling path used inside `transferChannelOwnership` (`WAWebNewsletterDemoteAdminJob.demoteNewsletterAdminAction`) is undefined too, so there is nothing to retarget. Baileys serves this capability.                                                                                                                                                                                               |
 | `transferChannelOwnership` | lib   | `Client.transferChannelOwnership` exists (`index.d.ts:375`) and its page function `WAWebChangeNewsletterOwnerAction.changeNewsletterOwnerAction` is present, but on Web `2.3000.1044824727-alpha` it rejects every call **locally** with `contact-not-found-in-newsletter-subscriber-list` — 4-9ms against a 352-531ms known-server baseline measured in the same page, so it never reaches WhatsApp. Unchanged by subscribing the target, promoting it to admin, or restarting the session; the only repopulation path, `WAWebCollections.NewsletterMetadataCollection.update`, is `undefined`. Baileys serves this capability.                                                                                                               |
 | `upsertLabel`              | lib   | 1.34.7 reads labels and assigns them (`getLabels`, `getLabelById`, `getChatLabels`, `getChatsByLabelId`, `addOrRemoveLabels`, `index.d.ts:129-154`) but exposes nothing that creates/edits a label definition.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |

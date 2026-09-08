@@ -2,6 +2,11 @@ import { createContext, useContext } from 'react';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
+export interface ToastAction {
+  label: string;
+  onClick: () => void;
+}
+
 export interface Toast {
   id: string;
   type: ToastType;
@@ -10,6 +15,7 @@ export interface Toast {
   duration?: number;
   /** Stable, non-rendered key for de-duplicating recurring toasts. Independent of the (translated) title. */
   dedupeKey?: string;
+  action?: ToastAction;
 }
 
 export interface ToastContextValue {
@@ -20,6 +26,7 @@ export interface ToastContextValue {
   error: (title: string, message?: string) => void;
   warning: (title: string, message?: string) => void;
   info: (title: string, message?: string) => void;
+  actionToast: (title: string, action: ToastAction, message?: string, duration?: number) => void;
 }
 
 export const ToastContext = createContext<ToastContextValue | null>(null);

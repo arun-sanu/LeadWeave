@@ -224,4 +224,50 @@ describe('HookManager.isInFlight + selective re-entrancy guard (conversation.sen
     );
     expect(observerCalls).toBe(0);
   });
+
+  it('times out hanging hooks and fails open without breaking execution', async () => {
+    const hm = new HookManager();
+    const later = jest.fn();
+    hm.register(
+      'hanging-plugin',
+      'message:sending',
+      async () => new Promise(() => {}), // Never resolves
+      10,
+    );
+    hm.register(
+      'good-plugin',
+      'message:sending',
+      async ctx => {
+        later();
+        return { continue: true, data: ctx.data };
+      },
+      20,
+    );
+
+    const res = await hm.execute('message:sending', { text: 'hi' }, { source: 'test', timeoutMs: 50 });
+    expect(later).toHaveBeenCalledTimes(1);
+    expect(res).toEqual({ continue: true, data: { text: 'hi' } });
+  });
+
+  it('executes observability hooks asynchronously without blocking caller', async () => {
+    const hm = new HookManager();
+    let hookExecuted = false;
+    hm.register(
+      'obs-plugin',
+      'message:sent', // Observability event
+      async () => {
+        await new Promise(r => setTimeout(r, 20));
+        hookExecuted = true;
+        return { continue: true };
+      },
+      10,
+    );
+
+    const res = await hm.execute('message:sent', { text: 'hi' }, { source: 'test' });
+    expect(res).toEqual({ continue: true, data: { text: 'hi' } });
+    expect(hookExecuted).toBe(false); // Call returned immediately
+
+    await new Promise(r => setTimeout(r, 50));
+    expect(hookExecuted).toBe(true); // Completed asynchronously in background
+  });
 });

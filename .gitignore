@@ -75,6 +75,7 @@ uploads/
 .claude/
 .zcode/
 .zcode-worktrees/
+.jcode/
 docs/plans/
 docs/superpowers/
 CLAUDE.md

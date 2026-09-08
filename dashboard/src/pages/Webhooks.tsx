@@ -75,7 +75,7 @@ function FilterBadge({ filters }: { filters: WebhookFilters }) {
       {coords && (
         <div className="filter-popover" style={{ top: coords.top, left: coords.left }} role="tooltip">
           <div className="filter-popover-title">{t('webhooks.filters.title')}</div>
-          {filters.conditions.map((condition, i) => (
+          {(filters?.conditions || []).map((condition, i) => (
             <div key={i} className="filter-popover-row">
               {conditionSummary(condition, t)}
             </div>

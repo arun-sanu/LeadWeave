@@ -236,6 +236,48 @@ describe('SendPacingService', () => {
 
       expect(count).not.toHaveBeenCalled();
     });
+
+    it('synchronizes breaker trip to Redis and respects remote trips across replicas', async () => {
+      const cacheService = {
+        isAvailable: jest.fn().mockResolvedValue(true),
+        getPacingBreaker: jest.fn().mockResolvedValue(null),
+        setPacingBreaker: jest.fn().mockResolvedValue(undefined),
+        clearPacingBreaker: jest.fn().mockResolvedValue(undefined),
+      };
+
+      const count = jest.fn().mockResolvedValue(0);
+      const findOne = jest.fn().mockResolvedValue(sessionAged(0));
+      const exists = jest.fn().mockResolvedValue(true);
+      const configService = {
+        get: () => ({ ...computeSendPacingConfig({}), enabled: true, breakerThreshold: 1, breakerCooldownMs: 30_000, warmupSchedule: [1000] }),
+      } as unknown as ConfigService;
+
+      const replicaA = new SendPacingService(
+        { count, exists } as unknown as Repository<Message>,
+        { findOne } as unknown as Repository<Session>,
+        configService,
+        undefined,
+        cacheService as unknown as ConstructorParameters<typeof SendPacingService>[4],
+      );
+
+      // Replica A experiences send failure that trips breaker
+      replicaA.recordSendFailure('s1');
+      expect(cacheService.setPacingBreaker).toHaveBeenCalledWith('s1', expect.objectContaining({ consecutiveFailures: 1 }), 30);
+
+      // Replica B receives request for same session; checks Redis and observes trip from Replica A
+      cacheService.getPacingBreaker.mockResolvedValueOnce({ consecutiveFailures: 1, openedAt: Date.now() });
+
+      const replicaB = new SendPacingService(
+        { count, exists } as unknown as Repository<Message>,
+        { findOne } as unknown as Repository<Session>,
+        configService,
+        undefined,
+        cacheService as unknown as ConstructorParameters<typeof SendPacingService>[4],
+      );
+
+      await expectPacingRefusal(replicaB.assertSendAllowed('s1'));
+      expect(cacheService.getPacingBreaker).toHaveBeenCalledWith('s1');
+    });
   });
 
   describe('metrics', () => {

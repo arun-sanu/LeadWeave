@@ -242,5 +242,7 @@ export const EXPORT_TABLES: AnyExportTable[] = [
  * entity metadata does not report it.
  */
 export const EXPORT_TABLE_EXCLUSIONS: Readonly<Record<string, string>> = {
-  // (empty today: every data-connection entity table is exported)
+  lead_records: 'Transient Google Sheet CRM synchronized row cache; restored on live sheet sync',
+  campaigns: 'Broadcast and outreach campaign runs; campaign history maintained in client store',
+  campaign_leads: 'Campaign audience recipients and per-lead delivery logs; tracked in campaign manager',
 };

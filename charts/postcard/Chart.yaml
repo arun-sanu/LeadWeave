@@ -1,0 +1,13 @@
+apiVersion: v2
+name: leadweave
+description: LeadWeave — WhatsApp API. Single-instance StatefulSet (see values.yaml replicaCount warning).
+type: application
+version: 0.1.17
+appVersion: '0.23.0'
+keywords:
+  - whatsapp
+  - leadweave
+  - api
+home: https://github.com/rmyndharis/LeadWeave
+sources:
+  - https://github.com/rmyndharis/LeadWeave

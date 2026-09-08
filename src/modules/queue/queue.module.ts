@@ -65,6 +65,13 @@ export const WEBHOOK_QUEUE_JOB_OPTIONS = {
         removeOnFail: { age: 86400, count: 5000 },
       },
     }),
+    BullModule.registerQueue({
+      name: QUEUE_NAMES.CAMPAIGN,
+      defaultJobOptions: {
+        removeOnComplete: { age: 86400, count: 1000 },
+        removeOnFail: { age: 86400 * 7, count: 5000 },
+      },
+    }),
     BullBoardModule.forRoot({
       route: '/admin/queues',
       adapter: ExpressAdapter,
@@ -75,6 +82,10 @@ export const WEBHOOK_QUEUE_JOB_OPTIONS = {
     }),
     BullBoardModule.forFeature({
       name: QUEUE_NAMES.INGRESS,
+      adapter: BullMQAdapter,
+    }),
+    BullBoardModule.forFeature({
+      name: QUEUE_NAMES.CAMPAIGN,
       adapter: BullMQAdapter,
     }),
   ],

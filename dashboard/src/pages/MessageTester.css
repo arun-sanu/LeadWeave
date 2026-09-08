@@ -23,11 +23,24 @@
 
 .message-tester .compose-panel,
 .message-tester .response-panel {
-  background: var(--bg-white);
-  border-radius: 12px;
+  background: var(--card-gradient);
+  border-radius: 16px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
+  position: relative;
+}
+
+.message-tester .compose-panel::before,
+.message-tester .response-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.12) 50%, transparent 100%);
+  pointer-events: none;
 }
 
 .message-tester .compose-panel h2,
@@ -59,7 +72,7 @@
   font-size: 0.9375rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--bg-white);
+  background: var(--bg-card);
   transition: border-color 0.2s;
 }
 
@@ -94,7 +107,7 @@
   padding: 0.625rem 1rem;
   font-size: 0.875rem;
   font-weight: 500;
-  background: var(--bg-white);
+  background: var(--bg-card);
   border: none;
   cursor: pointer;
   transition: all 0.2s;
@@ -148,7 +161,7 @@
 }
 
 .message-tester .response-status.success {
-  background: rgba(37, 211, 102, 0.1);
+  background: rgba(var(--accent-rgb), 0.10);
   color: var(--primary-text);
 }
 
@@ -225,7 +238,7 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-secondary);
-  background: var(--bg-white);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
@@ -341,7 +354,7 @@
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--text-secondary);
-  background: var(--bg-white);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
@@ -409,7 +422,7 @@
 }
 
 .message-tester .batch-badge.completed {
-  background: rgba(37, 211, 102, 0.12);
+  background: var(--accent-soft);
   color: var(--primary-text);
 }
 

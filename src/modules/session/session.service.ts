@@ -30,6 +30,7 @@ import { resolveFeatureFlags } from '../../config/feature-flags';
 import { IWhatsAppEngine, ChatSummary, ChatState } from '../../engine/interfaces/whatsapp-engine.interface';
 import { createLogger } from '../../common/services/logger.service';
 import { HookManager } from '../../core/hooks';
+import { getRequestActor } from '../../common/services/request-context';
 
 /** Stagger before the single transient-launch retry; short - the claim is held while it waits. */
 const SESSION_START_RETRY_DELAY_MS = 2_000;
@@ -265,8 +266,14 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
       throw new ConflictException(`Session with name '${dto.name}' already exists`);
     }
 
+    const actor = getRequestActor();
+    const companyId = actor?.companyId;
+    const userId = actor?.userId;
+
     const session = this.sessionRepository.create({
       name: dto.name,
+      companyId: companyId || null,
+      userId: userId || null,
       config: dto.config || {},
       proxyUrl: dto.proxyUrl || null,
       proxyType: dto.proxyType || null,
@@ -289,6 +296,8 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
     }
     this.logger.log(`Session created: ${saved.name}`, {
       sessionId: saved.id,
+      companyId: saved.companyId,
+      userId: saved.userId,
       action: 'create',
     });
 
@@ -302,14 +311,43 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
   }
 
   async findAll(allowedSessions?: string[] | null, opts: ListOptions = {}): Promise<Session[]> {
-    // A session-restricted key only lists its own sessions; an unrestricted key (null/empty
-    // allowlist) lists all — mirroring the ApiKeyGuard allowedSessions model so a scoped key
-    // cannot enumerate every session through this aggregate route.
+    const actor = getRequestActor();
+    const companyId = actor?.companyId;
+    const userId = actor?.userId;
+    const userRole = (actor?.userRole || '').toLowerCase();
+    const isSuperAdmin = userRole === 'superadmin' || userRole === 'developer';
+    const isCompanyAdmin = userRole === 'companyadmin' || userRole === 'admin';
+
     const { limit, offset } = resolveListWindow(opts.limit, opts.offset);
-    const options: FindManyOptions<Session> = { order: { createdAt: 'DESC' }, take: limit, skip: offset };
-    if (allowedSessions && allowedSessions.length > 0) {
-      options.where = { id: In(allowedSessions) };
+    const options: FindManyOptions<Session> = {
+      order: { createdAt: 'DESC' },
+      take: limit,
+      skip: offset,
+    };
+
+    // 1. Company workspace isolation
+    const companyFilter = companyId && !isSuperAdmin ? companyId : undefined;
+
+    // 2. User workspace isolation under company workspace
+    if (!isSuperAdmin && !isCompanyAdmin && userId) {
+      const allowed = allowedSessions && allowedSessions.length > 0 ? allowedSessions : [];
+      if (allowed.length > 0) {
+        options.where = [
+          { ...(companyFilter ? { companyId: companyFilter } : {}), userId },
+          { ...(companyFilter ? { companyId: companyFilter } : {}), id: In(allowed) },
+        ];
+      } else {
+        options.where = { ...(companyFilter ? { companyId: companyFilter } : {}), userId };
+      }
+    } else if (allowedSessions && allowedSessions.length > 0) {
+      options.where = {
+        ...(companyFilter ? { companyId: companyFilter } : {}),
+        id: In(allowedSessions),
+      };
+    } else if (companyFilter) {
+      options.where = { companyId: companyFilter };
     }
+
     const sessions = await this.sessionRepository.find(options);
     return sessions.map(session => this.attachRuntimeState(session));
   }
@@ -319,6 +357,31 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
     if (!session) {
       throw new NotFoundException(`Session with id '${id}' not found`);
     }
+
+    const actor = getRequestActor();
+    if (actor) {
+      const companyId = actor.companyId;
+      const userId = actor.userId;
+      const userRole = (actor.userRole || '').toLowerCase();
+      const isSuperAdmin = userRole === 'superadmin' || userRole === 'developer';
+      const isCompanyAdmin = userRole === 'companyadmin' || userRole === 'admin';
+
+      // Company isolation: cannot access a foreign company's session
+      if (companyId && !isSuperAdmin && session.companyId && session.companyId !== companyId) {
+        throw new NotFoundException(`Session with id '${id}' not found`);
+      }
+
+      // User workspace isolation: regular agent cannot access another agent's session unless assigned
+      if (!isSuperAdmin && !isCompanyAdmin && userId) {
+        const allowed = actor.allowedSessions;
+        const isOwner = session.userId === userId;
+        const isAssigned = allowed ? allowed.includes(session.id) : false;
+        if (!isOwner && !isAssigned) {
+          throw new NotFoundException(`Session with id '${id}' not found`);
+        }
+      }
+    }
+
     return this.attachRuntimeState(session);
   }
 
@@ -561,7 +624,12 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
       if (session.status === SessionStatus.READY) {
         throw new BadRequestException('Session is already authenticated, no QR code needed');
       }
-      throw new BadRequestException('QR code is not ready yet. Please wait...');
+      throw new BadRequestException({
+        statusCode: 400,
+        message: 'QR code is not ready yet. Please wait...',
+        retryAfterMs: 3000,
+        status: session.status,
+      });
     }
 
     return {
@@ -621,10 +689,13 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
     await this.findOne(id); // Verify session exists
     const engine = this.requireEngine(id);
 
-    // Most-recent first, then bound the response window. Sorting before the cap means a capped
-    // response is the N newest chats (what clients show first) rather than an arbitrary slice.
-    const chats = [...(await engine.getChats())].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-    return paginate(chats, opts.limit, opts.offset);
+    try {
+      const chats = [...(await engine.getChats())].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      return paginate(chats, opts.limit, opts.offset);
+    } catch (err) {
+      this.logger.error(`getChats failed for session ${id}: ${err instanceof Error ? err.stack || err.message : String(err)}`);
+      throw err;
+    }
   }
 
   /**

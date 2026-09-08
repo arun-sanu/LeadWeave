@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional, MaxLength, MinLength, Matches, IsIn, IsUrl } from 'class-validator';
+import { IsString, IsOptional, MaxLength, MinLength, Matches, IsIn, IsUrl, IsBoolean } from 'class-validator';
+import { ToStrictBoolean } from '../../../common/utils/strict-boolean';
 
 export class CreateSessionDto {
   @ApiProperty({
@@ -64,4 +65,13 @@ export class CreateSessionDto {
   @IsOptional()
   @IsIn(['http', 'https', 'socks4', 'socks5'])
   proxyType?: 'http' | 'https' | 'socks4' | 'socks5';
+
+  @ApiPropertyOptional({
+    description: 'Optionally start the session engine immediately upon creation',
+    example: true,
+  })
+  @IsOptional()
+  @ToStrictBoolean()
+  @IsBoolean()
+  autoStart?: boolean;
 }

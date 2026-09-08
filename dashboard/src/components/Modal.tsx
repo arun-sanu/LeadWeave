@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { bindModalA11y } from '../utils/modalA11y.ts';
+import { LeadWeaveLogo } from './LeadWeaveLogo';
 
 export interface ModalProps {
   /** Whether the dialog is shown. When false, renders nothing. */
@@ -86,7 +87,10 @@ export function Modal({
         tabIndex={-1}
       >
         <div className="modal-header">
-          <h2 id={titleId}>{title}</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <LeadWeaveLogo size={24} />
+            <h2 id={titleId}>{title}</h2>
+          </div>
           {headerExtra}
           {hideCloseButton ? null : (
             <button type="button" className="btn-icon" onClick={onClose} aria-label={closeLabel}>

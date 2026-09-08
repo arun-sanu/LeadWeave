@@ -1,5 +1,3 @@
-import { Suspense } from 'react';
-import { lazyWithRetry as lazy } from '../utils/lazyWithRetry';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { MessageSquare, Send, Webhook, Activity, Loader2 } from 'lucide-react';
@@ -10,27 +8,49 @@ import {
   useWebhooksQuery,
   useStopSessionMutation,
   useStatsOverviewQuery,
+  useSessionSpecificStatsQuery,
 } from '../hooks/queries';
 import { PageHeader } from '../components/PageHeader';
+import { SciFiGauges } from '../components/SciFiGauges';
+import type { Session } from '../services/api';
 import './Dashboard.css';
 
-// recharts is heavy (~150kB gzip); load the analytics section on demand so it never bloats the
-// main/login bundle and only ships when the dashboard actually renders.
-const DashboardCharts = lazy(() => import('../components/DashboardCharts').then(m => ({ default: m.DashboardCharts })));
+function SessionGaugeBlock({ session }: { session: Session }) {
+  const { data: stats } = useSessionSpecificStatsQuery(session.id);
+
+  return (
+    <div className="session-gauge-block">
+      <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        {session.name}
+        <span className={`status-pill ${session.status}`}>{session.status}</span>
+      </h3>
+      
+      <SciFiGauges
+        messagesSentToday={stats?.messages?.today ?? 0}
+        dailyMessageLimit={5000}
+        usersReachedToday={stats?.messages?.today ?? 0}
+        dailyUserLimit={2500}
+        currentMsgsPerMin={0}
+        maxMessagesPerMinute={30}
+      />
+    </div>
+  );
+}
 
 export function Dashboard() {
   const { t } = useTranslation();
   useDocumentTitle(t('dashboard.title'));
   const navigate = useNavigate();
   const { data: sessions = [], isLoading: loadingSessions, error: sessionsError } = useSessionsQuery();
+  
   const { data: stats } = useSessionStatsQuery();
   const { data: webhooks = [] } = useWebhooksQuery();
+  
   // /stats/overview is ADMIN-only; for a non-admin key it 403s → overview stays undefined and the
   // message cards fall back to '—' without breaking the (un-gated) session cards.
-  const { data: overview } = useStatsOverviewQuery();
+  const { data: statsOverview } = useStatsOverviewQuery();
   const stopMutation = useStopSessionMutation();
-  const messagesToday = overview ? overview.messages.today.sent + overview.messages.today.received : '—';
-  const totalMessages = overview ? overview.messages.sent + overview.messages.received : '—';
+  
   const loading = loadingSessions;
   const error =
     sessionsError instanceof Error ? sessionsError.message : sessionsError ? t('dashboard.loadError') : null;
@@ -44,18 +64,18 @@ export function Dashboard() {
     }
   };
 
-  const statsCards = [
+  const messagesToday = statsOverview?.messages?.today ? statsOverview.messages.today.sent + statsOverview.messages.today.received : '—';
+  const totalMessages = statsOverview?.messages ? statsOverview.messages.sent + statsOverview.messages.received : '—';
+
+  const globalStatsCards = [
     {
-      // `stats.active` counts running engines — which includes initializing/qr_ready/connecting — so
-      // it overstates what an operator reads as "connected". READY is the only status where the
-      // session can actually send and receive.
       label: t('dashboard.stats.activeSessions'),
       value: stats?.ready ?? 0,
       icon: MessageSquare,
       detail: stats ? t('dashboard.stats.sessionsDetail', { running: stats.active, total: stats.total }) : undefined,
     },
-    { label: t('dashboard.stats.messagesToday'), value: messagesToday, icon: Send },
     { label: t('dashboard.stats.webhooksConfigured'), value: webhookCount, icon: Webhook },
+    { label: t('dashboard.stats.messagesToday'), value: messagesToday, icon: Send },
     { label: t('dashboard.stats.totalMessages'), value: totalMessages, icon: Activity },
   ];
 
@@ -105,8 +125,9 @@ export function Dashboard() {
         }
       />
 
+      {/* Global Summary Stats */}
       <div className="stats-grid">
-        {statsCards.map(({ label, value, icon: Icon, detail }) => (
+        {globalStatsCards.map(({ label, value, icon: Icon, detail }) => (
           <div key={label} className="stat-card">
             <Icon className="stat-watermark" />
             <div className="stat-header">
@@ -119,18 +140,29 @@ export function Dashboard() {
         ))}
       </div>
 
-      <Suspense fallback={null}>
-        <DashboardCharts />
-      </Suspense>
-
-      <section className="sessions-section">
+      <section className="sessions-overview-section" style={{ marginTop: '3rem' }}>
         <div className="section-header">
           <h2>{t('dashboard.sessionsOverview')}</h2>
-          <span className="section-subtitle">
-            {t('dashboard.showingSessions', { shown: sessions.length, total: stats?.total ?? 0 })}
-          </span>
         </div>
 
+        {sessions.length === 0 ? (
+          <div className="table-row" style={{ justifyContent: 'center', color: 'var(--text-muted)' }}>
+            {t('dashboard.noSessions')}
+          </div>
+        ) : (
+          <div className="session-dashboard-cards">
+            {sessions.map(session => (
+              <SessionGaugeBlock key={session.id} session={session} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Old Table view below if needed, but we can replace it or keep it. Let's keep it below the cards */}
+      <section className="sessions-section" style={{ marginTop: '3rem' }}>
+        <div className="section-header">
+          <h2>Session Details Table</h2>
+        </div>
         <div className="sessions-table">
           <div className="table-header">
             <span>{t('dashboard.columns.sessionId')}</span>

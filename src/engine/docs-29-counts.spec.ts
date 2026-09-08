@@ -85,7 +85,7 @@ describe('docs/29 counts match the capability matrix', () => {
     // is why they drifted while the digit-shaped claims held: a patcher was added to each library and
     // the words stayed at "five" and "1 on Baileys".
     const WORDS: Record<string, number> = { four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
-    const spelled = doc.match(/OpenWA ships (\w+) exact, self-disabling source transforms/);
+    const spelled = doc.match(/LeadWeave ships (\w+) exact, self-disabling source transforms/);
     const wrongProse: string[] = [];
     if (!spelled) wrongProse.push('29.3 opening: phrasing no longer found in the document');
     else if (WORDS[spelled[1]] !== expected.total) {
@@ -100,8 +100,8 @@ describe('docs/29 counts match the capability matrix', () => {
         re: /engine-specific \(\d+ on wwjs,\s*(\d+) on Baileys\)/,
         want: expected.baileys,
       },
-      { label: 'mermaid wwjs node', re: /whatsapp-web\.js [\d.]+<br\/>\+ (\d+) OpenWA patch/, want: expected.wwjs },
-      { label: 'mermaid baileys node', re: /baileys [\w.-]+<br\/>\+ (\d+) OpenWA patch/, want: expected.baileys },
+      { label: 'mermaid wwjs node', re: /whatsapp-web\.js [\d.]+<br\/>\+ (\d+) LeadWeave patch/, want: expected.wwjs },
+      { label: 'mermaid baileys node', re: /baileys [\w.-]+<br\/>\+ (\d+) LeadWeave patch/, want: expected.baileys },
       { label: '29.8 total', re: /- \*\*(\d+)\*\* install-time patches/, want: expected.total },
       { label: '29.8 split', re: /install-time patches \((\d+) whatsapp-web\.js/, want: expected.wwjs },
       {

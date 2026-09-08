@@ -1,8 +1,7 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { MessageStatsResponseDto, OverviewStatsResponseDto, SessionStatsResponseDto } from './dto/stats-response.dto';
+import { OverviewStatsResponseDto, SessionStatsResponseDto } from './dto/stats-response.dto';
 import { StatsService } from './stats.service';
-import { StatsQueryDto } from './dto/stats-query.dto';
 import { RequireRole, RequireUnscopedKey } from '../auth/decorators/auth.decorators';
 import { ApiKeyRole } from '../auth/entities/api-key.entity';
 
@@ -25,19 +24,6 @@ export class StatsController {
   })
   async getOverview() {
     return this.statsService.getOverview();
-  }
-
-  @Get('messages')
-  @RequireRole(ApiKeyRole.ADMIN)
-  @RequireUnscopedKey()
-  @ApiOperation({ summary: 'Get message statistics with time series' })
-  @ApiResponse({
-    status: 200,
-    description: 'Message statistics with a time series for the requested period.',
-    type: MessageStatsResponseDto,
-  })
-  async getMessageStats(@Query() query: StatsQueryDto) {
-    return this.statsService.getMessageStats(query.period || '24h');
   }
 
   @Get('sessions/:sessionId')

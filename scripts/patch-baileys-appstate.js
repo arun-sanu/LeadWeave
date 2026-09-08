@@ -17,7 +17,7 @@
  *
  * The transform adds the exit the guard assumes: an empty decode ends the walk. Nothing came back,
  * and re-asking in a tight loop is what produced the defect — a later connect re-runs the sync
- * anyway (OpenWA calls it on every `open`).
+ * anyway (LeadWeave calls it on every `open`).
  *
  * Exact and self-disabling, matching the whatsapp-web.js patchers: an unknown shape fails rather
  * than silently shipping without the fix. Remove this once upstream bounds the loop.
@@ -34,7 +34,7 @@ const LOOP_FIND = `                const decoded = await extractSyncdPatches(res
                 for (const key in decoded) {`;
 
 const LOOP_REPLACE = `                const decoded = await extractSyncdPatches(result, config?.options);
-                // OpenWA: query() resolves undefined on its own timeout, which decodes to {}. Every
+                // LeadWeave: query() resolves undefined on its own timeout, which decodes to {}. Every
                 // exit below — including the attemptsMap guard — is inside this for-in, so an empty
                 // decode would otherwise spin the while loop for the life of the socket.
                 if (!Object.keys(decoded).length) {
@@ -49,7 +49,7 @@ function applyAppStatePatch(baileysDir = DEFAULT_BAILEYS) {
     return { skipped: true, reason: `${CHATS_PATH} not found — nothing to patch` };
   }
   const source = fs.readFileSync(file, 'utf8');
-  if (source.includes('OpenWA: query() resolves undefined on its own timeout')) {
+  if (source.includes('LeadWeave: query() resolves undefined on its own timeout')) {
     return { skipped: true, reason: 'already patched' };
   }
   const occurrences = source.split(LOOP_FIND).length - 1;

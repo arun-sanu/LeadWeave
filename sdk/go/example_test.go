@@ -1,4 +1,4 @@
-package openwa_test
+package leadweave_test
 
 import (
 	"context"
@@ -7,11 +7,11 @@ import (
 	"log"
 	"time"
 
-	openwa "github.com/rmyndharis/OpenWA/sdk/go"
+	leadweave "github.com/rmyndharis/LeadWeave/sdk/go"
 )
 
 func ExampleNew() {
-	client, err := openwa.New("http://localhost:2785", "owa_k1_…")
+	client, err := leadweave.New("http://localhost:2785", "owa_k1_…")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -21,9 +21,9 @@ func ExampleNew() {
 		log.Fatal(err)
 	}
 
-	res, err := client.Messages.SendText(ctx, "my-session", openwa.SendTextRequest{
+	res, err := client.Messages.SendText(ctx, "my-session", leadweave.SendTextRequest{
 		ChatID: "628123456789@c.us",
-		Text:   "Hello from the OpenWA Go SDK!",
+		Text:   "Hello from the LeadWeave Go SDK!",
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -32,19 +32,19 @@ func ExampleNew() {
 }
 
 func ExampleClient_typedErrors() {
-	client, _ := openwa.New("http://localhost:2785", "owa_k1_…")
+	client, _ := leadweave.New("http://localhost:2785", "owa_k1_…")
 
-	_, err := client.Messages.SendText(context.Background(), "my-session", openwa.SendTextRequest{
+	_, err := client.Messages.SendText(context.Background(), "my-session", leadweave.SendTextRequest{
 		ChatID: "628123456789@c.us",
 		Text:   "hi",
 	})
 	switch {
-	case errors.Is(err, openwa.ErrConflict):
+	case errors.Is(err, leadweave.ErrConflict):
 		// Engine not ready (409) — retry after the session reaches "ready".
-	case errors.Is(err, openwa.ErrNotFound):
+	case errors.Is(err, leadweave.ErrNotFound):
 		// Unknown session (404).
 	case err != nil:
-		var apiErr *openwa.APIError
+		var apiErr *leadweave.APIError
 		if errors.As(err, &apiErr) {
 			log.Printf("API %d: %s", apiErr.StatusCode, apiErr.Message)
 		}
@@ -54,26 +54,26 @@ func ExampleClient_typedErrors() {
 func ExampleWithRetry() {
 	// Opt into automatic retries with exponential backoff, and inject a custom
 	// per-request timeout — dependencies flow through functional options.
-	client, _ := openwa.New("http://localhost:2785", "owa_k1_…",
-		openwa.WithRetry(openwa.DefaultRetryPolicy()),
-		openwa.WithTimeout(15*time.Second),
+	client, _ := leadweave.New("http://localhost:2785", "owa_k1_…",
+		leadweave.WithRetry(leadweave.DefaultRetryPolicy()),
+		leadweave.WithTimeout(15*time.Second),
 	)
 	_ = client
 }
 
 func ExampleClient_webhookEvents() {
-	client, _ := openwa.New("http://localhost:2785", "owa_k1_…")
+	client, _ := leadweave.New("http://localhost:2785", "owa_k1_…")
 
 	// Subscribe to the group and call events with the Event* constants — they
 	// are the exact wire values, so a typo is a compile error, not a silent
 	// no-delivery.
-	_, err := client.Webhooks.Create(context.Background(), "my-session", openwa.CreateWebhookRequest{
+	_, err := client.Webhooks.Create(context.Background(), "my-session", leadweave.CreateWebhookRequest{
 		URL: "https://example.com/hook",
 		Events: []string{
-			openwa.EventGroupJoin,
-			openwa.EventGroupLeave,
-			openwa.EventGroupUpdate,
-			openwa.EventCallReceived,
+			leadweave.EventGroupJoin,
+			leadweave.EventGroupLeave,
+			leadweave.EventGroupUpdate,
+			leadweave.EventCallReceived,
 		},
 	})
 	if err != nil {

@@ -2264,7 +2264,7 @@
                   "summary": "Plain text message",
                   "value": {
                     "chatId": "628123456789@c.us",
-                    "text": "Hello from OpenWA!"
+                    "text": "Hello from LeadWeave!"
                   }
                 },
                 "withMentions": {
@@ -9423,12 +9423,12 @@
     }
   },
   "info": {
-    "title": "OpenWA API",
+    "title": "LeadWeave API",
     "description": "Open Source WhatsApp API Gateway - Free, Self-Hosted HTTP API\n\n**Gateway-wide responses.** Two statuses are returned by middleware before routing, so any operation can emit them:\n\n- `415 Unsupported Media Type` — the request body carries a `Content-Encoding` other than `identity`. The aggregate in-flight body cap counts wire bytes, so a compressed body would be admitted on its compressed size and then inflated past the memory it is meant to bound. Send the body uncompressed.\n- `503 Service Unavailable` with `Retry-After` — the gateway already has too much request body data in flight. The body is not read; retry after the given delay.",
     "version": "0.23.0",
     "contact": {
-      "name": "OpenWA",
-      "url": "https://github.com/rmyndharis/OpenWA",
+      "name": "LeadWeave",
+      "url": "https://github.com/rmyndharis/LeadWeave",
       "email": "yudhi@rmyndharis.com"
     }
   },
@@ -11282,7 +11282,7 @@
           "text": {
             "type": "string",
             "description": "Text message content",
-            "example": "Hello from OpenWA!",
+            "example": "Hello from LeadWeave!",
             "maxLength": 4096
           },
           "mentions": {
@@ -12553,7 +12553,7 @@
           "header": {
             "type": "string",
             "description": "Optional header text, prepended to the rendered body",
-            "example": "OpenWA Store",
+            "example": "LeadWeave Store",
             "maxLength": 1024
           },
           "footer": {
@@ -12807,11 +12807,11 @@
           "host": {
             "type": "string",
             "description": "Host the app is configured to reach.",
-            "example": "openwa-postgres"
+            "example": "leadweave-postgres"
           },
           "builtIn": {
             "type": "boolean",
-            "description": "Whether OpenWA's own bundled container is actually running and backing this service, detected live from the labelled container rather than read from the saved intent. Falls back to the saved flag when Docker is unavailable.",
+            "description": "Whether LeadWeave's own bundled container is actually running and backing this service, detected live from the labelled container rather than read from the saved intent. Falls back to the saved flag when Docker is unavailable.",
             "example": true
           }
         },
@@ -12837,7 +12837,7 @@
           },
           "host": {
             "type": "string",
-            "example": "openwa-redis"
+            "example": "leadweave-redis"
           },
           "port": {
             "type": "number",
@@ -12845,7 +12845,7 @@
           },
           "builtIn": {
             "type": "boolean",
-            "description": "Whether OpenWA's bundled Redis container is backing this.",
+            "description": "Whether LeadWeave's bundled Redis container is backing this.",
             "example": true
           }
         },
@@ -12923,11 +12923,11 @@
           "bucket": {
             "type": "string",
             "description": "Bucket name. Present only for `s3`.",
-            "example": "openwa-media"
+            "example": "leadweave-media"
           },
           "builtIn": {
             "type": "boolean",
-            "description": "Whether OpenWA's bundled MinIO container is backing this.",
+            "description": "Whether LeadWeave's bundled MinIO container is backing this.",
             "example": false
           },
           "s3Available": {
@@ -13138,7 +13138,7 @@
           },
           "host": {
             "type": "string",
-            "example": "openwa-postgres"
+            "example": "leadweave-postgres"
           },
           "port": {
             "type": "string",
@@ -13147,12 +13147,12 @@
           },
           "username": {
             "type": "string",
-            "example": "openwa"
+            "example": "leadweave"
           },
           "database": {
             "type": "string",
             "description": "Database name, or the SQLite file path.",
-            "example": "openwa"
+            "example": "leadweave"
           },
           "schema": {
             "type": "string",
@@ -13203,7 +13203,7 @@
           },
           "host": {
             "type": "string",
-            "example": "openwa-redis"
+            "example": "leadweave-redis"
           },
           "port": {
             "type": "string",
@@ -16241,11 +16241,11 @@
               "type": "string"
             }
           },
-          "minOpenWAVersion": {
+          "minLeadWeaveVersion": {
             "type": "string",
             "example": "0.18.0"
           },
-          "testedOpenWAVersion": {
+          "testedLeadWeaveVersion": {
             "type": "string",
             "example": "0.18.0"
           },

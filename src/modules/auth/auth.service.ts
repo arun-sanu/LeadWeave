@@ -92,7 +92,7 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     this.logger.log('');
     this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     this.logger.log('');
-    this.logger.log('  🟢 Welcome to OpenWA - WhatsApp API Gateway');
+    this.logger.log('  🟢 Welcome to LeadWeave - WhatsApp API Gateway');
     this.logger.log('');
     this.logger.log(`  📊 Dashboard: ${dashboardUrl}`);
     this.logger.log(`  📚 API Docs:  ${apiBaseUrl}/api/docs`);
@@ -106,7 +106,27 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     this.logger.log('');
     this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     this.logger.log('');
+
+    // Auto-sync instance registration to Supabase if enabled
+    try {
+      const { SupabaseService } = require('./supabase.service');
+      const supabaseService = this.moduleRef.get(SupabaseService, { strict: false });
+      if (supabaseService?.isEnabled?.()) {
+        const os = require('os');
+        const instanceId = process.env.INSTANCE_ID || process.env.HOSTNAME || `lw-node-${os.hostname()}`;
+        const keyPrefix = displayKey.startsWith('owa_') ? displayKey.substring(0, 12) : 'owa_k1_admin';
+        void supabaseService.registerInstance({
+          instanceId,
+          hostname: os.hostname(),
+          keyPrefix,
+          version: '0.23.0',
+        });
+      }
+    } catch {
+      // Best-effort instance registration
+    }
   }
+
 
   /** Flush the coalesced usage counters before the DB connection closes. See ApiKeyUsageTracker. */
   async onModuleDestroy(): Promise<void> {
@@ -420,6 +440,17 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
       this.logger.warn(`Failed to evict WebSocket sockets for key ${keyId}`, {
         error: error instanceof Error ? error.message : String(error),
       });
+    }
+
+    // Broadcast eviction to peer cluster replicas via Redis Pub/Sub
+    try {
+      const { CacheService } = require('../../common/cache/cache.service');
+      const cacheService = this.moduleRef.get(CacheService, { strict: false });
+      if (cacheService) {
+        void cacheService.publishAuthEviction(keyId, reason);
+      }
+    } catch {
+      // Best-effort cluster broadcast
     }
   }
 

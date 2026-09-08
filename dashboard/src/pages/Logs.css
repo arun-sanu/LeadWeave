@@ -23,7 +23,7 @@
   flex: 1;
   max-width: 400px;
   padding: 0.75rem 1rem;
-  background: var(--bg-white);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
@@ -49,7 +49,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0 1rem;
-  background: var(--bg-white);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
@@ -63,7 +63,7 @@
 }
 
 .logs-page .logs-table-container {
-  background: var(--bg-white);
+  background: var(--bg-card);
   border-radius: 12px;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
@@ -102,11 +102,11 @@
 }
 
 .logs-page .logs-table .table-row:not(.header):hover {
-  background: rgba(37, 211, 102, 0.05);
+  background: rgba(var(--accent-rgb), 0.05);
 }
 
 .logs-page .timestamp {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   color: var(--text-muted);
   white-space: nowrap;
@@ -120,13 +120,13 @@
 }
 
 .logs-page .api-key {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   white-space: nowrap;
 }
 
 .logs-page .ip {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   white-space: nowrap;
 }
@@ -180,7 +180,7 @@
 .logs-page .pagination button {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  background: var(--bg-white);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
@@ -289,7 +289,7 @@
     text-align: left;
     gap: 0.5rem;
     padding: 1rem;
-    background: var(--bg-white);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: var(--shadow-sm);
@@ -304,7 +304,7 @@
   }
 
   .logs-page .logs-table .table-row:not(.header):hover {
-    background: var(--bg-white);
+    background: var(--bg-card);
   }
 
   /* Action label prominent at top */

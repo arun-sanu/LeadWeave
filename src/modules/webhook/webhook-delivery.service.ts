@@ -335,7 +335,7 @@ export class WebhookDeliveryService implements OnModuleInit, OnModuleDestroy {
       const finalPayload = (hookResult as { payload?: WebhookPayload } | null | undefined)?.payload ?? payload;
       // Re-assert EVERY identity field after the (untrusted) hook chain. A hook may rewrite data,
       // but event/sessionId/timestamp and the dedupe ids must remain the server's values: the
-      // receiver verifies the signature over this body and compares it against the X-OpenWA-*
+      // receiver verifies the signature over this body and compares it against the X-LeadWeave-*
       // headers, and failure records are filed by these fields — a rewritten sessionId/event
       // misfiles them across sessions.
       finalPayload.event = event;
@@ -382,11 +382,11 @@ export class WebhookDeliveryService implements OnModuleInit, OnModuleDestroy {
       const headers = {
         ...this.sanitizeCustomHeaders(webhook.headers),
         'Content-Type': 'application/json',
-        'User-Agent': 'OpenWA-Webhook/1.0.0',
-        'X-OpenWA-Event': event,
-        'X-OpenWA-Idempotency-Key': idempotencyKey,
-        'X-OpenWA-Delivery-Id': deliveryId,
-        'X-OpenWA-Retry-Count': '0',
+        'User-Agent': 'LeadWeave-Webhook/1.0.0',
+        'X-LeadWeave-Event': event,
+        'X-LeadWeave-Idempotency-Key': idempotencyKey,
+        'X-LeadWeave-Delivery-Id': deliveryId,
+        'X-LeadWeave-Retry-Count': '0',
       };
       return { finalPayload, body, headers };
     } catch (error) {
@@ -453,7 +453,7 @@ export class WebhookDeliveryService implements OnModuleInit, OnModuleDestroy {
       const signature = webhook.secret ? this.generateSignature(body, webhook.secret) : '';
 
       if (webhook.secret) {
-        headers['X-OpenWA-Signature'] = signature;
+        headers['X-LeadWeave-Signature'] = signature;
       }
 
       const jobData: WebhookJobData = {
@@ -509,7 +509,7 @@ export class WebhookDeliveryService implements OnModuleInit, OnModuleDestroy {
       // Fallback: deliver directly when the queue add failed (e.g. Redis unreachable with the
       // producer's enableOfflineQueue:false). This is at-least-once — if add() actually reached
       // Redis before rejecting, the queued job AND this fallback may both POST. Both paths carry the
-      // same X-OpenWA-Idempotency-Key / X-OpenWA-Delivery-Id, so a conformant receiver dedupes.
+      // same X-LeadWeave-Idempotency-Key / X-LeadWeave-Delivery-Id, so a conformant receiver dedupes.
       try {
         await this.deliverWebhook(webhook, finalPayload, headers, body);
 
@@ -701,11 +701,11 @@ export class WebhookDeliveryService implements OnModuleInit, OnModuleDestroy {
     attempt = 1,
   ): Promise<void> {
     // Update retry count header
-    headers['X-OpenWA-Retry-Count'] = String(attempt - 1);
+    headers['X-LeadWeave-Retry-Count'] = String(attempt - 1);
 
     // Add signature if secret is configured and not already present
-    if (webhook.secret && !headers['X-OpenWA-Signature']) {
-      headers['X-OpenWA-Signature'] = this.generateSignature(body, webhook.secret);
+    if (webhook.secret && !headers['X-LeadWeave-Signature']) {
+      headers['X-LeadWeave-Signature'] = this.generateSignature(body, webhook.secret);
     }
 
     try {
@@ -766,14 +766,14 @@ export class WebhookDeliveryService implements OnModuleInit, OnModuleDestroy {
 
   /**
    * Drop operator-supplied custom headers that target reserved names (Content-Type or any
-   * X-OpenWA-* header) so a webhook config cannot forge the signature/event/idempotency
+   * X-LeadWeave-* header) so a webhook config cannot forge the signature/event/idempotency
    * headers. Spread the result BEFORE the system headers so system always wins. Shared with
    * WebhookService.test(), which must probe with headers identical to a real delivery's.
    */
   sanitizeCustomHeaders(custom: Record<string, string> | null | undefined): Record<string, string> {
     const safe: Record<string, string> = {};
     for (const [key, value] of Object.entries(custom ?? {})) {
-      if (!/^(content-type|x-openwa-)/i.test(key)) {
+      if (!/^(content-type|x-leadweave-)/i.test(key)) {
         safe[key] = value;
       }
     }

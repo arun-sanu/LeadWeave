@@ -407,4 +407,75 @@ describe('ApiKeyGuard', () => {
 
     expect(authService.validateApiKey).toHaveBeenCalledWith('key', '203.0.113.50', undefined);
   });
+
+  describe('Cookie-authenticated requests & CSRF Protection', () => {
+    it('authenticates via leadweave_api_key cookie', async () => {
+      reflector.getAllAndOverride.mockReturnValue(undefined);
+      authService.validateApiKey.mockResolvedValue(createMockApiKey());
+      authService.hasPermission.mockReturnValue(true);
+
+      const request = {
+        headers: { host: 'localhost:3000' },
+        cookies: { leadweave_api_key: 'owa_k1_test' },
+        method: 'GET',
+        params: {},
+        ip: '127.0.0.1',
+      };
+      const context = {
+        switchToHttp: () => ({ getRequest: () => request }),
+        getHandler: () => ({}),
+        getClass: () => ({}),
+      } as unknown as ExecutionContext;
+
+      const result = await guard.canActivate(context);
+      expect(result).toBe(true);
+      expect(authService.validateApiKey).toHaveBeenCalledWith('owa_k1_test', '127.0.0.1', undefined);
+    });
+
+    it('rejects cross-site cookie mutation with ForbiddenException', async () => {
+      reflector.getAllAndOverride.mockReturnValue(undefined);
+
+      const request = {
+        headers: {
+          host: 'api.example.com',
+          'sec-fetch-site': 'cross-site',
+        },
+        cookies: { leadweave_api_key: 'owa_k1_test' },
+        method: 'POST',
+        params: {},
+        ip: '127.0.0.1',
+      };
+      const context = {
+        switchToHttp: () => ({ getRequest: () => request }),
+        getHandler: () => ({}),
+        getClass: () => ({}),
+      } as unknown as ExecutionContext;
+
+      await expect(guard.canActivate(context)).rejects.toThrow(ForbiddenException);
+    });
+
+    it('allows header-authenticated mutation requests even with cross-site sec-fetch-site (programmatic API)', async () => {
+      reflector.getAllAndOverride.mockReturnValue(undefined);
+      authService.validateApiKey.mockResolvedValue(createMockApiKey());
+      authService.hasPermission.mockReturnValue(true);
+
+      const request = {
+        headers: {
+          'x-api-key': 'owa_k1_direct',
+          'sec-fetch-site': 'cross-site',
+        },
+        method: 'POST',
+        params: {},
+        ip: '127.0.0.1',
+      };
+      const context = {
+        switchToHttp: () => ({ getRequest: () => request }),
+        getHandler: () => ({}),
+        getClass: () => ({}),
+      } as unknown as ExecutionContext;
+
+      const result = await guard.canActivate(context);
+      expect(result).toBe(true);
+    });
+  });
 });

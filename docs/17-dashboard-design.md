@@ -2,7 +2,7 @@
 
 ## 17.1 Overview
 
-The dashboard is a web-based management interface for OpenWA that lets users manage sessions, webhooks, and monitor activity without using the API directly.
+The dashboard is a web-based management interface for LeadWeave that lets users manage sessions, webhooks, and monitor activity without using the API directly.
 
 ### Tech Stack
 
@@ -22,7 +22,7 @@ flowchart LR
     end
 
     subgraph Backend
-        API[OpenWA API]
+        API[LeadWeave API]
         WS[socket.io WebSocket]
     end
 
@@ -123,7 +123,7 @@ a non-admin hitting the path falls through to the `*` redirect.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  🔵 OpenWA                              🔍 Search    👤 Admin    ☀️  │
+│  🔵 LeadWeave                              🔍 Search    👤 Admin    ☀️  │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐          │
@@ -339,7 +339,7 @@ a non-admin hitting the path falls through to the `*` redirect.
 │                                                                      │
 │  ┌───────────────────────────────────────────────────────────────┐  │
 │  │  🔗 Main Webhook                                   ✅ Active   │  │
-│  │  https://api.example.com/webhook/openwa                        │  │
+│  │  https://api.example.com/webhook/leadweave                        │  │
 │  │  Events: message.received, message.ack, session.status         │  │
 │  │  Sessions: All                                                 │  │
 │  │  ──────────────────────────────────────────────────────────── │  │
@@ -460,7 +460,7 @@ and redirects to login.) Endpoints are grouped into typed namespaces — `sessio
 export const API_BASE_URL = `${(import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '')}/api`;
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const apiKey = sessionStorage.getItem('openwa_api_key');
+  const apiKey = sessionStorage.getItem('leadweave_api_key');
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers: {
@@ -563,7 +563,7 @@ export function useWebSocket(events: WebSocketEvents = {}) {
 
   const connect = useCallback(() => {
     if (socketRef.current?.connected) return;
-    const apiKey = sessionStorage.getItem('openwa_api_key');
+    const apiKey = sessionStorage.getItem('leadweave_api_key');
     if (!apiKey) return;
 
     socketRef.current = io(`${SOCKET_URL}/events`, {
@@ -616,7 +616,7 @@ export function useWebSocket(events: WebSocketEvents = {}) {
 
 Theming is **not** shadcn HSL design tokens. It is a plain `useTheme` hook (`src/hooks/useTheme.ts`)
 that toggles one attribute on `<html>` and lets the CSS do the rest. The value is persisted to
-`localStorage` under `openwa_theme`:
+`localStorage` under `leadweave_theme`:
 
 - **Mode** — `light | dark | system`. `system` removes `data-theme` so a `prefers-color-scheme`
   media query in the global CSS takes over; otherwise `data-theme="light|dark"` is set explicitly.
@@ -624,20 +624,20 @@ that toggles one attribute on `<html>` and lets the CSS do the rest. The value i
 The sidebar footer button toggles light ↔ dark directly (resolving `system` first); there is no
 picker popover and no `ThemeProvider` context wrapper — it's a hook consumed directly where needed.
 An earlier accent-palette picker (seven palettes via `data-palette`) was removed for
-maintainability; the legacy `openwa_palette` storage key and the attribute are cleaned up on load.
+maintainability; the legacy `leadweave_palette` storage key and the attribute are cleaned up on load.
 
 ```typescript
 // src/hooks/useTheme.ts (abridged)
 export type Theme = 'light' | 'dark' | 'system';
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(/* localStorage 'openwa_theme' ?? 'system' */);
+  const [theme, setTheme] = useState<Theme>(/* localStorage 'leadweave_theme' ?? 'system' */);
 
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'system') root.removeAttribute('data-theme');
     else root.setAttribute('data-theme', theme);
-    localStorage.setItem('openwa_theme', theme);
+    localStorage.setItem('leadweave_theme', theme);
   }, [theme]);
 
   return { theme, setTheme /* toggleTheme, resolvedTheme */ };

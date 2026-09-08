@@ -1,0 +1,708 @@
+/* Campaigns & Spreadsheet Grid Styling */
+.campaigns-page {
+  padding: 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Stats Summary Ribbon */
+.campaigns-page .campaigns-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.campaigns-page .stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.campaigns-page .stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.campaigns-page .stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-soft);
+  color: var(--primary-text);
+}
+
+.campaigns-page .stat-icon-wrapper.blue {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+}
+
+.campaigns-page .stat-icon-wrapper.purple {
+  background: rgba(147, 51, 234, 0.12);
+  color: #9333ea;
+}
+
+.campaigns-page .stat-icon-wrapper.amber {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+
+.campaigns-page .stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.campaigns-page .stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.campaigns-page .stat-label {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Main Studio Layout: 2 Columns on Desktop */
+.campaigns-page .campaign-studio-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .campaigns-page .campaign-studio-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section Card */
+.campaigns-page .studio-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.campaigns-page .studio-card-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.campaigns-page .card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.campaigns-page .card-title-group h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.campaigns-page .card-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  background: var(--primary-soft);
+  color: var(--primary-text);
+}
+
+.campaigns-page .card-actions-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Spreadsheet Actions */
+.campaigns-page .btn-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.campaigns-page .btn-tool:hover {
+  background: var(--bg-light);
+  color: var(--text-primary);
+  border-color: var(--primary);
+}
+
+.campaigns-page .btn-tool.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.campaigns-page .btn-tool.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.campaigns-page .btn-tool.btn-danger {
+  color: var(--error);
+}
+
+.campaigns-page .btn-tool.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--error);
+}
+
+/* Paste Banner Helper */
+.campaigns-page .paste-helper-banner {
+  margin: 1rem 1.5rem 0.5rem;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.08), rgba(37, 99, 235, 0.08));
+  border: 1px dashed var(--primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.campaigns-page .paste-helper-banner strong {
+  color: var(--text-primary);
+}
+
+.campaigns-page .paste-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Spreadsheet Grid Container */
+.campaigns-page .spreadsheet-scroll-area {
+  padding: 1rem 1.5rem 1.5rem;
+  overflow-x: auto;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.campaigns-page .spreadsheet-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.campaigns-page .spreadsheet-table th {
+  background: var(--bg-light);
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.65rem 0.85rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  user-select: none;
+}
+
+.campaigns-page .spreadsheet-table th:first-child {
+  border-left: 1px solid var(--border);
+  border-top-left-radius: 6px;
+  width: 48px;
+  text-align: center;
+}
+
+.campaigns-page .spreadsheet-table th:last-child {
+  border-top-right-radius: 6px;
+  width: 50px;
+  text-align: center;
+}
+
+.campaigns-page .col-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.campaigns-page .col-header-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.campaigns-page .col-header-pill {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  background: var(--primary-soft);
+  color: var(--primary-text);
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.campaigns-page .spreadsheet-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  background: var(--bg-card);
+  vertical-align: middle;
+}
+
+.campaigns-page .spreadsheet-table td:first-child {
+  border-left: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  background: var(--bg-light);
+}
+
+.campaigns-page .spreadsheet-table tr:hover td {
+  background: var(--bg-light);
+}
+
+.campaigns-page .spreadsheet-table tr:hover td:first-child {
+  background: rgba(var(--accent-rgb), 0.10);
+  color: var(--primary-text);
+}
+
+.campaigns-page .cell-input {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.875rem;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.campaigns-page .cell-input:hover {
+  border-color: var(--border);
+  background: var(--bg-card);
+}
+
+.campaigns-page .cell-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.20);
+}
+
+.campaigns-page .phone-cell-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.campaigns-page .phone-badge-valid {
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+.campaigns-page .phone-badge-invalid {
+  color: var(--error);
+  flex-shrink: 0;
+}
+
+.campaigns-page .row-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.campaigns-page .row-delete-btn:hover {
+  color: var(--error);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Empty State */
+.campaigns-page .spreadsheet-empty-state {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-muted);
+}
+
+.campaigns-page .empty-icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+/* Right Studio Panel: Composer & Settings */
+.campaigns-page .studio-right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.campaigns-page .composer-card-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.campaigns-page .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.campaigns-page .form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.campaigns-page .form-label-hint {
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: var(--text-muted);
+}
+
+.campaigns-page .form-control {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.campaigns-page .form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+}
+
+/* Variable Insert Pills */
+.campaigns-page .variable-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+}
+
+.campaigns-page .var-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.6rem;
+  background: var(--primary-soft);
+  color: var(--primary-text);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.campaigns-page .var-pill-btn:hover {
+  background: var(--primary);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* WhatsApp Message Preview Box */
+.campaigns-page .whatsapp-preview-box {
+  background: #0b141a;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 16px 16px;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.campaigns-page .preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #8696a0;
+  font-size: 0.75rem;
+}
+
+.campaigns-page .preview-row-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.campaigns-page .nav-row-arrow-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.campaigns-page .nav-row-arrow-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.campaigns-page .whatsapp-bubble {
+  background: #005c4b;
+  color: #e9edef;
+  border-radius: 12px 12px 2px 12px;
+  padding: 0.85rem 1.15rem;
+  align-self: flex-end;
+  max-width: 85%;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  word-break: break-word;
+  white-space: pre-wrap;
+  position: relative;
+}
+
+.campaigns-page .bubble-timestamp {
+  display: block;
+  text-align: right;
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 0.35rem;
+}
+
+/* Pacing Sliders */
+.campaigns-page .pacing-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.125rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.campaigns-page .slider-labels-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.campaigns-page .slider-track {
+  width: 100%;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* Launch Action Footer */
+.campaigns-page .launch-campaign-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #06080a;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px -2px rgba(var(--accent-rgb), 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: -0.01em;
+}
+
+.campaigns-page .launch-campaign-btn:hover:not(:disabled) {
+  background: var(--primary-hover);
+  box-shadow: 0 6px 25px 0 rgba(var(--accent-rgb), 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.campaigns-page .launch-campaign-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.campaigns-page .launch-campaign-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Active Batch Progress Monitor */
+.campaigns-page .active-batch-monitor-card {
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 12px;
+  padding: 1.125rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.campaigns-page .batch-monitor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.campaigns-page .batch-monitor-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.campaigns-page .batch-monitor-title code {
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  color: var(--primary);
+}
+
+.campaigns-page .batch-status-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.campaigns-page .batch-status-badge.badge-processing {
+  background: rgba(37, 99, 235, 0.15);
+  color: #3b82f6;
+  border: 1px solid rgba(37, 99, 235, 0.3);
+}
+
+.campaigns-page .batch-status-badge.badge-completed {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.campaigns-page .batch-status-badge.badge-failed,
+.campaigns-page .batch-status-badge.badge-cancelled {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.campaigns-page .batch-progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.campaigns-page .batch-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #3b82f6);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.campaigns-page .batch-progress-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.campaigns-page .batch-failed-count {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.campaigns-page .cancel-batch-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.25rem;
+}
+
+.campaigns-page .cancel-batch-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+}
+
+.campaigns-page .cancel-batch-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.campaigns-page .spin-icon {
+  animation: spin 1s linear infinite;
+}
+

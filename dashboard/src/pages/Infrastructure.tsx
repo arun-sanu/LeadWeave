@@ -71,16 +71,16 @@ export function Infrastructure() {
           configForm.dbConfig.database !== savedConfig.database.database);
       const dbSwitch =
         !!infraStatus &&
-        (configForm.dbConfig.type !== infraStatus.database.type ||
-          (configForm.dbConfig.type === 'postgres' && configForm.dbConfig.builtIn !== infraStatus.database.builtIn) ||
+        (configForm.dbConfig.type !== infraStatus.database?.type ||
+          (configForm.dbConfig.type === 'postgres' && configForm.dbConfig.builtIn !== infraStatus.database?.builtIn) ||
           dbExternalRetarget);
       // Scope: this warns on a backend-TYPE change (local↔s3) and a built-in↔external flip — the cases
       // that point at a different store. It does NOT warn on same-backend repointing (e.g. a new S3
       // bucket/endpoint or a new local path); region/endpoint aren't on /status to compare reliably.
       const storageSwitch =
         !!infraStatus &&
-        (configForm.storageConfig.type !== infraStatus.storage.type ||
-          (configForm.storageConfig.type === 's3' && configForm.storageConfig.builtIn !== infraStatus.storage.builtIn));
+        (configForm.storageConfig.type !== infraStatus.storage?.type ||
+          (configForm.storageConfig.type === 's3' && configForm.storageConfig.builtIn !== infraStatus.storage?.builtIn));
       restartFlow.open({ profiles, dbSwitch, storageSwitch });
     },
   });
@@ -92,8 +92,8 @@ export function Infrastructure() {
   // LIVE indicators (not editable) — always reflect the running process, every refetch.
   useEffect(() => {
     if (!infraStatus) return;
-    configForm.setRedisConnected(infraStatus.redis.connected);
-    setQueueStats({ webhooks: infraStatus.queue.webhooks });
+    configForm.setRedisConnected(infraStatus.redis?.connected ?? false);
+    setQueueStats({ webhooks: infraStatus.queue?.webhooks ?? { pending: 0, completed: 0, failed: 0 } });
     // configForm is a fresh object every render; only infraStatus identity should re-arm this effect.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [infraStatus]);
@@ -166,7 +166,7 @@ export function Infrastructure() {
               ● {configForm.dbConfig.type === 'postgres' ? 'PostgreSQL' : 'SQLite'}
             </span>
           </div>
-          {settingNote('DATABASE_TYPE', infraStatus.database.type, savedConfig?.database.type)}
+          {settingNote('DATABASE_TYPE', infraStatus?.database?.type, savedConfig?.database?.type)}
 
           <div className="radio-group">
             <label className={`radio-option ${configForm.dbConfig.type === 'sqlite' ? 'selected' : ''}`}>
@@ -380,7 +380,7 @@ export function Infrastructure() {
           </div>
           {/* The radio re-seeds from the RUNNING engine, so without this a pinned engine silently
               snapped back after a restart and read as "the save did nothing" (#1082). */}
-          {settingNote('ENGINE_TYPE', infraStatus.engine.type, savedConfig?.engine.type)}
+          {settingNote('ENGINE_TYPE', infraStatus?.engine?.type, savedConfig?.engine?.type)}
 
           <div className="radio-group">
             {engines.map(engine => (
@@ -406,11 +406,11 @@ export function Infrastructure() {
           </div>
 
           {/* The actual WhatsApp Web build in use — distinct from the library version above (#488). */}
-          {infraStatus?.engine.webVersion !== undefined && (
+          {infraStatus?.engine?.webVersion !== undefined && (
             <p className="engine-web-version">
               {t('infrastructure.engine.webVersion')}:{' '}
-              <code>{infraStatus.engine.webVersion ?? t('infrastructure.engine.webVersionNative')}</code>
-              {infraStatus.engine.webVersionSource && (
+              <code>{infraStatus?.engine?.webVersion ?? t('infrastructure.engine.webVersionNative')}</code>
+              {infraStatus?.engine?.webVersionSource && (
                 <span className="muted">
                   {' '}
                   ({t(`infrastructure.engine.webVersionSource.${infraStatus.engine.webVersionSource}`)})
@@ -483,7 +483,7 @@ export function Infrastructure() {
                 : t('infrastructure.statusLabels.disabled')}
             </span>
           </div>
-          {settingNote('REDIS_ENABLED', infraStatus.redis.enabled, savedConfig?.redis.enabled)}
+          {settingNote('REDIS_ENABLED', infraStatus?.redis?.enabled, savedConfig?.redis?.enabled)}
 
           <div
             className="toggle-row"
@@ -645,7 +645,7 @@ export function Infrastructure() {
             {(() => {
               // S3 selected but the backend isn't reachable → warn instead of a misleading green.
               const s3Unreachable =
-                configForm.storageConfig.type === 's3' && infraStatus?.storage.s3Available === false;
+                configForm.storageConfig.type === 's3' && infraStatus?.storage?.s3Available === false;
               const cls =
                 configForm.storageConfig.type !== 's3' ? 'sqlite' : s3Unreachable ? 'disconnected' : 'connected';
               return (
@@ -660,7 +660,7 @@ export function Infrastructure() {
               );
             })()}
           </div>
-          {settingNote('STORAGE_TYPE', infraStatus.storage.type, savedConfig?.storage.type)}
+          {settingNote('STORAGE_TYPE', infraStatus?.storage?.type, savedConfig?.storage?.type)}
 
           <div className="radio-group">
             <label className={`radio-option ${configForm.storageConfig.type === 'local' ? 'selected' : ''}`}>

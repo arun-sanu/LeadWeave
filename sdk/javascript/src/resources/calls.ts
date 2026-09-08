@@ -6,11 +6,11 @@
  */
 
 import { encodeSegment } from '../http.js';
-import type { OpenWAClient } from '../client.js';
+import type { LeadWeaveClient } from '../client.js';
 import type { CallLinkResponse, CreateCallLinkRequest, SuccessResult } from '../types.js';
 
 export class CallsResource {
-  constructor(private readonly client: OpenWAClient) {}
+  constructor(private readonly client: LeadWeaveClient) {}
 
   /**
    * Reject a ringing incoming call. The `callId` comes from the `call.received`

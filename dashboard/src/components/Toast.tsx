@@ -1,4 +1,4 @@
-import { useState, useCallback, type ReactNode } from 'react';
+import { useState, useCallback, useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, XCircle, AlertCircle, Info, X } from 'lucide-react';
 import { ToastContext, type Toast } from '../hooks/useToast';
@@ -98,8 +98,20 @@ export function ToastProvider({ children }: ToastProviderProps) {
     [addToast],
   );
 
+  const actionToast = useCallback(
+    (title: string, action: { label: string; onClick: () => void }, message?: string, duration = 6000) => {
+      addToast({ type: 'info', title, message, duration, action });
+    },
+    [addToast],
+  );
+
+  const contextValue = useMemo(
+    () => ({ toasts, addToast, removeToast, success, error, warning, info, actionToast }),
+    [toasts, addToast, removeToast, success, error, warning, info, actionToast],
+  );
+
   return (
-    <ToastContext.Provider value={{ toasts, addToast, removeToast, success, error, warning, info }}>
+    <ToastContext.Provider value={contextValue}>
       {children}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </ToastContext.Provider>
@@ -136,6 +148,18 @@ function ToastContainer({ toasts, removeToast }: ToastContainerProps) {
               <div className="toast-title">{toast.title}</div>
               {toast.message && <div className="toast-message">{toast.message}</div>}
             </div>
+            {toast.action && (
+              <button
+                type="button"
+                className="toast-action-btn"
+                onClick={() => {
+                  toast.action?.onClick();
+                  removeToast(toast.id);
+                }}
+              >
+                {toast.action.label}
+              </button>
+            )}
             <button className="toast-close" onClick={() => removeToast(toast.id)} aria-label={t('common.close')}>
               <X size={16} />
             </button>

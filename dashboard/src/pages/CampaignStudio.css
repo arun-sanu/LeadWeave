@@ -1,0 +1,424 @@
+/* Campaign Studio Comprehensive Dark-Mode Design System */
+
+.campaign-studio-layout {
+  --studio-bg-card:        rgba(42, 48, 60, 0.75);
+  --studio-border:         var(--border);
+  --studio-border-hover:   rgba(var(--accent-rgb), 0.30);
+  --studio-emerald:        var(--accent);
+  --studio-emerald-dark:   var(--accent-hover);
+  --studio-gradient-bg:    var(--accent);
+  --studio-gradient-hover: var(--accent-hover);
+  --studio-emerald-glow:   rgba(var(--accent-rgb), 0.35);
+  --studio-bg-input:       var(--color-surface);
+  --studio-text-main:      var(--text-primary);
+  --studio-text-sub:       var(--text-secondary);
+  --studio-text-muted:     var(--text-muted);
+}
+
+/* Glassmorphic Card Container */
+.campaign-studio-layout .studio-card-container {
+  background: var(--studio-bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--studio-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campaign-studio-layout .studio-card-container:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.campaign-studio-layout .studio-card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--studio-border);
+}
+
+.campaign-studio-layout .studio-card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--studio-text-main);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.campaign-studio-layout .studio-card-subtitle {
+  font-size: 0.8125rem;
+  color: var(--studio-text-sub);
+  margin-top: 0.2rem;
+}
+
+.campaign-studio-layout .btn-primary,
+.campaign-studio-layout button.btn-primary {
+  background: var(--studio-gradient-bg) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(var(--accent-rgb), 0.40) !important;
+  box-shadow: 0 4px 14px var(--studio-emerald-glow) !important;
+  transition: all 0.2s ease !important;
+}
+
+.campaign-studio-layout .btn-primary:hover:not(:disabled),
+.campaign-studio-layout button.btn-primary:hover:not(:disabled) {
+  background: var(--studio-gradient-hover) !important;
+  box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.50) !important;
+  transform: translateY(-1px);
+}
+
+/* Variable Chips */
+.campaign-studio-layout .variable-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.campaign-studio-layout .variable-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.campaign-studio-layout .variable-chip-btn:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+}
+
+.campaign-studio-layout .variable-chip-btn.spintax-chip {
+  color: #a7f3d0;
+  background: var(--studio-gradient-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.40);
+  box-shadow: 0 2px 8px var(--studio-emerald-glow);
+}
+
+.campaign-studio-layout .variable-chip-btn.spintax-chip:hover {
+  background: var(--studio-gradient-hover);
+  border-color: #5B944D;
+}
+
+/* Authentic WhatsApp Phone Preview Mockup */
+.campaign-studio-layout .whatsapp-phone-frame {
+  background: #0b141a;
+  border: 1px solid var(--studio-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 420px;
+}
+
+.campaign-studio-layout .whatsapp-mock-header {
+  background: #202c33;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.campaign-studio-layout .whatsapp-avatar-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.campaign-studio-layout .whatsapp-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--studio-gradient-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.campaign-studio-layout .whatsapp-contact-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e9edef;
+  margin: 0;
+}
+
+.campaign-studio-layout .whatsapp-contact-status {
+  font-size: 0.6875rem;
+  color: #8696a0;
+}
+
+.campaign-studio-layout .whatsapp-chat-bg {
+  flex: 1;
+  background-color: #0b141a;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-size: 16px 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.campaign-studio-layout .whatsapp-out-bubble {
+  align-self: flex-end;
+  background: #005c4b;
+  border: 1px solid rgba(var(--accent-rgb), 0.30);
+  color: #e9edef;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px 0px 8px 8px;
+  max-width: 85%;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  position: relative;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.campaign-studio-layout .whatsapp-bubble-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  margin-top: 0.35rem;
+  font-size: 0.6875rem;
+  color: rgba(241, 245, 249, 0.6);
+}
+
+.campaign-studio-layout .whatsapp-ticks {
+  color: #53bdeb;
+  font-weight: bold;
+}
+
+/* AirTable / Notion Style Spreadsheet Grid */
+.campaign-studio-layout .spreadsheet-grid-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--studio-border);
+  border-radius: 8px;
+  background: #090d16;
+}
+
+.campaign-studio-layout .spreadsheet-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.campaign-studio-layout .spreadsheet-grid-table th {
+  background: #131b2e;
+  color: var(--studio-text-sub);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--studio-border);
+  border-right: 1px solid var(--studio-border);
+  position: relative;
+  user-select: none;
+}
+
+.campaign-studio-layout .spreadsheet-header-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.campaign-studio-layout .spreadsheet-header-del-btn {
+  background: transparent;
+  border: none;
+  color: var(--studio-text-muted);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: all 0.15s ease;
+}
+
+.campaign-studio-layout .spreadsheet-grid-table th:hover .spreadsheet-header-del-btn {
+  opacity: 1;
+}
+
+.campaign-studio-layout .spreadsheet-header-del-btn:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.campaign-studio-layout .spreadsheet-grid-table td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  background: transparent;
+}
+
+.campaign-studio-layout .spreadsheet-cell-input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--studio-text-main);
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8125rem;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.campaign-studio-layout .spreadsheet-cell-input:focus {
+  background: var(--color-depth);
+  border-color: var(--studio-emerald);
+  box-shadow: 0 0 0 2px var(--studio-emerald-glow);
+}
+
+.campaign-studio-layout .spreadsheet-cell-input.invalid-phone {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+/* Custom Segmented Control Buttons */
+.campaign-studio-layout .segmented-control-group {
+  display: flex;
+  background: var(--color-depth);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--studio-border);
+  gap: 4px;
+}
+
+.campaign-studio-layout .segmented-control-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--studio-text-sub);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.campaign-studio-layout .segmented-control-btn.active {
+  color: #ffffff;
+  background: var(--studio-gradient-bg);
+  box-shadow: 0 4px 14px var(--studio-emerald-glow);
+}
+
+/* Custom Sleek Sliders */
+.campaign-studio-layout .studio-range-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #1e293b;
+  outline: none;
+}
+
+.campaign-studio-layout .studio-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--studio-emerald);
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--studio-emerald-glow);
+  transition: transform 0.15s ease;
+}
+
+.campaign-studio-layout .studio-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.campaign-studio-layout .launch-cta-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--studio-gradient-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.40);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px var(--studio-emerald-glow);
+  transition: all 0.2s ease;
+}
+
+.campaign-studio-layout .launch-cta-btn:hover:not(:disabled) {
+  background: var(--studio-gradient-hover);
+  box-shadow: 0 8px 25px rgba(var(--accent-rgb), 0.50);
+  transform: translateY(-1px);
+}
+
+.campaign-studio-layout .launch-cta-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  background: #334155;
+  border-color: transparent;
+}
+
+/* Session Selection Cards */
+.campaign-studio-layout .session-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.campaign-studio-layout .session-select-card {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--color-depth);
+  border: 1px solid var(--studio-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.campaign-studio-layout .session-select-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.campaign-studio-layout .session-select-card.selected {
+  background: rgba(91, 148, 77, 0.12);
+  border-color: var(--studio-emerald);
+}
+
+.campaign-studio-layout .session-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--studio-emerald);
+  box-shadow: 0 0 6px var(--studio-emerald-glow);
+}
+
+.campaign-studio-layout .wide-modal {
+  max-width: 750px !important;
+}

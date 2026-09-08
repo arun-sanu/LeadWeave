@@ -23,6 +23,7 @@ export const PUBLIC_PATHS = [
   '/api/health/ready',
   '/api/infra/health',
   '/api/ingress/{pluginId}/{instanceId}/{path}',
+  '/api/lead-sheets/trigger-lead',
 ];
 
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head', 'trace', 'search'] as const;
@@ -92,7 +93,7 @@ export function exemptPublicOperations(document: OpenAPIObject): OpenAPIObject {
 }
 
 /**
- * Builds the OpenAPI document configuration for the OpenWA API.
+ * Builds the OpenAPI document configuration for the LeadWeave API.
  */
 export function createSwaggerConfig(): Omit<OpenAPIObject, 'paths'> {
   // Source the API version from package.json so it tracks releases automatically — no manual bump, no drift.
@@ -100,13 +101,13 @@ export function createSwaggerConfig(): Omit<OpenAPIObject, 'paths'> {
   const { version } = require('../../package.json') as { version: string };
   return (
     new DocumentBuilder()
-      .setTitle('OpenWA API')
+      .setTitle('LeadWeave API')
       // Two refusals are issued by middleware BEFORE routing, so they apply to every operation
       // below and cannot be expressed as a per-operation @ApiResponse without repeating them 187
       // times. Documenting them here keeps the contract honest for clients that would otherwise
       // meet an undocumented status.
       .setDescription(
-        'Open Source WhatsApp API Gateway - Free, Self-Hosted HTTP API\n\n' +
+        'LeadWeave - Open Source WhatsApp API Gateway - Free, Self-Hosted HTTP API\n\n' +
           '**Gateway-wide responses.** Two statuses are returned by middleware before routing, ' +
           'so any operation can emit them:\n\n' +
           '- `415 Unsupported Media Type` — the request body carries a `Content-Encoding` other ' +
@@ -132,7 +133,7 @@ export function createSwaggerConfig(): Omit<OpenAPIObject, 'paths'> {
       // Apply the scheme globally so Swagger UI sends the key with every request
       // (mirrors the global ApiKeyGuard). Without this, "Authorize" is cosmetic.
       .addSecurityRequirements(API_KEY_SECURITY_SCHEME)
-      .setContact('OpenWA', 'https://github.com/rmyndharis/OpenWA', 'yudhi@rmyndharis.com')
+      .setContact('LeadWeave', 'https://github.com/rmyndharis/LeadWeave', 'yudhi@rmyndharis.com')
       .addTag('sessions', 'WhatsApp session management')
       .addTag('messages', 'Send and manage messages')
       .addTag('webhooks', 'Webhook configuration')

@@ -12,7 +12,6 @@ import {
   type Webhook,
   type WebhookFilters,
   type TemplatePayload,
-  type StatsPeriod,
   type CreateInstanceInput,
   type UpdateInstanceInput,
 } from '../services/api';
@@ -34,7 +33,7 @@ export const queryKeys = {
   engines: ['engines'] as const,
   currentEngine: ['engines', 'current'] as const,
   statsOverview: ['stats', 'overview'] as const,
-  statsMessages: (period: string) => ['stats', 'messages', period] as const,
+  sessionOverview: (sessionId: string) => ['stats', 'sessions', sessionId] as const,
 };
 
 // ── Session Queries ───────────────────────────────────────────────────
@@ -339,11 +338,13 @@ export function useStatsOverviewQuery() {
   });
 }
 
-export function useStatsMessagesQuery(period: StatsPeriod) {
+export function useSessionSpecificStatsQuery(sessionId: string, enabled = true) {
   return useQuery({
-    queryKey: queryKeys.statsMessages(period),
-    queryFn: () => statsApi.getMessages(period),
+    queryKey: queryKeys.sessionOverview(sessionId),
+    queryFn: () => statsApi.getSessionStats(sessionId),
+    enabled: enabled && !!sessionId,
     staleTime: 30_000,
     retry: false,
   });
 }
+

@@ -1,0 +1,82 @@
+# Envoy Ingress Configuration with Maglev / Ring-Hash on Session ID
+# Routes traffic directly to the owning LeadWeave replica based on X-Session-ID or path parameter.
+
+static_resources:
+  listeners:
+    - name: leadweave_ingress_listener
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 80
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_http
+                upgrade_configs:
+                  - upgrade_type: websocket
+                route_config:
+                  name: local_route
+                  virtual_hosts:
+                    - name: leadweave_service
+                      domains: ["*"]
+                      routes:
+                        # Session-specific routes with Ring Hash
+                        - match:
+                            prefix: "/api/sessions/"
+                          route:
+                            cluster: leadweave_cluster
+                            hash_policy:
+                              - header:
+                                  header_name: "x-session-id"
+                              - cookie:
+                                  name: "leadweave_session"
+                                  ttl: 86400s
+                            timeout: 60s
+                        # General API / Dashboard routes
+                        - match:
+                            prefix: "/"
+                          route:
+                            cluster: leadweave_cluster
+                            timeout: 60s
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+  clusters:
+    - name: leadweave_cluster
+      connect_timeout: 0.5s
+      type: STRICT_DNS
+      dns_lookup_family: V4_ONLY
+      lb_policy: RING_HASH
+      ring_hash_lb_config:
+        minimum_ring_size: 1024
+        hash_function: MURMUR_HASH_2
+      load_assignment:
+        cluster_name: leadweave_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: leadweave-1
+                      port_value: 2785
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: leadweave-2
+                      port_value: 2785
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: leadweave-3
+                      port_value: 2785
+      health_checks:
+        - timeout: 3s
+          interval: 10s
+          unhealthy_threshold: 3
+          healthy_threshold: 1
+          http_health_check:
+            path: "/api/health"

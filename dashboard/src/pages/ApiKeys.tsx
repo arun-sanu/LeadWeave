@@ -41,9 +41,18 @@ const roleNames = ['admin', 'operator', 'viewer'] as const;
 function useWindowSize() {
   const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
+    let timeoutId: number | null = null;
+    const handleResize = () => {
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(() => {
+        setWidth(window.innerWidth);
+      }, 150);
+    };
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
   return width;
 }

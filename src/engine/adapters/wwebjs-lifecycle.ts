@@ -17,7 +17,7 @@ import { type WhatsAppWebJsConfig } from './whatsapp-web-js.adapter';
 
 /**
  * Detect Puppeteer's "Execution context was destroyed" error. During `Client.inject()` this is most
- * often a persistent browser profile left stale by an OpenWA upgrade that changed the Chromium/Chrome
+ * often a persistent browser profile left stale by an LeadWeave upgrade that changed the Chromium/Chrome
  * binary (e.g. the v0.8.12 amd64 Debian Chromium → Chrome for Testing switch, #663 / #708) — but it is
  * not exclusively that: Puppeteer also raises it on a page navigation or a renderer crash (see
  * puppeteer-core `ExecutionContext` / `IsolatedWorld`), so the caller advises rather than asserts.
@@ -207,8 +207,8 @@ export class WwebjsLifecycle {
 
       // Marker arg: Chromium silently ignores unknown flags, so this exists purely as a label that
       // lets killOrphanedChromiumProcesses() identify this session's browser processes in `ps`
-      // output later (after a hard kill of the OpenWA process orphaned them).
-      puppeteerArgs.push(`--openwa-session=${this.host.config.sessionId}`);
+      // output later (after a hard kill of the LeadWeave process orphaned them).
+      puppeteerArgs.push(`--leadweave-session=${this.host.config.sessionId}`);
 
       // Pin the WA-Web version (fixes the 1.34.x "stuck at authenticating" hang on some setups,
       // #251/#488). DEFAULT: auto-resolve a settled build from the wa-version registry and pin its
@@ -284,7 +284,7 @@ export class WwebjsLifecycle {
         // here: sessionDataPath is a required config field already resolved in the try block above, so
         // this can't throw and mask the original error we are about to rethrow.
         this.host.logger.warn(
-          `"${reason}" during initialize. If this followed an OpenWA upgrade that changed the ` +
+          `"${reason}" during initialize. If this followed an LeadWeave upgrade that changed the ` +
             `Chromium/Chrome binary (v0.8.12 amd64 switched Debian Chromium → Chrome for Testing), the ` +
             `session's browser profile is likely stale — delete the profile dir ` +
             `"${path.join(path.resolve(this.host.config.sessionDataPath), `session-${this.host.config.sessionId}`)}" ` +
@@ -352,7 +352,7 @@ export class WwebjsLifecycle {
       this.setStatus(EngineStatus.DISCONNECTED);
       return;
     }
-    // Kill any Chromium that survived a hard kill of a previous OpenWA process lifetime (its
+    // Kill any Chromium that survived a hard kill of a previous LeadWeave process lifetime (its
     // Puppeteer exit hook never ran, leaving an orphaned browser holding the profile). Safe here:
     // this runs before this attempt's browser exists, so the only thing it can kill is an orphan —
     // including attempt 1's browser when the bounded inter-attempt destroy did not finish it.
@@ -754,6 +754,7 @@ export class WwebjsLifecycle {
     this.host.clearReadyReconcile();
     this.host.clearOnboardingWatcher();
     this.clearNavigationReinjectWindow();
+    void killOrphanedChromiumProcesses(this.host.config.sessionId, this.host.logger);
   }
 
   async disconnect(): Promise<void> {

@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
+import { useEffect, useRef, useState, Suspense, type Dispatch, type SetStateAction } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Loader2, Paperclip, Send, Smile, X } from 'lucide-react';
+import { Theme, EmojiStyle, Categories, Emoji } from 'emoji-picker-react';
+import { Loader2, Paperclip, Send, Smile, X, FileText, Calendar } from 'lucide-react';
 import { messageApi, type Chat, type MessageType } from '../../services/api';
 import { mergeOrAppend, type ChatMessageView } from '../../utils/chatMessages';
 import { promoteChatWithSnippet } from '../../utils/chatList';
@@ -9,7 +10,11 @@ import { buildMediaSendPayload, buildOptimisticMetadata, quotedIdOf } from '../.
 import { messagesQueryKey, useChatMessagesActions } from '../../hooks/useChatMessages';
 import { useRole } from '../../hooks/useRole';
 import { useToast } from '../../hooks/useToast';
+import { lazyWithRetry as lazy } from '../../utils/lazyWithRetry';
 import type { ScrollDirection } from '../../utils/scrollDecision';
+
+const EmojiPicker = lazy(() => import('emoji-picker-react'));
+const ChatReminderModal = lazy(() => import('./ChatReminderModal').then(m => ({ default: m.ChatReminderModal })));
 
 // Map an attachment MIME type to the neutral MessageType for the optimistic outgoing bubble, so the
 // placeholder matches what the backend will persist (e.g. a PDF is `document`, not `application`).
@@ -75,6 +80,9 @@ function ChatComposer({
   const [sending, setSending] = useState<boolean>(false);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+  const [showTemplatePicker, setShowTemplatePicker] = useState<boolean>(false);
+  const [showReminderModal, setShowReminderModal] = useState<boolean>(false);
+
   // Monotonic token invalidating an in-flight attachment FileReader: picking a second file (or
   // removing the attachment) before `onload` fires must win over the late-arriving bytes —
   // otherwise the slower read overwrites the newer pick. Same pattern as composeImageReadSeq.
@@ -91,27 +99,49 @@ function ChatComposer({
 
   // References
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const emojiPickerRef = useRef<HTMLDivElement | null>(null);
+  const emojiButtonRef = useRef<HTMLButtonElement | null>(null);
+  const templatePickerRef = useRef<HTMLDivElement | null>(null);
+  const templateButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  // Popular emojis
-  const popularEmojis = [
-    '😀',
-    '😂',
-    '👍',
-    '❤️',
-    '🔥',
-    '👏',
-    '🙏',
-    '🎉',
-    '💡',
-    '🤔',
-    '😅',
-    '😍',
-    '😊',
-    '😭',
-    '😎',
-    '😜',
-    '🚀',
-    '✨',
+  // Close emoji & template popovers on outside click
+  useEffect(() => {
+    if (!showEmojiPicker && !showTemplatePicker) return;
+
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        showEmojiPicker &&
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(target) &&
+        emojiButtonRef.current &&
+        !emojiButtonRef.current.contains(target)
+      ) {
+        setShowEmojiPicker(false);
+      }
+      if (
+        showTemplatePicker &&
+        templatePickerRef.current &&
+        !templatePickerRef.current.contains(target) &&
+        templateButtonRef.current &&
+        !templateButtonRef.current.contains(target)
+      ) {
+        setShowTemplatePicker(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [showEmojiPicker, showTemplatePicker]);
+
+  // Hardcoded templates
+  const messageTemplates = [
+    { id: 1, title: 'Greeting', text: 'Hello! How can I help you today?' },
+    { id: 2, title: 'Follow-up', text: 'Just checking in to see if you have any questions.' },
+    { id: 3, title: 'Thank you', text: 'Thank you for your business. Let us know if you need anything else.' },
+    { id: 4, title: 'Out of Office', text: 'I am currently out of the office and will reply as soon as possible.' }
   ];
 
   // 5. Handle file selection & base64 conversion
@@ -159,6 +189,11 @@ function ChatComposer({
   const handleEmojiClick = (emoji: string) => {
     setMessageInput(prev => prev + emoji);
     setShowEmojiPicker(false);
+  };
+
+  const handleTemplateClick = (text: string) => {
+    setMessageInput(prev => (prev ? prev + '\n' + text : text));
+    setShowTemplatePicker(false);
   };
 
   // 7. Handle sending a message / media
@@ -266,6 +301,17 @@ function ChatComposer({
 
   return (
     <>
+      {/* Chat Reminder Modal */}
+      {showReminderModal && (
+        <Suspense fallback={null}>
+          <ChatReminderModal
+            open={showReminderModal}
+            onClose={() => setShowReminderModal(false)}
+            activeChat={activeChat}
+          />
+        </Suspense>
+      )}
+
       {/* Attachment preview banner */}
       {attachment && (
         <div className="attachment-preview-banner">
@@ -284,18 +330,7 @@ function ChatComposer({
         </div>
       )}
 
-      {/* Popular emojis panel */}
-      {showEmojiPicker && (
-        <div className="chats-emoji-picker">
-          <div className="emoji-grid">
-            {popularEmojis.map(emoji => (
-              <button key={emoji} type="button" className="emoji-btn" onClick={() => handleEmojiClick(emoji)}>
-                {emoji}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+
 
       {/* Replying preview banner */}
       {replyingTo && (
@@ -318,7 +353,60 @@ function ChatComposer({
       )}
 
       {/* Message input bar */}
-      <footer className="room-input-footer">
+      <footer className="room-input-footer relative">
+        {/* Templates panel */}
+        {showTemplatePicker && (
+          <div ref={templatePickerRef} className="chats-template-picker">
+            <div className="chats-template-picker-header">
+              <span>{t('templates.title', 'Templates')}</span>
+              <button onClick={() => setShowTemplatePicker(false)} className="btn-close-picker">
+                <X size={16} />
+              </button>
+            </div>
+            <div className="chats-template-picker-list">
+              {messageTemplates.map(template => (
+                <button 
+                  key={template.id} 
+                  type="button" 
+                  className="chats-template-item"
+                  onClick={() => handleTemplateClick(template.text)}
+                >
+                  <div className="chats-template-item-title">{template.title}</div>
+                  <div className="chats-template-item-text">{template.text}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Emoji Picker panel */}
+        {showEmojiPicker && (
+          <div className="chats-emoji-picker" ref={emojiPickerRef}>
+            <Suspense fallback={<div className="chats-emoji-loading"><Loader2 className="animate-spin" size={24} /></div>}>
+              <EmojiPicker 
+                onEmojiClick={(emojiData) => handleEmojiClick(emojiData.emoji)}
+                theme={Theme.DARK}
+                emojiStyle={EmojiStyle.FACEBOOK}
+                lazyLoadEmojis={false}
+                searchDisabled
+                previewConfig={{ showPreview: false }}
+                width={350}
+                height={380}
+                categoryIcons={{
+                  [Categories.SUGGESTED]: <Emoji unified="1f552" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                  [Categories.SMILEYS_PEOPLE]: <Emoji unified="1f600" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                  [Categories.ANIMALS_NATURE]: <Emoji unified="1f431" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                  [Categories.FOOD_DRINK]: <Emoji unified="1f354" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                  [Categories.TRAVEL_PLACES]: <Emoji unified="1f68c" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                  [Categories.ACTIVITIES]: <Emoji unified="26bd" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                  [Categories.OBJECTS]: <Emoji unified="1f4a1" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                  [Categories.SYMBOLS]: <Emoji unified="1f523" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                  [Categories.FLAGS]: <Emoji unified="1f3f3-fe0f" size={20} emojiStyle={EmojiStyle.FACEBOOK} />,
+                }}
+              />
+            </Suspense>
+          </div>
+        )}
         <form onSubmit={handleSend} className="input-form">
           <input type="file" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} />
 
@@ -334,12 +422,40 @@ function ChatComposer({
 
           <button
             type="button"
-            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            ref={emojiButtonRef}
+            onClick={() => {
+              setShowEmojiPicker(!showEmojiPicker);
+              setShowTemplatePicker(false);
+            }}
             disabled={!canWrite || sending}
             className={`btn-input-accessory ${showEmojiPicker ? 'active' : ''}`}
             title={t('chats.emojiTitle')}
           >
             <Smile size={20} />
+          </button>
+          
+          <button
+            type="button"
+            ref={templateButtonRef}
+            onClick={() => {
+              setShowTemplatePicker(!showTemplatePicker);
+              setShowEmojiPicker(false);
+            }}
+            disabled={!canWrite || sending}
+            className={`btn-input-accessory ${showTemplatePicker ? 'active' : ''}`}
+            title="Templates"
+          >
+            <FileText size={20} />
+          </button>
+          
+          <button
+            type="button"
+            onClick={() => setShowReminderModal(true)}
+            disabled={!canWrite || sending}
+            className="btn-input-accessory"
+            title="Set Reminder"
+          >
+            <Calendar size={20} />
           </button>
 
           <input
@@ -362,7 +478,7 @@ function ChatComposer({
             className="btn-send-message"
             aria-label={t('chats.send')}
           >
-            {sending ? <Loader2 className="animate-spin" size={24} /> : <Send size={28} strokeWidth={2.5} />}
+            {sending ? <Loader2 className="animate-spin" size={20} /> : <Send size={18} strokeWidth={2.2} />}
           </button>
         </form>
       </footer>

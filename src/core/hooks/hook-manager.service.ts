@@ -1,6 +1,26 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { HookEvent, HookHandler, HookContext, HookRegistration } from './hook.interfaces';
+import { HookEvent, HookHandler, HookContext, HookRegistration, isMutatingHookEvent } from './hook.interfaces';
+
+export const DEFAULT_HOOK_TIMEOUT_MS = 2000;
+
+function withHookTimeout<T>(promise: Promise<T>, timeoutMs: number, hookId: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`Hook execution timed out after ${timeoutMs}ms (hook: ${hookId})`));
+    }, timeoutMs);
+
+    promise
+      .then(res => {
+        clearTimeout(timer);
+        resolve(res);
+      })
+      .catch(err => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+}
 
 @Injectable()
 export class HookManager {
@@ -129,11 +149,20 @@ export class HookManager {
   private async runHandlers<T>(
     event: HookEvent,
     data: T,
-    options: { sessionId?: string; source: string },
+    options: { sessionId?: string; source: string; timeoutMs?: number },
   ): Promise<{ continue: boolean; data: T }> {
     const registrations = this.hooks.get(event) || [];
 
     if (registrations.length === 0) {
+      return { continue: true, data };
+    }
+
+    const isMutating = isMutatingHookEvent(event);
+    const timeoutMs = options.timeoutMs ?? DEFAULT_HOOK_TIMEOUT_MS;
+
+    // Non-mutating observability hooks: run asynchronously (fire-and-forget) so caller is never blocked
+    if (!isMutating) {
+      void this.runAsyncObservabilityHandlers(registrations, event, data, options, timeoutMs);
       return { continue: true, data };
     }
 
@@ -149,7 +178,11 @@ export class HookManager {
     for (const registration of registrations) {
       try {
         ctx.data = currentData;
-        const result = await registration.handler(ctx);
+        const result = await withHookTimeout(
+          registration.handler(ctx),
+          timeoutMs,
+          registration.id,
+        );
 
         // A handler that reports an error discards its output: do NOT apply its (possibly partial or
         // corrupted) data mutation, even though HookResult allows returning data and error together.
@@ -174,6 +207,32 @@ export class HookManager {
     }
 
     return { continue: true, data: currentData };
+  }
+
+  private async runAsyncObservabilityHandlers<T>(
+    registrations: HookRegistration[],
+    event: HookEvent,
+    data: T,
+    options: { sessionId?: string; source: string },
+    timeoutMs: number,
+  ): Promise<void> {
+    const ctx: HookContext<T> = {
+      event,
+      data,
+      sessionId: options.sessionId,
+      timestamp: new Date(),
+      source: options.source,
+    };
+
+    for (const registration of registrations) {
+      try {
+        await withHookTimeout(registration.handler(ctx), timeoutMs, registration.id);
+      } catch (error) {
+        this.logger.error(
+          `Async observability hook error in ${registration.pluginId} for ${event}: ${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
+    }
   }
 
   /**

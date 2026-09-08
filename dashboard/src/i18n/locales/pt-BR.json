@@ -6,7 +6,7 @@
     }
   },
   "common": {
-    "appName": "OpenWA",
+    "appName": "LeadWeave",
     "loading": "Carregando...",
     "cancel": "Cancelar",
     "delete": "Excluir",
@@ -63,7 +63,8 @@
     "infrastructure": "Infraestrutura",
     "plugins": "Plugins",
     "logs": "Registros",
-    "templates": "Modelos"
+    "templates": "Modelos",
+    "campaigns": "Campanhas"
   },
   "chats": {
     "media": {
@@ -121,7 +122,9 @@
     "tab": {
       "chats": "Chats",
       "channels": "Canais",
-      "status": "Status"
+      "status": "Status",
+      "groups": "Grupos",
+      "archive": "Arquivadas"
     },
     "status": {
       "itemCount": "{{count}} atualização",
@@ -168,7 +171,15 @@
       "delivered": "Entregue",
       "read": "Lido",
       "failed": "Falhou"
-    }
+    },
+    "emptyGroups": "Nenhum grupo",
+    "emptyArchive": "Nenhuma conversa arquivada",
+    "archiveChat": "Arquivar conversa",
+    "unarchiveChat": "Desarquivar conversa",
+    "archivedSuccess": "Conversa arquivada",
+    "unarchivedSuccess": "Conversa desarquivada",
+    "archiveFailed": "Falha ao arquivar conversa",
+    "unarchiveFailed": "Falha ao desarquivar conversa"
   },
   "errorBoundary": {
     "title": "Algo deu errado",
@@ -185,7 +196,7 @@
     "connectionError": "Não foi possível conectar ao servidor. Por favor, tente novamente.",
     "help": "Precisa de ajuda?",
     "viewDocs": "Ver documentação",
-    "footer": "Feito com ❤️ por Yudhi Armyndharis e a comunidade OpenWA",
+    "footer": "Feito com ❤️ por Yudhi Armyndharis e a comunidade LeadWeave",
     "version": "v{{version}} · {{date}}"
   },
   "dashboard": {
@@ -211,23 +222,7 @@
     "view": "Ver",
     "disconnect": "Desconectar",
     "errorPrefix": "Erro: {{message}}",
-    "loadError": "Erro ao carregar os dados",
-    "charts": {
-      "title": "Análises de mensagens",
-      "period": {
-        "24h": "24 h",
-        "7d": "7 d",
-        "30d": "30 d"
-      },
-      "overTime": "Mensagens ao longo do tempo",
-      "byType": "Mensagens por tipo",
-      "topChats": "Principais chats",
-      "sent": "Enviadas",
-      "received": "Recebidas",
-      "messages": "Mensagens",
-      "empty": "Sem atividade de mensagens neste período.",
-      "error": "Não foi possível carregar as análises de mensagens. Verifique os registros do servidor."
-    }
+    "loadError": "Erro ao carregar os dados"
   },
   "sessionStatus": {
     "created": "Nova",
@@ -694,7 +689,7 @@
       "postgres": "PostgreSQL",
       "postgresDesc": "Banco de dados para produção",
       "useBuiltIn": "Usar contêiner PostgreSQL integrado",
-      "builtInDesc": "OpenWA gerenciará um contêiner PostgreSQL para você",
+      "builtInDesc": "LeadWeave gerenciará um contêiner PostgreSQL para você",
       "dbName": "Nome do banco de dados",
       "schema": "Esquema",
       "schemaDesc": "Esquema do PostgreSQL (ignorado para SQLite). Padrão 'public'. O esquema já deve existir.",
@@ -729,7 +724,7 @@
       "enable": "Habilitar Redis",
       "enableDesc": "Necessário para cache, armazenamento de sessões e filas BullMQ",
       "useBuiltIn": "Usar contêiner Redis integrado",
-      "builtInDesc": "OpenWA gerenciará um contêiner Redis para você",
+      "builtInDesc": "LeadWeave gerenciará um contêiner Redis para você",
       "queueTitle": "Habilitar sistema de filas BullMQ",
       "queueDesc": "Use filas de mensagens para entrega confiável de mensagens e webhooks",
       "statsTitle": "Estatísticas das filas",
@@ -751,7 +746,7 @@
       "s3": "Amazon S3",
       "s3Desc": "Armazenamento em nuvem (compatível com S3)",
       "useBuiltIn": "Usar contêiner MinIO integrado",
-      "builtInDesc": "OpenWA gerenciará um contêiner MinIO (compatível com S3) para você",
+      "builtInDesc": "LeadWeave gerenciará um contêiner MinIO (compatível com S3) para você",
       "storagePath": "Caminho de armazenamento",
       "bucket": "Nome do bucket",
       "region": "Região",
@@ -802,7 +797,7 @@
       "importFailed": "Não foi possível importar os dados",
       "importOk": "Dados importados",
       "importConfirm": "A importação IRÁ SUBSTITUIR todos os dados atuais pelo backup ({{rows}} linhas). Isso não pode ser desfeito. Continuar?",
-      "invalidFile": "Esse arquivo não é um backup de dados válido do OpenWA.",
+      "invalidFile": "Esse arquivo não é um backup de dados válido do LeadWeave.",
       "importTooLarge": "O backup excede o limite da requisição. Aumente BODY_SIZE_LIMIT no servidor e tente novamente."
     },
     "statusLoadError": "Não foi possível carregar o status atual da infraestrutura. Atualize para tentar novamente."
@@ -822,7 +817,7 @@
     "uninstallConfirm": "Desinstalar \"{{name}}\"? Isso remove seus arquivos.",
     "empty": {
       "title": "Nenhum plugin encontrado",
-      "description": "Instale plugins para ampliar a funcionalidade do OpenWA"
+      "description": "Instale plugins para ampliar a funcionalidade do LeadWeave"
     },
     "config": {
       "title": "Configurar {{name}}",
@@ -845,7 +840,7 @@
       "trustWarning": "Plugins são executados com todos os privilégios do processo do gateway — o modo isolado contém falhas, não código malicioso. Instale apenas plugins em que você confia.",
       "choose": "Escolha um arquivo .zip…",
       "tooLarge": "O arquivo excede o limite de 5 MB.",
-      "catalogHint": "Instale diretamente do catálogo de plugins do OpenWA. O .zip é baixado no servidor através da proteção SSRF, depois validado e executado em sandbox.",
+      "catalogHint": "Instale diretamente do catálogo de plugins do LeadWeave. O .zip é baixado no servidor através da proteção SSRF, depois validado e executado em sandbox.",
       "catalogTeaser": "Procurando plugins?",
       "catalogTeaserSuffix": "navega no marketplace oficial.",
       "tabCatalog": "Catálogo",

@@ -235,7 +235,7 @@ before(async () => {
   installFetchStub();
   // RoleProvider initializes from localStorage; 'admin' makes canWrite true so the composer
   // controls render enabled.
-  window.localStorage.setItem('openwa_user_role', 'admin');
+  window.localStorage.setItem('leadweave_user_role', 'admin');
   // The real i18n instance, and then its readiness promise: catalogues are fetched rather than
   // bundled, so importing the module only STARTS the load. Every `getByText` below is English copy
   // out of en.json, which renders as a raw key until it lands. Awaiting is what makes that
@@ -264,7 +264,7 @@ function renderChats(): { container: HTMLElement } {
     createElement(
       QueryClientProvider,
       { client: queryClient },
-      createElement(RoleProvider, null, createElement(ToastProvider, null, createElement(Chats))),
+      createElement(RoleProvider, { initialRole: 'admin' }, createElement(ToastProvider, null, createElement(Chats))),
     ),
   );
 }
@@ -526,3 +526,23 @@ test('two media downloads in flight do not clobber each other', async () => {
     "B's download was still open — A settling must not re-enable it",
   );
 });
+
+test('pressing Escape key closes the translucent glass popup room', async () => {
+  const { screen, fireEvent, within } = rtl;
+  resetFetchCalls();
+  const { container } = renderChats();
+
+  await screen.findByText('Main (15551234567)');
+  fireEvent.click(await screen.findByText('Alice'));
+
+  // The glass popup is open and renders the thread
+  assert.ok(container.querySelector('.chats-glass-popup-overlay'), 'glass popup overlay should be open');
+  await within(container.querySelector('.room-messages') as HTMLElement).findByText('hello from alice');
+
+  // Press ESC key
+  fireEvent.keyDown(window, { key: 'Escape', code: 'Escape' });
+
+  // Popup overlay is dismissed
+  assert.equal(container.querySelector('.chats-glass-popup-overlay'), null, 'glass popup should be closed on ESC');
+});
+

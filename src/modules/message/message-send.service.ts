@@ -18,6 +18,7 @@ import { SsrfBlockedError, SSRF_BLOCKED_CLIENT_MESSAGE } from '../../common/secu
 import { resolveFeatureFlags } from '../../config/feature-flags';
 import { isUniqueViolation } from '../../common/utils/db-errors';
 import { ChatMediaArchiveService } from '../chat-media/chat-media-archive.service';
+import { calculateTypingDuration, calculateHumanDelay } from '../../common/utils/human-jitter';
 
 /** Default cap on a rendered template's final text; overridable via TEMPLATE_RENDER_MAX_CHARS. */
 export const DEFAULT_TEMPLATE_RENDER_MAX_CHARS = 64 * 1024;
@@ -262,6 +263,10 @@ export class MessageSendService {
       },
     });
 
+    if (finalDto.caption) {
+      await this.simulateTypingIfEnabled(engine, finalDto.chatId, finalDto.caption);
+    }
+
     let result: MessageResult;
     try {
       result = await engine.sendImageMessage(finalDto.chatId, media);
@@ -286,6 +291,10 @@ export class MessageSendService {
         media: { mimetype: finalDto.mimetype, filename: finalDto.filename, data: media.data },
       },
     });
+
+    if (finalDto.caption) {
+      await this.simulateTypingIfEnabled(engine, finalDto.chatId, finalDto.caption);
+    }
 
     let result: MessageResult;
     try {
@@ -320,6 +329,10 @@ export class MessageSendService {
       },
       quotedMessageId: finalDto.quotedMessageId,
     });
+
+    if (finalDto.ptt) {
+      await this.simulateRecordingIfEnabled(engine, finalDto.chatId);
+    }
 
     let result: MessageResult;
     try {
@@ -715,8 +728,8 @@ export class MessageSendService {
   }
 
   /**
-   * Humanising delay: show the engine's typing indicator and pause for a length-scaled, jittered
-   * interval before the real send, so automated single sends don't look instantaneous (anti-ban).
+   * Humanising delay: show the engine's typing indicator and pause for a length-scaled, Gaussian jittered
+   * interval before the real send, so automated single sends model human typing speeds (anti-ban).
    * ON by default — set `SIMULATE_TYPING=false` to disable. Engine-agnostic (goes through
    * `sendChatState`) and strictly best-effort — it never throws and never blocks the send if presence
    * fails or the engine has no presence concept. `SIMULATE_TYPING_MAX_MS` (default 5000) caps the pause.
@@ -727,12 +740,25 @@ export class MessageSendService {
     if (!simulateTyping) return;
     try {
       await engine.sendChatState(chatId, 'typing');
-      const maxMs = simulateTypingMaxMs;
-      const planned = Math.min(maxMs, 500 + text.length * 45);
-      const jittered = Math.round(planned * (0.85 + Math.random() * 0.3)); // ±15% so it isn't metronomic
-      await new Promise(resolve => setTimeout(resolve, jittered));
+      const planned = calculateTypingDuration(text, 500, simulateTypingMaxMs);
+      await new Promise(resolve => setTimeout(resolve, planned));
     } catch (error) {
       this.logger.warn(`simulateTyping skipped: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Voice note humanising delay: show the engine's 'recording' presence indicator before sending PTT audio.
+   */
+  private async simulateRecordingIfEnabled(engine: IWhatsAppEngine, chatId: string): Promise<void> {
+    const { simulateTyping, simulateTypingMaxMs } = resolveFeatureFlags(this.configService);
+    if (!simulateTyping) return;
+    try {
+      await engine.sendChatState(chatId, 'recording');
+      const planned = calculateHumanDelay(800, Math.min(2500, simulateTypingMaxMs));
+      await new Promise(resolve => setTimeout(resolve, planned));
+    } catch (error) {
+      this.logger.warn(`simulateRecording skipped: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

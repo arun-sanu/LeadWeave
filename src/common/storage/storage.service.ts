@@ -13,7 +13,7 @@ import {
   CreateBucketCommand,
 } from '@aws-sdk/client-s3';
 import { createLogger } from '../services/logger.service';
-import { isSafeStorageKey } from '../utils/path-safety';
+import { isSafeStorageKey, isPathWithin } from '../utils/path-safety';
 import { createExportStream, importFromStream } from './storage-transfer';
 import { listLocalFiles, iterateLocalFiles, getLocalFile, putLocalFile, deleteLocalFile } from './storage-local-files';
 
@@ -55,7 +55,7 @@ export class StorageService implements OnModuleDestroy {
   private readonly storageType: string;
   private readonly localPath: string;
   private s3Client: S3Client | null = null;
-  private s3Bucket = 'openwa';
+  private s3Bucket = 'leadweave';
   private s3Available = false;
   private s3ReprobeTimer: NodeJS.Timeout | null = null;
   private readonly s3ReprobeIntervalMs = positiveIntFromEnv('S3_REPROBE_INTERVAL_MS', DEFAULT_S3_REPROBE_INTERVAL_MS);
@@ -89,7 +89,7 @@ export class StorageService implements OnModuleDestroy {
           },
           ...(endpoint ? { forcePathStyle: true } : {}), // Required for path-style stores (MinIO)
         });
-        this.s3Bucket = process.env.S3_BUCKET || s3Config.bucket || 'openwa';
+        this.s3Bucket = process.env.S3_BUCKET || s3Config.bucket || 'leadweave';
         void this.initializeS3Bucket();
         this.startS3Reprobe();
       }
@@ -267,6 +267,32 @@ export class StorageService implements OnModuleDestroy {
     return this.getLocalFile(filePath);
   }
 
+  async getStream(filePath: string): Promise<Readable> {
+    if (!isSafeStorageKey(filePath)) {
+      throw new Error(`Refusing to read an unsafe storage key: ${filePath}`);
+    }
+    if (this.storageType === 's3' && this.s3Client && this.s3Available) {
+      try {
+        const response = await this.s3Client.send(
+          new GetObjectCommand({
+            Bucket: this.s3Bucket,
+            Key: `media/${filePath}`,
+          }),
+        );
+        if (response.Body) {
+          return response.Body as Readable;
+        }
+      } catch (error: unknown) {
+        if ((error as { name?: string }).name !== 'NoSuchKey') throw error;
+      }
+    }
+    const fullPath = path.resolve(this.localPath, filePath);
+    if (!isPathWithin(this.localPath, fullPath)) {
+      throw new Error(`Path traversal detected: ${filePath}`);
+    }
+    return fs.createReadStream(fullPath);
+  }
+
   async putFile(filePath: string, data: Buffer): Promise<void> {
     // Centralized containment so BOTH backends inherit it: putLocalFile has its own isPathWithin
     // guard, but putS3File builds `media/${filePath}` with none — reject a traversing key here.
@@ -277,6 +303,38 @@ export class StorageService implements OnModuleDestroy {
       return this.putS3File(filePath, data);
     }
     return this.putLocalFile(filePath, data);
+  }
+
+  async putStream(filePath: string, stream: Readable, mimetype?: string): Promise<void> {
+    if (!isSafeStorageKey(filePath)) {
+      throw new Error(`Refusing to store an unsafe storage key: ${filePath}`);
+    }
+    if (this.storageType === 's3' && this.s3Client && this.s3Available) {
+      await this.s3Client.send(
+        new PutObjectCommand({
+          Bucket: this.s3Bucket,
+          Key: `media/${filePath}`,
+          Body: stream,
+          ContentType: mimetype,
+        }),
+      );
+      return;
+    }
+    const fullPath = path.resolve(this.localPath, filePath);
+    if (!isPathWithin(this.localPath, fullPath)) {
+      throw new Error(`Path traversal detected: ${filePath}`);
+    }
+    const dir = path.dirname(fullPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    const writeStream = fs.createWriteStream(fullPath);
+    await new Promise<void>((resolve, reject) => {
+      stream.pipe(writeStream);
+      writeStream.on('finish', () => resolve());
+      writeStream.on('error', err => reject(err));
+      stream.on('error', err => reject(err));
+    });
   }
 
   /**

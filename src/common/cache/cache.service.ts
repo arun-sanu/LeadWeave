@@ -2,6 +2,7 @@ import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 import { createLogger } from '../services/logger.service';
+import { CacheKeyBuilder } from './cache-key.builder';
 
 export interface SessionInfo {
   id: string;
@@ -150,7 +151,7 @@ export class CacheService implements OnModuleDestroy {
   async getSessionStatus(id: string): Promise<string | null> {
     if (!(await this.isAvailable())) return null;
     try {
-      return await this.redis!.get(`session:${id}:status`);
+      return await this.redis!.get(CacheKeyBuilder.sessionStatus(id));
     } catch (error) {
       this.logger.warn(`Cache read failed (session:status): ${String(error)}`);
       return null;
@@ -160,7 +161,7 @@ export class CacheService implements OnModuleDestroy {
   async setSessionStatus(id: string, status: string): Promise<void> {
     if (!(await this.isAvailable())) return;
     try {
-      await this.redis!.setex(`session:${id}:status`, TTL.SESSION_STATUS, status);
+      await this.redis!.setex(CacheKeyBuilder.sessionStatus(id), TTL.SESSION_STATUS, status);
     } catch (error) {
       this.logger.warn(`Cache write failed (session:status): ${String(error)}`);
     }
@@ -171,7 +172,7 @@ export class CacheService implements OnModuleDestroy {
   async getSessionInfo(id: string): Promise<SessionInfo | null> {
     if (!(await this.isAvailable())) return null;
     try {
-      const data = await this.redis!.get(`session:${id}:info`);
+      const data = await this.redis!.get(CacheKeyBuilder.sessionInfo(id));
       return data ? (JSON.parse(data) as SessionInfo) : null;
     } catch (error) {
       this.logger.warn(`Cache read failed (session:info): ${String(error)}`);
@@ -182,7 +183,7 @@ export class CacheService implements OnModuleDestroy {
   async setSessionInfo(id: string, info: SessionInfo): Promise<void> {
     if (!(await this.isAvailable())) return;
     try {
-      await this.redis!.setex(`session:${id}:info`, TTL.SESSION_INFO, JSON.stringify(info));
+      await this.redis!.setex(CacheKeyBuilder.sessionInfo(id), TTL.SESSION_INFO, JSON.stringify(info));
     } catch (error) {
       this.logger.warn(`Cache write failed (session:info): ${String(error)}`);
     }
@@ -193,7 +194,7 @@ export class CacheService implements OnModuleDestroy {
   async getSessionQR(id: string): Promise<string | null> {
     if (!(await this.isAvailable())) return null;
     try {
-      return await this.redis!.get(`session:${id}:qr`);
+      return await this.redis!.get(CacheKeyBuilder.sessionQr(id));
     } catch (error) {
       this.logger.warn(`Cache read failed (session:qr): ${String(error)}`);
       return null;
@@ -203,7 +204,7 @@ export class CacheService implements OnModuleDestroy {
   async setSessionQR(id: string, qr: string): Promise<void> {
     if (!(await this.isAvailable())) return;
     try {
-      await this.redis!.setex(`session:${id}:qr`, TTL.SESSION_QR, qr);
+      await this.redis!.setex(CacheKeyBuilder.sessionQr(id), TTL.SESSION_QR, qr);
     } catch (error) {
       this.logger.warn(`Cache write failed (session:qr): ${String(error)}`);
     }
@@ -214,7 +215,7 @@ export class CacheService implements OnModuleDestroy {
   async getSessionsList(): Promise<string[] | null> {
     if (!(await this.isAvailable())) return null;
     try {
-      const data = await this.redis!.get('sessions:list');
+      const data = await this.redis!.get(CacheKeyBuilder.sessionsList());
       return data ? (JSON.parse(data) as string[]) : null;
     } catch (error) {
       this.logger.warn(`Cache read failed (sessions:list): ${String(error)}`);
@@ -225,7 +226,7 @@ export class CacheService implements OnModuleDestroy {
   async setSessionsList(ids: string[]): Promise<void> {
     if (!(await this.isAvailable())) return;
     try {
-      await this.redis!.setex('sessions:list', TTL.SESSIONS_LIST, JSON.stringify(ids));
+      await this.redis!.setex(CacheKeyBuilder.sessionsList(), TTL.SESSIONS_LIST, JSON.stringify(ids));
     } catch (error) {
       this.logger.warn(`Cache write failed (sessions:list): ${String(error)}`);
     }
@@ -236,7 +237,7 @@ export class CacheService implements OnModuleDestroy {
   async getSessionsStats(): Promise<SessionStats | null> {
     if (!(await this.isAvailable())) return null;
     try {
-      const data = await this.redis!.get('sessions:stats');
+      const data = await this.redis!.get(CacheKeyBuilder.sessionsStats());
       return data ? (JSON.parse(data) as SessionStats) : null;
     } catch (error) {
       this.logger.warn(`Cache read failed (sessions:stats): ${String(error)}`);
@@ -247,9 +248,57 @@ export class CacheService implements OnModuleDestroy {
   async setSessionsStats(stats: SessionStats): Promise<void> {
     if (!(await this.isAvailable())) return;
     try {
-      await this.redis!.setex('sessions:stats', TTL.SESSIONS_STATS, JSON.stringify(stats));
+      await this.redis!.setex(CacheKeyBuilder.sessionsStats(), TTL.SESSIONS_STATS, JSON.stringify(stats));
     } catch (error) {
       this.logger.warn(`Cache write failed (sessions:stats): ${String(error)}`);
+    }
+  }
+
+  // ========== Send Pacing Distributed Breaker ==========
+
+  async getPacingBreaker(sessionId: string): Promise<{ consecutiveFailures: number; openedAt: number | null } | null> {
+    if (!(await this.isAvailable())) return null;
+    try {
+      const data = await this.redis!.get(CacheKeyBuilder.pacingBreaker(sessionId));
+      return data ? (JSON.parse(data) as { consecutiveFailures: number; openedAt: number | null }) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  async setPacingBreaker(
+    sessionId: string,
+    state: { consecutiveFailures: number; openedAt: number | null },
+    ttlSeconds: number,
+  ): Promise<void> {
+    if (!(await this.isAvailable())) return;
+    try {
+      await this.redis!.setex(CacheKeyBuilder.pacingBreaker(sessionId), Math.max(1, ttlSeconds), JSON.stringify(state));
+    } catch (error) {
+      this.logger.warn(`Cache write failed (pacing:breaker): ${String(error)}`);
+    }
+  }
+
+  async clearPacingBreaker(sessionId: string): Promise<void> {
+    if (!(await this.isAvailable())) return;
+    try {
+      await this.redis!.del(CacheKeyBuilder.pacingBreaker(sessionId), CacheKeyBuilder.pacingStreak(sessionId));
+    } catch (error) {
+      this.logger.warn(`Cache delete failed (pacing:breaker): ${String(error)}`);
+    }
+  }
+
+  // ========== Distributed Auth Key Eviction ==========
+
+  async publishAuthEviction(keyId: string, reason: string): Promise<void> {
+    if (!(await this.isAvailable())) return;
+    try {
+      await this.redis!.publish(
+        CacheKeyBuilder.authEvictChannel(),
+        JSON.stringify({ keyId, reason, timestamp: Date.now() }),
+      );
+    } catch (error) {
+      this.logger.warn(`Failed to publish auth eviction: ${String(error)}`);
     }
   }
 }

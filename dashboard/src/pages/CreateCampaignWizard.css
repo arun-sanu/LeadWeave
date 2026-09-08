@@ -1,0 +1,150 @@
+/* 
+ * Create Campaign Wizard - Tech Green Dark Mode Modern 
+ * Applying Emil Kowalski design engineering principles
+ */
+
+.campaign-studio-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Back Button */
+.campaign-studio-layout .wizard-back-btn {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted, rgba(255, 255, 255, 0.4));
+  background: transparent;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  margin-left: -0.5rem; /* Optical alignment */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 150ms var(--ease-out), color 150ms var(--ease-out), transform 150ms var(--ease-out);
+}
+
+.campaign-studio-layout .wizard-back-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+}
+
+.campaign-studio-layout .wizard-back-btn:active {
+  transform: scale(0.95);
+}
+
+/* Header Container */
+.campaign-studio-layout .wizard-header-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+/* Campaign Name Input (Premium Typography, Borderless) */
+.campaign-studio-layout .wizard-campaign-name-input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+  padding: 0.35rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  width: 100%;
+  max-width: 800px;
+  outline: none;
+  transition: border-color 200ms var(--ease-out), color 200ms var(--ease-out);
+}
+
+.campaign-studio-layout .wizard-campaign-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.campaign-studio-layout .wizard-campaign-name-input:focus {
+  border-bottom: 2px solid var(--primary);
+}
+
+/* Wizard Steps Navigation */
+.campaign-studio-layout .wizard-steps-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  /* Scrollbar hiding for clean UI */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.campaign-studio-layout .wizard-steps-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.campaign-studio-layout .wizard-step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 99px; /* Pill shape */
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: transform 160ms var(--ease-out), background-color 200ms var(--ease-out), border-color 200ms var(--ease-out), color 200ms var(--ease-out);
+  white-space: nowrap;
+}
+
+/* Hover State - slight scale and brighten */
+.campaign-studio-layout .wizard-step:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.campaign-studio-layout .wizard-step:active {
+  transform: scale(0.97);
+}
+
+.campaign-studio-layout .wizard-step .step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: color 200ms var(--ease-out);
+}
+
+/* Active Step */
+.campaign-studio-layout .wizard-step.active {
+  background: rgba(var(--success-rgb), 0.1);
+  border: 1px solid rgba(var(--success-rgb), 0.3);
+  color: var(--success);
+  box-shadow: 0 0 12px rgba(var(--success-rgb), 0.05);
+}
+
+.campaign-studio-layout .wizard-step.active .step-icon {
+  color: var(--success);
+}
+
+/* Content Area */
+.campaign-studio-layout .wizard-content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Remove internal padding/headers from child pages */
+.campaign-studio-layout .wizard-content-area .page-container {
+  padding: 0;
+  max-width: 100%;
+}
+.campaign-studio-layout .wizard-content-area .page-header {
+  display: none;
+}

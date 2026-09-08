@@ -38,17 +38,17 @@ export function applyDatabaseSection(
       // Built-in PostgreSQL - use container name as host
       updates.DATABASE_HOST = 'postgres';
       updates.DATABASE_PORT = '5432';
-      updates.DATABASE_USERNAME = 'openwa';
+      updates.DATABASE_USERNAME = 'leadweave';
       // The bundled credential is only the DEFAULT. Secrets are never echoed back to the form,
-      // so an absent password field means "unchanged", not "reset to 'openwa'" — and the
+      // so an absent password field means "unchanged", not "reset to 'leadweave'" — and the
       // dashboard ALWAYS sends builtIn, so keying the reset on "explicit builtIn:true" reset a
       // re-keyed container on every save from the Infrastructure page.
       // What decides it is whether the stored password belongs to this same bundled container:
       // it does when the previous mode was already built-in. Coming from external, the stored
       // value is the external DB's credential and must not be carried into the container.
       const storedPassword = existing.POSTGRES_BUILTIN === 'true' ? existing.DATABASE_PASSWORD : undefined;
-      updates.DATABASE_PASSWORD = database.password || storedPassword || 'openwa';
-      updates.DATABASE_NAME = 'openwa';
+      updates.DATABASE_PASSWORD = database.password || storedPassword || 'leadweave';
+      updates.DATABASE_NAME = 'leadweave';
       // Built-in Postgres is initialized with the default 'public' schema (see
       // scripts/postgres-init-schema.sh). Pin it so a later switch from a custom-schema
       // external DB to built-in doesn't carry a stale POSTGRES_SCHEMA forward.
@@ -56,7 +56,7 @@ export function applyDatabaseSection(
       profiles.push('postgres');
     } else {
       // External PostgreSQL. Flipping built-in -> external must not carry the bundled
-      // 'openwa' password into the external config: the production boot guard rejects
+      // 'leadweave' password into the external config: the production boot guard rejects
       // it, so the next boot would crash-loop. A password in the same payload wins.
       if (database.builtIn === false && existing.POSTGRES_BUILTIN === 'true' && !database.password) {
         staleKeys.add('DATABASE_PASSWORD');
@@ -65,7 +65,7 @@ export function applyDatabaseSection(
       if (database.port !== undefined) updates.DATABASE_PORT = database.port || '5432';
       if (database.username !== undefined) updates.DATABASE_USERNAME = database.username || 'postgres';
       setSecret(updates, 'DATABASE_PASSWORD', database.password);
-      if (database.database !== undefined) updates.DATABASE_NAME = database.database || 'openwa';
+      if (database.database !== undefined) updates.DATABASE_NAME = database.database || 'leadweave';
       if (database.schema !== undefined) updates.POSTGRES_SCHEMA = database.schema || 'public';
     }
     if (database.poolSize !== undefined) {
@@ -158,7 +158,7 @@ export function applyStorageSection(
       updates.S3_ENDPOINT = 'http://minio:9000';
       updates.S3_ACCESS_KEY_ID = 'minioadmin';
       updates.S3_SECRET_ACCESS_KEY = 'minioadmin';
-      updates.S3_BUCKET = 'openwa';
+      updates.S3_BUCKET = 'leadweave';
       updates.S3_REGION = 'us-east-1';
       profiles.push('minio');
     } else {

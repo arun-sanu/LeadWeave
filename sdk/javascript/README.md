@@ -1,13 +1,13 @@
-# @rmyndharis/openwa
+# @rmyndharis/leadweave
 
-Official JavaScript/TypeScript SDK for the [OpenWA](https://github.com/rmyndharis/OpenWA) WhatsApp API Gateway.
+Official JavaScript/TypeScript SDK for the [LeadWeave](https://github.com/rmyndharis/LeadWeave) WhatsApp API Gateway.
 
 Ships dual CJS + ESM builds with bundled type declarations.
 
 ## Install
 
 ```bash
-npm install @rmyndharis/openwa
+npm install @rmyndharis/leadweave
 ```
 
 Requires Node.js >= 18 (relies on the global `fetch`).
@@ -15,9 +15,9 @@ Requires Node.js >= 18 (relies on the global `fetch`).
 ## Usage
 
 ```typescript
-import { OpenWAClient } from '@rmyndharis/openwa';
+import { LeadWeaveClient } from '@rmyndharis/leadweave';
 
-const client = new OpenWAClient({
+const client = new LeadWeaveClient({
   baseUrl: 'https://your-gateway.example.com',
   apiKey: 'owa_k1_…',
 });
@@ -26,12 +26,12 @@ await client.sessions.start('my-session');
 
 const result = await client.messages.sendText('my-session', {
   chatId: '628123456789@c.us',
-  text: 'Hello from the OpenWA SDK!',
+  text: 'Hello from the LeadWeave SDK!',
 });
 console.log(result.messageId);
 ```
 
-CommonJS consumers use `require('@rmyndharis/openwa')` identically.
+CommonJS consumers use `require('@rmyndharis/leadweave')` identically.
 
 ## Messaging
 
@@ -39,12 +39,12 @@ CommonJS consumers use `require('@rmyndharis/openwa')` identically.
 
 ## Errors
 
-Non-2xx responses throw a typed `OpenWAApiError` subclass
-(`OpenWAAuthError`, `OpenWAForbiddenError`, `OpenWANotFoundError`,
-`OpenWAConflictError`, `OpenWARateLimitError`, `OpenWANotImplementedError`,
-`OpenWAServiceUnavailableError` — 503, the only retryable one),
+Non-2xx responses throw a typed `LeadWeaveApiError` subclass
+(`LeadWeaveAuthError`, `LeadWeaveForbiddenError`, `LeadWeaveNotFoundError`,
+`LeadWeaveConflictError`, `LeadWeaveRateLimitError`, `LeadWeaveNotImplementedError`,
+`LeadWeaveServiceUnavailableError` — 503, the only retryable one),
 each carrying `.status` and the parsed `.body`. Timeouts throw
-`OpenWATimeoutError`. The SDK does **not** retry — wrap calls with your own
+`LeadWeaveTimeoutError`. The SDK does **not** retry — wrap calls with your own
 backoff if needed.
 
 ## Releasing
@@ -58,11 +58,11 @@ automatically. Nothing long-lived exists to leak, expire, or migrate when
 2FA-bypass tokens lose direct publish in January 2027.
 
 One-time setup, required **before** the first tag — on npmjs.com, open the
-package settings for `@rmyndharis/openwa` and add a Trusted Publisher:
+package settings for `@rmyndharis/leadweave` and add a Trusted Publisher:
 
 - Provider: **GitHub Actions**
 - Organization: `rmyndharis`
-- Repository: `OpenWA`
+- Repository: `LeadWeave`
 - Workflow filename: `js-sdk-release.yml` (the extension is part of the value)
 
 There are no repository secrets to add. Until the trusted publisher exists npm

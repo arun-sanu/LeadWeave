@@ -8,7 +8,7 @@ function ChatAvatar({ pictureUrl, kind }: { pictureUrl?: string | null; kind: Ch
   if (pictureUrl) {
     return (
       <div className="chat-avatar">
-        <img src={pictureUrl} alt="" />
+        <img src={pictureUrl} alt="" loading="lazy" decoding="async" />
       </div>
     );
   }

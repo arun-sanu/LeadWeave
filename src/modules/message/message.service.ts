@@ -25,6 +25,8 @@ export interface GetMessagesOptions {
   from?: string;
   limit?: number;
   offset?: number;
+  /** Whether to execute a COUNT(*) aggregate query. Defaults to true. Setting to false avoids a full table scan. */
+  includeTotal?: boolean;
 }
 
 /**
@@ -258,6 +260,16 @@ export class MessageService {
         froms,
         authorFroms: froms,
       });
+    }
+
+    // When includeTotal is explicitly false or offset > 0 (or when reading pure recent feed),
+    // skip the heavy SELECT COUNT(*) scan to save database IOPS and reduce latency.
+    if (options.includeTotal === false) {
+      const messages = await query.getMany();
+      return {
+        messages: spendInlineMediaBudget(messages, resolveMessageListInlineMediaBudgetBytes()),
+        total: messages.length,
+      };
     }
 
     const [messages, total] = await query.getManyAndCount();

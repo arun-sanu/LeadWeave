@@ -6,7 +6,7 @@
  */
 
 import { encodeSegment } from '../http.js';
-import type { OpenWAClient } from '../client.js';
+import type { LeadWeaveClient } from '../client.js';
 import type { CreateWebhookRequest, UpdateWebhookRequest, WebhookResponse, WebhookTestResult } from '../types.js';
 
 /** Pagination for the cross-session webhook list and the delivery-failure log. */
@@ -21,7 +21,7 @@ export interface DeliveryFailureQuery extends WebhookListQuery {
 }
 
 export class WebhooksResource {
-  constructor(private readonly client: OpenWAClient) {}
+  constructor(private readonly client: LeadWeaveClient) {}
 
   /**
    * List webhooks across EVERY session the key can see, not one session's. Requires an OPERATOR-level

@@ -99,9 +99,11 @@ describe('exemptPublicOperations', () => {
 // requirement) rather than a PUBLIC_PATHS security: [] exemption.
 describe('PUBLIC_PATHS drift guard', () => {
   const EXPECTED_PUBLIC_CONTROLLERS = [
+    'src/modules/auth/auth-validate.controller.ts',
     'src/modules/health/health.controller.ts',
     'src/modules/infra/infra-status.controller.ts',
     'src/modules/integration/ingress.controller.ts',
+    'src/modules/lead-sheet/lead-sheet.controller.ts',
     'src/modules/metrics/metrics.controller.ts',
   ];
 
@@ -141,6 +143,7 @@ describe('PUBLIC_PATHS drift guard', () => {
         '/api/health/ready',
         '/api/infra/health',
         '/api/ingress/{pluginId}/{instanceId}/{path}',
+        '/api/lead-sheets/trigger-lead',
       ].sort(),
     );
   });

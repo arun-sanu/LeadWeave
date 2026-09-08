@@ -204,15 +204,15 @@ describe('mountMcpServer (raw-Express request-handling path)', () => {
     auditService: { logWarn: jest.Mock };
   }
 
-  const mount = (): Harness => {
-    const tool = {
+  const mount = (customTool?: AnyToolDescriptor): Harness => {
+    const tool = customTool ?? ({
       name: 'MessageSendText',
       description: 'Send a text message (session-scoped write tool)',
       inputSchema: z.object({ sessionId: z.string(), to: z.string(), text: z.string() }),
       tier: 'write',
       sessionScoped: true,
       handler: jest.fn().mockResolvedValue({ sent: true }),
-    } as unknown as AnyToolDescriptor;
+    } as unknown as AnyToolDescriptor);
     const registry = { list: jest.fn(() => [tool]) };
     const authService = { validateApiKey: jest.fn(), hasPermission: jest.fn(() => true) };
     const auditService = { logWarn: jest.fn() };
@@ -264,8 +264,8 @@ describe('mountMcpServer (raw-Express request-handling path)', () => {
 
   // The single registered tool callback, captured when the driven POST built its per-request server.
   const toolCallback = (): ToolCallback => {
-    expect(mockRegisteredTools).toHaveLength(1);
-    return mockRegisteredTools[0].callback;
+    expect(mockRegisteredTools.length).toBeGreaterThan(0);
+    return mockRegisteredTools[mockRegisteredTools.length - 1].callback;
   };
 
   it('dispatches the request to transport.handleRequest with the parsed body', async () => {
@@ -347,5 +347,100 @@ describe('mountMcpServer (raw-Express request-handling path)', () => {
       error: { code: -32603, message: 'Internal server error' },
       id: null,
     });
+  });
+
+  it('supports array-valued x-api-key and authorization headers', async () => {
+    const h = mount();
+    h.authService.validateApiKey.mockResolvedValue({ id: 'k1', role: 'admin' } as any);
+    await post(h, { jsonrpc: '2.0', id: 1 });
+
+    // 1. Array x-api-key
+    await toolCallback()(
+      { sessionId: 's1', to: '123', text: 'hi' },
+      { requestInfo: { headers: { 'x-api-key': ['array-key-1', 'array-key-2'] } } },
+    );
+    expect(h.authService.validateApiKey).toHaveBeenCalledWith('array-key-1', undefined, 's1');
+
+    // 2. Array authorization
+    await toolCallback()(
+      { sessionId: 's1', to: '123', text: 'hi' },
+      { requestInfo: { headers: { authorization: ['Bearer array-bearer-token'] } } },
+    );
+    expect(h.authService.validateApiKey).toHaveBeenCalledWith('array-bearer-token', undefined, 's1');
+
+    // 3. Non-bearer authorization header returns error result
+    const res = (await toolCallback()(
+      { sessionId: 's1', to: '123', text: 'hi' },
+      { requestInfo: { headers: { authorization: 'Basic dXNlcjpwYXNz' } } },
+    )) as { isError?: boolean; content: Array<{ text: string }> };
+    expect(res.isError).toBe(true);
+    expect(JSON.parse(res.content[0].text)).toMatchObject({ message: 'Missing API key' });
+  });
+
+  it('handles tools with json resultDisposition', async () => {
+    const schema = z.object({ query: z.string() });
+    const toolWithJson: AnyToolDescriptor = {
+      name: 'JsonTool',
+      description: 'Returns JSON',
+      tier: 'read',
+      resultDisposition: 'json',
+      sessionScoped: false,
+      schema,
+      inputSchema: schema,
+      handler: jest.fn().mockResolvedValue({ raw: 'data', count: 42 }),
+    };
+    const h = mount(toolWithJson);
+    h.authService.validateApiKey.mockResolvedValue({ id: 'k1', role: 'admin' } as any);
+    await post(h, { jsonrpc: '2.0', id: 1 });
+
+    const result = (await toolCallback()(
+      { query: 'test' },
+      { requestInfo: { headers: { 'x-api-key': 'valid-key' } } },
+    )) as { content: Array<{ text: string }> };
+
+    expect(JSON.parse(result.content[0].text)).toEqual({ raw: 'data', count: 42 });
+  });
+
+  it('normalizes base path with trailing slash on mount', () => {
+    const registry = {
+      list: jest.fn().mockReturnValue([]),
+    } as unknown as ToolRegistryService;
+    const authService = {} as AuthService;
+    const adapter = { post: jest.fn() };
+    const rateLimiter = new KeyRateLimiter(10, 1000);
+
+    mountMcpServer(adapter as any, registry, authService, rateLimiter, rateLimiter, { basePath: '/custom-mcp/' });
+    expect(adapter.post).toHaveBeenCalledWith('/custom-mcp', expect.any(Function), expect.any(Function), expect.any(Function));
+  });
+});
+
+describe('auditMcpAuthFailure (direct unit tests)', () => {
+  it('does nothing when auditService is undefined', () => {
+    expect(() => auditMcpAuthFailure(undefined, new UnauthorizedException('test'), {})).not.toThrow();
+  });
+
+  it('logs ForbiddenException with string message and context', () => {
+    const auditService = { logWarn: jest.fn() };
+    auditMcpAuthFailure(auditService as any, new ForbiddenException('Forbidden access'), {
+      ipAddress: '1.1.1.1',
+      method: 'POST',
+      path: '/mcp',
+    });
+
+    expect(auditService.logWarn).toHaveBeenCalledWith(AuditAction.API_KEY_AUTH_FAILED, {
+      ipAddress: '1.1.1.1',
+      method: 'POST',
+      path: '/mcp',
+      errorMessage: 'Forbidden access',
+    });
+  });
+
+  it('does not log non-auth exceptions (e.g. BadRequestException)', () => {
+    const auditService = { logWarn: jest.fn() };
+    auditMcpAuthFailure(auditService as any, new BadRequestException('Invalid input'), {
+      ipAddress: '1.1.1.1',
+    });
+
+    expect(auditService.logWarn).not.toHaveBeenCalled();
   });
 });

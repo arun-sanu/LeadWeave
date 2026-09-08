@@ -491,6 +491,7 @@ export interface ChatSummary {
   unreadCount: number;
   timestamp: number;
   lastMessage?: string;
+  archived?: boolean;
 }
 
 /**

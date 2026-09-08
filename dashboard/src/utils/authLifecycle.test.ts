@@ -65,8 +65,7 @@ test('isUserRole accepts exactly the three known roles', () => {
 // saved key). Harness mirrors Infrastructure.test.ts: jsdom globals, a fetch stub recording every
 // call, i18n catalogues awaited before render. App brings its own providers, so no wrapper here.
 
-const LOGIN_KEY = 'openwa_api_key';
-const ROLE_KEY = 'openwa_user_role';
+const LOGIN_FLAG = 'leadweave_logged_in';
 
 interface FetchCall {
   method: string;
@@ -75,7 +74,7 @@ interface FetchCall {
 
 const fetchCalls: FetchCall[] = [];
 
-// Per-test body for POST /auth/validate. The home page's stats endpoints need their object shapes
+// Per-test body for POST /auth/validate and POST /auth/session. The home page's stats endpoints need their object shapes
 // ([] would crash Dashboard's overview render); every other request gets an empty list, which the
 // post-login pages' React Query hooks tolerate.
 let validateBody: { valid?: boolean; role?: string } = { valid: true, role: 'operator' };
@@ -88,13 +87,12 @@ function installFetchStub(): void {
     fetchCalls.push({ method, path });
 
     let body: unknown = [];
-    if (method === 'POST' && path === '/api/auth/validate') body = validateBody;
+    if (method === 'POST' && (path === '/api/auth/validate' || path === '/api/auth/session')) body = validateBody;
     else if (path === '/api/stats/overview')
       body = {
         sessions: { active: 0, total: 0, byStatus: {} },
         messages: { sent: 0, received: 0, failed: 0, today: { sent: 0, received: 0 } },
       };
-    else if (path.startsWith('/api/stats/messages')) body = { timeSeries: [], byType: {}, bySession: [], topChats: [] };
     return Promise.resolve(
       new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } }),
     );
@@ -102,7 +100,7 @@ function installFetchStub(): void {
 }
 
 function validateCallCount(): number {
-  return fetchCalls.filter(c => c.method === 'POST' && c.path === '/api/auth/validate').length;
+  return fetchCalls.filter(c => c.method === 'POST' && (c.path === '/api/auth/validate' || c.path === '/api/auth/session')).length;
 }
 
 type RTL = typeof import('@testing-library/react');
@@ -161,21 +159,21 @@ async function signIn(apiKey: string): Promise<void> {
   const input = await screen.findByLabelText('API Key');
   fireEvent.change(input, { target: { value: apiKey } });
   fireEvent.submit(input.closest('form')!);
-  await waitFor(() => assert.ok(localStorage.getItem(ROLE_KEY), 'expected a role to be stored after sign-in'));
+  await waitFor(() => assert.equal(sessionStorage.getItem(LOGIN_FLAG), 'true'));
+  // Ensure raw API keys are never leaked to sessionStorage
+  assert.equal(sessionStorage.getItem('leadweave_api_key'), null);
   // Give the post-login render and its effects a macrotask to fire before counting requests.
   await new Promise(resolve => setTimeout(resolve, 50));
 }
 
-test('a fresh sign-in makes exactly one /auth/validate request, feeding the role from its response', async () => {
+test('a fresh sign-in makes exactly one /auth/session request, feeding the role from its response', async () => {
   rtl.render(createElement(App));
 
   await signIn('fresh-key');
 
-  // The login page's own validate is the one request; the startup re-validation effect must not
-  // re-fire on the null→key transition that storing the fresh key causes.
   assert.equal(validateCallCount(), 1);
-  assert.equal(localStorage.getItem(ROLE_KEY), 'operator');
-  assert.equal(sessionStorage.getItem(LOGIN_KEY), 'fresh-key');
+  assert.equal(sessionStorage.getItem(LOGIN_FLAG), 'true');
+  assert.equal(sessionStorage.getItem('leadweave_api_key'), null);
 });
 
 test('a fresh sign-in with a role-less validate response still degrades to viewer', async () => {
@@ -185,17 +183,18 @@ test('a fresh sign-in with a role-less validate response still degrades to viewe
   await signIn('fresh-key');
 
   assert.equal(validateCallCount(), 1);
-  assert.equal(localStorage.getItem(ROLE_KEY), 'viewer');
+  assert.equal(sessionStorage.getItem(LOGIN_FLAG), 'true');
+  assert.equal(sessionStorage.getItem('leadweave_api_key'), null);
 });
 
-test('a page reload with a saved key re-validates once at startup and refreshes the cached role', async () => {
-  sessionStorage.setItem(LOGIN_KEY, 'saved-key');
-  localStorage.setItem(ROLE_KEY, 'viewer'); // stale cached role
+test('a page reload with active login session re-validates once at startup and refreshes the authenticated session', async () => {
+  sessionStorage.setItem(LOGIN_FLAG, 'true');
   validateBody = { valid: true, role: 'admin' };
   rtl.render(createElement(App));
 
-  await rtl.waitFor(() => assert.equal(localStorage.getItem(ROLE_KEY), 'admin'));
+  await rtl.waitFor(() => assert.equal(validateCallCount(), 1));
   await new Promise(resolve => setTimeout(resolve, 50));
 
   assert.equal(validateCallCount(), 1);
+  assert.equal(sessionStorage.getItem('leadweave_api_key'), null);
 });

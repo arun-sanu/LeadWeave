@@ -9,9 +9,10 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger, OnModuleDestroy } from '@nestjs/common';
+import { Logger, OnModuleDestroy, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../auth/auth.service';
+import { SupabaseService } from '../auth/supabase.service';
 import { AuditService } from '../audit/audit.service';
 import { AuditAction } from '../audit/entities/audit-log.entity';
 import { resolveCorsPolicy } from '../../config/bootstrap-security';
@@ -132,6 +133,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     private readonly authService: AuthService,
     private readonly auditService: AuditService,
     private readonly configService: ConfigService,
+    @Optional() private readonly supabaseService?: SupabaseService,
   ) {
     this.rateLimits = readWsRateLimitConfig();
     this.frameLimiter = new TokenBucketLimiter(this.rateLimits.framePerSecond, this.rateLimits.frameBurst);
@@ -238,10 +240,20 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
       return;
     }
 
-    // Accept the key only via Socket.IO's `auth` field or the header — never the query string, which
-    // leaks the credential into proxy/access logs. (The deprecated `?apiKey=` fallback was removed.)
-    const handshakeAuth = client.handshake.auth as { apiKey?: string } | undefined;
-    const apiKey = handshakeAuth?.apiKey || (client.handshake.headers['x-api-key'] as string);
+    // Accept credential via Socket.IO's `auth` field (apiKey or token), headers (x-api-key / authorization), or HttpOnly cookies.
+    const handshakeAuth = client.handshake.auth as { apiKey?: string; token?: string } | undefined;
+    const authHeader = client.handshake.headers['authorization'];
+    const bearerToken = typeof authHeader === 'string' && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : undefined;
+    const cookieHeader = client.handshake.headers['cookie'];
+    let cookieApiKey: string | undefined;
+    let cookieToken: string | undefined;
+    if (typeof cookieHeader === 'string' && cookieHeader.length > 0) {
+      const matchKey = /(?:^|;\s*)leadweave_api_key=([^;]+)/.exec(cookieHeader);
+      if (matchKey) cookieApiKey = decodeURIComponent(matchKey[1]);
+      const matchToken = /(?:^|;\s*)leadweave_token=([^;]+)/.exec(cookieHeader);
+      if (matchToken) cookieToken = decodeURIComponent(matchToken[1]);
+    }
+    const apiKey = handshakeAuth?.apiKey || handshakeAuth?.token || (client.handshake.headers['x-api-key'] as string) || bearerToken || cookieApiKey || cookieToken;
 
     if (!apiKey) {
       this.logger.warn(`Client ${client.id} rejected: No API key provided`);
@@ -256,11 +268,24 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     }
 
     try {
-      // validateApiKey THROWS on any failure (it never resolves to a falsy value), so the rejection
-      // path is the catch below — a separate `if (!validKey)` branch here was dead code. The clientIp
-      // is passed so an IP-restricted key (allowedIps set) is ENFORCED rather than blanket-rejected
-      // for "Client IP could not be determined".
-      const validKey = await this.authService.validateApiKey(apiKey, clientIp);
+      let validKey: { id: string; name: string; allowedSessions?: string[] | null } | null = null;
+
+      // 1. Try Supabase token verification if available (only for tokens, not standard owa_ API keys)
+      if (this.supabaseService?.isEnabled?.() && !apiKey.startsWith('owa_') && apiKey.includes('.')) {
+        const supabaseUser = await this.supabaseService.verifyToken(apiKey).catch(() => null);
+        if (supabaseUser) {
+          validKey = {
+            id: `supabase:${supabaseUser.id}`,
+            name: supabaseUser.email || `Supabase User (${supabaseUser.id})`,
+            allowedSessions: [], // Unrestricted sessions
+          };
+        }
+      }
+
+      // 2. Fallback to API Key validation
+      if (!validKey) {
+        validKey = await this.authService.validateApiKey(apiKey, clientIp);
+      }
 
       // Cap simultaneous sockets per key: each socket holds rooms, engine fan-out, and memory,
       // so one key must not open connections without bound. Enough for multi-tab dashboards;
@@ -284,6 +309,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 
       // Store the validated key AND the raw key — the raw key lets handleSubscribe
       // RE-validate on each subscription so a key revoked mid-connection is caught.
+      client.data = client.data || {};
       (client.data as { apiKey: unknown; rawApiKey: string }).apiKey = validKey;
       (client.data as { rawApiKey: string }).rawApiKey = apiKey;
       this.trackSocket(validKey.id, client);
@@ -365,18 +391,34 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     // revoked/expired after connect must not be able to keep opening new subscriptions.
     // The clientIp is re-resolved (trusted-proxy-aware) so an IP-restricted key is enforced
     // here too, not just at connect.
-    const rawApiKey = (client.data as { rawApiKey?: string }).rawApiKey;
+    const rawApiKey =
+      (client.data as { rawApiKey?: string } | undefined)?.rawApiKey ||
+      (client.handshake?.auth as { apiKey?: string; token?: string } | undefined)?.apiKey ||
+      (client.handshake?.auth as { apiKey?: string; token?: string } | undefined)?.token ||
+      (client.handshake?.headers?.['x-api-key'] as string | undefined) ||
+      (typeof client.handshake?.headers?.['authorization'] === 'string' &&
+      client.handshake.headers['authorization'].startsWith('Bearer ')
+        ? client.handshake.headers['authorization'].slice(7)
+        : undefined);
     const clientIp = this.resolveClientIp(client);
-    let subscriberKey: { allowedSessions?: string[] | null } | null;
+    let subscriberKey: { allowedSessions?: string[] | null } | null = null;
     try {
-      subscriberKey = rawApiKey ? await this.authService.validateApiKey(rawApiKey, clientIp) : null;
+      if (rawApiKey && this.supabaseService?.isEnabled?.() && !rawApiKey.startsWith('owa_') && rawApiKey.includes('.')) {
+        const supabaseUser = await this.supabaseService.verifyToken(rawApiKey).catch(() => null);
+        if (supabaseUser) {
+          subscriberKey = { allowedSessions: [] };
+        }
+      }
+      if (!subscriberKey && rawApiKey) {
+        subscriberKey = await this.authService.validateApiKey(rawApiKey, clientIp);
+      }
     } catch {
       subscriberKey = null;
     }
     if (!subscriberKey) {
-      client.emit('message', this.createError('UNAUTHORIZED', 'API key is no longer valid', requestId));
+      client.emit('message', this.createError('UNAUTHORIZED', 'API key or session token is no longer valid', requestId));
       client.disconnect();
-      return this.createError('UNAUTHORIZED', 'API key is no longer valid', requestId);
+      return this.createError('UNAUTHORIZED', 'API key or session token is no longer valid', requestId);
     }
 
     // Enforce per-key session scope against the FRESH key: a key restricted to specific

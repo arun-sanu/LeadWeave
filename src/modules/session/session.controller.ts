@@ -76,11 +76,18 @@ export class SessionController {
   })
   @ApiResponse({ status: 409, description: 'Session name already exists' })
   async create(@Body() dto: CreateSessionDto): Promise<SessionResponseDto> {
-    const session = await this.sessionService.create(dto);
+    let session = await this.sessionService.create(dto);
     await this.auditService.logInfo(AuditAction.SESSION_CREATED, {
       sessionId: session.id,
       sessionName: session.name,
     });
+    if (dto.autoStart) {
+      session = await this.sessionService.start(session.id);
+      await this.auditService.logInfo(AuditAction.SESSION_STARTED, {
+        sessionId: session.id,
+        sessionName: session.name,
+      });
+    }
     return this.transformSession(session);
   }
 

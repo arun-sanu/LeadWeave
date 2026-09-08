@@ -28,11 +28,9 @@ export function bindModalA11y(doc: Document, card: HTMLElement, onClose: () => v
   const previousOverflow = doc.body.style.overflow;
   doc.body.style.overflow = 'hidden';
 
-  // Capture before moving focus into the dialog — this is the trigger focus returns to on close.
-  // Guarded structurally (not instanceof) so the binder also runs under non-DOM test doubles.
-  const active = doc.activeElement;
-  const previouslyFocused =
-    active && typeof (active as HTMLElement).focus === 'function' ? (active as HTMLElement) : null;
+  // Unconditionally store active element on modal open
+  const active = doc.activeElement as HTMLElement | null;
+  const previouslyFocused = active;
 
   const stackEntry = {};
   modalStack.push(stackEntry);
@@ -72,8 +70,15 @@ export function bindModalA11y(doc: Document, card: HTMLElement, onClose: () => v
     if (stackIndex !== -1) modalStack.splice(stackIndex, 1);
     doc.removeEventListener('keydown', onKeyDown, true);
     doc.body.style.overflow = previousOverflow;
-    // Restore focus to the trigger — unless it left the document while the dialog was open
-    // (e.g. the row that opened it was deleted), in which case focus() would throw/no-op.
-    if (previouslyFocused && doc.contains(previouslyFocused)) previouslyFocused.focus();
+    // Unconditionally attempt focus restoration on close with null & detached element guards
+    if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+      if (!doc.contains || doc.contains(previouslyFocused)) {
+        try {
+          previouslyFocused.focus();
+        } catch {
+          // ignore focus errors on detached elements
+        }
+      }
+    }
   };
 }

@@ -306,7 +306,7 @@ export function PluginInstances({ pluginId }: { pluginId: string }) {
             </button>
           </div>
           <label>{t('plugins.instances.created.ingressUrls')}</label>
-          {minted.ingressUrls.map(u => (
+          {(minted.ingressUrls || []).map(u => (
             <div key={u.route} className="pi-secret">
               <code>{u.url}</code>
               <button className="btn-primary" onClick={() => void copy(u.url, `mint-${u.route}`)}>

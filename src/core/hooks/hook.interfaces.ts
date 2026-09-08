@@ -58,6 +58,17 @@ const HOOK_EVENT_REGISTRY: Record<HookEvent, true> = {
 
 export const KNOWN_HOOK_EVENTS: ReadonlySet<HookEvent> = new Set(Object.keys(HOOK_EVENT_REGISTRY) as HookEvent[]);
 
+/** Mutating hooks that can alter payloads or halt pipeline execution. All other hooks are observability events. */
+export const MUTATING_HOOK_EVENTS: ReadonlySet<HookEvent> = new Set([
+  'message:sending',
+  'message:received',
+  'webhook:before',
+]);
+
+export function isMutatingHookEvent(event: HookEvent): boolean {
+  return MUTATING_HOOK_EVENTS.has(event);
+}
+
 /** Type guard: is `event` one of the known HookEvent values? Narrows an untrusted string to HookEvent. */
 export function isKnownHookEvent(event: string): event is HookEvent {
   return (KNOWN_HOOK_EVENTS as ReadonlySet<string>).has(event);

@@ -245,7 +245,7 @@ export class WebhookService implements OnModuleInit, OnModuleDestroy {
       idempotencyKey: generateIdempotencyKey('test', { webhookId: webhook.id }),
       deliveryId: generateDeliveryId(),
       data: {
-        message: 'This is a test webhook from OpenWA',
+        message: 'This is a test webhook from LeadWeave',
         webhookId: webhook.id,
         url: webhook.url,
       },
@@ -256,15 +256,15 @@ export class WebhookService implements OnModuleInit, OnModuleDestroy {
       // Custom headers FIRST so the system headers below always win.
       ...this.delivery.sanitizeCustomHeaders(webhook.headers),
       'Content-Type': 'application/json',
-      'User-Agent': 'OpenWA-Webhook/1.0.0',
-      'X-OpenWA-Event': 'test',
-      'X-OpenWA-Idempotency-Key': testPayload.idempotencyKey,
-      'X-OpenWA-Delivery-Id': testPayload.deliveryId,
-      'X-OpenWA-Retry-Count': '0',
+      'User-Agent': 'LeadWeave-Webhook/1.0.0',
+      'X-LeadWeave-Event': 'test',
+      'X-LeadWeave-Idempotency-Key': testPayload.idempotencyKey,
+      'X-LeadWeave-Delivery-Id': testPayload.deliveryId,
+      'X-LeadWeave-Retry-Count': '0',
     };
 
     if (webhook.secret) {
-      headers['X-OpenWA-Signature'] = this.delivery.generateSignature(body, webhook.secret);
+      headers['X-LeadWeave-Signature'] = this.delivery.generateSignature(body, webhook.secret);
     }
 
     try {

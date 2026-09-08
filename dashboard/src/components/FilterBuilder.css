@@ -39,7 +39,7 @@
   padding: 0 0.5rem;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--bg-white);
+  background: var(--bg-card);
   color: var(--text-primary);
   font-size: 0.8125rem;
 }
@@ -134,7 +134,7 @@
   padding: 0 0.625rem;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--bg-white);
+  background: var(--bg-card);
   color: var(--text-primary);
   font-size: 0.8125rem;
 }
@@ -160,7 +160,7 @@
   padding: 0.3125rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--bg-white);
+  background: var(--bg-card);
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s;
@@ -191,7 +191,7 @@
   padding: 0.25rem;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--bg-white);
+  background: var(--bg-card);
 }
 
 .chip {
@@ -199,8 +199,8 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.125rem 0.375rem;
-  background: rgba(37, 211, 102, 0.15);
-  border: 1px solid rgba(37, 211, 102, 0.25);
+  background: rgba(var(--accent-rgb), 0.15);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
   color: var(--primary-text);
   border-radius: 6px;
   font-size: 0.75rem;
@@ -248,7 +248,7 @@
   right: 0;
   max-height: 14rem;
   overflow-y: auto;
-  background: var(--bg-white);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 8px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);

@@ -1,0 +1,12 @@
+# LeadWeave
+
+> Open Source WhatsApp API Gateway & Management Dashboard
+
+LeadWeave provides an open-source WhatsApp gateway, messaging automation, and dashboard management interface.
+
+## Quick Links
+- [Dashboard](http://localhost:2886/): Main web UI
+- [Chats](http://localhost:2886/chats): Real-time chat management
+- [Sessions](http://localhost:2886/sessions): WhatsApp sessions and pairing
+- [Webhooks](http://localhost:2886/webhooks): Event subscriptions and webhook configuration
+- [Templates](http://localhost:2886/templates): WhatsApp message templates

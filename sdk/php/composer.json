@@ -1,18 +1,18 @@
 {
-    "name": "rmyndharis/openwa",
-    "description": "Official PHP SDK for OpenWA WhatsApp API Gateway",
+    "name": "rmyndharis/leadweave",
+    "description": "Official PHP SDK for LeadWeave WhatsApp API Gateway",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "whatsapp",
         "api",
         "sdk",
-        "openwa",
+        "leadweave",
         "gateway"
     ],
     "authors": [
         {
-            "name": "OpenWA Contributors"
+            "name": "LeadWeave Contributors"
         }
     ],
     "require": {
@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "OpenWA\\": "src/"
+            "LeadWeave\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "OpenWA\\Tests\\": "tests/"
+            "LeadWeave\\Tests\\": "tests/"
         }
     },
     "config": {

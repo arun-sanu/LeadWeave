@@ -173,8 +173,9 @@ describe('API-key usage write scope', () => {
 describe('validateApiKey entrypoint coverage', () => {
   /** Every known caller, with the surface it authenticates. */
   const KNOWN_CALLERS = new Map<string, string>([
-    ['core/agent-tools/tool-invoker.ts', 'agent tool invocation'],
     ['common/security/bull-board-auth.middleware.ts', 'queue dashboard middleware'],
+    ['core/agent-tools/tool-invoker.ts', 'agent tool invocation'],
+    ['modules/auth/auth-validate.controller.ts', 'lightweight API key validation endpoint'],
     ['modules/auth/guards/api-key.guard.ts', 'REST route guard'],
     ['modules/events/events.gateway.ts', 'websocket connect and per-subscribe re-validation'],
     ['modules/health/health.controller.ts', 'version disclosure on the public health check'],

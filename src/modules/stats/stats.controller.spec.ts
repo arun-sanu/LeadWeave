@@ -13,7 +13,7 @@ describe('StatsController access control', () => {
   // metadata-only handler lookup.
   const proto = StatsController.prototype as unknown as Record<string, (...args: unknown[]) => unknown>;
 
-  it.each(['getOverview', 'getMessageStats'] as const)('global stats route %s requires ADMIN', method => {
+  it.each(['getOverview'] as const)('global stats route %s requires ADMIN', method => {
     const role = reflector.get<ApiKeyRole | undefined>(REQUIRED_ROLE_KEY, proto[method]);
     expect(role).toBe(ApiKeyRole.ADMIN);
   });

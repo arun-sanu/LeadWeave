@@ -119,6 +119,15 @@ describe('EventsGateway connection auth + subscribe re-validation', () => {
     expect(sock.data.rawApiKey).toBe('good');
   });
 
+  it('accepts a valid key via handshake Cookie header (HttpOnly cookie support)', async () => {
+    authService.validateApiKey.mockResolvedValue({ name: 'k', allowedSessions: null });
+    const sock = makeSocket({});
+    sock.handshake.headers.cookie = 'leadweave_api_key=owa_k1_cookie_key';
+    await gateway.handleConnection(asSocket(sock));
+    expect(sock.disconnect).not.toHaveBeenCalled();
+    expect(sock.data.rawApiKey).toBe('owa_k1_cookie_key');
+  });
+
   it('re-validates on subscribe and disconnects a key revoked after connect', async () => {
     authService.validateApiKey.mockResolvedValueOnce({ name: 'k', allowedSessions: null }); // connect
     const sock = makeSocket({ apiKey: 'good' });

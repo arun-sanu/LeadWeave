@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, CornerUpLeft, Loader2, MessageSquare, Smile, Trash2 } from 'lucide-react';
+import { Emoji, EmojiStyle } from 'emoji-picker-react';
 import { sessionApi, type Chat } from '../../services/api';
 import { getMediaSrc, senderKey, type ChatMessageView } from '../../utils/chatMessages';
 import MessageBody from './MessageBody';
+import EmojiText from './EmojiText';
 
 // Stable per-sender colour for group message labels, like WhatsApp gives each participant a colour.
 // Hashed from the sender's name so the same person keeps the same colour across a session. The palette
@@ -245,6 +247,8 @@ function ChatThread({
                       src={mediaSrc}
                       alt={mediaInfo.filename || t('chats.media.image')}
                       className="chat-image-media"
+                      loading="lazy"
+                      decoding="async"
                       onLoad={onMediaLoad}
                       onClick={() => onOpenImage(msg.id)}
                     />
@@ -334,11 +338,11 @@ function ChatThread({
                         aria-label={t(`chats.messageStatus.${msg.status}`)}
                         title={t(`chats.messageStatus.${msg.status}`)}
                       >
-                        {msg.status === 'pending' && '🕒'}
+                        {msg.status === 'pending' && <EmojiText text="🕒" />}
                         {msg.status === 'sent' && '✓'}
                         {msg.status === 'delivered' && '✓✓'}
                         {msg.status === 'read' && '✓✓'}
-                        {msg.status === 'failed' && '⚠️'}
+                        {msg.status === 'failed' && <EmojiText text="⚠️" />}
                       </span>
                     )}
                   </div>
@@ -350,7 +354,7 @@ function ChatThread({
                         .slice(0, 3)
                         .map((emoji, idx) => (
                           <span key={idx} className="reaction-emoji-span">
-                            {emoji}
+                            <EmojiText text={emoji} />
                           </span>
                         ))}
                       {Object.keys(reactions).length > 1 && (
@@ -377,9 +381,16 @@ function ChatThread({
                         <Smile size={14} />
                       </button>
                       <div className="reaction-quick-popover">
-                        {['👍', '❤️', '😂', '😮', '😢', '🙏'].map(emoji => (
-                          <button key={emoji} type="button" onClick={() => onReact(msg, emoji)}>
-                            {emoji}
+                        {[
+                          { char: '👍', unified: '1f44d' },
+                          { char: '❤️', unified: '2764-fe0f' },
+                          { char: '😂', unified: '1f602' },
+                          { char: '😮', unified: '1f62e' },
+                          { char: '😢', unified: '1f622' },
+                          { char: '🙏', unified: '1f64f' },
+                        ].map(item => (
+                          <button key={item.char} type="button" onClick={() => onReact(msg, item.char)}>
+                            <Emoji unified={item.unified} size={20} emojiStyle={EmojiStyle.FACEBOOK} />
                           </button>
                         ))}
                       </div>

@@ -8,7 +8,7 @@
 # The only copies left in the image are the ones bundled inside the npm CLI
 # (/usr/local/lib/node_modules/npm/node_modules/brace-expansion, currently 5.0.7). npm is never on
 # the request path: the entrypoint runs `node dist/main`, and npm is present only for the
-# documented operator runbooks (`docker exec openwa npm run cli …`). Reaching this code requires an
+# documented operator runbooks (`docker exec leadweave npm run cli …`). Reaching this code requires an
 # operator to run an npm command with an attacker-chosen glob inside the container.
 #
 # npm 12 — the newest release, already installed by the Dockerfile — still bundles 5.0.7, so there

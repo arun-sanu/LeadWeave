@@ -17,14 +17,36 @@ interface ChatLike {
   id: string;
   name?: string;
   kind?: string;
+  isGroup?: boolean;
+  archived?: boolean;
 }
 
 /**
- * Chats tab: real conversations only. Channel- and status-kind rows are hidden here and surfaced on
- * their own tabs instead, so a channel never appears twice.
+ * Chats tab: 1-on-1 direct conversations only.
+ * Groups, archived chats, channels, and status rows are hidden here.
  */
 export function filterChats<T extends ChatLike>(chats: T[], query: string): T[] {
-  return chats.filter(c => c.kind !== 'channel' && c.kind !== 'status' && matches(query, c.name, c.id));
+  return chats.filter(
+    c => !c.archived && !c.isGroup && c.kind !== 'group' && c.kind !== 'channel' && c.kind !== 'status' && matches(query, c.name, c.id),
+  );
+}
+
+/**
+ * Groups tab: group conversations only (excluding archived).
+ */
+export function filterGroupChats<T extends ChatLike>(chats: T[], query: string): T[] {
+  return chats.filter(
+    c => !c.archived && (c.isGroup || c.kind === 'group') && matches(query, c.name, c.id),
+  );
+}
+
+/**
+ * Archive tab: all archived direct chats and groups.
+ */
+export function filterArchivedChats<T extends ChatLike>(chats: T[], query: string): T[] {
+  return chats.filter(
+    c => Boolean(c.archived) && matches(query, c.name, c.id),
+  );
 }
 
 /** Channels tab: same search box, matched on the channel's own name/id. */

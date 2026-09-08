@@ -189,8 +189,8 @@ before(async () => {
   installFetchStub();
   // RoleProvider seeds from localStorage; 'admin' makes canWrite true, or every action button
   // (New Session, Stop/Start, Unlink, Delete, Kill Stuck) is hidden and there is nothing to test.
-  window.localStorage.setItem('openwa_user_role', 'admin');
-  // Deliberately NOT setting sessionStorage['openwa_api_key']: useWebSocket.connect() reads it and
+  window.localStorage.setItem('leadweave_user_role', 'admin');
+  // Deliberately NOT setting sessionStorage['leadweave_api_key']: useWebSocket.connect() reads it and
   // bails with a console.warn when it's absent. Setting it would make socket.io actually dial
   // http://localhost/events and hit ECONNREFUSED in this environment.
   // Awaited, not just imported: catalogues are fetched now, so the import only starts the load and
@@ -215,7 +215,7 @@ function renderSessions(): { container: HTMLElement } {
     createElement(
       QueryClientProvider,
       { client: queryClient },
-      createElement(RoleProvider, null, createElement(ToastProvider, null, createElement(Sessions))),
+      createElement(RoleProvider, { initialRole: 'admin' }, createElement(ToastProvider, null, createElement(Sessions))),
     ),
   );
 }

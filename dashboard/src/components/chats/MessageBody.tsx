@@ -1,6 +1,7 @@
 import { memo, type ReactNode } from 'react';
 import Linkify from 'linkify-react';
 import { parseMessageBody, type MessageNode } from '../../utils/messageFormatter';
+import EmojiText from './EmojiText';
 
 interface Props {
   text: string;
@@ -21,7 +22,7 @@ const linkifyOptions = {
 function renderNode(node: MessageNode, key: number): ReactNode {
   switch (node.type) {
     case 'text':
-      return <span key={key}>{node.value}</span>;
+      return <EmojiText key={key} text={node.value} />;
     case 'bold':
       return <strong key={key}>{node.children.map(renderNode)}</strong>;
     case 'italic':

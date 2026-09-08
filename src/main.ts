@@ -201,7 +201,7 @@ async function bootstrap() {
   // sending #731 chasing BASE_URL/BIND_HOST/API_PORT instead of the real cause.
   const publicUrl = process.env.BASE_URL || `http://localhost:${port}`;
 
-  console.log(`🚀 OpenWA is running on: ${publicUrl}`);
+  console.log(`🚀 LeadWeave is running on: ${publicUrl}`);
   if (swaggerEnabled) {
     console.log(`📚 Swagger docs: ${publicUrl}/api/docs`);
   }

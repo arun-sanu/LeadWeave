@@ -46,7 +46,7 @@ const RELAYED_RESPONSE_HEADERS = [
 ] as const;
 
 /** Marks a request as already forwarded once. Whatever happens, it is never forwarded again. */
-export const FORWARDED_HEADER = 'x-openwa-forwarded';
+export const FORWARDED_HEADER = 'x-leadweave-forwarded';
 
 /**
  * The URL to forward to: ALWAYS the owner's origin, carrying only the request's path and query.
@@ -218,7 +218,7 @@ export class SessionProxyInterceptor implements NestInterceptor {
         const value = upstream.headers.get(name);
         if (value) response.setHeader(name, value);
       }
-      response.setHeader('x-openwa-served-by', ownerNodeId);
+      response.setHeader('x-leadweave-served-by', ownerNodeId);
       const body = Buffer.from(await upstream.arrayBuffer());
       if (body.length > 0) response.send(body);
       else response.end();

@@ -1,0 +1,138 @@
+.database-usage-page {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.database-usage-page .db-usage-header {
+  margin-bottom: 24px;
+}
+
+.database-usage-page .db-usage-header h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary, var(--color-depth));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.database-usage-page .db-usage-header p {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.database-usage-page .metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.database-usage-page .metric-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.database-usage-page .metric-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.database-usage-page .metric-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary, var(--color-depth));
+  margin-bottom: 4px;
+}
+
+.database-usage-page .metric-subtitle {
+  font-size: 12px;
+  color: var(--success-text);
+  font-weight: 600;
+}
+
+.database-usage-page .storage-breakdown-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.database-usage-page .storage-breakdown-card h2 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary, var(--color-depth));
+  margin-bottom: 16px;
+}
+
+.database-usage-page .storage-bar-wrapper {
+  margin-bottom: 20px;
+}
+
+.database-usage-page .storage-bar {
+  height: 20px;
+  border-radius: 10px;
+  background: var(--divider);
+  overflow: hidden;
+  display: flex;
+}
+
+.database-usage-page .bar-segment {
+  height: 100%;
+  transition: width var(--duration-slow) var(--ease-out);
+}
+
+.database-usage-page .storage-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.database-usage-page .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-primary, #334155);
+}
+
+.database-usage-page .legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.database-usage-page .tenants-usage-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.database-usage-page .tenants-usage-table th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.database-usage-page .tenants-usage-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}

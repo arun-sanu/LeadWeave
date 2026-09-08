@@ -1,7 +1,7 @@
 {
-    "name": "@rmyndharis/openwa",
+    "name": "@rmyndharis/leadweave",
     "version": "0.5.0",
-    "description": "Official JavaScript/TypeScript SDK for OpenWA WhatsApp API Gateway",
+    "description": "Official JavaScript/TypeScript SDK for LeadWeave WhatsApp API Gateway",
     "type": "module",
     "main": "./dist/cjs/index.js",
     "module": "./dist/esm/index.js",
@@ -35,14 +35,14 @@
         "whatsapp",
         "api",
         "sdk",
-        "openwa",
+        "leadweave",
         "gateway"
     ],
-    "author": "OpenWA Contributors",
+    "author": "LeadWeave Contributors",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/rmyndharis/OpenWA",
+        "url": "https://github.com/rmyndharis/LeadWeave",
         "directory": "sdk/javascript"
     },
     "engines": {

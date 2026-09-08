@@ -18,13 +18,25 @@
 }
 
 .infrastructure-page .infra-card {
-  background: var(--bg-white);
-  border-radius: 12px;
+  background: var(--card-gradient);
+  border-radius: 16px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
   width: 100%;
   box-sizing: border-box;
+  position: relative;
+}
+
+.infrastructure-page .infra-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.12) 50%, transparent 100%);
+  pointer-events: none;
 }
 
 .infrastructure-page .card-header {
@@ -43,11 +55,14 @@
 }
 
 .infrastructure-page .header-left svg {
-  color: var(--primary-text);
+  color: var(--primary);
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.40));
 }
 
 .infrastructure-page .card-header h2 {
   margin: 0;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
 }
 
 .infrastructure-page .status-indicator {
@@ -55,24 +70,30 @@
   align-items: center;
   gap: 0.375rem;
   font-size: 0.8125rem;
-  font-weight: 500;
+  font-weight: 600;
   padding: 0.375rem 0.75rem;
   border-radius: 9999px;
+  border: 1px solid transparent;
 }
 
 .infrastructure-page .status-indicator.connected {
-  background: rgba(37, 211, 102, 0.1);
-  color: var(--primary-text);
+  background: var(--accent-soft);
+  color: var(--success-text);
+  border-color: rgba(var(--accent-rgb), 0.30);
+  box-shadow: 0 0 12px -2px rgba(var(--accent-rgb), 0.30);
 }
 
 .infrastructure-page .status-indicator.disconnected {
   background: rgba(239, 68, 68, 0.12);
-  color: var(--error-text);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
 .infrastructure-page .status-indicator.sqlite {
-  background: rgba(59, 130, 246, 0.12);
-  color: var(--info);
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 12px -2px rgba(56, 189, 248, 0.25);
 }
 
 /* Radio Group */
@@ -87,20 +108,26 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  padding: 1rem;
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
+  padding: 1.125rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .infrastructure-page .radio-option:hover {
-  border-color: var(--text-muted);
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
 }
 
 .infrastructure-page .radio-option.selected {
   border-color: var(--primary);
-  background: rgba(37, 211, 102, 0.05);
+  background: linear-gradient(135deg, var(--accent-soft) 0%, rgba(var(--accent-rgb), 0.03) 100%);
+  box-shadow: 0 4px 20px -4px rgba(var(--accent-rgb), 0.25), var(--rim-top);
 }
 
 .infrastructure-page .radio-option input {
@@ -182,7 +209,7 @@
   font-size: 0.9375rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--bg-white);
+  background: var(--bg-card);
   transition: border-color 0.2s;
 }
 
@@ -256,7 +283,7 @@
   height: 20px;
   left: 3px;
   bottom: 3px;
-  background: white;
+  background: var(--bg-card);
   border-radius: 50%;
   transition: all 0.2s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);

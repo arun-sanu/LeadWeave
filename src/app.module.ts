@@ -44,7 +44,10 @@ import { PluginsModule } from './core/plugins';
 import { PluginsApiModule } from './modules/plugins/plugins.module';
 import { AgentToolsModule } from './core/agent-tools/agent-tools.module';
 import { IntegrationModule } from './modules/integration/integration.module';
+import { LeadSheetModule } from './modules/lead-sheet/lead-sheet.module';
+import { CampaignModule } from './modules/campaign/campaign.module';
 import { SearchModule } from './modules/search/search.module';
+import { LanMeshModule } from './modules/lan-mesh/lan-mesh.module';
 import { SqlitePermissionsBoot } from './database/sqlite-file-permissions';
 
 // Only import QueueModule if explicitly enabled to avoid Redis connection errors
@@ -76,7 +79,7 @@ if (process.env.MCP_ENABLED === 'true') {
   mcpModules.push(
     McpModule.forRoot({
       basePath: '/mcp',
-      serverInfo: { name: 'openwa', version },
+      serverInfo: { name: 'leadweave', version },
     }),
   );
 }
@@ -98,6 +101,11 @@ if (dashboardServingEnabled && dashboardBuildPresent) {
       // Let Nest own these so unknown API/socket routes return real 404s/JSON rather
       // than the SPA index.html fallback (Express 5 / path-to-regexp v8 wildcard syntax).
       exclude: ['/api/{*splat}', '/socket.io/{*splat}', '/mcp', '/mcp/{*splat}'],
+      serveStaticOptions: {
+        maxAge: 31536000000, // 1 year cache for immutable content-hashed assets
+        immutable: true,
+        index: false,
+      },
       // Disable this module's OWN catch-all SPA fallback. main.ts already serves dashboard
       // documents (it injects the per-response CSP nonce, which is why it must own them), and
       // that handler is correctly narrow: it skips /assets and only answers extensionless paths
@@ -105,14 +113,36 @@ if (dashboardServingEnabled && dashboardBuildPresent) {
       // EVERY unmatched GET with index.html, so a mistyped `<script src>` came back 200 HTML and
       // the browser reported a JavaScript parse error instead of the real 404, hiding broken
       // builds behind a confusing symptom. It is also outright broken when the install path
-      // contains a dot-segment (~/.openwa, a checkout under ~/.cache): it sends the index by
+      // contains a dot-segment (~/.leadweave, a checkout under ~/.cache): it sends the index by
       // ABSOLUTE path and Express's `send` refuses dot-segments, 404ing every client-side route.
       // Turning it off fixes both, and makes behaviour identical on either path shape.
       // ServeStaticModule has no explicit off switch, so this is a renderPath literal that no
       // real request can match.
-      renderPath: '/__openwa_spa_fallback_owned_by_main_ts__',
+      renderPath: '/__leadweave_spa_fallback_owned_by_main_ts__',
     }),
   );
+}
+
+// Optional/Disabled Experimental & Native-Driver-Limited Modules
+// Default to OFF (disabled) so they do not run, but remain fully ready to enable or modify.
+const catalogModules: Array<Type | DynamicModule> = [];
+if (process.env.CATALOG_ENABLED === 'true') {
+  catalogModules.push(CatalogModule);
+}
+
+const channelModules: Array<Type | DynamicModule> = [];
+if (process.env.CHANNEL_ENABLED === 'true') {
+  channelModules.push(ChannelModule);
+}
+
+const statusModules: Array<Type | DynamicModule> = [];
+if (process.env.STATUS_ENABLED === 'true') {
+  statusModules.push(StatusModule);
+}
+
+const lanMeshModules: Array<Type | DynamicModule> = [];
+if (process.env.LAN_MESH_ENABLED === 'true') {
+  lanMeshModules.push(LanMeshModule);
 }
 
 @Module({
@@ -173,6 +203,8 @@ if (dashboardServingEnabled && dashboardBuildPresent) {
             __dirname + '/modules/integration/**/*.entity{.ts,.js}',
             __dirname + '/modules/status-store/**/*.entity{.ts,.js}',
             __dirname + '/modules/automation/**/*.entity{.ts,.js}',
+            __dirname + '/modules/lead-sheet/**/*.entity{.ts,.js}',
+            __dirname + '/modules/campaign/**/*.entity{.ts,.js}',
           ],
           migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
           logging: configService.get<boolean>('dataDatabase.logging', false),
@@ -196,7 +228,7 @@ if (dashboardServingEnabled && dashboardBuildPresent) {
             port: configService.get<number>('dataDatabase.port'),
             username: configService.get<string>('dataDatabase.username'),
             password: configService.get<string>('dataDatabase.password'),
-            database: configService.get<string>('dataDatabase.name', 'openwa'),
+            database: configService.get<string>('dataDatabase.name', 'leadweave'),
 
             ssl: configService.get<boolean>('dataDatabase.ssl', false)
               ? {
@@ -238,7 +270,7 @@ if (dashboardServingEnabled && dashboardBuildPresent) {
           ...baseConfig,
           name: 'data',
           type: 'better-sqlite3' as const,
-          database: configService.get<string>('dataDatabase.database', './data/openwa.sqlite'),
+          database: configService.get<string>('dataDatabase.database', './data/leadweave.sqlite'),
           synchronize,
           migrationsRun: !synchronize,
         };
@@ -303,19 +335,22 @@ if (dashboardServingEnabled && dashboardBuildPresent) {
     ProfileModule, // Own-profile API (name / status / picture)
     CallModule, // Incoming-call API (reject a ringing call)
     LabelModule, // Phase 3: Labels Management
-    ChannelModule, // Phase 3: Channels/Newsletter
+    ...channelModules, // Phase 3: Channels/Newsletter (Disabled by default: set CHANNEL_ENABLED=true)
     StatsModule, // Phase 3: Statistics Dashboard
     MetricsModule, // Prometheus /api/metrics
-    StatusModule, // Phase 3: Status/Stories API
+    ...statusModules, // Phase 3: Status/Stories API (Disabled by default: set STATUS_ENABLED=true)
     MediaModule, // Server-side media conversion (opt-in)
     StatusStoreModule, // Phase 3: inbound status/story TTL store (24h purge + media persistence)
     ChatMediaModule, // opt-in chat-media archive (retention purge + orphan sweep)
     AutomationModule, // single-message autoreply rules, evaluated on the inbound dispatch
     TakeoverModule, // adopts sessions whose holder's lease lapsed (crashed peer / recreated node)
-    CatalogModule, // Phase 3: Catalog API (WhatsApp Business)
+    ...catalogModules, // Phase 3: Catalog API (Disabled by default: set CATALOG_ENABLED=true)
     PluginsApiModule, // Phase 5: Plugins API
     AgentToolsModule, // Agent-invocable tool registry (protocol-neutral)
     IntegrationModule, // Integration Fabric: @Public provider-webhook ingress + fast-ack pipeline
+    LeadSheetModule, // Google Sheets CRM: Webhook Trigger, STOP opt-out, & 20h W-RNR timeout tracker
+    CampaignModule, // Spreadsheet CRM, Dynamic Numbers, Pacing, Reply Tracking & Analytics
+    ...lanMeshModules, // LAN Mesh P2P Discovery (Opt-in via LAN_MESH_ENABLED=true for company LAN)
     ...searchModules, // Global message search (opt-out via SEARCH_ENABLED=false; default ON)
     ...mcpModules, // MCP Streamable-HTTP server (opt-in via MCP_ENABLED=true)
     ...serveStaticModules, // Bundled dashboard SPA (production single-port setup)

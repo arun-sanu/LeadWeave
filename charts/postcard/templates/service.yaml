@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "leadweave.fullname" . }}
+  labels:
+    {{- include "leadweave.labels" . | nindent 4 }}
+    # Marks this Service as the single scrape target. Deliberately NOT in `leadweave.labels`: the
+    # headless Service must not carry it, or the ServiceMonitor matches both again. The headless
+    # Service exists for StatefulSet DNS and sets publishNotReadyAddresses, so scraping it also
+    # produces `up=0` for a pod that is still starting.
+    leadweave.io/scrape-target: "primary"
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    {{- include "leadweave.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http

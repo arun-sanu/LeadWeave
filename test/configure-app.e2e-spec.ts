@@ -29,11 +29,11 @@ class HttpSurfaceModule {}
 
 // A stand-in for the bundled document: the real dashboard/index.html carries the placeholder in a
 // meta element, which Plugins.tsx reads to copy the nonce onto its sandboxed iframe's scripts.
-const distDir = join(mkdtempSync(join(tmpdir(), 'openwa-surface-')), 'dashboard', 'dist');
+const distDir = join(mkdtempSync(join(tmpdir(), 'leadweave-surface-')), 'dashboard', 'dist');
 mkdirSync(distDir, { recursive: true });
 writeFileSync(
   join(distDir, 'index.html'),
-  `<!doctype html><html><head><meta name="openwa-csp-nonce" content="${DASHBOARD_CSP_NONCE_PLACEHOLDER}" />` +
+  `<!doctype html><html><head><meta name="leadweave-csp-nonce" content="${DASHBOARD_CSP_NONCE_PLACEHOLDER}" />` +
     `</head><body><script nonce="${DASHBOARD_CSP_NONCE_PLACEHOLDER}"></script></body></html>`,
 );
 

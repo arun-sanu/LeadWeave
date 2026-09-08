@@ -88,11 +88,14 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
     // blank, defeating the audit trail. Explicit context values still win (e.g. a worker that stamps
     // a system key, or the AUTH_FAILED case which only has an IP).
     const actor = getRequestActor();
-    const apiKeyId = context.apiKey?.id ?? actor?.apiKeyId;
-    const apiKeyName = context.apiKey?.name ?? actor?.apiKeyName;
+    const apiKeyId = context.apiKey?.id ?? (actor?.userId ? `supabase:${actor.userId}` : actor?.apiKeyId);
+    const apiKeyName = context.apiKey?.name ?? actor?.userEmail ?? actor?.apiKeyName;
     const ipAddress = context.ipAddress ?? actor?.ipAddress;
+    const userMeta = actor?.userId ? { userId: actor.userId, userEmail: actor.userEmail, userRole: actor.userRole } : {};
     const metadata =
-      context.metadata || requestId ? { ...(context.metadata ?? {}), ...(requestId ? { requestId } : {}) } : null;
+      context.metadata || requestId || actor?.userId
+        ? { ...(context.metadata ?? {}), ...(requestId ? { requestId } : {}), ...userMeta }
+        : null;
     const auditLog = this.auditRepository.create({
       action,
       severity,

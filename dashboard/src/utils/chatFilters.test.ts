@@ -1,15 +1,65 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { filterChats, filterChannels, groupStatusesByContact } from './chatFilters.ts';
+import { filterChats, filterGroupChats, filterArchivedChats, filterChannels, groupStatusesByContact } from './chatFilters.ts';
 
-const chat = (id: string, name?: string, kind?: string) => ({ id, name, kind });
+const chat = (id: string, name?: string, kind?: string, isGroup?: boolean, archived?: boolean) => ({
+  id,
+  name,
+  kind,
+  isGroup,
+  archived,
+});
 
-test('the chats tab hides channel and status rows, which have their own tabs', () => {
-  const all = [chat('a@c.us', 'Alice'), chat('n@newsletter', 'News', 'channel'), chat('s@broadcast', 'S', 'status')];
+test('the chats tab shows only 1-on-1 direct non-archived conversations', () => {
+  const all = [
+    chat('a@c.us', 'Alice', 'individual', false, false),
+    chat('g@g.us', 'Dev Team', 'group', true, false),
+    chat('archived@c.us', 'Old Chat', 'individual', false, true),
+    chat('n@newsletter', 'News', 'channel', false, false),
+    chat('s@broadcast', 'S', 'status', false, false),
+  ];
 
   assert.deepEqual(
     filterChats(all, '').map(c => c.id),
     ['a@c.us'],
+  );
+});
+
+test('the groups tab shows only non-archived groups', () => {
+  const all = [
+    chat('a@c.us', 'Alice', 'individual', false, false),
+    chat('g1@g.us', 'Dev Team', 'group', true, false),
+    chat('g2@g.us', 'Marketing', 'group', true, true), // archived group
+  ];
+
+  assert.deepEqual(
+    filterGroupChats(all, '').map(c => c.id),
+    ['g1@g.us'],
+  );
+  assert.deepEqual(
+    filterGroupChats(all, 'dev').map(c => c.id),
+    ['g1@g.us'],
+  );
+  assert.deepEqual(
+    filterGroupChats(all, 'market').map(c => c.id),
+    [],
+  );
+});
+
+test('the archive tab shows all archived direct chats and groups', () => {
+  const all = [
+    chat('a@c.us', 'Alice', 'individual', false, false),
+    chat('archived-user@c.us', 'Old Friend', 'individual', false, true),
+    chat('archived-group@g.us', 'Old Project', 'group', true, true),
+  ];
+
+  assert.deepEqual(
+    filterArchivedChats(all, '').map(c => c.id),
+    ['archived-user@c.us', 'archived-group@g.us'],
+  );
+  assert.deepEqual(
+    filterArchivedChats(all, 'friend').map(c => c.id),
+    ['archived-user@c.us'],
   );
 });
 
@@ -32,12 +82,12 @@ test('search matches name or id, case-insensitively, and an absent name never th
 
 test('channels match on their own name and id', () => {
   const channels = [
-    { id: '111@newsletter', name: 'OpenWA News' },
+    { id: '111@newsletter', name: 'LeadWeave News' },
     { id: '222@newsletter', name: 'Other' },
   ];
 
   assert.deepEqual(
-    filterChannels(channels, 'openwa').map(c => c.id),
+    filterChannels(channels, 'leadweave').map(c => c.id),
     ['111@newsletter'],
   );
   assert.deepEqual(

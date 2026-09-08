@@ -1,27 +1,28 @@
+import { useRef } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { useTranslation } from 'react-i18next';
-import { AlertCircle, CircleDashed, Loader2, Megaphone, Plus, Search } from 'lucide-react';
+import { AlertCircle, Archive, ArchiveRestore, CircleDashed, Loader2, Megaphone, Plus } from 'lucide-react';
 import type { UseQueryResult } from '@tanstack/react-query';
-import type { Channel, Chat, ContactStatusGroup, Session } from '../../services/api';
+import type { Channel, Chat, ContactStatusGroup } from '../../services/api';
 import ChatAvatar from './ChatAvatar';
+import EmojiText from './EmojiText';
 
-export type ChatsTab = 'chats' | 'channels' | 'status';
+export type ChatsTab = 'chats' | 'groups' | 'channels' | 'status' | 'archive';
 
 interface ChatSidebarProps {
-  sessions: Session[];
-  selectedSessionId: string;
-  onSelectSession: (sessionId: string) => void;
   activeTab: ChatsTab;
   onSwitchTab: (tab: ChatsTab) => void;
-  searchQuery: string;
-  onSearchQueryChange: (query: string) => void;
   onComposeStatus: () => void;
   formatChatTime: (timestamp?: number) => string;
+
+
   chatsTab: {
     loading: boolean;
     chats: Chat[];
     activeChatId?: string;
     pictures?: Record<string, string | null>;
     onSelectChat: (chat: Chat) => void;
+    onArchiveChat?: (chat: Chat, archive: boolean) => void;
   };
   channelsTab: {
     engineLoading: boolean;
@@ -40,23 +41,29 @@ interface ChatSidebarProps {
   };
 }
 
-// LEFT SIDEBAR: session selector, Chats/Channels/Status tab bar, search, and the per-tab lists.
+// RIGHT SIDEBAR: session selector (if multi-session), Chats/Channels/Status tab bar, search, and lists.
 // The page owns all queries/state; this component renders them and reports interactions up.
 function ChatSidebar({
-  sessions,
-  selectedSessionId,
-  onSelectSession,
   activeTab,
   onSwitchTab,
-  searchQuery,
-  onSearchQueryChange,
   onComposeStatus,
   formatChatTime,
+
+
   chatsTab,
   channelsTab,
   statusTab,
 }: ChatSidebarProps) {
   const { t } = useTranslation();
+  const chatsContainerRef = useRef<HTMLDivElement>(null);
+
+  const rowVirtualizer = useVirtualizer({
+    count: chatsTab.chats.length,
+    getScrollElement: () => chatsContainerRef.current,
+    estimateSize: () => 72,
+    overscan: 6,
+    initialRect: { width: 300, height: 800 },
+  });
 
   const formatLastMessageSnippet = (chat: Chat) => chat.lastMessage || '';
 
@@ -85,7 +92,7 @@ function ChatSidebar({
         <div className="chat-item-info">
           <div className="chat-item-top">
             <span className="chat-item-name" title={chat.name || chat.id}>
-              {chat.name || chat.id.split('@')[0]}
+              <EmojiText text={chat.name || chat.id.split('@')[0]} />
             </span>
             {chat.kind !== 'individual' && chat.kind !== 'unknown' && (
               <span className={`chat-kind-badge kind-${chat.kind}`}>{t(`chats.kind.${chat.kind}`)}</span>
@@ -97,17 +104,37 @@ function ChatSidebar({
           </div>
           <div className="chat-item-bottom">
             <span className="chat-item-snippet" title={formatLastMessageSnippet(chat)}>
-              {formatLastMessageSnippet(chat) || <span className="no-message">{t('chats.noMessageYet')}</span>}
+              {formatLastMessageSnippet(chat) ? (
+                <EmojiText text={formatLastMessageSnippet(chat)} />
+              ) : (
+                <span className="no-message">{t('chats.noMessageYet')}</span>
+              )}
             </span>
-            {chat.unreadCount > 0 && (
-              <span
-                className="chat-unread-badge"
-                title={t('chats.unreadBadge', { count: chat.unreadCount })}
-                aria-label={t('chats.unreadBadge', { count: chat.unreadCount })}
-              >
-                {chat.unreadCount > 99 ? '99+' : chat.unreadCount}
-              </span>
-            )}
+            <div className="chat-item-actions-cluster">
+              {chat.unreadCount > 0 && (
+                <span
+                  className="chat-unread-badge"
+                  title={t('chats.unreadBadge', { count: chat.unreadCount })}
+                  aria-label={t('chats.unreadBadge', { count: chat.unreadCount })}
+                >
+                  {chat.unreadCount > 99 ? '99+' : chat.unreadCount}
+                </span>
+              )}
+              {chatsTab.onArchiveChat && (
+                <button
+                  type="button"
+                  className="chat-item-quick-action"
+                  title={chat.archived ? t('chats.unarchiveChat') : t('chats.archiveChat')}
+                  aria-label={chat.archived ? t('chats.unarchiveChat') : t('chats.archiveChat')}
+                  onClick={e => {
+                    e.stopPropagation();
+                    chatsTab.onArchiveChat!(chat, !chat.archived);
+                  }}
+                >
+                  {chat.archived ? <ArchiveRestore size={14} /> : <Archive size={14} />}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -117,28 +144,11 @@ function ChatSidebar({
   return (
     <aside className="chats-sidebar">
       <div className="sidebar-header-box">
-        {/* Session selector */}
-        <div className="session-select-group">
-          <label className="form-label" htmlFor="csb-1">
-            {t('chats.sessionLabel')}
-          </label>
-          <select
-            id="csb-1"
-            value={selectedSessionId}
-            onChange={e => onSelectSession(e.target.value)}
-            className="session-selector"
-          >
-            {sessions.map(s => (
-              <option key={s.id} value={s.id}>
-                {s.name} ({s.phone || t('chats.noPhone')})
-              </option>
-            ))}
-          </select>
-        </div>
 
-        {/* Chats / Channels / Status tabs */}
+
+        {/* Chats / Groups / Channels / Status / Archive tabs */}
         <div className="chats-tabs" role="tablist">
-          {(['chats', 'channels', 'status'] as const).map(tab => (
+          {(['chats', 'groups', 'channels', 'status', 'archive'] as const).map(tab => (
             <button
               key={tab}
               type="button"
@@ -152,16 +162,7 @@ function ChatSidebar({
           ))}
         </div>
 
-        {/* Search bar */}
-        <div className="chat-search-input">
-          <Search size={18} />
-          <input
-            type="text"
-            placeholder={t('chats.searchPlaceholder')}
-            value={searchQuery}
-            onChange={e => onSearchQueryChange(e.target.value)}
-          />
-        </div>
+
 
         {/* Compose a new status — only meaningful on the Status tab. */}
         {activeTab === 'status' && (
@@ -170,11 +171,13 @@ function ChatSidebar({
             {t('chats.status.compose')}
           </button>
         )}
+
+
       </div>
 
-      {/* Chat list */}
-      {activeTab === 'chats' && (
-        <div className="chats-list">
+      {/* Chat / Group / Archive list */}
+      {(activeTab === 'chats' || activeTab === 'groups' || activeTab === 'archive') && (
+        <div className="chats-list" ref={chatsContainerRef}>
           {chatsTab.loading ? (
             <div className="chats-list-loading">
               <Loader2 className="animate-spin" size={24} />
@@ -182,7 +185,39 @@ function ChatSidebar({
             </div>
           ) : chatsTab.chats.length === 0 ? (
             <div className="chats-list-empty">
-              <span>{t('chats.empty')}</span>
+              <span>
+                {activeTab === 'groups'
+                  ? t('chats.emptyGroups')
+                  : activeTab === 'archive'
+                    ? t('chats.emptyArchive')
+                    : t('chats.empty')}
+              </span>
+            </div>
+          ) : chatsTab.chats.length > 50 ? (
+            <div
+              style={{
+                height: `${rowVirtualizer.getTotalSize()}px`,
+                width: '100%',
+                position: 'relative',
+              }}
+            >
+              {rowVirtualizer.getVirtualItems().map(virtualRow => {
+                const chat = chatsTab.chats[virtualRow.index];
+                return (
+                  <div
+                    key={chat.id}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                  >
+                    {renderChatRow(chat)}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             chatsTab.chats.map(renderChatRow)

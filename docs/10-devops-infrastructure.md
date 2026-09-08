@@ -9,7 +9,7 @@
 
 ## 10.1 Infrastructure Overview
 
-OpenWA is a **single-process** application, so a deployment is exactly one app instance per
+LeadWeave is a **single-process** application, so a deployment is exactly one app instance per
 session-data volume (`replicas: 1` — see §10.2). The repo has no staging/production environments and
 no auto-deploy: CI builds and publishes images, and pulling one onto a server is the operator's step.
 
@@ -25,7 +25,7 @@ flowchart TB
 
     subgraph Deployment["Deployment (single server)"]
         PROXY[Reverse Proxy]
-        PROXY --> APP[OpenWA - one instance]
+        PROXY --> APP[LeadWeave - one instance]
         APP --> DB[(PostgreSQL or SQLite)]
         APP --> REDIS[(Redis - optional)]
         APP --> VOL["Data volume (/app/data)"]
@@ -103,12 +103,12 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/local/bin/puppeteer-chrome
 COPY --from=builder /app/dist ./dist
 
 # Create the unprivileged user the entrypoint drops to. The real image deliberately has NO
-# `USER openwa` directive and no `chown -R openwa /app /opt/puppeteer`: a full /app chown walks
+# `USER leadweave` directive and no `chown -R leadweave /app /opt/puppeteer`: a full /app chown walks
 # every production dependency (issue #1045: ~35 minutes on a small VPS), and the container itself
 # is the Chromium confinement boundary (cap_drop ALL, read_only rootfs). Instead the image starts
 # as root, the entrypoint chowns ONLY the writable ./data volume and then drops privileges via
-# `exec gosu openwa node dist/main.js` (no-new-privileges blocks any setuid path back up).
-RUN groupadd -r openwa && useradd -r -g openwa openwa
+# `exec gosu leadweave node dist/main.js` (no-new-privileges blocks any setuid path back up).
+RUN groupadd -r leadweave && useradd -r -g leadweave leadweave
 
 # Expose port
 EXPOSE 2785
@@ -146,9 +146,9 @@ services:
       - DATABASE_TYPE=postgres
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
-      - DATABASE_NAME=openwa
-      - DATABASE_USERNAME=openwa
-      - DATABASE_PASSWORD=openwa
+      - DATABASE_NAME=leadweave
+      - DATABASE_USERNAME=leadweave
+      - DATABASE_PASSWORD=leadweave
       - REDIS_ENABLED=true
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -163,7 +163,7 @@ services:
       - /app/node_modules
       # Everything the app writes locally (session auth, the main (auth/audit) SQLite DB, media,
       # plugins) lives under /app/data; with DATABASE_TYPE=postgres above, the data DB does not
-      - openwa-data:/app/data
+      - leadweave-data:/app/data
     depends_on:
       - postgres
       - redis
@@ -172,9 +172,9 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=openwa
-      - POSTGRES_PASSWORD=openwa
-      - POSTGRES_DB=openwa
+      - POSTGRES_USER=leadweave
+      - POSTGRES_PASSWORD=leadweave
+      - POSTGRES_DB=leadweave
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
@@ -193,7 +193,7 @@ services:
 volumes:
   postgres-data:
   redis-data:
-  openwa-data:
+  leadweave-data:
 ```
 
 ### Docker Compose (Production)
@@ -212,7 +212,7 @@ version: '3.8'
 
 services:
   app:
-    image: ghcr.io/rmyndharis/openwa:latest
+    image: ghcr.io/rmyndharis/leadweave:latest
     deploy:
       replicas: 1
       resources:
@@ -240,7 +240,7 @@ services:
     volumes:
       # Session auth, the main (auth/audit) SQLite DB, media and plugins all live here — losing
       # this volume loses the linked WhatsApp sessions and the API keys.
-      - openwa-data:/app/data
+      - leadweave-data:/app/data
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:2785/api/health/ready']
       interval: 30s
@@ -261,7 +261,7 @@ services:
     restart: always
 
 volumes:
-  openwa-data:
+  leadweave-data:
     driver: local
 ```
 
@@ -280,10 +280,10 @@ volumes:
 
 ### Helm Chart (Kubernetes)
 
-The maintained way to deploy on Kubernetes is the Helm chart at `charts/openwa/`:
+The maintained way to deploy on Kubernetes is the Helm chart at `charts/leadweave/`:
 
 ```bash
-helm install openwa ./charts/openwa \
+helm install leadweave ./charts/leadweave \
   --set secretEnv.API_MASTER_KEY=$(openssl rand -base64 32)
 ```
 
@@ -292,7 +292,7 @@ the compose warning above) with a PVC for `/app/data`, the compose hardening mir
 (read-only rootfs, dropped capabilities, writable `emptyDir` at `/tmp`), and optional
 Ingress / PodDisruptionBudget / ServiceMonitor. Configuration goes through free-form
 `env` and `secretEnv` maps — any variable from `.env.example` works; see
-`charts/openwa/README.md` and the inline comments in `charts/openwa/values.yaml`.
+`charts/leadweave/README.md` and the inline comments in `charts/leadweave/values.yaml`.
 The k8s manifests in [13 - Horizontal Scaling Guide](./13-horizontal-scaling.md) are
 an illustrative design sketch; the chart is the authoritative artifact.
 
@@ -334,7 +334,7 @@ something red within days instead of waiting for the next push or release.
 flowchart TB
     subgraph Server["Single Server"]
         NGINX[Nginx Reverse Proxy]
-        NGINX --> APP[OpenWA App]
+        NGINX --> APP[LeadWeave App]
         APP --> PG[(PostgreSQL)]
         APP --> RD[(Redis)]
         APP --> FS[File Storage]
@@ -345,8 +345,8 @@ flowchart TB
 
 ### Multi-Server Deployment
 
-> **Design sketch, not a supported topology.** OpenWA is single-process with in-memory engine state,
-> so the multi-`OpenWA` fan-out below would corrupt WhatsApp auth across replicas. It is retained only
+> **Design sketch, not a supported topology.** LeadWeave is single-process with in-memory engine state,
+> so the multi-`LeadWeave` fan-out below would corrupt WhatsApp auth across replicas. It is retained only
 > as the target architecture once the session-claim design in
 > [13 - Horizontal Scaling Guide](./13-horizontal-scaling.md) is implemented. Deploy with `replicas: 1`.
 
@@ -361,9 +361,9 @@ flowchart TB
     end
 
     subgraph AppServers["Application Servers"]
-        APP1[OpenWA 1]
-        APP2[OpenWA 2]
-        APP3[OpenWA N]
+        APP1[LeadWeave 1]
+        APP2[LeadWeave 2]
+        APP3[LeadWeave N]
     end
 
     subgraph DataLayer["Data Layer"]
@@ -404,13 +404,13 @@ LOG_FORMAT=json
 # Option 1: SQLite (for minimal deployments)
 # For SQLite, DATABASE_NAME is the database FILE PATH.
 DATABASE_TYPE=sqlite
-DATABASE_NAME=./data/openwa.sqlite
+DATABASE_NAME=./data/leadweave.sqlite
 
 # Option 2: PostgreSQL (for production) — DATABASE_NAME is the database NAME here
 # DATABASE_TYPE=postgres
 # DATABASE_HOST=localhost
 # DATABASE_PORT=5432
-# DATABASE_NAME=openwa
+# DATABASE_NAME=leadweave
 # DATABASE_USERNAME=user
 # DATABASE_PASSWORD=pass
 # DATABASE_POOL_SIZE=20
@@ -427,7 +427,7 @@ STORAGE_LOCAL_PATH=./data/media
 
 # Option 2: S3 (AWS) — leave S3_ENDPOINT unset; the SDK derives it from the region
 # STORAGE_TYPE=s3
-# S3_BUCKET=openwa
+# S3_BUCKET=leadweave
 # S3_REGION=ap-southeast-1
 # S3_ACCESS_KEY_ID=your-access-key
 # S3_SECRET_ACCESS_KEY=your-secret-key
@@ -436,7 +436,7 @@ STORAGE_LOCAL_PATH=./data/media
 # Setting S3_ENDPOINT is what enables path-style addressing; there is no separate flag.
 # STORAGE_TYPE=s3
 # S3_ENDPOINT=http://minio:9000
-# S3_BUCKET=openwa
+# S3_BUCKET=leadweave
 # S3_ACCESS_KEY_ID=minioadmin
 # S3_SECRET_ACCESS_KEY=minioadmin
 
@@ -507,8 +507,8 @@ export default () => ({
   dataDatabase: {
     type: process.env.DATABASE_TYPE || 'sqlite',
     // SQLite file path when type is sqlite; PostgreSQL database name when type is postgres
-    database: process.env.DATABASE_NAME || './data/openwa.sqlite',
-    name: process.env.DATABASE_NAME || 'openwa',
+    database: process.env.DATABASE_NAME || './data/leadweave.sqlite',
+    name: process.env.DATABASE_NAME || 'leadweave',
     host: process.env.DATABASE_HOST || 'localhost',
     port: parseInt(process.env.DATABASE_PORT || '5432', 10),
     username: process.env.DATABASE_USERNAME,
@@ -702,7 +702,7 @@ rule_files:
   - 'alerts.yml'
 
 scrape_configs:
-  - job_name: 'openwa'
+  - job_name: 'leadweave'
     static_configs:
       - targets: ['app:2785']
     metrics_path: '/api/metrics'
@@ -724,27 +724,27 @@ scrape_configs:
 
 ### Alert Rules
 
-These rules use the metric names OpenWA actually exports (`openwa_*`). The memory rule below uses a
+These rules use the metric names LeadWeave actually exports (`leadweave_*`). The memory rule below uses a
 node-exporter metric — an **external** exporter, not the app — and is kept as a host-level example.
 
 ```yaml
 # monitoring/alerts.yml
 groups:
-  - name: openwa-alerts
+  - name: leadweave-alerts
     rules:
-      # Service Down — openwa_up disappears (or the scrape fails)
+      # Service Down — leadweave_up disappears (or the scrape fails)
       - alert: ServiceDown
-        expr: up{job="openwa"} == 0 or absent(openwa_up)
+        expr: up{job="leadweave"} == 0 or absent(leadweave_up)
         for: 1m
         labels:
           severity: critical
         annotations:
-          summary: 'OpenWA service is down'
-          description: 'The OpenWA application is not responding'
+          summary: 'LeadWeave service is down'
+          description: 'The LeadWeave application is not responding'
 
       # Session(s) disconnected
       - alert: SessionDisconnected
-        expr: openwa_sessions{status="disconnected"} > 0
+        expr: leadweave_sessions{status="disconnected"} > 0
         for: 2m
         labels:
           severity: warning
@@ -754,7 +754,7 @@ groups:
 
       # Failed messages currently stored
       - alert: FailedMessagesPresent
-        expr: openwa_messages_failed_total > 0
+        expr: leadweave_messages_failed_total > 0
         for: 5m
         labels:
           severity: warning
@@ -764,15 +764,15 @@ groups:
 
       # Process memory growth (app-exported RSS; ~2GB example threshold)
       - alert: HighProcessMemory
-        expr: openwa_process_resident_memory_bytes > 2e9
+        expr: leadweave_process_resident_memory_bytes > 2e9
         for: 10m
         labels:
           severity: warning
         annotations:
-          summary: 'High OpenWA process memory'
+          summary: 'High LeadWeave process memory'
           description: 'RSS is {{ $value | humanize1024 }}B'
 
-      # Host memory pressure — EXTERNAL (node-exporter), not exported by OpenWA
+      # Host memory pressure — EXTERNAL (node-exporter), not exported by LeadWeave
       - alert: HighHostMemoryUsage
         expr: |
           (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)
@@ -810,19 +810,19 @@ route:
 receivers:
   - name: 'slack-notifications'
     slack_configs:
-      - channel: '#openwa-alerts'
+      - channel: '#leadweave-alerts'
         send_resolved: true
 
   - name: 'slack-critical'
     slack_configs:
-      - channel: '#openwa-critical'
+      - channel: '#leadweave-critical'
         send_resolved: true
         title: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
         text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
 
   - name: 'slack-warnings'
     slack_configs:
-      - channel: '#openwa-alerts'
+      - channel: '#leadweave-alerts'
         send_resolved: true
         title: '⚠️ WARNING: {{ .GroupLabels.alertname }}'
 ```
@@ -875,7 +875,7 @@ export class HealthController {
 
 ### Prometheus Metrics Implementation
 
-The metrics surface is small, so OpenWA emits Prometheus text exposition format (v0.0.4) **by hand** —
+The metrics surface is small, so LeadWeave emits Prometheus text exposition format (v0.0.4) **by hand** —
 there is **no `prom-client` dependency** and **no `collectDefaultMetrics`**. `MetricsService` reads an
 aggregate overview from `StatsService` plus `process.memoryUsage()`, memoizes the rendered text for a
 short TTL (~5s, so back-to-back scrapes don't repeat the DB scan), and exposes it at
@@ -897,25 +897,25 @@ export class MetricsService {
 
   async render(): Promise<string> {
     // Guarded: an unreachable data database must cost the DB-derived series, not the whole scrape.
-    // `overview` is null on failure, which is what openwa_stats_available reports.
+    // `overview` is null on failure, which is what leadweave_stats_available reports.
     const overview = await this.readOverviewOrNull();
     const mem = process.memoryUsage();
     const lines: string[] = [];
     // ... gauge() helper pushes `# HELP` / `# TYPE` / value lines ...
-    gauge('openwa_up', '...', 1);
-    gauge('openwa_process_uptime_seconds', '...', Math.round(process.uptime()));
-    gauge('openwa_process_resident_memory_bytes', '...', mem.rss);
-    gauge('openwa_process_heap_used_bytes', '...', mem.heapUsed);
-    gauge('openwa_stats_available', '...', overview ? 1 : 0);
+    gauge('leadweave_up', '...', 1);
+    gauge('leadweave_process_uptime_seconds', '...', Math.round(process.uptime()));
+    gauge('leadweave_process_resident_memory_bytes', '...', mem.rss);
+    gauge('leadweave_process_heap_used_bytes', '...', mem.heapUsed);
+    gauge('leadweave_stats_available', '...', overview ? 1 : 0);
     if (overview) {
-      gauge('openwa_sessions_total', '...', overview.sessions.total);
-      gauge('openwa_sessions_active', '...', overview.sessions.active);
-      // openwa_sessions{status="..."} — one line per status
-      // openwa_messages_total{direction="outgoing"|"incoming"}
-      // openwa_messages_failed_total
+      gauge('leadweave_sessions_total', '...', overview.sessions.total);
+      gauge('leadweave_sessions_active', '...', overview.sessions.active);
+      // leadweave_sessions{status="..."} — one line per status
+      // leadweave_messages_total{direction="outgoing"|"incoming"}
+      // leadweave_messages_failed_total
     }
     // ... then the process-start counters (webhook delivery failures, session reconnect attempts
-    // and loop alerts), openwa_sessions_restricted, and the pacing refusals — see the table below
+    // and loop alerts), leadweave_sessions_restricted, and the pacing refusals — see the table below
     // for the full list. The real method also memoizes this string for METRICS_RENDER_TTL_MS.
     return lines.join('\n') + '\n';
   }
@@ -926,32 +926,34 @@ export class MetricsService {
 
 | Metric                                       | Type      | Labels                              | Meaning                                                                                      |
 | -------------------------------------------- | --------- | ----------------------------------- | -------------------------------------------------------------------------------------------- |
-| `openwa_up`                                  | gauge     | —                                   | Always `1` when scraped                                                                      |
-| `openwa_process_uptime_seconds`              | gauge     | —                                   | Process uptime                                                                               |
-| `openwa_process_resident_memory_bytes`       | gauge     | —                                   | RSS                                                                                          |
-| `openwa_process_heap_used_bytes`             | gauge     | —                                   | V8 heap used                                                                                 |
-| `openwa_stats_available`                     | gauge     | —                                   | 1 when the database-derived series below could be read on this scrape, 0 when they could not |
-| `openwa_sessions_total`                      | gauge     | —                                   | Configured sessions                                                                          |
-| `openwa_sessions_active`                     | gauge     | —                                   | READY (active) sessions                                                                      |
-| `openwa_sessions`                            | gauge     | `status`                            | Session count per status                                                                     |
-| `openwa_messages_total`                      | gauge     | `direction` (`incoming`/`outgoing`) | Current stored messages by direction                                                         |
-| `openwa_messages_failed_total`               | gauge     | —                                   | Current messages in FAILED state                                                             |
-| `openwa_webhook_delivery_failures_total`     | counter   | —                                   | Webhook deliveries that terminally failed (all retries exhausted) since process start        |
-| `openwa_session_reconnect_attempts_total`    | counter   | —                                   | Reconnect attempts scheduled across all sessions since process start                         |
-| `openwa_session_reconnect_loop_alerts_total` | counter   | —                                   | Reconnect-loop alerts emitted since process start                                            |
-| `openwa_sessions_restricted`                 | gauge     | —                                   | Sessions whose account WhatsApp is currently restricting                                     |
-| `openwa_send_pacing_refusals_total`          | counter   | `reason`                            | Sends refused by the pacing governor since process start                                     |
+| `leadweave_up`                                  | gauge     | —                                   | Always `1` when scraped                                                                      |
+| `leadweave_process_uptime_seconds`              | gauge     | —                                   | Process uptime                                                                               |
+| `leadweave_process_resident_memory_bytes`       | gauge     | —                                   | RSS                                                                                          |
+| `leadweave_process_heap_used_bytes`             | gauge     | —                                   | V8 heap used                                                                                 |
+| `leadweave_stats_available`                     | gauge     | —                                   | 1 when the database-derived series below could be read on this scrape, 0 when they could not |
+| `leadweave_sessions_total`                      | gauge     | —                                   | Configured sessions                                                                          |
+| `leadweave_sessions_active`                     | gauge     | —                                   | READY (active) sessions                                                                      |
+| `leadweave_sessions`                            | gauge     | `status`                            | Session count per status                                                                     |
+| `leadweave_messages_total`                      | gauge     | `direction` (`incoming`/`outgoing`) | Current stored messages by direction                                                         |
+| `leadweave_messages_failed_total`               | gauge     | —                                   | Current messages in FAILED state                                                             |
+| `leadweave_webhook_delivery_failures_total`     | counter   | —                                   | Webhook deliveries that terminally failed (all retries exhausted) since process start        |
+| `leadweave_session_reconnect_attempts_total`    | counter   | —                                   | Reconnect attempts scheduled across all sessions since process start                         |
+| `leadweave_session_reconnect_loop_alerts_total` | counter   | —                                   | Reconnect-loop alerts emitted since process start                                            |
+| `leadweave_sessions_restricted`                 | gauge     | —                                   | Sessions whose account WhatsApp is currently restricting                                     |
+| `leadweave_send_pacing_refusals_total`          | counter   | `reason`                            | Sends refused by the pacing governor since process start                                     |
+| `leadweave_outbound_messages_total`             | counter   | `type`, `engine`, `status`          | Outbound messages dispatched through WhatsApp engines                                        |
+| `leadweave_outbound_message_avg_duration_ms`     | gauge     | —                                   | Average duration in ms to dispatch an outbound message                                       |
 | `http_requests_total`                        | counter   | `method`, `route`, `status`         | HTTP requests served, by method, route and status                                            |
 | `http_request_duration_seconds`              | histogram | `method`, `route`                   | HTTP request duration (`_bucket` / `_sum` / `_count`)                                        |
 
 The last two are deliberately **unprefixed** so a generic RED dashboard or alert rule matches them
-without knowing anything about OpenWA. They come from `src/common/metrics/request-metrics.ts`, which
+without knowing anything about LeadWeave. They come from `src/common/metrics/request-metrics.ts`, which
 `render()` splices into the same output.
 
 Not every row appears on every scrape, and the difference matters when you write alerts. The
-database-derived series (`openwa_sessions*`, `openwa_messages*`) are **omitted entirely** when the
-overview cannot be read — `openwa_stats_available` is what tells the two cases apart, so alert on it
-rather than reading a missing series as zero. `openwa_send_pacing_refusals_total` appears only once
+database-derived series (`leadweave_sessions*`, `leadweave_messages*`) are **omitted entirely** when the
+overview cannot be read — `leadweave_stats_available` is what tells the two cases apart, so alert on it
+rather than reading a missing series as zero. `leadweave_send_pacing_refusals_total` appears only once
 the governor has refused something. For these, `absent()` is the correct alerting primitive.
 
 `src/common/docs-metrics-list.spec.ts` compares this table against the metric names declared in
@@ -960,66 +962,66 @@ one of the files it reads. A series added to either file without a row here fail
 from a module that is neither — and not spliced through `lines.push(...renderX())` — would not be
 seen, so keep new renderers on that composition.
 
-> **The database-derived series can be absent.** `openwa_sessions_*`, `openwa_messages_*` and the per-status
+> **The database-derived series can be absent.** `leadweave_sessions_*`, `leadweave_messages_*` and the per-status
 > breakdown are read from the data database on each scrape. If that read fails — an outage, a statement
 > timeout, pool exhaustion, a `SQLITE_BUSY` under load — they are OMITTED rather than reported as zero, and
-> `openwa_stats_available` goes to 0. The process, HTTP and webhook series keep being served, so `up` stays 1
-> and still means "the process is alive". Alert on `openwa_stats_available == 0` for the degradation itself;
-> an alert written as `openwa_sessions_active == 0` would never fire for it, and one written with `absent()`
+> `leadweave_stats_available` goes to 0. The process, HTTP and webhook series keep being served, so `up` stays 1
+> and still means "the process is alive". Alert on `leadweave_stats_available == 0` for the degradation itself;
+> an alert written as `leadweave_sessions_active == 0` would never fire for it, and one written with `absent()`
 > would.
 
 ### Grafana Dashboard Definition
 
 ```json
-// monitoring/grafana/dashboards/openwa.json — panels use the openwa_* metrics OpenWA exports
+// monitoring/grafana/dashboards/leadweave.json — panels use the leadweave_* metrics LeadWeave exports
 {
-  "title": "OpenWA Dashboard",
-  "uid": "openwa-main",
+  "title": "LeadWeave Dashboard",
+  "uid": "leadweave-main",
   "panels": [
     {
       "title": "Active Sessions",
       "type": "stat",
       "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
-      "targets": [{ "expr": "openwa_sessions_active" }]
+      "targets": [{ "expr": "leadweave_sessions_active" }]
     },
     {
       "title": "Stored Outgoing Messages",
       "type": "stat",
       "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
-      "targets": [{ "expr": "openwa_messages_total{direction=\"outgoing\"}" }]
+      "targets": [{ "expr": "leadweave_messages_total{direction=\"outgoing\"}" }]
     },
     {
       "title": "Failed Messages",
       "type": "stat",
       "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
-      "targets": [{ "expr": "openwa_messages_failed_total" }]
+      "targets": [{ "expr": "leadweave_messages_failed_total" }]
     },
     {
       "title": "Sessions by Status",
       "type": "timeseries",
       "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
-      "targets": [{ "expr": "openwa_sessions", "legendFormat": "{{status}}" }]
+      "targets": [{ "expr": "leadweave_sessions", "legendFormat": "{{status}}" }]
     },
     {
       "title": "Stored Messages by Direction",
       "type": "timeseries",
       "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
-      "targets": [{ "expr": "openwa_messages_total", "legendFormat": "{{direction}}" }]
+      "targets": [{ "expr": "leadweave_messages_total", "legendFormat": "{{direction}}" }]
     },
     {
       "title": "Process Memory",
       "type": "timeseries",
       "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 },
       "targets": [
-        { "expr": "openwa_process_resident_memory_bytes / 1024 / 1024", "legendFormat": "RSS (MB)" },
-        { "expr": "openwa_process_heap_used_bytes / 1024 / 1024", "legendFormat": "Heap used (MB)" }
+        { "expr": "leadweave_process_resident_memory_bytes / 1024 / 1024", "legendFormat": "RSS (MB)" },
+        { "expr": "leadweave_process_heap_used_bytes / 1024 / 1024", "legendFormat": "Heap used (MB)" }
       ]
     },
     {
       "title": "Uptime",
       "type": "stat",
       "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
-      "targets": [{ "expr": "openwa_process_uptime_seconds" }]
+      "targets": [{ "expr": "leadweave_process_uptime_seconds" }]
     }
   ]
 }
@@ -1061,22 +1063,22 @@ export class MessageService {
 
 ### Key Metrics to Monitor
 
-These are the metrics OpenWA actually exports at `GET /api/metrics`:
+These are the metrics LeadWeave actually exports at `GET /api/metrics`:
 
 | Category     | Metric                                        | Description                                             | Alert Idea                       |
 | ------------ | --------------------------------------------- | ------------------------------------------------------- | -------------------------------- |
-| **Liveness** | `openwa_up`                                   | Always `1` when scraped (absence/scrape-failure = down) | Target down                      |
-| **Sessions** | `openwa_sessions_total`                       | Configured sessions                                     | Near your expected session count |
-| **Sessions** | `openwa_sessions_active`                      | READY (active) sessions                                 | Drops below expected             |
-| **Sessions** | `openwa_sessions{status="..."}`               | Per-status counts (e.g. `disconnected`, `failed`)       | `disconnected`/`failed` > 0      |
-| **Messages** | `openwa_messages_total{direction="outgoing"}` | Current stored outgoing messages                        | Unexpected change                |
-| **Messages** | `openwa_messages_total{direction="incoming"}` | Current stored incoming messages                        | Unexpected change                |
-| **Messages** | `openwa_messages_failed_total`                | Current messages in FAILED state                        | Above acceptable threshold       |
-| **System**   | `openwa_process_resident_memory_bytes`        | RSS                                                     | Growth / near limit              |
-| **System**   | `openwa_process_heap_used_bytes`              | V8 heap used                                            | Growth                           |
-| **System**   | `openwa_process_uptime_seconds`               | Process uptime                                          | Frequent restarts (resets)       |
+| **Liveness** | `leadweave_up`                                   | Always `1` when scraped (absence/scrape-failure = down) | Target down                      |
+| **Sessions** | `leadweave_sessions_total`                       | Configured sessions                                     | Near your expected session count |
+| **Sessions** | `leadweave_sessions_active`                      | READY (active) sessions                                 | Drops below expected             |
+| **Sessions** | `leadweave_sessions{status="..."}`               | Per-status counts (e.g. `disconnected`, `failed`)       | `disconnected`/`failed` > 0      |
+| **Messages** | `leadweave_messages_total{direction="outgoing"}` | Current stored outgoing messages                        | Unexpected change                |
+| **Messages** | `leadweave_messages_total{direction="incoming"}` | Current stored incoming messages                        | Unexpected change                |
+| **Messages** | `leadweave_messages_failed_total`                | Current messages in FAILED state                        | Above acceptable threshold       |
+| **System**   | `leadweave_process_resident_memory_bytes`        | RSS                                                     | Growth / near limit              |
+| **System**   | `leadweave_process_heap_used_bytes`              | V8 heap used                                            | Growth                           |
+| **System**   | `leadweave_process_uptime_seconds`               | Process uptime                                          | Frequent restarts (resets)       |
 
-> OpenWA does **not** expose request-rate, latency-histogram, webhook, queue, or Node default
+> LeadWeave does **not** expose request-rate, latency-histogram, webhook, queue, or Node default
 > (`nodejs_*`) metrics. For host/container-level signals (CPU, memory pressure, event-loop), scrape
 > external exporters: `up` and `container_memory_usage_bytes` come from blackbox/cAdvisor, and
 > `node_*` from node-exporter — not from the app.
@@ -1119,7 +1121,7 @@ before restoring; PostgreSQL dumps still require the explicit `psql` step descri
 
 ### Vertical Scaling
 
-OpenWA scales **vertically** — add CPU/RAM to a single instance. The table below is **unbenchmarked
+LeadWeave scales **vertically** — add CPU/RAM to a single instance. The table below is **unbenchmarked
 starting guidance**, not measured figures; actual usage depends heavily on engine choice
 (whatsapp-web.js spawns a Chromium per session; Baileys is far lighter), message volume, and media.
 Size up from your own monitoring.
@@ -1133,7 +1135,7 @@ Size up from your own monitoring.
 
 ### Horizontal Scaling
 
-**Not currently supported.** OpenWA is a single-process application with in-memory engine state, so
+**Not currently supported.** LeadWeave is a single-process application with in-memory engine state, so
 multiple replicas against a shared session volume corrupt WhatsApp auth. Run exactly **one** API
 instance per session-data volume (`replicas: 1`). The DB-backed session registry / node-claim design
 that would be required to scale out is documented — as a future design sketch, not a shipped feature —

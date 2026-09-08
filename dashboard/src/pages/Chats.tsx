@@ -1,14 +1,16 @@
-import { useState, useEffect, useCallback, useRef, useMemo, useLayoutEffect } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, Suspense } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { nextReconnectState } from '../utils/reconnectState';
 import { applyIncomingToChatList } from '../utils/chatList';
-import { filterChats, filterChannels, groupStatusesByContact } from '../utils/chatFilters';
-import { ArrowLeft, Loader2, Megaphone, CircleDashed, AlertCircle, MessageSquare } from 'lucide-react';
+import { filterChats, filterGroupChats, filterArchivedChats, filterChannels, groupStatusesByContact } from '../utils/chatFilters';
+import { ArrowLeft, Loader2, Megaphone, CircleDashed, AlertCircle, MessageSquare, ExternalLink, Archive, ArchiveRestore, X, Smartphone, MessageCircle, Search, Network } from 'lucide-react';
 import { useProfilePicture } from '../hooks/useProfilePicture';
 import { useProfilePictures } from '../hooks/useProfilePictures';
 import { useResolvedPhone } from '../hooks/useResolvedPhone';
 import { formatPhoneForDisplay } from '../utils/formatPhone';
+import { bubbleStore } from '../components/bubbles/useBubbleStore';
 import {
   sessionApi,
   messageApi,
@@ -17,7 +19,6 @@ import {
   type Chat,
   type ChatKind,
   type Channel,
-  type SearchHit,
   type ContactStatusGroup,
 } from '../services/api';
 import {
@@ -32,23 +33,27 @@ import {
 import { useWebSocket } from '../hooks/useWebSocket';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useToast } from '../hooks/useToast';
-import { PageHeader } from '../components/PageHeader';
-import { GlobalSearch } from '../components/GlobalSearch';
 import { useChatMessages, useChatMessagesActions, messagesQueryKey } from '../hooks/useChatMessages';
 import { useChannelMessages } from '../hooks/useChannelMessages';
 import { useContactStatuses } from '../hooks/useContactStatuses';
 import { useChatScrollPosition } from '../hooks/useChatScrollPosition';
-import { useCurrentEngineQuery } from '../hooks/queries';
+import { useSessionsQuery, useCurrentEngineQuery } from '../hooks/queries';
 import { createTrailingCoalescer } from '../utils/trailingCoalescer';
+import { lazyWithRetry as lazy } from '../utils/lazyWithRetry';
 import MessageBody from '../components/chats/MessageBody';
-import MediaLightbox, { type LightboxItem } from '../components/chats/MediaLightbox';
+import type { LightboxItem } from '../components/chats/MediaLightbox';
 import KindIcon from '../components/chats/KindIcon';
-import ChatSidebar from '../components/chats/ChatSidebar';
+import ChatSidebar, { type ChatsTab } from '../components/chats/ChatSidebar';
+import EmojiText from '../components/chats/EmojiText';
 import ChatThread from '../components/chats/ChatThread';
 import ChatComposer, { type StagedAttachment } from '../components/chats/ChatComposer';
 import StatusMedia from '../components/chats/StatusMedia';
-import StatusComposeModal from '../components/chats/StatusComposeModal';
+import SessionsManager from '../components/sessions/SessionsManager';
+import { LanMeshTab } from './LanMeshTab';
 import './Chats.css';
+
+const MediaLightbox = lazy(() => import('../components/chats/MediaLightbox'));
+const StatusComposeModal = lazy(() => import('../components/chats/StatusComposeModal'));
 
 // Quiet window for coalescing mark-as-read RPCs (see markReadCoalescer below).
 const MARK_READ_DEBOUNCE_MS = 750;
@@ -108,12 +113,49 @@ const statusFontStyle = (font?: number): { fontFamily?: string; fontWeight?: num
 export function Chats() {
   const { t } = useTranslation();
   useDocumentTitle(t('nav.chats'));
-  const { error: showErrorToast, warning: showWarningToast } = useToast();
+  const { error: showErrorToast, warning: showWarningToast, info: showInfoToast, success: showSuccessToast } = useToast();
+
+  // Request browser Notification permission on mount
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      void Notification.requestPermission();
+    }
+  }, []);
+
+  // Left section view mode: defaults to 'sessions' when requested via ?tab=sessions, otherwise 'chats'
+  const [leftPaneMode, setLeftPaneMode] = useState<'chats' | 'sessions' | 'lan-mesh'>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab === 'sessions' || tab === 'lan-mesh') {
+        return tab;
+      }
+      if (params.get('chat') || tab === 'chats') {
+        return 'chats';
+      }
+    }
+    return 'chats';
+  });
+
+  let locationSearch = '';
+  let navigateFn: ((to: string, options?: { replace?: boolean }) => void) | null = null;
+  try {
+    locationSearch = useLocation().search;
+  } catch {
+    locationSearch = typeof window !== 'undefined' ? window.location.search : '';
+  }
+  try {
+    navigateFn = useNavigate();
+  } catch {
+    navigateFn = null;
+  }
 
   // Sessions list & active session
+  const sessionsQuery = useSessionsQuery();
+  const [allSessions, setAllSessions] = useState<Session[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [selectedSessionId, setSelectedSessionId] = useState<string>('');
-  const [loadingSessions, setLoadingSessions] = useState<boolean>(true);
+  const isInitialSessionsLoading = sessionsQuery.isLoading && !sessionsQuery.data && allSessions.length === 0;
 
   // Chats list
   const [chats, setChats] = useState<Chat[]>([]);
@@ -123,16 +165,47 @@ export function Chats() {
   // Selected chat & message history
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
-  // Only the contact id is state — the open group is derived from groupedStatuses at render, so a
-  // refetch (window focus, post-compose) flows straight into the open viewer instead of leaving it
-  // pinned to the snapshot captured at click time. A group that disappears (all items expired)
-  // simply closes the viewer.
   const [activeStatusContactId, setActiveStatusContactId] = useState<string | null>(null);
 
-  // Chats/Channels/Status tab selection. Switching tabs closes whatever conversation is open so a
+  const closeActiveRoom = useCallback(() => {
+    setActiveChat(null);
+    setActiveChannel(null);
+    setActiveStatusContactId(null);
+  }, []);
+
+  const handleSetLeftPaneMode = useCallback((mode: 'chats' | 'sessions' | 'lan-mesh') => {
+    setLeftPaneMode(mode);
+    if (mode !== 'chats') {
+      closeActiveRoom();
+    }
+    if (navigateFn) {
+      navigateFn(`?tab=${mode}`, { replace: true });
+    } else if (typeof window !== 'undefined' && window.history?.replaceState) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', mode);
+      window.history.replaceState(null, '', url.toString());
+    }
+  }, [navigateFn, closeActiveRoom]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(locationSearch);
+    const tab = params.get('tab');
+    if (tab === 'sessions' || tab === 'lan-mesh' || tab === 'chats') {
+      setLeftPaneMode(tab);
+      if (tab !== 'chats') {
+        closeActiveRoom();
+      }
+    }
+    const querySession = params.get('session');
+    if (querySession && sessions.some(s => s.id === querySession)) {
+      setSelectedSessionId(querySession);
+    }
+  }, [locationSearch, sessions, closeActiveRoom]);
+
+  // Chats/Groups/Channels/Status/Archive tab selection. Switching tabs closes whatever conversation is open so a
   // press on another tab doesn't leave a Chats-tab room rendered underneath a Channels/Status list.
-  const [activeTab, setActiveTab] = useState<'chats' | 'channels' | 'status'>('chats');
-  const switchTab = useCallback((tab: 'chats' | 'channels' | 'status') => {
+  const [activeTab, setActiveTab] = useState<ChatsTab>('chats');
+  const switchTab = useCallback((tab: ChatsTab) => {
     setActiveTab(tab);
     setActiveChat(null);
     setActiveChannel(null);
@@ -248,25 +321,58 @@ export function Chats() {
   const activePhoneText =
     activePhoneDisplay ?? (resolvedPhoneQ.data ? formatPhoneForDisplay(resolvedPhoneQ.data) : null);
 
-  // 1. Fetch available connected sessions on mount
-  useEffect(() => {
-    const loadSessions = async () => {
-      try {
-        setLoadingSessions(true);
-        const list = await sessionApi.list();
-        const readySessions = list.filter(s => s.status === 'ready');
-        setSessions(readySessions);
-        if (readySessions.length > 0) {
-          setSelectedSessionId(readySessions[0].id);
+  // 1. Sync available connected sessions from TanStack Query (cached across navigation)
+  const syncSessionsList = useCallback((list: Session[]) => {
+    setAllSessions(prev => {
+      const prevSig = prev.map(s => `${s.id}:${s.status}:${s.phone || ''}`).join('|');
+      const nextSig = list.map(s => `${s.id}:${s.status}:${s.phone || ''}`).join('|');
+      return prevSig === nextSig ? prev : list;
+    });
+
+    const readySessions = list.filter(s => s.status === 'ready');
+    setSessions(prev => {
+      const prevSig = prev.map(s => `${s.id}:${s.status}:${s.phone || ''}`).join('|');
+      const nextSig = readySessions.map(s => `${s.id}:${s.status}:${s.phone || ''}`).join('|');
+      return prevSig === nextSig ? prev : readySessions;
+    });
+
+    if (readySessions.length > 0) {
+      setSelectedSessionId(prev => {
+        const params = new URLSearchParams(window.location.search);
+        const querySession = params.get('session');
+        if (querySession && readySessions.some(s => s.id === querySession)) {
+          return querySession;
         }
-      } catch (err) {
-        showErrorToast(t('chats.errors.loadSessions'), err instanceof Error ? err.message : undefined);
-      } finally {
-        setLoadingSessions(false);
+        if (prev && readySessions.some(s => s.id === prev)) {
+          return prev;
+        }
+        return readySessions[0].id;
+      });
+    } else {
+      setSelectedSessionId('');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sessionsQuery.data) {
+      syncSessionsList(sessionsQuery.data);
+    }
+  }, [sessionsQuery.data, syncSessionsList]);
+
+  const loadSessions = useCallback(async () => {
+    try {
+      const res = await sessionsQuery.refetch();
+      if (res.data) {
+        syncSessionsList(res.data);
       }
-    };
-    void loadSessions();
-  }, [t, showErrorToast]);
+    } catch (err) {
+      showErrorToast(t('chats.errors.loadSessions'), err instanceof Error ? err.message : undefined);
+    }
+  }, [sessionsQuery, syncSessionsList, t, showErrorToast]);
+
+  const handleSessionsChange = useCallback((updatedList: Session[]) => {
+    syncSessionsList(updatedList);
+  }, [syncSessionsList]);
 
   // 2. Fetch chats when active session changes
   const loadChats = useCallback(
@@ -277,6 +383,34 @@ export function Chats() {
         const data = await sessionApi.getChats(sessionId);
         const sorted = [...data].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
         setChats(sorted);
+
+        // Sync resolved contact names to bubbleStore for floating chat bubbles
+        sorted.forEach(c => {
+          if (c.name && !c.name.includes('@')) {
+            bubbleStore.updateBubbleName(c.id, c.name);
+          }
+        });
+
+        // Check if there is a target chat requested in query params
+        const params = new URLSearchParams(window.location.search);
+        const queryChatId = params.get('chat');
+        if (queryChatId) {
+          handleSetLeftPaneMode('chats');
+          const found = sorted.find(c => c.id === queryChatId);
+          if (found) {
+            setActiveChat(found);
+          } else {
+            // Even if not in first page of sorted list, construct a minimal chat object so room opens
+            setActiveChat({
+              id: queryChatId,
+              name: queryChatId.split('@')[0],
+              timestamp: Math.floor(Date.now() / 1000),
+              unreadCount: 0,
+              isGroup: queryChatId.endsWith('@g.us'),
+              kind: queryChatId.endsWith('@g.us') ? 'group' : 'individual',
+            });
+          }
+        }
       } catch (err) {
         showErrorToast(t('chats.errors.loadChats'), err instanceof Error ? err.message : undefined);
         setChats([]);
@@ -290,9 +424,6 @@ export function Chats() {
   useEffect(() => {
     if (selectedSessionId) {
       void loadChats(selectedSessionId);
-      setActiveChat(null);
-      setActiveChannel(null);
-      setActiveStatusContactId(null);
       // A staged attachment belongs to a chat in the session being left, so it is dropped here
       // rather than carried across — the close/reopen round trip that preserves it is scoped to a
       // single session. Clearing previewUrl runs the revoke effect's cleanup; the composer
@@ -365,6 +496,31 @@ export function Chats() {
       // up to date so re-opening them shows fresh data without a refetch.
       appendMessage(event.sessionId, newMsg.chatId, mappedMessage);
 
+      // Show pop-up bubble notification for incoming messages (from someone else)
+      if (!newMsg.fromMe) {
+        const senderName = newMsg.contact?.pushName ?? newMsg.contact?.name ?? newMsg.from.split('@')[0];
+        const previewText = newMsg.body || (newMsg.media ? `📷 ${t('chats.media.image')}` : t('chats.media.file'));
+
+        // Update global floating pill and bubble store
+        bubbleStore.addOrUpdateBubble({
+          chatId: newMsg.chatId,
+          sessionId: event.sessionId,
+          name: senderName,
+          incrementUnread: activeChat?.id !== newMsg.chatId,
+          lastMessage: previewText,
+          lastMessageObject: mappedMessage,
+          showLivelyAlert: activeChat?.id !== newMsg.chatId,
+        });
+
+        // Native Desktop Browser Notification (if permission granted and user is not in this chat)
+        if (activeChat?.id !== newMsg.chatId && 'Notification' in window && Notification.permission === 'granted') {
+          new Notification(`Message from ${senderName}`, {
+            body: previewText,
+            icon: '/favicon.ico',
+          });
+        }
+      }
+
       // If the message belongs to the currently visible chat, mark-as-read and run the scroll heuristic.
       if (activeChat && newMsg.chatId === activeChat.id) {
         markChatRead(activeChat.id);
@@ -388,7 +544,7 @@ export function Chats() {
         void loadChats(selectedSessionId);
       }
     },
-    [selectedSessionId, activeChat, loadChats, markChatRead, appendMessage, onMessageAppended, t],
+    [selectedSessionId, activeChat, loadChats, markChatRead, appendMessage, onMessageAppended, showInfoToast, t],
   );
 
   const handleIncomingMessageAck = useCallback(
@@ -517,6 +673,13 @@ export function Chats() {
     [queryClient],
   );
 
+  const handleSessionStatusReceived = useCallback(
+    (_event: { sessionId: string; status: string }) => {
+      void loadSessions();
+    },
+    [loadSessions],
+  );
+
   // The events object must be referentially stable: useWebSocket re-registers its socket handler
   // on every identity change, so an inline literal would tear down and re-attach per render.
   const wsEvents = useMemo(
@@ -527,6 +690,7 @@ export function Chats() {
       onMessageRevoked: handleIncomingMessageRevoked,
       onMessageEdited: handleIncomingMessageEdited,
       onStatusReceived: handleStatusReceived,
+      onSessionStatus: handleSessionStatusReceived,
     }),
     [
       handleIncomingMessage,
@@ -535,6 +699,7 @@ export function Chats() {
       handleIncomingMessageRevoked,
       handleIncomingMessageEdited,
       handleStatusReceived,
+      handleSessionStatusReceived,
     ],
   );
   const { isConnected, connectionFailed, reconnect, subscribe, unsubscribe } = useWebSocket(wsEvents);
@@ -658,88 +823,7 @@ export function Chats() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeChat?.id, markChatRead]);
 
-  // --- Global search: jump to a hit's chat (and best-effort scroll to the message) ---
-  // A cross-session hit switches session, which asynchronously reloads the chats list — so the
-  // target chat may not be available at click time. pendingHitRef carries the intent across that
-  // async gap: the chat-select effect picks it up once the list lands, and the scroll effect runs
-  // once the messages have rendered.
-  const pendingHitRef = useRef<{ chatId: string; waMessageId: string } | null>(null);
 
-  const handleSearchHit = useCallback(
-    (hit: SearchHit) => {
-      pendingHitRef.current = { chatId: hit.chatId, waMessageId: hit.waMessageId };
-      if (hit.sessionId !== selectedSessionId) {
-        // Switching session triggers loadChats; the effect below selects the chat once the list lands.
-        setSelectedSessionId(hit.sessionId);
-      } else {
-        const chat = chats.find(c => c.id === hit.chatId);
-        if (chat) {
-          if (chat.kind === 'channel') {
-            // Channels render their own read-only list on the Channels tab, not via activeChat — the
-            // hit's message-highlight is intentionally dropped here since that pane has no per-message scroll target.
-            switchTab('channels');
-            pendingHitRef.current = null;
-          } else if (chat.kind === 'status') {
-            setActiveTab('status');
-            setActiveChat(chat);
-            setActiveChannel(null);
-            setActiveStatusContactId(null);
-          } else {
-            setActiveTab('chats');
-            setActiveChat(chat);
-            setActiveChannel(null);
-            setActiveStatusContactId(null);
-          }
-        } else {
-          pendingHitRef.current = null;
-        }
-      }
-    },
-    [selectedSessionId, chats, switchTab],
-  );
-
-  // After a session switch the chats list reloads — pick up the pending chat once it appears.
-  useEffect(() => {
-    const pending = pendingHitRef.current;
-    if (!pending || activeChat?.id === pending.chatId) return;
-    const chat = chats.find(c => c.id === pending.chatId);
-    if (chat) {
-      if (chat.kind === 'channel') {
-        switchTab('channels');
-        pendingHitRef.current = null;
-      } else if (chat.kind === 'status') {
-        setActiveTab('status');
-        setActiveChat(chat);
-        setActiveChannel(null);
-        setActiveStatusContactId(null);
-      } else {
-        setActiveTab('chats');
-        setActiveChat(chat);
-        setActiveChannel(null);
-        setActiveStatusContactId(null);
-      }
-    }
-  }, [chats, activeChat, switchTab]);
-
-  // Best-effort scroll to the hit message. Runs as a layout effect (after useChatScrollPosition's
-  // own restore on the same commit) so it overrides the bottom/saved jump with no visible flash.
-  // Degrades silently to session+chat selection when the element isn't present — the message is
-  // still visible in the conversation.
-  useLayoutEffect(() => {
-    const pending = pendingHitRef.current;
-    if (!pending || !activeChat || activeChat.id !== pending.chatId) return;
-    if (loadingMessages || messages.length === 0) return;
-    const container = messagesContainerRef.current;
-    if (container) {
-      try {
-        const el = container.querySelector(`[data-wa-message-id="${pending.waMessageId}"]`);
-        if (el instanceof HTMLElement) el.scrollIntoView({ block: 'center' });
-      } catch {
-        // Unexpected chars in the id made the selector invalid — ignore.
-      }
-    }
-    pendingHitRef.current = null;
-  }, [activeChat, loadingMessages, messages, messagesContainerRef]);
 
   // Helper formats
   const formatChatTime = useCallback(
@@ -760,10 +844,49 @@ export function Chats() {
     [t],
   );
 
-  // One search box drives all three tabs; each matches on its own fields. Plain consts (not useMemo)
-  // because chats/channelsQuery.data/statusesQuery.data are already stable, query-cached references,
-  // so re-filtering on every render is cheap. See utils/chatFilters for the two status orderings.
-  const filteredChats = filterChats(chats, searchQuery);
+  // Archive/unarchive handler with optimistic local state updates.
+  const handleArchiveChat = useCallback(
+    async (chatToArchive: Chat, archive: boolean) => {
+      if (!selectedSessionId) return;
+
+      // Optimistic local state update
+      setChats(prevChats =>
+        prevChats.map(c => (c.id === chatToArchive.id ? { ...c, archived: archive } : c)),
+      );
+      if (activeChat?.id === chatToArchive.id) {
+        setActiveChat(prev => (prev ? { ...prev, archived: archive } : null));
+      }
+
+      try {
+        await sessionApi.archiveChat(selectedSessionId, chatToArchive.id, archive);
+        showSuccessToast(archive ? t('chats.archivedSuccess') : t('chats.unarchivedSuccess'));
+        queryClient.invalidateQueries({ queryKey: ['chats', selectedSessionId] });
+      } catch (err) {
+        // Rollback on failure
+        setChats(prevChats =>
+          prevChats.map(c => (c.id === chatToArchive.id ? { ...c, archived: !archive } : c)),
+        );
+        if (activeChat?.id === chatToArchive.id) {
+          setActiveChat(prev => (prev ? { ...prev, archived: !archive } : null));
+        }
+        showErrorToast(archive ? t('chats.archiveFailed') : t('chats.unarchiveFailed'));
+      }
+    },
+    [selectedSessionId, activeChat?.id, queryClient, showSuccessToast, showErrorToast, t],
+  );
+
+  // Filter conversations based on tab and search query.
+  const filteredDirectChats = filterChats(chats, searchQuery);
+  const filteredGroupChats = filterGroupChats(chats, searchQuery);
+  const filteredArchivedChats = filterArchivedChats(chats, searchQuery);
+
+  const currentListChats =
+    activeTab === 'groups'
+      ? filteredGroupChats
+      : activeTab === 'archive'
+        ? filteredArchivedChats
+        : filteredDirectChats;
+
   // The channels zero-state ("not subscribed to any channels") stays keyed on the UNFILTERED list
   // below, so a non-matching search renders an empty list rather than claiming there are none.
   const filteredChannels = filterChannels(channelsQuery.data ?? [], searchQuery);
@@ -781,7 +904,7 @@ export function Chats() {
   useEffect(() => {
     const el = statusFeedRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [activeStatusGroup?.contact.id, activeStatusGroup?.items]);
+  }, [activeStatusGroup?.contact?.id, activeStatusGroup?.items]);
 
   // Image media items for the lightbox, in render order. `getMediaSrc` reconstructs a usable src
   // from either a base64 payload or a URL — the ChatMessageView shape stores both in `data`.
@@ -799,13 +922,30 @@ export function Chats() {
     [messages, formatChatTime],
   );
 
+
+
+  const isRoomOpen = leftPaneMode === 'chats' && Boolean(activeChat || activeChannel || activeStatusGroup);
+
+  // Global ESC key listener to close the translucent glass full page popup
+  useEffect(() => {
+    if (!isRoomOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        // Prevent ESC from also closing parent modals if any and close this glass popup
+        e.stopPropagation();
+        closeActiveRoom();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isRoomOpen, closeActiveRoom]);
+
   return (
     <div className="chats-page">
-      <PageHeader
-        title={t('nav.chats')}
-        subtitle={t('chats.subtitle')}
-        actions={sessions.length > 0 && <GlobalSearch currentSessionId={selectedSessionId} onHit={handleSearchHit} />}
-      />
 
       {/* Real-time connection permanently dropped — let the user re-establish it instead of
           silently showing stale chats. */}
@@ -819,65 +959,236 @@ export function Chats() {
         </div>
       )}
 
-      {loadingSessions ? (
+      {isInitialSessionsLoading ? (
         <div className="chats-loading-container">
           <Loader2 className="animate-spin" size={32} />
           <p>{t('common.loading')}</p>
         </div>
-      ) : sessions.length === 0 ? (
-        <div className="chats-error-state">
-          <AlertCircle size={48} className="text-warn" />
-          <h3>{t('chats.noSessionsTitle')}</h3>
-          <p>
-            <Trans i18nKey="chats.noSessionsDesc">
-              Please connect a WhatsApp session from the <strong>Sessions</strong> menu first to use the chat feature.
-            </Trans>
-          </p>
-        </div>
       ) : (
-        <div className={`chats-layout ${activeChat || activeChannel || activeStatusGroup ? 'has-active-chat' : ''}`}>
-          {/* LEFT SIDEBAR: session & chat rooms */}
-          <ChatSidebar
-            sessions={sessions}
-            selectedSessionId={selectedSessionId}
-            onSelectSession={setSelectedSessionId}
-            activeTab={activeTab}
-            onSwitchTab={switchTab}
-            searchQuery={searchQuery}
-            onSearchQueryChange={setSearchQuery}
-            onComposeStatus={() => setComposeOpen(true)}
-            formatChatTime={formatChatTime}
-            chatsTab={{
-              loading: loadingChats,
-              chats: filteredChats,
-              activeChatId: activeChat?.id,
-              pictures: listPics.data,
-              onSelectChat: setActiveChat,
-            }}
-            channelsTab={{
-              engineLoading: currentEngine.isLoading,
-              supported: channelsSupported,
-              query: channelsQuery,
-              channels: filteredChannels,
-              activeChannelId: activeChannel?.id,
-              onSelectChannel: setActiveChannel,
-            }}
-            statusTab={{
-              loading: statusesQuery.isLoading,
-              error: statusesQuery.isError,
-              groups: groupedStatuses,
-              activeContactId: activeStatusContactId,
-              onSelectContact: setActiveStatusContactId,
-            }}
-          />
-
-          {/* RIGHT VIEW: active chat room */}
+        <div className="chats-layout">
+          {/* LEFT HERO VIEW: Constant 65% left frame with fluid title/content transition */}
           <main className="chats-room">
+            {/* Top View Selector Bar on Left Pane */}
+            <div className="left-pane-view-toggle-bar">
+              <div className="left-pane-tabs" role="tablist">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={leftPaneMode === 'sessions'}
+                  className={`left-pane-tab ${leftPaneMode === 'sessions' ? 'active' : ''}`}
+                  onClick={() => handleSetLeftPaneMode('sessions')}
+                >
+                  <Smartphone size={15} />
+                  <span>{t('nav.sessions', 'Sessions')}</span>
+                  {allSessions.length > 0 && <span className="tab-pill-count">{allSessions.length}</span>}
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={leftPaneMode === 'chats'}
+                  className={`left-pane-tab ${leftPaneMode === 'chats' ? 'active' : ''}`}
+                  onClick={() => handleSetLeftPaneMode('chats')}
+                >
+                  <MessageCircle size={15} />
+                  <span>{t('nav.chats', 'Chats')}</span>
+                  {sessions.length > 0 && <span className="tab-pill-count">{sessions.length}</span>}
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={leftPaneMode === 'lan-mesh'}
+                  className={`left-pane-tab ${leftPaneMode === 'lan-mesh' ? 'active' : ''}`}
+                  onClick={() => handleSetLeftPaneMode('lan-mesh')}
+                >
+                  <Network size={15} />
+                  <span>LAN Mesh</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Persistent Hero Body with seamless transition */}
+            <div className="chats-room-placeholder">
+              <div key={leftPaneMode} className="chats-hero-center hero-crossfade-enter">
+                <h1 className="chats-hero-title">
+                  {leftPaneMode === 'chats' ? 'Chats' : leftPaneMode === 'lan-mesh' ? 'LAN Mesh' : 'Sessions'}
+                </h1>
+
+                {leftPaneMode === 'chats' && sessions.length > 0 && (
+                  <div className="chats-hero-search-container">
+                    <div className="chat-search-input chats-hero-search-input">
+                      <Search size={18} />
+                      <input
+                        type="text"
+                        placeholder={t('chats.searchPlaceholder', 'Search chats...')}
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {leftPaneMode === 'chats' ? (
+                  sessions.length > 0 ? (
+                    (() => {
+                      const session = sessions.find(s => s.id === selectedSessionId);
+                      if (!session) return null;
+                      return (
+                        <div className={`sidebar-session-switcher chats-hero-session-switcher ${sessions.length === 1 ? 'single-session' : ''}`}>
+                          <select
+                            value={selectedSessionId}
+                            onChange={e => setSelectedSessionId(e.target.value)}
+                            className="sidebar-session-select"
+                            aria-label={t('sessions.selectSession', 'Select Session')}
+                          >
+                            {sessions.map(s => (
+                              <option key={s.id} value={s.id}>
+                                {s.name} ({s.phone || t('chats.noPhone')})
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      );
+                    })()
+                  ) : (
+                    <div className="chats-hero-empty-state">
+                      <p className="chats-hero-empty-desc">
+                        {t('chats.noSessionsDesc', 'No connected WhatsApp session. Please connect or start a session to use chat.')}
+                      </p>
+                      <button
+                        type="button"
+                        className="btn-primary"
+                        onClick={() => handleSetLeftPaneMode('sessions')}
+                        style={{ marginTop: '1.25rem', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        <Smartphone size={16} />
+                        <span>{t('sessions.title', 'Go to Sessions')}</span>
+                      </button>
+                    </div>
+                  )
+                ) : leftPaneMode === 'lan-mesh' ? (
+                  <div className="chats-hero-session-pill">
+                    <span className="session-status-dot" />
+                    <span>
+                      Decentralized P2P Mesh Network
+                    </span>
+                  </div>
+                ) : (
+                  <div className="chats-hero-session-pill">
+                    <span className="session-status-dot" />
+                    <span>
+                      {allSessions.length} {t('sessions.title', 'Sessions')} ({sessions.length} {t('sessionStatus.ready', 'Ready')})
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </main>
+
+          {/* RIGHT SIDEBAR: Switch between Chats sidebar and Sessions list sidebar seamlessly */}
+          <div className="chats-right-pane-container">
+            {leftPaneMode === 'chats' ? (
+              sessions.length === 0 ? (
+                <aside className="chats-sidebar">
+                  <div className="chats-list-empty" style={{ padding: '3rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                    <AlertCircle size={40} className="text-warn" style={{ marginBottom: '1rem' }} />
+                    <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: '1.0625rem', fontWeight: 600 }}>
+                      {t('chats.noSessionsTitle', 'No connected sessions')}
+                    </h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem', maxWidth: '280px', lineHeight: 1.5 }}>
+                      {t('chats.noSessionsDesc', 'Please connect a WhatsApp session to start using chats.')}
+                    </p>
+                    <button
+                      type="button"
+                      className="btn-primary btn-sm"
+                      onClick={() => handleSetLeftPaneMode('sessions')}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                    >
+                      <Smartphone size={14} />
+                      <span>{t('sessions.newSession', 'Connect Session')}</span>
+                    </button>
+                  </div>
+                </aside>
+              ) : (
+                <ChatSidebar
+                  activeTab={activeTab}
+                  onSwitchTab={switchTab}
+                  onComposeStatus={() => setComposeOpen(true)}
+                  formatChatTime={formatChatTime}
+                  chatsTab={{
+                    loading: loadingChats,
+                    chats: currentListChats,
+                    activeChatId: activeChat?.id,
+                    pictures: listPics.data,
+                    onSelectChat: chat => {
+                      handleSetLeftPaneMode('chats');
+                      setActiveChat(chat);
+                    },
+                    onArchiveChat: handleArchiveChat,
+                  }}
+                  channelsTab={{
+                    engineLoading: currentEngine.isLoading,
+                    supported: channelsSupported,
+                    query: channelsQuery,
+                    channels: filteredChannels,
+                    activeChannelId: activeChannel?.id,
+                    onSelectChannel: setActiveChannel,
+                  }}
+                  statusTab={{
+                    loading: statusesQuery.isLoading,
+                    error: statusesQuery.isError,
+                    groups: groupedStatuses,
+                    activeContactId: activeStatusContactId,
+                    onSelectContact: setActiveStatusContactId,
+                  }}
+                />
+              )
+            ) : leftPaneMode === 'sessions' ? (
+              <SessionsManager
+                standalone={false}
+                selectedSessionId={selectedSessionId}
+                onSessionSelect={id => {
+                  setSelectedSessionId(id);
+                  handleSetLeftPaneMode('chats');
+                }}
+                onSessionsChange={handleSessionsChange}
+              />
+            ) : (
+              <LanMeshTab />
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* TRANSLUCENT GLASS FULL PAGE POPUP FOR SELECTED CHATS / CHANNELS / STATUSES */}
+      {isRoomOpen && (
+        <div
+          className="chats-glass-popup-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label={
+            activeChat
+              ? activeChat.name || activeChat.id
+              : activeChannel
+                ? activeChannel.name
+                : activeStatusGroup?.contact?.name || 'Status'
+          }
+          onMouseDown={e => {
+            if (e.target === e.currentTarget) {
+              closeActiveRoom();
+            }
+          }}
+        >
+          <div className="chats-glass-popup-content">
             {activeChat ? (
               <div className="room-container">
                 {/* Room header */}
                 <header className="room-header">
-                  <button className="room-back" onClick={() => setActiveChat(null)} aria-label={t('common.back')}>
+                  <button
+                    className="room-back"
+                    onClick={closeActiveRoom}
+                    aria-label={t('common.back')}
+                    title={`${t('common.back')} (ESC)`}
+                  >
                     <ArrowLeft size={20} />
                   </button>
                   <div className="room-avatar">
@@ -885,7 +1196,6 @@ export function Chats() {
                       <img
                         src={activePp.data}
                         alt=""
-                        // Signed CDN URLs rotate every few hours; refetch the slice on a stale load.
                         onError={() => activePp.refetch()}
                       />
                     ) : (
@@ -893,25 +1203,58 @@ export function Chats() {
                     )}
                   </div>
                   <div className="room-contact-info">
-                    <h3>{activeChat.name || activeChat.id.split('@')[0]}</h3>
-                    {/* Personal chats show the prettified phone number — local formatting for
-                        @c.us ids, engine-resolved for @lid privacy ids (which are NOT phones and
-                        must never be formatted as one). Groups fall back to a semantic label;
-                        the raw JID follows below for the technical case. */}
+                    <h3>
+                      <EmojiText text={activeChat.name || activeChat.id.split('@')[0]} />
+                    </h3>
                     <span className="room-contact-phone">
                       {activePhoneText ??
                         (activeChat.isGroup ? t('chats.groupSubtitle') : t('chats.privateContactSubtitle'))}
                     </span>
-                    {/* Raw JID preserved for the technical case (the gateway speaks JIDs everywhere:
-                        webhooks, message rows, lid resolution). Monospace + muted so it doesn't compete
-                        with the human-facing name/number. */}
-                    <span className="room-contact-jid" title={activeChat.id}>
-                      {activeChat.id}
-                    </span>
+                  </div>
+
+                  <div className="room-header-actions">
+                    <button
+                      type="button"
+                      className="room-archive-btn"
+                      onClick={() => handleArchiveChat(activeChat, !activeChat.archived)}
+                      title={activeChat.archived ? t('chats.unarchiveChat') : t('chats.archiveChat')}
+                      aria-label={activeChat.archived ? t('chats.unarchiveChat') : t('chats.archiveChat')}
+                    >
+                      {activeChat.archived ? <ArchiveRestore size={13} /> : <Archive size={13} />}
+                    </button>
+
+                    <button
+                      type="button"
+                      className="bubble-popout-btn"
+                      onClick={() => {
+                        bubbleStore.addOrUpdateBubble({
+                          chatId: activeChat.id,
+                          sessionId: selectedSessionId,
+                          name: activeChat.name || activeChat.id.split('@')[0],
+                          incrementUnread: false,
+                        });
+                        bubbleStore.openDrawer(activeChat.id);
+                      }}
+                      title="Pop into Floating Bubble"
+                      aria-label="Pop into Floating Bubble"
+                    >
+                      <ExternalLink size={13} />
+                    </button>
+
+                    <button
+                      type="button"
+                      className="chats-glass-popup-close-btn"
+                      onClick={closeActiveRoom}
+                      title="Close (ESC)"
+                      aria-label={t('common.close') || 'Close'}
+                    >
+                      <X size={18} />
+                      <kbd className="esc-key-badge">ESC</kbd>
+                    </button>
                   </div>
                 </header>
 
-                {/* Messages body (list, media, reactions, scroll-to-bottom) — components/chats/ChatThread. */}
+                {/* Messages body */}
                 <ChatThread
                   sessionId={selectedSessionId}
                   activeChat={activeChat}
@@ -929,8 +1272,7 @@ export function Chats() {
                   onDelete={handleDeleteMessage}
                 />
 
-                {/* Composer: attachment preview, emoji panel, reply banner, input bar —
-                    components/chats/ChatComposer. */}
+                {/* Composer */}
                 <ChatComposer
                   selectedSessionId={selectedSessionId}
                   activeChat={activeChat}
@@ -947,15 +1289,29 @@ export function Chats() {
                 />
               </div>
             ) : activeChannel ? (
-              // Read-only channel pane: no send footer, reactions, delete, reply, or markChatRead —
-              // subscribed channels are a broadcast feed, not a two-way conversation.
               <div key={activeChannel.id} className="channel-room">
                 <header className="chats-room-header">
-                  <button className="room-back" onClick={() => setActiveChannel(null)} aria-label={t('common.back')}>
+                  <button
+                    className="room-back"
+                    onClick={closeActiveRoom}
+                    aria-label={t('common.back')}
+                    title={`${t('common.back')} (ESC)`}
+                  >
                     <ArrowLeft size={20} />
                   </button>
                   <Megaphone size={20} />
                   <h2>{activeChannel.name}</h2>
+                  <button
+                    type="button"
+                    className="chats-glass-popup-close-btn"
+                    style={{ marginLeft: 'auto' }}
+                    onClick={closeActiveRoom}
+                    title="Close (ESC)"
+                    aria-label={t('common.close') || 'Close'}
+                  >
+                    <X size={18} />
+                    <kbd className="esc-key-badge">ESC</kbd>
+                  </button>
                 </header>
                 <div className="messages-list" ref={channelFeedRef}>
                   {channelMessages.isLoading ? (
@@ -985,14 +1341,13 @@ export function Chats() {
                 </div>
               </div>
             ) : activeStatusGroup ? (
-              // Read-only status viewer: no send footer, reactions, delete, reply, or markChatRead —
-              // statuses are ephemeral broadcast posts, not a two-way conversation.
               <div key={activeStatusGroup.contact.id} className="channel-room">
                 <header className="chats-room-header">
                   <button
                     className="room-back"
-                    onClick={() => setActiveStatusContactId(null)}
+                    onClick={closeActiveRoom}
                     aria-label={t('common.back')}
+                    title={`${t('common.back')} (ESC)`}
                   >
                     <ArrowLeft size={20} />
                   </button>
@@ -1002,15 +1357,23 @@ export function Chats() {
                       activeStatusGroup.contact.pushName ??
                       activeStatusGroup.contact.id}
                   </h2>
+                  <button
+                    type="button"
+                    className="chats-glass-popup-close-btn"
+                    style={{ marginLeft: 'auto' }}
+                    onClick={closeActiveRoom}
+                    title="Close (ESC)"
+                    aria-label={t('common.close') || 'Close'}
+                  >
+                    <X size={18} />
+                    <kbd className="esc-key-badge">ESC</kbd>
+                  </button>
                 </header>
                 <div className="messages-list" ref={statusFeedRef}>
-                  {activeStatusGroup.items.map(item => (
+                  {(activeStatusGroup?.items || []).map(item => (
                     <div
                       key={item.id}
                       className="message-bubble incoming"
-                      // A text status keeps the look it was posted with: background colour (white
-                      // text like WhatsApp) and the closest generic font family we have for the
-                      // proprietary WhatsApp font slots.
                       style={
                         item.type === 'text' && (item.backgroundColor || item.font)
                           ? {
@@ -1035,30 +1398,30 @@ export function Chats() {
                   ))}
                 </div>
               </div>
-            ) : (
-              <div className="chats-room-placeholder">
-                <MessageSquare size={80} className="placeholder-icon" />
-                <h2>{t('chats.placeholderTitle')}</h2>
-                <p>{t('chats.placeholderDesc')}</p>
-              </div>
-            )}
-          </main>
+            ) : null}
+          </div>
         </div>
       )}
 
-      <MediaLightbox
-        items={imageMedia}
-        index={lightboxIndex}
-        onClose={() => setLightboxIndex(null)}
-        onNavigate={setLightboxIndex}
-      />
+      {lightboxIndex !== null && (
+        <Suspense fallback={null}>
+          <MediaLightbox
+            items={imageMedia}
+            index={lightboxIndex}
+            onClose={() => setLightboxIndex(null)}
+            onNavigate={setLightboxIndex}
+          />
+        </Suspense>
+      )}
 
       {composeOpen && (
-        <StatusComposeModal
-          sessionId={selectedSessionId}
-          onClose={() => setComposeOpen(false)}
-          onPosted={() => statusesQuery.refetch()}
-        />
+        <Suspense fallback={null}>
+          <StatusComposeModal
+            sessionId={selectedSessionId}
+            onClose={() => setComposeOpen(false)}
+            onPosted={() => statusesQuery.refetch()}
+          />
+        </Suspense>
       )}
     </div>
   );

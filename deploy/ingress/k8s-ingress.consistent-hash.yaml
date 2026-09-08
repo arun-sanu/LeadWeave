@@ -1,0 +1,30 @@
+# Kubernetes Ingress with Upstream Consistent Hashing on Session ID
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: leadweave-ingress
+  namespace: leadweave
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # Enable upstream consistent hashing based on X-Session-ID header
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$http_x_session_id$request_uri"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/websocket-services: "leadweave-service"
+spec:
+  rules:
+    - host: leadweave.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: leadweave-service
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - leadweave.example.com
+      secretName: leadweave-tls

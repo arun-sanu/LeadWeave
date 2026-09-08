@@ -137,9 +137,15 @@ interface ServerErrorFrame {
   message?: string;
 }
 
-// Use current origin for WebSocket (goes through nginx proxy in Docker)
-// Falls back to env var or localhost for development
-const SOCKET_URL = import.meta.env.VITE_WS_URL || window.location.origin;
+const getSocketUrl = (): string => {
+  if (import.meta.env.VITE_WS_URL) return import.meta.env.VITE_WS_URL;
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '');
+  
+  // Use window.location.origin in both dev (proxied by Vite) and production
+  return window.location.origin;
+};
+
+const SOCKET_URL = getSocketUrl();
 // Warn when the WebSocket origin is an insecure http:// URL on a non-localhost host.
 warnIfInsecureHttpUrl(SOCKET_URL, 'VITE_WS_URL');
 
@@ -161,28 +167,38 @@ export function useWebSocket(events: WebSocketEvents = {}) {
   const connect = useCallback(() => {
     if (socketRef.current?.connected) return;
 
-    // Get API key from sessionStorage (same as api.ts)
-    const apiKey = sessionStorage.getItem('openwa_api_key');
+    // Verify logged in session (or fallback legacy tokens)
+    const isLoggedIn = sessionStorage.getItem('leadweave_logged_in') === 'true';
+    const apiKey = sessionStorage.getItem('leadweave_api_key');
+    const supabaseToken = sessionStorage.getItem('leadweave_supabase_token');
 
-    if (!apiKey) {
-      console.warn('[WebSocket] No API key found, skipping connection');
+    if (!isLoggedIn && !apiKey && !supabaseToken) {
+      console.warn('[WebSocket] No active session found, skipping connection');
       return;
     }
+
+    const authPayload = supabaseToken
+      ? { token: supabaseToken }
+      : apiKey
+      ? { apiKey }
+      : undefined;
+
+    const extraHeaders: Record<string, string> = {
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(supabaseToken ? { Authorization: `Bearer ${supabaseToken}` } : {}),
+      ...(apiKey ? { 'X-API-Key': apiKey } : {}),
+    };
 
     setSocketEpoch(epoch => epoch + 1);
     socketRef.current = io(`${SOCKET_URL}/events`, {
       autoConnect: true,
+      withCredentials: true,
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
-      // Send the key via `auth` (and a header for proxies). NOT via `query` — a key in the
-      // handshake URL leaks into access logs / Referer. The gateway reads auth first.
-      auth: {
-        apiKey,
-      },
-      extraHeaders: {
-        'X-API-Key': apiKey,
-      },
+      // Authenticates via HttpOnly cookies (withCredentials: true) or optional auth payload
+      auth: authPayload,
+      extraHeaders,
     });
 
     socketRef.current.on('connect', () => {
@@ -253,6 +269,9 @@ export function useWebSocket(events: WebSocketEvents = {}) {
     };
   }, [connect]);
 
+  const eventsRef = useRef(events);
+  eventsRef.current = events;
+
   // Register the single envelope handler and fan out to the typed callbacks.
   useEffect(() => {
     if (!socketRef.current) return;
@@ -263,11 +282,11 @@ export function useWebSocket(events: WebSocketEvents = {}) {
       if (!msg || typeof msg.type !== 'string') return;
 
       if (msg.type === 'error') {
-        events.onServerError?.({ code: String(msg.code ?? ''), message: String(msg.message ?? '') });
+        eventsRef.current.onServerError?.({ code: String(msg.code ?? ''), message: String(msg.message ?? '') });
         return;
       }
       if (msg.type === 'subscribed') {
-        events.onSubscribed?.({
+        eventsRef.current.onSubscribed?.({
           sessionId: String(msg.sessionId ?? ''),
           events: Array.isArray(msg.events) ? msg.events : [],
         });
@@ -279,23 +298,23 @@ export function useWebSocket(events: WebSocketEvents = {}) {
 
       switch (event) {
         case 'session.status':
-          events.onSessionStatus?.({ sessionId, status: String(data.status), timestamp: msg.timestamp });
+          eventsRef.current.onSessionStatus?.({ sessionId, status: String(data.status), timestamp: msg.timestamp });
           break;
         case 'session.qr':
-          events.onQRCode?.({ sessionId, qrCode: String(data.qrCode), timestamp: msg.timestamp });
+          eventsRef.current.onQRCode?.({ sessionId, qrCode: String(data.qrCode), timestamp: msg.timestamp });
           break;
         case 'message.received':
         case 'message.sent':
-          events.onMessage?.({ sessionId, message: data, timestamp: msg.timestamp });
+          eventsRef.current.onMessage?.({ sessionId, message: data, timestamp: msg.timestamp });
           break;
         case 'status.received':
-          events.onStatusReceived?.({ sessionId, timestamp: msg.timestamp });
+          eventsRef.current.onStatusReceived?.({ sessionId, timestamp: msg.timestamp });
           break;
         case 'session.restriction':
-          events.onSessionRestriction?.({ sessionId, timestamp: msg.timestamp });
+          eventsRef.current.onSessionRestriction?.({ sessionId, timestamp: msg.timestamp });
           break;
         case 'message.ack':
-          events.onMessageAck?.({
+          eventsRef.current.onMessageAck?.({
             sessionId,
             id: String(data.id),
             messageId: String(data.messageId),
@@ -305,7 +324,7 @@ export function useWebSocket(events: WebSocketEvents = {}) {
           });
           break;
         case 'message.reaction':
-          events.onMessageReaction?.({
+          eventsRef.current.onMessageReaction?.({
             sessionId,
             messageId: String(data.messageId),
             chatId: String(data.chatId),
@@ -318,7 +337,7 @@ export function useWebSocket(events: WebSocketEvents = {}) {
           });
           break;
         case 'message.revoked':
-          events.onMessageRevoked?.({
+          eventsRef.current.onMessageRevoked?.({
             sessionId,
             id: String(data.id),
             // Not String()-coerced like its neighbours: the field is optional on the wire, and
@@ -343,7 +362,7 @@ export function useWebSocket(events: WebSocketEvents = {}) {
           ) {
             break;
           }
-          events.onMessageEdited?.({
+          eventsRef.current.onMessageEdited?.({
             sessionId,
             messageId: data.messageId,
             chatId: data.chatId,
@@ -363,7 +382,7 @@ export function useWebSocket(events: WebSocketEvents = {}) {
     };
     // socketEpoch re-runs this effect for the socket a manual reconnect() swapped in; the cleanup
     // above detaches the handler from the dead instance first.
-  }, [events, socketEpoch]);
+  }, [socketEpoch]);
 
   return { isConnected, connectionFailed, reconnect, subscribe, unsubscribe };
 }

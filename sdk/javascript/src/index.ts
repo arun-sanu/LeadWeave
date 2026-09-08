@@ -1,13 +1,13 @@
 /**
- * OpenWA JavaScript/TypeScript SDK.
+ * LeadWeave JavaScript/TypeScript SDK.
  *
- * Official client library for the OpenWA WhatsApp API Gateway.
+ * Official client library for the LeadWeave WhatsApp API Gateway.
  *
  * @example
  * ```typescript
- * import { OpenWAClient, OpenWAApiError } from '@rmyndharis/openwa';
+ * import { LeadWeaveClient, LeadWeaveApiError } from '@rmyndharis/leadweave';
  *
- * const client = new OpenWAClient({
+ * const client = new LeadWeaveClient({
  *   baseUrl: 'http://localhost:2785',
  *   apiKey: 'owa_k1_…',
  * });
@@ -15,7 +15,7 @@
  * await client.sessions.start('my-session');
  * const result = await client.messages.sendText('my-session', {
  *   chatId: '628123456789@c.us',
- *   text: 'Hello from the OpenWA SDK!',
+ *   text: 'Hello from the LeadWeave SDK!',
  * });
  * console.log(result.messageId);
  * ```
@@ -23,9 +23,9 @@
  * @packageDocumentation
  */
 
-export { OpenWAClient } from './client.js';
+export { LeadWeaveClient } from './client.js';
 export { default } from './client.js';
-export type { OpenWAClientOptions } from './client.js';
+export type { LeadWeaveClientOptions } from './client.js';
 export * from './errors.js';
 export type * from './types.js';
 export type { BinaryResponse, ClientConfig, FetchLike, HttpMethod, RequestOptions } from './http.js';

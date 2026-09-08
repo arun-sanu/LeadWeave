@@ -76,6 +76,12 @@ export class MessageController {
   })
   @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Max messages to return (default 50)' })
   @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Offset for pagination' })
+  @ApiQuery({
+    name: 'includeTotal',
+    required: false,
+    type: Boolean,
+    description: 'Whether to count total rows (default true). Pass false for faster feeds without count scan.',
+  })
   @ApiResponse({
     status: 200,
     description: 'Message history',
@@ -87,12 +93,14 @@ export class MessageController {
     @Query('from') from?: string,
     @Query('limit') limit?: string,
     @Query('offset') offset?: string,
+    @Query('includeTotal') includeTotal?: string,
   ) {
     return this.messageService.getMessages(sessionId, {
       chatId,
       from,
       limit: limit ? parseInt(limit, 10) : undefined,
       offset: offset ? parseInt(offset, 10) : undefined,
+      includeTotal: includeTotal !== undefined ? includeTotal === 'true' || includeTotal === '1' : undefined,
     });
   }
 
@@ -449,6 +457,10 @@ export class MessageController {
     content: { 'application/octet-stream': { schema: { type: 'string', format: 'binary' } } },
   })
   @ApiResponse({
+    status: 206,
+    description: 'Partial content response when HTTP Range header is requested (for audio/video seeking).',
+  })
+  @ApiResponse({
     status: 404,
     description:
       'No stored media for this message — it carries no media, media download was disabled or the ' +
@@ -460,13 +472,38 @@ export class MessageController {
     @Param('chatId') chatId: string,
     @Param('messageId') messageId: string,
     @Res({ passthrough: true }) res: Response,
+    @Query('range') rangeQuery?: string,
   ): Promise<StreamableFile> {
     const { buffer, mimetype } = await this.messageService.getChatMedia(sessionId, chatId, messageId);
-    // attachment + nosniff together: the mimetype is already reduced to an inert set, and forcing a
-    // download means even a mistake there cannot render as active content on the API origin. The
-    // dashboard renders chat media from the inline copy, so nothing depends on inline display here.
+    const totalSize = buffer.length;
+
+    // HTTP Range request support (RFC 7233) for efficient video and audio seeking
+    const rangeHeader = res.req?.headers?.range || rangeQuery;
+    if (rangeHeader && totalSize > 0 && typeof rangeHeader === 'string' && rangeHeader.startsWith('bytes=')) {
+      const parts = rangeHeader.replace(/bytes=/, '').split('-');
+      const start = parseInt(parts[0], 10) || 0;
+      const end = parts[1] ? parseInt(parts[1], 10) : totalSize - 1;
+
+      if (start < totalSize && end < totalSize && start <= end) {
+        const chunk = buffer.subarray(start, end + 1);
+        res.status(HttpStatus.PARTIAL_CONTENT);
+        res.set({
+          'Content-Type': mimetype,
+          'Content-Range': `bytes ${start}-${end}/${totalSize}`,
+          'Accept-Ranges': 'bytes',
+          'Content-Length': String(chunk.length),
+          'X-Content-Type-Options': 'nosniff',
+          'Content-Disposition': 'inline',
+        });
+        return new StreamableFile(chunk);
+      }
+    }
+
+    // Default full download attachment
     res.set({
       'Content-Type': mimetype,
+      'Accept-Ranges': 'bytes',
+      'Content-Length': String(totalSize),
       'X-Content-Type-Options': 'nosniff',
       'Content-Disposition': 'attachment',
     });

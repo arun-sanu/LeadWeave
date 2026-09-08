@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 // Single source of truth for the version shown in the dashboard: the ROOT package.json, which is
 // what a release bumps and what `npm run check:versions` gates. Resolved relative to this config
@@ -18,11 +19,55 @@ const { version: pkgVersion } = JSON.parse(
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    nodePolyfills({
+      globals: {
+        Buffer: true,
+        global: true,
+        process: true,
+      },
+    }),
+  ],
   appType: 'spa', // Enable SPA fallback for client-side routing
   define: {
     __APP_VERSION__: JSON.stringify(process.env.APP_VERSION || pkgVersion),
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react-dom') || id.includes('react/')) {
+              return 'vendor-react-core';
+            }
+            if (id.includes('react-router') || id.includes('react-router-dom')) {
+              return 'vendor-router';
+            }
+            if (id.includes('@tanstack')) {
+              return 'vendor-tanstack';
+            }
+            if (id.includes('@supabase')) {
+              return 'vendor-supabase';
+            }
+            if (id.includes('i18next') || id.includes('react-i18next')) {
+              return 'vendor-i18n';
+            }
+            if (id.includes('emoji-picker-react') || id.includes('react-emoji-render')) {
+              return 'vendor-emoji';
+            }
+            if (id.includes('yet-another-react-lightbox')) {
+              return 'vendor-lightbox';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+          }
+        },
+      },
+    },
   },
   server: {
     port: 2886,
@@ -38,6 +83,16 @@ export default defineConfig({
         target: 'http://localhost:2785',
         ws: true,
         changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('error', (_err, _req, _res) => {
+            // Silently suppress ECONNRESET / EPIPE error logging when connection closes
+          });
+          proxy.on('proxyReqWs', (_proxyReq, _req, socket) => {
+            socket.on('error', (_err) => {
+              // Suppress unhandled errors on the WebSocket proxy socket
+            });
+          });
+        },
       },
     },
   },

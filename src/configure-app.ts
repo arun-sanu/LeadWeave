@@ -1,5 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
+import compression from 'compression';
 import { Request, Response, NextFunction, json, urlencoded } from 'express';
 import { randomBytes } from 'crypto';
 import { existsSync, readFileSync } from 'fs';
@@ -102,6 +104,22 @@ export function configureApp(app: INestApplication, options: ConfigureAppOptions
     }),
   );
 
+  // Parse HTTP cookies on all incoming requests
+  app.use(cookieParser());
+
+  // Compress response bodies > 1KB (Gzip/Brotli wire optimization for JSON/Docs/HTML)
+  app.use(
+    compression({
+      threshold: 1024,
+      filter: (req: Request, res: Response) => {
+        if (req.headers['x-no-compression']) {
+          return false;
+        }
+        return compression.filter(req, res);
+      },
+    }),
+  );
+
   // Assign a request id to every inbound request (X-Request-ID), echo it on the response, and run
   // the whole downstream chain inside its scope so every log line + audit row carries it.
   app.use(requestContextMiddleware);
@@ -130,8 +148,13 @@ export function configureApp(app: INestApplication, options: ConfigureAppOptions
           // Chat media (voice notes, video) is served to the dashboard as data: URIs. Without an
           // explicit media-src, <audio>/<video> fall back to default-src 'self' and are blocked.
           // Mirror imgSrc so audio/video render the same way images already do.
-          mediaSrc: ["'self'", 'data:', 'blob:', 'https:'],
-          connectSrc: ["'self'"],
+          // Allow connect-src to self, Supabase Auth/REST/Realtime APIs, and any custom Supabase URL
+          connectSrc: [
+            "'self'",
+            'https://*.supabase.co',
+            'wss://*.supabase.co',
+            ...(process.env.SUPABASE_URL ? [process.env.SUPABASE_URL] : []),
+          ],
           fontSrc: ["'self'", 'https://fonts.gstatic.com'],
           objectSrc: ["'none'"],
           // Auto-upgrade HTTP→HTTPS in production, unless CSP_UPGRADE_INSECURE_REQUESTS opts out for an

@@ -1,4 +1,4 @@
-package openwa
+package leadweave
 
 import (
 	"context"
@@ -200,7 +200,7 @@ func retryMiddleware(p RetryPolicy, log Logger) Middleware {
 					_ = resp.Body.Close()
 				}
 
-				log.Log(req.Context(), LevelWarn, "openwa retrying request",
+				log.Log(req.Context(), LevelWarn, "leadweave retrying request",
 					"method", req.Method, "url", req.URL.String(),
 					"attempt", attempt+1, "delay_ms", delay.Milliseconds())
 

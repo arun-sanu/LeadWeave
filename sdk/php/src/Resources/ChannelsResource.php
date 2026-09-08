@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace OpenWA\Resources;
+namespace LeadWeave\Resources;
 
-use OpenWA\Http\HttpExecutor;
+use LeadWeave\Http\HttpExecutor;
 
 /**
  * Channels resource — WhatsApp Channels / Newsletters.

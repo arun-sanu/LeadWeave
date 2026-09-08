@@ -143,10 +143,10 @@ export class PluginCatalogEntryDto {
   keywords?: string[];
 
   @ApiPropertyOptional({ example: '0.18.0' })
-  minOpenWAVersion?: string;
+  minLeadWeaveVersion?: string;
 
   @ApiPropertyOptional({ example: '0.18.0' })
-  testedOpenWAVersion?: string;
+  testedLeadWeaveVersion?: string;
 
   @ApiPropertyOptional({ example: '2026-08-01' })
   releasedAt?: string;

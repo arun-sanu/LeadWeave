@@ -6,7 +6,7 @@
     }
   },
   "common": {
-    "appName": "OpenWA",
+    "appName": "LeadWeave",
     "loading": "로딩 중...",
     "cancel": "취소",
     "delete": "삭제",
@@ -63,7 +63,8 @@
     "messageTester": "메시지 테스터",
     "infrastructure": "인프라",
     "plugins": "플러그인",
-    "logs": "로그"
+    "logs": "로그",
+    "campaigns": "???"
   },
   "chats": {
     "media": {
@@ -121,7 +122,9 @@
     "tab": {
       "chats": "채팅",
       "channels": "채널",
-      "status": "상태"
+      "status": "상태",
+      "groups": "그룹",
+      "archive": "보관함"
     },
     "status": {
       "itemCount": "업데이트 {{count}}개",
@@ -168,7 +171,15 @@
       "delivered": "전달됨",
       "read": "읽음",
       "failed": "실패"
-    }
+    },
+    "emptyGroups": "그룹이 없습니다",
+    "emptyArchive": "보관된 채팅이 없습니다",
+    "archiveChat": "채팅 보관",
+    "unarchiveChat": "채팅 보관 해제",
+    "archivedSuccess": "채팅이 보관되었습니다",
+    "unarchivedSuccess": "채팅 보관이 해제되었습니다",
+    "archiveFailed": "채팅 보관 실패",
+    "unarchiveFailed": "보관 해제 실패"
   },
   "errorBoundary": {
     "title": "문제가 발생했습니다",
@@ -185,7 +196,7 @@
     "connectionError": "서버에 연결할 수 없습니다. 다시 시도해 주세요.",
     "help": "도움이 필요하신가요?",
     "viewDocs": "문서 보기",
-    "footer": "Yudhi Armyndharis와 OpenWA 커뮤니티가 ❤️로 만들었습니다",
+    "footer": "Yudhi Armyndharis와 LeadWeave 커뮤니티가 ❤️로 만들었습니다",
     "version": "v{{version}} · {{date}}"
   },
   "dashboard": {
@@ -211,23 +222,7 @@
     "view": "보기",
     "disconnect": "연결 해제",
     "errorPrefix": "오류: {{message}}",
-    "loadError": "데이터를 불러오지 못했습니다",
-    "charts": {
-      "title": "메시지 분석",
-      "period": {
-        "24h": "24시간",
-        "7d": "7일",
-        "30d": "30일"
-      },
-      "overTime": "시간별 메시지 추이",
-      "byType": "유형별 메시지",
-      "topChats": "인기 채팅",
-      "sent": "보냄",
-      "received": "받음",
-      "messages": "메시지",
-      "empty": "이 기간에는 메시지 활동이 없습니다.",
-      "error": "메시지 분석을 불러올 수 없습니다. 서버 로그를 확인하세요."
-    }
+    "loadError": "데이터를 불러오지 못했습니다"
   },
   "sessionStatus": {
     "created": "신규",
@@ -694,7 +689,7 @@
       "postgres": "PostgreSQL",
       "postgresDesc": "프로덕션에 적합한 데이터베이스",
       "useBuiltIn": "내장 PostgreSQL 컨테이너 사용",
-      "builtInDesc": "OpenWA가 PostgreSQL 컨테이너를 관리합니다",
+      "builtInDesc": "LeadWeave가 PostgreSQL 컨테이너를 관리합니다",
       "dbName": "데이터베이스 이름",
       "schema": "스키마",
       "schemaDesc": "PostgreSQL 스키마(SQLite에서는 무시됨). 기본값 'public'. 스키마가 이미 존재해야 합니다.",
@@ -729,7 +724,7 @@
       "enable": "Redis 사용",
       "enableDesc": "캐싱, 세션 저장, BullMQ 큐에 필요합니다",
       "useBuiltIn": "내장 Redis 컨테이너 사용",
-      "builtInDesc": "OpenWA가 Redis 컨테이너를 관리합니다",
+      "builtInDesc": "LeadWeave가 Redis 컨테이너를 관리합니다",
       "queueTitle": "BullMQ 큐 시스템 사용",
       "queueDesc": "안정적인 메시지 및 웹훅 전달을 위해 메시지 큐를 사용합니다",
       "statsTitle": "큐 통계",
@@ -752,7 +747,7 @@
       "s3": "Amazon S3",
       "s3Desc": "클라우드 스토리지 (S3 호환)",
       "useBuiltIn": "내장 MinIO 컨테이너 사용",
-      "builtInDesc": "OpenWA가 MinIO(S3 호환) 컨테이너를 관리합니다",
+      "builtInDesc": "LeadWeave가 MinIO(S3 호환) 컨테이너를 관리합니다",
       "storagePath": "스토리지 경로",
       "bucket": "버킷 이름",
       "region": "리전",
@@ -783,7 +778,7 @@
       "importFailed": "데이터를 가져오지 못했습니다",
       "importOk": "데이터를 가져왔습니다",
       "importConfirm": "가져오기를 실행하면 현재 데이터가 백업본({{rows}}행)으로 완전히 대체됩니다. 되돌릴 수 없습니다. 계속할까요?",
-      "invalidFile": "올바른 OpenWA 데이터 백업 파일이 아닙니다.",
+      "invalidFile": "올바른 LeadWeave 데이터 백업 파일이 아닙니다.",
       "importTooLarge": "백업 파일이 요청 크기 제한을 초과합니다. 서버의 BODY_SIZE_LIMIT을 늘린 후 다시 시도하세요."
     },
     "restart": {
@@ -822,7 +817,7 @@
     "uninstallConfirm": "\"{{name}}\"을(를) 제거할까요? 관련 파일이 모두 삭제됩니다.",
     "empty": {
       "title": "설치된 플러그인이 없습니다",
-      "description": "OpenWA의 기능을 확장하려면 플러그인을 설치하세요."
+      "description": "LeadWeave의 기능을 확장하려면 플러그인을 설치하세요."
     },
     "config": {
       "title": "{{name}} 구성",
@@ -845,7 +840,7 @@
       "trustWarning": "플러그인은 게이트웨이의 전체 프로세스 권한으로 실행됩니다. 샌드박스는 충돌만 격리할 뿐 악성 코드는 막지 못합니다. 신뢰할 수 있는 플러그인만 설치하세요.",
       "choose": ".zip 파일 선택…",
       "tooLarge": "파일이 5MB 제한을 초과합니다.",
-      "catalogHint": "OpenWA 플러그인 카탈로그에서 직접 설치하세요. .zip 파일은 SSRF 가드를 통해 서버에서 가져온 후 검증되고 샌드박스에서 실행됩니다.",
+      "catalogHint": "LeadWeave 플러그인 카탈로그에서 직접 설치하세요. .zip 파일은 SSRF 가드를 통해 서버에서 가져온 후 검증되고 샌드박스에서 실행됩니다.",
       "catalogTeaser": "플러그인을 찾고 계신가요?",
       "catalogTeaserSuffix": "공식 마켓플레이스를 둘러봅니다.",
       "tabCatalog": "카탈로그",

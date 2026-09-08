@@ -11,6 +11,7 @@ import { EngineRefusedError } from '../../common/errors/engine-refused.error';
 import { SsrfBlockedError } from '../../common/security/ssrf-guard';
 import { AuditService } from '../audit/audit.service';
 import { AuditAction } from '../audit/entities/audit-log.entity';
+import { CacheService } from '../../common/cache/cache.service';
 
 /** Body code on a pacing refusal. The throttler's own 429 carries no `code`, which is what tells the two apart. */
 export const SEND_PACING_LIMITED = 'SEND_PACING_LIMITED';
@@ -133,6 +134,8 @@ export class SendPacingService {
     // a running gateway it is always present; absent means the console log is the only record.
     @Optional()
     private readonly auditService?: AuditService,
+    @Optional()
+    private readonly cacheService?: CacheService,
   ) {}
 
   /**
@@ -145,7 +148,7 @@ export class SendPacingService {
     const config = resolveSendPacingConfig(this.configService);
     if (!config.enabled) return;
 
-    this.assertBreakerClosed(sessionId, config);
+    await this.assertBreakerClosed(sessionId, config);
     await this.assertUnderDailyCap(sessionId, config);
     await this.assertUnderColdCap(sessionId, chatId, config);
   }
@@ -170,7 +173,7 @@ export class SendPacingService {
     const config = resolveSendPacingConfig(this.configService);
     if (!config.enabled) return 0;
 
-    this.assertBreakerClosed(sessionId, config);
+    await this.assertBreakerClosed(sessionId, config);
     if (config.coldSchedule.length === 0 || contactIds.length === 0) return 0;
 
     // The same id twice in one request is one contact, and must cost one. Each contact is probed
@@ -260,6 +263,12 @@ export class SendPacingService {
         cooldownMs: config.breakerCooldownMs,
         action: 'send_breaker_tripped',
       });
+      // Synchronize to distributed Redis cache if available
+      void this.cacheService?.setPacingBreaker(
+        sessionId,
+        { consecutiveFailures: breaker.consecutiveFailures, openedAt: breaker.openedAt },
+        Math.ceil(config.breakerCooldownMs / 1000),
+      );
       // Never sampled: a trip is rare and is the event an operator most wants to find afterwards.
       void this.auditService?.logWarn(AuditAction.SEND_BREAKER_TRIPPED, {
         sessionId,
@@ -275,10 +284,11 @@ export class SendPacingService {
     if (!config.enabled) return;
 
     const breaker = this.breakers.get(sessionId);
-    if (!breaker) return;
+    if (!breaker && !this.cacheService) return;
     // A success proves the account is being served, so the streak resets AND an open breaker closes.
     // Nothing else closes it early: the cooldown is what normally lets traffic back through.
     this.breakers.delete(sessionId);
+    void this.cacheService?.clearPacingBreaker(sessionId);
   }
 
   /** The allowance for a session this many whole days old, saturating at the schedule's last entry. */
@@ -295,8 +305,17 @@ export class SendPacingService {
     return created;
   }
 
-  private assertBreakerClosed(sessionId: string, config: SendPacingConfig): void {
-    const breaker = this.breakers.get(sessionId);
+  private async assertBreakerClosed(sessionId: string, config: SendPacingConfig): Promise<void> {
+    let breaker = this.breakers.get(sessionId);
+    // If not open in local memory, check distributed Redis cache
+    if (!breaker?.openedAt && this.cacheService) {
+      const cached = await this.cacheService.getPacingBreaker(sessionId).catch(() => null);
+      if (cached?.openedAt) {
+        breaker = { consecutiveFailures: cached.consecutiveFailures, openedAt: cached.openedAt };
+        this.breakers.set(sessionId, breaker);
+      }
+    }
+
     if (!breaker?.openedAt) return;
 
     const elapsed = Date.now() - breaker.openedAt;
@@ -305,6 +324,7 @@ export class SendPacingService {
       // the number of sessions currently in trouble instead of every session that ever failed — and
       // it is equivalent, since the next failure recreates it at a count of one either way.
       this.breakers.delete(sessionId);
+      void this.cacheService?.clearPacingBreaker(sessionId);
       return;
     }
     this.refuse('breaker_open', sessionId, Math.ceil((config.breakerCooldownMs - elapsed) / 1000), {

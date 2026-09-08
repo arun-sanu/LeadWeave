@@ -40,7 +40,7 @@
 > **Request routing now exists, opt-in via `NODE_URL`.** When every node sets its own
 > reachable URL (e.g. `NODE_URL=http://10.0.0.5:2785`), a session-scoped request landing on
 > a non-owner is forwarded to the live owner and the owner's response is relayed back
-> (`x-openwa-served-by` names it). The forward happens after API-key auth, carries the
+> (`x-leadweave-served-by` names it). The forward happens after API-key auth, carries the
 > caller's credentials (both nodes share the auth database), is bounded by
 > `SESSION_PROXY_TIMEOUT_MS` (default 60s), and is one hop only — a forwarded request is
 > never forwarded again; one that still lands on a live non-owner (stale ownership, or a
@@ -84,7 +84,7 @@
 > Everything below (node affinity, `replicas: 3`) remains a **design sketch** until those
 > land.
 
-This guide explains a _proposed_ design for deploying OpenWA in a horizontally scaled environment for high availability and increased capacity.
+This guide explains a _proposed_ design for deploying LeadWeave in a horizontally scaled environment for high availability and increased capacity.
 
 ## 13.1 Architecture Overview
 
@@ -94,10 +94,10 @@ flowchart TB
         NGINX[Nginx/Traefik]
     end
 
-    subgraph Nodes["OpenWA Nodes"]
-        N1[OpenWA Node 1]
-        N2[OpenWA Node 2]
-        N3[OpenWA Node 3]
+    subgraph Nodes["LeadWeave Nodes"]
+        N1[LeadWeave Node 1]
+        N2[LeadWeave Node 2]
+        N3[LeadWeave Node 3]
     end
 
     subgraph Storage["Shared Storage"]
@@ -174,8 +174,8 @@ Each node "claims" sessions on startup and releases them on shutdown. **(Not imp
 version: '3.8'
 
 services:
-  openwa:
-    image: ghcr.io/rmyndharis/openwa:latest
+  leadweave:
+    image: ghcr.io/rmyndharis/leadweave:latest
     deploy:
       replicas: 1 # MUST stay 1 until session-claim is implemented — multiple replicas on one session volume corrupt WhatsApp auth
       update_config:
@@ -193,8 +193,8 @@ services:
       - NODE_ENV=production
       - DATABASE_TYPE=postgres
       - DATABASE_HOST=postgres
-      - DATABASE_NAME=openwa
-      - DATABASE_USERNAME=openwa
+      - DATABASE_NAME=leadweave
+      - DATABASE_USERNAME=leadweave
       - DATABASE_PASSWORD=${DB_PASSWORD}
       - REDIS_HOST=redis
       - QUEUE_ENABLED=true
@@ -205,7 +205,7 @@ services:
     volumes:
       - sessions:/app/data/sessions
     networks:
-      - openwa-net
+      - leadweave-net
     depends_on:
       - postgres
       - redis
@@ -218,13 +218,13 @@ services:
         constraints:
           - node.role == manager
     environment:
-      - POSTGRES_DB=openwa
-      - POSTGRES_USER=openwa
+      - POSTGRES_DB=leadweave
+      - POSTGRES_USER=leadweave
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - openwa-net
+      - leadweave-net
 
   redis:
     image: redis:7-alpine
@@ -234,11 +234,11 @@ services:
     volumes:
       - redis-data:/data
     networks:
-      - openwa-net
+      - leadweave-net
 
-  # NOTE (v0.4.0): OpenWA no longer ships a bundled Traefik container.
+  # NOTE (v0.4.0): LeadWeave no longer ships a bundled Traefik container.
   # For TLS / public exposure, bring your own reverse proxy (Traefik, nginx,
-  # Caddy, a cloud load balancer, etc.) and point it at openwa:2785.
+  # Caddy, a cloud load balancer, etc.) and point it at leadweave:2785.
   # See section 13.5 for Traefik / nginx config examples.
 
 volumes:
@@ -247,7 +247,7 @@ volumes:
   sessions:
 
 networks:
-  openwa-net:
+  leadweave-net:
     driver: overlay
 ```
 
@@ -258,14 +258,14 @@ networks:
 docker swarm init
 
 # Deploy stack
-docker stack deploy -c docker-compose.swarm.yml openwa
+docker stack deploy -c docker-compose.swarm.yml leadweave
 
 # Check status
 docker service ls
-docker service ps openwa_openwa
+docker service ps leadweave_app
 ```
 
-> **Do not scale the `openwa` service** (`docker service scale openwa_openwa=N`). The `sessions`
+> **Do not scale the `leadweave` service** (`docker service scale leadweave_app=N`). The `sessions`
 > volume above is declared with the default local driver (not `external`), so Swarm creates one per
 > node: replicas co-located on a single node share that directory and corrupt the WhatsApp auth
 > state, while replicas placed on other nodes each get a fresh empty volume and start an
@@ -280,7 +280,7 @@ docker service ps openwa_openwa
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: openwa
+  name: leadweave
 ```
 
 ### k8s/configmap.yaml
@@ -289,14 +289,14 @@ metadata:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: openwa-config
-  namespace: openwa
+  name: leadweave-config
+  namespace: leadweave
 data:
   NODE_ENV: 'production'
   DATABASE_TYPE: 'postgres'
   DATABASE_HOST: 'postgres-service'
   DATABASE_PORT: '5432'
-  DATABASE_NAME: 'openwa'
+  DATABASE_NAME: 'leadweave'
   REDIS_HOST: 'redis-service'
   REDIS_PORT: '6379'
   QUEUE_ENABLED: 'true'
@@ -309,11 +309,11 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: openwa-secrets
-  namespace: openwa
+  name: leadweave-secrets
+  namespace: leadweave
 type: Opaque
 stringData:
-  DATABASE_USERNAME: openwa
+  DATABASE_USERNAME: leadweave
   DATABASE_PASSWORD: your-secure-password
 ```
 
@@ -323,18 +323,18 @@ stringData:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: openwa
-  namespace: openwa
+  name: leadweave
+  namespace: leadweave
 spec:
-  serviceName: openwa-headless # must match the headless Service declared in k8s/service.yaml
+  serviceName: leadweave-headless # must match the headless Service declared in k8s/service.yaml
   replicas: 1 # MUST stay 1 until session-claim is implemented — see the warning at the top of this guide
   selector:
     matchLabels:
-      app: openwa
+      app: leadweave
   template:
     metadata:
       labels:
-        app: openwa
+        app: leadweave
     spec:
       # OS-level containment is the second half of the plugin sandbox boundary (see docs/23-plugin-
       # sandboxing.md). Without it a worker_thread plugin that abuses Node built-ins (fs, net) runs with
@@ -345,16 +345,16 @@ spec:
         runAsNonRoot: true
         fsGroup: 1000
       containers:
-        - name: openwa
-          image: ghcr.io/rmyndharis/openwa:latest
+        - name: leadweave
+          image: ghcr.io/rmyndharis/leadweave:latest
           ports:
             - containerPort: 2785
               name: http
           envFrom:
             - configMapRef:
-                name: openwa-config
+                name: leadweave-config
             - secretRef:
-                name: openwa-secrets
+                name: leadweave-secrets
           env:
             # The session-ownership identity — see the compose example above. It must be STABLE
             # across restarts, which a Deployment's pod name is NOT: use a StatefulSet (whose pod
@@ -381,7 +381,7 @@ spec:
               memory: '2Gi'
               cpu: '1000m'
           volumeMounts:
-            - name: openwa-data
+            - name: leadweave-data
               mountPath: /app/data
             - name: tmp
               mountPath: /tmp
@@ -402,7 +402,7 @@ spec:
           emptyDir: {}
   volumeClaimTemplates:
     - metadata:
-        name: openwa-data
+        name: leadweave-data
       spec:
         accessModes: ['ReadWriteOnce']
         resources:
@@ -416,12 +416,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: openwa-service
-  namespace: openwa
+  name: leadweave-service
+  namespace: leadweave
 spec:
   type: ClusterIP
   selector:
-    app: openwa
+    app: leadweave
   ports:
     - port: 80
       targetPort: 2785
@@ -430,12 +430,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: openwa-headless
-  namespace: openwa
+  name: leadweave-headless
+  namespace: leadweave
 spec:
   clusterIP: None
   selector:
-    app: openwa
+    app: leadweave
   ports:
     - port: 2785
       name: http
@@ -447,34 +447,34 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: openwa-ingress
-  namespace: openwa
+  name: leadweave-ingress
+  namespace: leadweave
   annotations:
     nginx.ingress.kubernetes.io/affinity: 'cookie'
-    nginx.ingress.kubernetes.io/session-cookie-name: 'openwa-session'
+    nginx.ingress.kubernetes.io/session-cookie-name: 'leadweave-session'
     nginx.ingress.kubernetes.io/session-cookie-max-age: '172800'
 spec:
   ingressClassName: nginx
   rules:
-    - host: openwa.example.com
+    - host: leadweave.example.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: openwa-service
+                name: leadweave-service
                 port:
                   number: 80
   tls:
     - hosts:
-        - openwa.example.com
-      secretName: openwa-tls
+        - leadweave.example.com
+      secretName: leadweave-tls
 ```
 
 ### Deploy to Kubernetes
 
-The maintained chart is [`charts/openwa`](../charts/openwa), a single-instance StatefulSet that
+The maintained chart is [`charts/leadweave`](../charts/leadweave), a single-instance StatefulSet that
 already encodes the `replicaCount: 1` constraint below; prefer it over hand-applied manifests. The
 raw manifests here stay for operators who do not use Helm.
 
@@ -483,13 +483,13 @@ raw manifests here stay for operators who do not use Helm.
 kubectl apply -f k8s/
 
 # Check pods
-kubectl get pods -n openwa
+kubectl get pods -n leadweave
 
 # Check logs
-kubectl logs -f statefulset/openwa -n openwa
+kubectl logs -f statefulset/leadweave -n leadweave
 ```
 
-> **Do not raise `replicas` above 1** (`kubectl scale statefulset openwa --replicas=N`). Each pod
+> **Do not raise `replicas` above 1** (`kubectl scale statefulset leadweave --replicas=N`). Each pod
 > gets its own PVC, so extra replicas do not share a session directory — they each start their own
 > unauthenticated engine, and with `AUTO_START_SESSIONS=true` every pod tries to drive the same
 > configured sessions from the shared database. See the warning at the top of this guide.
@@ -502,9 +502,9 @@ kubectl logs -f statefulset/openwa -n openwa
 # traefik/dynamic-scaling.yml
 http:
   routers:
-    openwa:
-      rule: 'Host(`openwa.example.com`)'
-      service: openwa
+    leadweave:
+      rule: 'Host(`leadweave.example.com`)'
+      service: leadweave
       middlewares:
         - sticky-session
 
@@ -512,56 +512,77 @@ http:
     sticky-session:
       headers:
         customResponseHeaders:
-          X-OpenWA-Node: '{{.Node}}'
+          X-LeadWeave-Node: '{{.Node}}'
 
   services:
-    openwa:
+    leadweave:
       loadBalancer:
         sticky:
           cookie:
-            name: openwa_node
+            name: leadweave_node
             secure: true
             httpOnly: true
         servers:
-          - url: 'http://openwa-1:2785'
-          - url: 'http://openwa-2:2785'
-          - url: 'http://openwa-3:2785'
+          - url: 'http://leadweave-1:2785'
+          - url: 'http://leadweave-2:2785'
+          - url: 'http://leadweave-3:2785'
         healthCheck:
           path: /api/health
           interval: 10s
           timeout: 3s
 ```
 
-### Nginx Upstream Config
+### Nginx Consistent Hashing Upstream Config (Recommended)
+
+> See full deploy configurations in [`deploy/ingress/nginx.consistent-hash.conf`](../deploy/ingress/nginx.consistent-hash.conf), [`deploy/ingress/envoy.consistent-hash.yaml`](../deploy/ingress/envoy.consistent-hash.yaml), and [`deploy/ingress/k8s-ingress.consistent-hash.yaml`](../deploy/ingress/k8s-ingress.consistent-hash.yaml).
 
 ```nginx
-upstream openwa {
-    ip_hash;  # Sticky sessions based on client IP
+# 1. Extract session identifier from URL path or X-Session-ID header
+map $request_uri $session_id_from_path {
+    ~*^/api/sessions/(?<sid>[^/?#]+) $sid;
+    ~*^/api/messages/(?<sid>[^/?#]+) $sid;
+    ~*^/api/chats/(?<sid>[^/?#]+)    $sid;
+    default                          "";
+}
 
-    server openwa-1:2785 weight=1 max_fails=3 fail_timeout=30s;
-    server openwa-2:2785 weight=1 max_fails=3 fail_timeout=30s;
-    server openwa-3:2785 weight=1 max_fails=3 fail_timeout=30s;
+map $session_id_from_path $session_routing_key {
+    ""      $http_x_session_id;
+    default $session_id_from_path;
+}
+
+map $session_routing_key $effective_routing_key {
+    ""      $remote_addr;
+    default $session_routing_key;
+}
+
+# 2. Consistent Hashing Upstream
+upstream leadweave_cluster {
+    hash $effective_routing_key consistent;
+
+    server leadweave-1:2785 max_fails=3 fail_timeout=15s;
+    server leadweave-2:2785 max_fails=3 fail_timeout=15s;
+    server leadweave-3:2785 max_fails=3 fail_timeout=15s;
+    keepalive 64;
 }
 
 server {
     listen 80;
-    server_name openwa.example.com;
+    server_name leadweave.example.com;
+    client_max_body_size 100M;
 
     location / {
-        proxy_pass http://openwa;
+        proxy_pass http://leadweave_cluster;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-        # Session affinity cookie
-        proxy_cookie_path / "/; SameSite=Strict; HttpOnly";
+        proxy_set_header X-Routing-Key $effective_routing_key;
     }
 
     location /api/health {
-        proxy_pass http://openwa;
+        proxy_pass http://leadweave_cluster;
         proxy_connect_timeout 5s;
         proxy_read_timeout 5s;
     }
@@ -609,18 +630,18 @@ the warning at the top of this guide), so the 3- and 5-node rows could not have 
 
 ### Prometheus Metrics
 
-OpenWA exports Prometheus text exposition at `GET /api/metrics` (`openwa_*` gauges and counters).
+LeadWeave exports Prometheus text exposition at `GET /api/metrics` (`leadweave_*` gauges and counters).
 The endpoint returns `404` until `METRICS_TOKEN` is set, and then requires that token as a Bearer:
 
 ```yaml
 # prometheus/prometheus.yml
 scrape_configs:
-  - job_name: 'openwa'
+  - job_name: 'leadweave'
     static_configs:
-      # Swarm service name (13.3). On Kubernetes there is no Service called `openwa` — scrape the
+      # Swarm service name (13.3). On Kubernetes there is no Service called `leadweave` — scrape the
       # pod through the headless Service instead, e.g.
-      # openwa-0.openwa-headless.openwa.svc.cluster.local:2785
-      - targets: ['openwa:2785']
+      # LeadWeave-0.leadweave-headless.leadweave.svc.cluster.local:2785
+      - targets: ['leadweave:2785']
     metrics_path: '/api/metrics'
     authorization:
       type: Bearer
@@ -628,25 +649,25 @@ scrape_configs:
 ```
 
 ```yaml
-# prometheus/openwa-rules.yaml
+# prometheus/leadweave-rules.yaml
 groups:
-  - name: openwa
+  - name: leadweave
     rules:
       - alert: HighMemoryUsage
-        expr: container_memory_usage_bytes{container="openwa"} > 1.8e9
+        expr: container_memory_usage_bytes{container="leadweave"} > 1.8e9
         for: 5m
         labels:
           severity: warning
         annotations:
-          summary: 'OpenWA node high memory usage'
+          summary: 'LeadWeave node high memory usage'
 
       - alert: NodeDown
-        expr: up{job="openwa"} == 0
+        expr: up{job="leadweave"} == 0
         for: 1m
         labels:
           severity: critical
         annotations:
-          summary: 'OpenWA node is down'
+          summary: 'LeadWeave node is down'
 ```
 
 ### Health Check Endpoints

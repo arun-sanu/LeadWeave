@@ -2,23 +2,23 @@
 
 ## Overview
 
-OpenWA provides official n8n community nodes for integrating WhatsApp automation into n8n workflows. This enables users to build powerful automations combining WhatsApp messaging with hundreds of other services available in n8n.
+LeadWeave provides official n8n community nodes for integrating WhatsApp automation into n8n workflows. This enables users to build powerful automations combining WhatsApp messaging with hundreds of other services available in n8n.
 
-**Repository:** https://github.com/rmyndharis/OpenWA-n8n
-**npm Package:** `@rmyndharis/n8n-nodes-openwa`
+**Repository:** https://github.com/rmyndharis/LeadWeave-n8n
+**npm Package:** `@rmyndharis/n8n-nodes-leadweave`
 
 ## Architecture
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   n8n Workflow  │────▶│  OpenWA Node    │────▶│  OpenWA API     │
+│   n8n Workflow  │────▶│  LeadWeave Node    │────▶│  LeadWeave API     │
 │                 │     │  (credentials)  │     │  (your server)  │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
                                                         │
                                                         ▼
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   n8n Workflow  │◀────│ OpenWA Trigger  │◀────│  Webhook POST   │
-│   (triggered)   │     │  (listens)      │     │  from OpenWA    │
+│   n8n Workflow  │◀────│ LeadWeave Trigger  │◀────│  Webhook POST   │
+│   (triggered)   │     │  (listens)      │     │  from LeadWeave    │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
@@ -28,7 +28,7 @@ OpenWA provides official n8n community nodes for integrating WhatsApp automation
 
 1. Go to **Settings > Community Nodes**
 2. Select **Install**
-3. Enter `@rmyndharis/n8n-nodes-openwa`
+3. Enter `@rmyndharis/n8n-nodes-leadweave`
 4. Agree to the risks and install
 5. Restart n8n
 
@@ -36,21 +36,21 @@ OpenWA provides official n8n community nodes for integrating WhatsApp automation
 
 ```bash
 cd ~/.n8n/nodes
-npm install @rmyndharis/n8n-nodes-openwa
+npm install @rmyndharis/n8n-nodes-leadweave
 ```
 
 ## Nodes
 
-### OpenWA Node
+### LeadWeave Node
 
-Execute operations on your OpenWA server.
+Execute operations on your LeadWeave server.
 
 #### Credentials Setup
 
 | Field      | Description                      | Example                  |
 | ---------- | -------------------------------- | ------------------------ |
-| Server URL | OpenWA server URL (without /api) | `https://wa.example.com` |
-| API Key    | API key from OpenWA dashboard    | `owa_xxxxxxxx...`        |
+| Server URL | LeadWeave server URL (without /api) | `https://wa.example.com` |
+| API Key    | API key from LeadWeave dashboard    | `owa_xxxxxxxx...`        |
 
 #### Resources & Operations
 
@@ -67,7 +67,7 @@ Execute operations on your OpenWA server.
 | Webhook  | Create        | Create a webhook            | `POST /api/sessions/:id/webhooks`               |
 | Webhook  | Delete        | Delete a webhook            | `DELETE /api/sessions/:id/webhooks/:webhookId`  |
 
-### OpenWA Trigger Node
+### LeadWeave Trigger Node
 
 Start workflows when WhatsApp events occur.
 
@@ -105,8 +105,8 @@ Start workflows when WhatsApp events occur.
 
 #### How It Works
 
-1. When workflow is activated, the trigger creates a webhook in OpenWA
-2. OpenWA sends events to n8n's webhook URL
+1. When workflow is activated, the trigger creates a webhook in LeadWeave
+2. LeadWeave sends events to n8n's webhook URL
 3. When workflow is deactivated, the webhook is automatically deleted
 
 #### Output Data Format
@@ -130,9 +130,9 @@ Start workflows when WhatsApp events occur.
 ```
 
 > **Deduplication.** Every delivery includes `idempotencyKey` and `deliveryId` in the body **and** as the
-> `X-OpenWA-Idempotency-Key` / `X-OpenWA-Delivery-Id` headers. `idempotencyKey` is **stable across retries**
+> `X-LeadWeave-Idempotency-Key` / `X-LeadWeave-Delivery-Id` headers. `idempotencyKey` is **stable across retries**
 > of the same event; `deliveryId` identifies one delivery to one webhook and is stable across that
-> delivery's retry attempts too — read the `X-OpenWA-Retry-Count` header for the attempt number. Because a
+> delivery's retry attempts too — read the `X-LeadWeave-Retry-Count` header for the attempt number. Because a
 > webhook can be retried, add a dedup step keyed on `idempotencyKey` (e.g. an n8n IF or "Remove Duplicates"
 > node) so a retried delivery isn't processed twice.
 
@@ -143,7 +143,7 @@ Start workflows when WhatsApp events occur.
 Automatically reply to incoming messages with a welcome message.
 
 ```
-[OpenWA Trigger] → [IF: Check keyword] → [OpenWA: Send Text]
+[LeadWeave Trigger] → [IF: Check keyword] → [LeadWeave: Send Text]
      │
      └── Events: message.received
 ```
@@ -152,14 +152,14 @@ Automatically reply to incoming messages with a welcome message.
 
 - Trigger: `message.received`
 - IF Node: Check if `{{$json.data.body}}` contains "hello"
-- OpenWA: Send Text with welcome message
+- LeadWeave: Send Text with welcome message
 
 ### 2. Lead Collection to Google Sheets
 
 Capture incoming messages and save to Google Sheets.
 
 ```
-[OpenWA Trigger] → [Google Sheets: Append] → [OpenWA: Send Text]
+[LeadWeave Trigger] → [Google Sheets: Append] → [LeadWeave: Send Text]
      │                    │
      │                    └── Save: name, phone, message
      └── Events: message.received
@@ -170,7 +170,7 @@ Capture incoming messages and save to Google Sheets.
 Get notified on Slack when WhatsApp session disconnects.
 
 ```
-[OpenWA Trigger] → [Slack: Send Message]
+[LeadWeave Trigger] → [Slack: Send Message]
      │
      └── Events: session.disconnected
 ```
@@ -188,7 +188,7 @@ Please check and reconnect.
 Send WhatsApp notification when new order is received.
 
 ```
-[Webhook: New Order] → [OpenWA: Send Text]
+[Webhook: New Order] → [LeadWeave: Send Text]
                             │
                             └── "Thank you for your order #{{$json.orderId}}"
 ```
@@ -198,7 +198,7 @@ Send WhatsApp notification when new order is received.
 Send daily reminders to a list of contacts.
 
 ```
-[Schedule Trigger] → [Google Sheets: Get Rows] → [Loop] → [OpenWA: Send Text]
+[Schedule Trigger] → [Google Sheets: Get Rows] → [Loop] → [LeadWeave: Send Text]
      │                      │                                    │
      └── Daily 9AM          └── Get contacts                     └── Send reminder
 ```
@@ -210,14 +210,14 @@ Collect appointment requests over WhatsApp, check availability in an external sc
 See [n8n Appointment Booking Workflow](./examples/n8n-appointment-booking.md) for a complete example.
 
 ```
-[OpenWA Trigger] → [IF: Booking intent?] → [Set: Normalize request]
+[LeadWeave Trigger] → [IF: Booking intent?] → [Set: Normalize request]
                                                │
                                                ▼
                                       [Availability Source]
                                                │
                          ┌─────────────────────┴─────────────────────┐
                          ▼                                           ▼
-              [Create Booking] → [OpenWA: Send Text]      [OpenWA: Send Text]
+              [Create Booking] → [LeadWeave: Send Text]      [LeadWeave: Send Text]
                   confirmed confirmation                  alternative slots
 ```
 
@@ -228,7 +228,7 @@ See [n8n Appointment Booking Workflow](./examples/n8n-appointment-booking.md) fo
 Always add error handling in your workflows:
 
 ```
-[OpenWA Node] → [IF: Check success] → [Continue...]
+[LeadWeave Node] → [IF: Check success] → [Continue...]
                       │
                       └── [Error Handler]
 ```
@@ -238,7 +238,7 @@ Always add error handling in your workflows:
 WhatsApp has rate limits. Add delays between messages:
 
 ```
-[Loop Over Items] → [Wait: 2 seconds] → [OpenWA: Send Text]
+[Loop Over Items] → [Wait: 2 seconds] → [LeadWeave: Send Text]
 ```
 
 ### 3. Message Formatting
@@ -261,10 +261,10 @@ Always use the correct format for chat IDs:
 
 ### Credential Test Failed
 
-1. Verify OpenWA server is running
+1. Verify LeadWeave server is running
 2. Check API key is correct
 3. Ensure server URL doesn't have trailing slash
-4. Verify network connectivity between n8n and OpenWA
+4. Verify network connectivity between n8n and LeadWeave
 
 ### Trigger Not Receiving Events
 
@@ -272,15 +272,15 @@ Always use the correct format for chat IDs:
    node two URLs: a test URL (`https://your-n8n/webhook-test/…`) and a production URL
    (`https://your-n8n/webhook/…`). The test URL is registered only while the editor is listening and
    stops after a single request, so a workflow wired to it receives one event and then goes silent.
-   Activate the workflow and point OpenWA at the production URL.
-2. Check webhook was created in OpenWA dashboard
-3. Verify n8n webhook URL is accessible from OpenWA server
+   Activate the workflow and point LeadWeave at the production URL.
+2. Check webhook was created in LeadWeave dashboard
+3. Verify n8n webhook URL is accessible from LeadWeave server
 4. Check firewall/proxy settings
 5. Ensure session is connected and active
 6. For a call-outcome trigger, confirm the session runs Baileys — see the note under the trigger
    event table above
-7. Ask OpenWA which side dropped the event:
-   `GET /api/webhooks/delivery-failures?sessionId={sessionId}` (ADMIN key). A row means OpenWA
+7. Ask LeadWeave which side dropped the event:
+   `GET /api/webhooks/delivery-failures?sessionId={sessionId}` (ADMIN key). A row means LeadWeave
    delivered and n8n rejected it; an empty list means the event never reached delivery at all
 
 ### Message Not Sending
@@ -295,8 +295,8 @@ Always use the correct format for chat IDs:
 ### Building from Source
 
 ```bash
-git clone https://github.com/rmyndharis/OpenWA-n8n.git
-cd OpenWA-n8n
+git clone https://github.com/rmyndharis/LeadWeave-n8n.git
+cd LeadWeave-n8n
 npm install
 npm run build
 ```
@@ -309,7 +309,7 @@ npm run dev
 
 # Link to local n8n
 cd ~/.n8n/nodes
-npm link /path/to/OpenWA-n8n
+npm link /path/to/LeadWeave-n8n
 ```
 
 ### Testing
@@ -329,7 +329,7 @@ docker run -it --rm \
 
 ## Related Documentation
 
-- [OpenWA API Specification](./06-api-specification.md)
+- [LeadWeave API Specification](./06-api-specification.md)
 - [Webhook System](./03-system-architecture.md#353-webhook-system)
 - [n8n Appointment Booking Workflow](./examples/n8n-appointment-booking.md)
 - [n8n Documentation](https://docs.n8n.io/)

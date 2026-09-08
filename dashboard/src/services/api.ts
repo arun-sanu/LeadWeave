@@ -1,7 +1,7 @@
-// API Service Layer for OpenWA Dashboard
+// API Service Layer for LeadWeave Dashboard
 // Centralized API client with TypeScript types
 
-import { warnIfInsecureHttpUrl } from '../utils/urlSecurity';
+import { warnIfInsecureHttpUrl } from '../utils/urlSecurity.ts';
 
 // Resolve the API base URL. By default this is the same-origin relative path '/api',
 // correct when the dashboard and API are served from the same origin (the default
@@ -12,7 +12,7 @@ import { warnIfInsecureHttpUrl } from '../utils/urlSecurity';
 // same-origin '/api' and a split deployment failed with "Invalid API Key" (#91).
 // Exported so direct fetches (e.g. auth/validate in Login.tsx / App.tsx) honor VITE_API_URL
 // too — otherwise split-origin deployments break. Empty VITE_API_URL → '/api'.
-const API_ORIGIN = (import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '');
+const API_ORIGIN = (import.meta.env?.VITE_API_URL ?? '').replace(/\/+$/, '');
 export const API_BASE_URL = `${API_ORIGIN}/api`;
 // Warn (not refuse — would break dev + TLS-terminating-proxy) when the API origin is an
 // insecure http:// URL pointing at a non-localhost host (API keys sent in cleartext).
@@ -214,6 +214,7 @@ export interface Chat {
   unreadCount: number;
   timestamp: number;
   lastMessage?: string;
+  archived?: boolean;
 }
 
 // Engine-neutral message types (mirrors the backend's IWhatsAppEngine MessageType). The backend
@@ -509,7 +510,7 @@ export interface HealthStatus {
 }
 
 export interface InfraStatus {
-  // `builtIn` = OpenWA's own bundled container is actually running and backing this service (live),
+  // `builtIn` = LeadWeave's own bundled container is actually running and backing this service (live),
   // not just the saved intent — falls back to the saved flag when Docker is unavailable. (#488)
   database: { connected: boolean; type: string; host: string; builtIn: boolean };
   redis: { enabled: boolean; connected: boolean; host: string; port: number; builtIn: boolean };
@@ -661,7 +662,9 @@ export interface SearchResults {
 // throw an Error carrying the HTTP status and, when the gateway supplied one, its machine code.
 async function handleErrorResponse<T>(response: Response): Promise<T> {
   if (response.status === 401) {
-    sessionStorage.removeItem('openwa_api_key');
+    sessionStorage.removeItem('leadweave_logged_in');
+    sessionStorage.removeItem('leadweave_api_key');
+    sessionStorage.removeItem('leadweave_supabase_token');
     if (typeof window !== 'undefined') {
       window.location.assign('/');
       return new Promise<T>(() => {});
@@ -672,12 +675,6 @@ async function handleErrorResponse<T>(response: Response): Promise<T> {
   // rather than statusText: the status code is what the toast connection-lost de-dup matches on,
   // and statusText is empty over HTTP/2 anyway.
   const error = await response.json().catch(() => ({}));
-  // Carry the HTTP status on the Error (message unchanged, so the toast de-dup still matches) so
-  // callers can tell apart a permission 403 from a real server 5xx instead of guessing from text.
-  // Carry the machine `code` too: the gateway's stable codes (SESSION_LOGOUT_INCOMPLETE,
-  // SESSION_NAME_TEARDOWN_PENDING, …) drive specific recovery UI, and a reverse-proxy 502 that
-  // never reached the gateway carries no code at all — that distinction is exactly what the unlink
-  // classifier keys on instead of fragile message heuristics.
   const err = new Error(error.message || `HTTP ${response.status}`) as Error & {
     status?: number;
     code?: string;
@@ -687,21 +684,26 @@ async function handleErrorResponse<T>(response: Response): Promise<T> {
   throw err;
 }
 
+const CSRF_HEADERS: Record<string, string> = {
+  'X-Requested-With': 'XMLHttpRequest',
+};
+
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-
-  // Get API key from sessionStorage for authentication
-  const apiKey = sessionStorage.getItem('openwa_api_key');
 
   // For FormData (file uploads) let the browser set multipart/form-data + boundary itself.
   const isFormData = options.body instanceof FormData;
   const headers: HeadersInit = {
     ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
-    ...(apiKey ? { 'X-API-Key': apiKey } : {}),
+    ...CSRF_HEADERS,
     ...options.headers,
   };
 
-  const response = await fetch(url, { ...options, headers });
+  const response = await fetch(url, {
+    credentials: 'include',
+    ...options,
+    headers,
+  });
 
   if (!response.ok) {
     return handleErrorResponse<T>(response);
@@ -716,9 +718,9 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
 /** Like {@link request} but returns the raw response text — e.g. a plugin's HTML config-UI bundle. */
 async function requestText(endpoint: string): Promise<string> {
-  const apiKey = sessionStorage.getItem('openwa_api_key');
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    headers: { ...(apiKey ? { 'X-API-Key': apiKey } : {}) },
+    credentials: 'include',
+    headers: { ...CSRF_HEADERS },
   });
 
   if (!response.ok) {
@@ -732,14 +734,14 @@ async function requestText(endpoint: string): Promise<string> {
 async function requestBlob(endpoint: string): Promise<Blob> {
   const url = `${API_BASE_URL}${endpoint}`;
 
-  // Get API key from sessionStorage for authentication
-  const apiKey = sessionStorage.getItem('openwa_api_key');
-
   const headers: HeadersInit = {
-    ...(apiKey ? { 'X-API-Key': apiKey } : {}),
+    ...CSRF_HEADERS,
   };
 
-  const response = await fetch(url, { headers });
+  const response = await fetch(url, {
+    credentials: 'include',
+    headers,
+  });
 
   if (!response.ok) {
     return handleErrorResponse<Blob>(response);
@@ -782,6 +784,11 @@ export const sessionApi = {
   getGroups: (id: string) =>
     request<{ id: string; name: string; linkedParentJID?: string | null }[]>(`/sessions/${id}/groups`),
   getChats: (id: string) => request<Chat[]>(`/sessions/${id}/chats`),
+  archiveChat: (id: string, chatId: string, archive: boolean) =>
+    request<{ success: boolean }>(`/sessions/${id}/chats/archive`, {
+      method: 'POST',
+      body: JSON.stringify({ chatId, archive }),
+    }),
   markChatRead: (id: string, chatId: string) =>
     request<{ success: boolean }>(`/sessions/${id}/chats/read`, {
       method: 'POST',
@@ -1035,6 +1042,51 @@ export const messageApi = {
     }),
 };
 
+export const leadSheetApi = {
+  triggerLead: (data: {
+    sessionId: string;
+    phone: string;
+    name?: string;
+    greetingTemplate?: string;
+    sheetId?: string;
+    rowIndex?: number;
+    sheetCallbackUrl?: string;
+  }) =>
+    request<{ success: boolean; status: string; leadId?: string; chatId?: string; message?: string }>(
+      '/lead-sheets/trigger-lead',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }
+    ),
+  getLeads: (params?: { sessionId?: string; limit?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.sessionId) query.set('sessionId', params.sessionId);
+    if (params?.limit) query.set('limit', String(params.limit));
+    const queryStr = query.toString();
+    return request<
+      Array<{
+        id: string;
+        sessionId: string;
+        chatId: string;
+        phoneNumber: string;
+        leadName?: string;
+        sheetId?: string;
+        rowIndex?: number;
+        status: string;
+        greetingMessage?: string;
+        lastSentAt?: string;
+        repliedAt?: string;
+        timeoutAt?: string;
+        createdAt: string;
+        updatedAt: string;
+      }>
+    >(`/lead-sheets/leads${queryStr ? `?${queryStr}` : ''}`);
+  },
+  getAppsScriptTemplate: (sessionId?: string) =>
+    request<{ script: string }>(`/lead-sheets/apps-script-template${sessionId ? `?sessionId=${encodeURIComponent(sessionId)}` : ''}`),
+};
+
 // =============================================================================
 // Search API
 // =============================================================================
@@ -1119,6 +1171,23 @@ export const infraApi = {
     }>('/infra/import-data', {
       method: 'POST',
       body: JSON.stringify({ tables, ...options }),
+    }),
+};
+
+export interface StorageFileStats {
+  storageType: string;
+  count: number;
+  sizeBytes: number;
+  sizeMB: string;
+}
+
+export const storageApi = {
+  getFileCount: () => request<StorageFileStats>('/infra/storage/files/count'),
+  exportStorage: () => request<{ message: string; download: string }>('/infra/storage/export'),
+  importStorage: (filePath: string) =>
+    request<{ imported: boolean; count: number; storageType: string }>('/infra/storage/import', {
+      method: 'POST',
+      body: JSON.stringify({ filePath }),
     }),
 };
 
@@ -1208,8 +1277,8 @@ export interface CatalogPlugin {
   author?: string;
   license?: string;
   keywords?: string[];
-  minOpenWAVersion?: string;
-  testedOpenWAVersion?: string;
+  minLeadWeaveVersion?: string;
+  testedLeadWeaveVersion?: string;
   homepage?: string;
   download?: string;
   installed: boolean;
@@ -1329,27 +1398,144 @@ export const pluginInstancesApi = {
 // Statistics API (mirrors src/modules/stats)
 // =============================================================================
 
-export type StatsPeriod = '24h' | '7d' | '30d';
-
 export interface OverviewStats {
   sessions: { active: number; total: number; byStatus: Record<string, number> };
   messages: { sent: number; received: number; failed: number; today: { sent: number; received: number } };
 }
 
-export interface MessageTimeSeriesPoint {
-  timestamp: string;
-  sent: number;
-  received: number;
-}
-
-export interface MessageStats {
-  timeSeries: MessageTimeSeriesPoint[];
-  byType: Record<string, number>;
-  bySession: Array<{ sessionId: string; name: string; sent: number; received: number }>;
-  topChats: Array<{ chatId: string; chatName?: string | null; messageCount: number }>;
+export interface SessionOverviewStats {
+  session: { id: string; name: string; status: string };
+  messages: { sent: number; received: number; today: number; failed: number };
+  hourlyActivity: { hour: number; sent: number; received: number }[];
 }
 
 export const statsApi = {
   getOverview: () => request<OverviewStats>('/stats/overview'),
-  getMessages: (period: StatsPeriod) => request<MessageStats>(`/stats/messages?period=${period}`),
+  getSessionStats: (sessionId: string) => request<SessionOverviewStats>(`/stats/sessions/${sessionId}`),
 };
+
+// =============================================================================
+// Campaign & Spreadsheet CRM API
+// =============================================================================
+
+export interface CampaignStats {
+  total: number;
+  pending: number;
+  sent: number;
+  delivered: number;
+  read: number;
+  replied: number;
+  optOut: number;
+  failed: number;
+  responseRate: number;
+}
+
+export interface CampaignLead {
+  id: string;
+  campaignId: string;
+  sessionId: string;
+  phoneNumber: string;
+  chatId: string;
+  name?: string;
+  customVariables?: Record<string, string>;
+  status: 'PENDING' | 'NOT_ON_WA' | 'SENT' | 'DELIVERED' | 'READ' | 'REPLIED' | 'OPT_OUT' | 'FAILED';
+  waMessageId?: string;
+  errorMessage?: string;
+  sentAt?: string | null;
+  deliveredAt?: string | null;
+  readAt?: string | null;
+  repliedAt?: string | null;
+  firstReplySnippet?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Campaign {
+  id: string;
+  name: string;
+  sessionIds: string[];
+  status: 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'cancelled';
+  template: string;
+  mediaUrl?: string | null;
+  scheduledAt?: string | null;
+  pacing?: {
+    minDelayMs: number;
+    maxDelayMs: number;
+    simulateTyping: boolean;
+  };
+  stats: CampaignStats;
+  columnsMetadata?: string[];
+  startedAt?: string | null;
+  completedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CampaignAnalytics {
+  campaign: Campaign;
+  stats: CampaignStats;
+  funnel: Array<{ stage: string; count: number; percent: number }>;
+  timeline: Array<{ time: string; replies: number; optOuts: number }>;
+}
+
+export const campaignApi = {
+  create: (data: {
+    name: string;
+    sessionIds: string[];
+    template: string;
+    mediaUrl?: string;
+    scheduledAt?: string;
+    pacing?: { minDelayMs?: number; maxDelayMs?: number; simulateTyping?: boolean };
+    columnsMetadata?: string[];
+    leads: Array<{ phone: string; name?: string; variables?: Record<string, string> }>;
+    autoLaunch?: boolean;
+  }) =>
+    request<Campaign>('/campaigns', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  list: (params?: { status?: string; page?: number; limit?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.status) query.set('status', params.status);
+    if (params?.page) query.set('page', String(params.page));
+    if (params?.limit) query.set('limit', String(params.limit));
+    const qs = query.toString();
+    return request<{ items: Campaign[]; total: number }>(`/campaigns${qs ? `?${qs}` : ''}`);
+  },
+
+  get: (id: string) => request<Campaign>(`/campaigns/${id}`),
+
+  start: (id: string) => request<Campaign>(`/campaigns/${id}/start`, { method: 'POST' }),
+
+  pause: (id: string) => request<Campaign>(`/campaigns/${id}/pause`, { method: 'POST' }),
+
+  cancel: (id: string) => request<Campaign>(`/campaigns/${id}/cancel`, { method: 'POST' }),
+
+  addLeads: (id: string, leads: Array<{ phone: string; name?: string; variables?: Record<string, string> }>) =>
+    request<{ added: number; newTotal: number }>(`/campaigns/${id}/leads`, {
+      method: 'POST',
+      body: JSON.stringify({ leads }),
+    }),
+
+  updateLead: (campaignId: string, leadId: string, data: { name?: string; customVariables?: Record<string, string> }) =>
+    request<CampaignLead>(`/campaigns/${campaignId}/leads/${leadId}`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  listLeads: (id: string, params?: { status?: string; search?: string; page?: number; limit?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.status) query.set('status', params.status);
+    if (params?.search) query.set('search', params.search);
+    if (params?.page) query.set('page', String(params.page));
+    if (params?.limit) query.set('limit', String(params.limit));
+    const qs = query.toString();
+    return request<{ items: CampaignLead[]; total: number }>(`/campaigns/${id}/leads${qs ? `?${qs}` : ''}`);
+  },
+
+  getAnalytics: (id: string) => request<CampaignAnalytics>(`/campaigns/${id}/analytics`),
+
+  getExportUrl: (id: string) => `${API_BASE_URL}/campaigns/${id}/export`,
+};
+

@@ -62,4 +62,25 @@ describe('MessageController — stored media download', () => {
     expect(body).toBeInstanceOf(StreamableFile);
     expect(body.getStream().read()).toEqual(Buffer.from('GIF89a'));
   });
+
+  it('handles HTTP Range requests with 206 Partial Content', async () => {
+    const headers: Record<string, string> = {};
+    let statusCode = 200;
+    const res = {
+      req: { headers: { range: 'bytes=0-2' } },
+      set: (fields: Record<string, string>) => Object.assign(headers, fields),
+      status: (code: number) => {
+        statusCode = code;
+        return res;
+      },
+    } as unknown as Response;
+
+    const body = await controller.getChatMedia('session-1', '628123@c.us', 'msg-1', res);
+
+    expect(statusCode).toBe(206);
+    expect(headers['Content-Range']).toBe('bytes 0-2/6');
+    expect(headers['Accept-Ranges']).toBe('bytes');
+    expect(headers['Content-Length']).toBe('3');
+    expect(body.getStream().read()).toEqual(Buffer.from('GIF'));
+  });
 });

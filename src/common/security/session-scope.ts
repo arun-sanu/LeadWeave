@@ -38,3 +38,52 @@ export function sessionScopeVisible(
   if (allowedSessions == null || allowedSessions.length === 0) return true;
   return sessionScope != null && sessionScope !== '*' && allowedSessions.includes(sessionScope);
 }
+
+/**
+ * Apply session scoping to a TypeORM SelectQueryBuilder.
+ * Uses explicitScope if provided, otherwise transparently reads active session scope from AsyncLocalStorage request context.
+ *
+ * If unrestricted (null/undefined), returns query builder unmodified.
+ * If restricted with 0 allowed sessions, appends '1 = 0' to return an empty set securely.
+ * If restricted with sessions, appends `sessionColumn IN (:...__allowedSessions)`.
+ */
+export function applySessionScopeToQuery<T>(
+  qb: any,
+  sessionColumn = 'sessionId',
+  explicitScope?: string[] | null,
+): any {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { getActiveSessionScope } = require('../services/request-context');
+  const scope = explicitScope !== undefined ? explicitScope : getActiveSessionScope();
+  if (scope === null || scope === undefined) {
+    return qb;
+  }
+  if (scope.length === 0) {
+    return qb.andWhere('1 = 0');
+  }
+  const colExpr = qb.alias ? `${qb.alias}.${sessionColumn}` : sessionColumn;
+  return qb.andWhere(`${colExpr} IN (:...__allowedSessions)`, { __allowedSessions: scope });
+}
+
+/**
+ * Apply tenant / company isolation scoping to a TypeORM SelectQueryBuilder.
+ * Uses explicitCompanyId if provided, otherwise reads active tenant company ID from AsyncLocalStorage request context.
+ *
+ * If no companyId is present (e.g. system background jobs or non-tenant auth), returns qb unmodified.
+ * If companyId is present, appends `${companyColumn} = :__companyId`.
+ */
+export function applyTenantScopeToQuery<T>(
+  qb: any,
+  companyColumn = 'companyId',
+  explicitCompanyId?: string | null,
+): any {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { getActiveTenantScope } = require('../services/request-context');
+  const companyId = explicitCompanyId !== undefined ? explicitCompanyId : getActiveTenantScope();
+  if (!companyId) {
+    return qb;
+  }
+  const colExpr = qb.alias ? `${qb.alias}.${companyColumn}` : companyColumn;
+  return qb.andWhere(`${colExpr} = :__companyId`, { __companyId: companyId });
+}
+

@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "graphifyy": {
+      "command": "/home/arun/.local/share/pipx/venvs/graphifyy/bin/python",
+      "args": [
+        "-m",
+        "graphify.serve",
+        "graphify-out/graph.json"
+      ],
+      "env": {
+        "GRAPHIFYY_WORKSPACE": "."
+      }
+    },
+    "jcode": {
+      "command": "node",
+      "args": [
+        "./.agents/mcp/jcode-mcp.cjs"
+      ],
+      "env": {
+        "JCODE_INDEX_DIR": "./.jcode"
+      }
+    }
+  }
+}

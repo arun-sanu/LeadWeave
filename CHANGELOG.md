@@ -246,14 +246,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GET /infra/storage/export` walks the uncapped file iterator, so the documented local→S3 migration no longer silently leaves media behind; the `files/count` pre-check uses the same list.
 - An ingress route omitting `maxBodyBytes` falls back to the process-wide body limit instead of being unbounded; the gap is logged once per route.
 - A `message:sending` plugin reply without a usable `input` now fails that send with a named `400` instead of turning every outbound send on the session into a `500`.
-- The `openwa_sessions_restricted` gauge now follows restrictions that lapse on their own instead of reporting the pre-expiry count indefinitely.
+- The `leadweave_sessions_restricted` gauge now follows restrictions that lapse on their own instead of reporting the pre-expiry count indefinitely.
 - Both compose files forward the inbound-media knobs (`MEDIA_DOWNLOAD_*`, `INBOUND_MEDIA_CONCURRENCY`); a gate binds all four in both files.
-- `GET /api/metrics` no longer `500`s when the data database is unreachable; database-derived series are omitted rather than zeroed, and a new `openwa_stats_available` gauge says which happened. The metrics reference now lists every emitted series, gated against the renderer.
+- `GET /api/metrics` no longer `500`s when the data database is unreachable; database-derived series are omitted rather than zeroed, and a new `leadweave_stats_available` gauge says which happened. The metrics reference now lists every emitted series, gated against the renderer.
 - An authorization denial now records which API key was denied — post-authentication `403`s previously stamped `apiKeyId`/`apiKeyName` as null.
 - The three group-picture routes `400` an id naming the account itself instead of replacing or deleting the account's own avatar.
 - `GET /sessions/:sessionId/messages` and the MCP `MessageList` tool bound inline media via `MESSAGE_LIST_INLINE_MEDIA_BUDGET_BYTES` (8 MiB default); past the budget a payload becomes an `{omitted:true, sizeBytes}` marker, still fetchable per message, and the newest payload always passes. The dashboard placeholder downloads on click.
 - Bulk send caps rendered template output at `TEMPLATE_RENDER_MAX_CHARS` (64 KiB), matching single-send; an over-cap item fails by name instead of inflating heap without bound.
-- The published image's drop to the `openwa` user is now verified in CI — the smoke test previously ran in no workflow.
+- The published image's drop to the `leadweave` user is now verified in CI — the smoke test previously ran in no workflow.
 - The root tree's dependency audit applies its `high` threshold per advisory (`npm run check:audit`) instead of all-or-nothing; `GHSA-jmr9-qjv8-65gv` (`extract-zip`, via `puppeteer-core` ← `whatsapp-web.js` — no patched release, reachable only at image-build time) is allowlisted by id, and an entry whose advisory has disappeared fails the job.
 - The dashboard's dependency tree is now audited on the PR and tag paths; `socket.io-parser` and `brace-expansion` are overridden to patched releases.
 - `.env.example` no longer ships uncommented the five keys the Infrastructure dashboard owns (they pinned the running value while the dashboard reported success); `.env.minimal` unpins the built-in datastore toggles too.
@@ -322,7 +322,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An inbound media burst no longer loses media past the eighth item on either engine: the Baileys download queue is unbounded, and on whatsapp-web.js the wait for a slot is bounded by `MEDIA_DOWNLOAD_TIMEOUT_MS`.
 - A webhook's `filters` and `lastTriggeredAt` are published as nullable, matching what the route stores and accepts; an invariant now fails when a documented-nullable property does not publish it.
 - The two channel administration routes reject a user id that does not name an individual with `400`, qualifying bare phone numbers like the group participant writes.
-- The chart's optional ServiceMonitor selects on a new `openwa.io/scrape-target` label, scraping one target per pod instead of two — check anything keyed on the `service` label.
+- The chart's optional ServiceMonitor selects on a new `leadweave.io/scrape-target` label, scraping one target per pod instead of two — check anything keyed on the `service` label.
 - The Helm chart gains a startup probe allowing 295s of boot where liveness allowed 50s, and `env`/`secretEnv`-only upgrades now restart pods via ConfigMap/Secret checksums (with `existingSecret`, still `kubectl rollout restart`).
 - Participant ids with a recognised domain but a nonsense user-part (`NOT A USER@c.us`) are rejected with `400` across the group writes, the `mentions` validator and the membership-request routes. Fixes #1220.
 - Messages predating the full-text index are indexed on the next boot and can be edited and deleted again; the `messages_fts` emptiness guard is now a rowid-level completeness check.
@@ -466,8 +466,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A WhatsApp-initiated unlink now leaves a durable audit record; the reason reached only the log, the webhook and the socket, so after a restart it was indistinguishable from a network drop. Transient drops stay unaudited.
 - The Go SDK has its first semantic version, `sdk/go/v0.2.0`; the module proxy served only pseudo-versions, so callers could not pin a release.
-- `rmyndharis-openwa` 0.2.0 on PyPI, the first release through the trusted-publishing workflow.
-- `rmyndharis/openwa` 0.2.0 on Packagist, the first versioned PHP release since June; Composer users on a stable constraint were pinned to 0.1.0.
+- `rmyndharis-leadweave` 0.2.0 on PyPI, the first release through the trusted-publishing workflow.
+- `rmyndharis/leadweave` 0.2.0 on Packagist, the first versioned PHP release since June; Composer users on a stable constraint were pinned to 0.1.0.
 
 ### Changed
 
@@ -491,7 +491,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- The JavaScript SDK publishes to npm from CI via Trusted Publishing (OIDC) on a `js-sdk-v*` tag — no npm token exists anywhere, and every release carries build provenance. First release: `@rmyndharis/openwa@0.2.0`.
+- The JavaScript SDK publishes to npm from CI via Trusted Publishing (OIDC) on a `js-sdk-v*` tag — no npm token exists anywhere, and every release carries build provenance. First release: `@rmyndharis/leadweave@0.2.0`.
 - The Python SDK publishes to PyPI from CI via Trusted Publishing (OIDC) on a `py-sdk-v*` tag, matching the JavaScript SDK's release path.
 - The PHP SDK cuts versioned releases from CI on a `php-sdk-v*` tag; the Packagist mirror previously only ever tracked `dev-main`.
 - The Go SDK documents how it is released: tags must carry the `sdk/go/` module prefix, so a bare `v*` app tag never publishes it.
@@ -584,7 +584,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `BAILEYS_MARK_ONLINE_ON_CONNECT=false` keeps phone push notifications alive while a Baileys gateway is connected (default `true`). (#871)
 - Catalog endpoints now work on the Baileys engine: `GET /catalog`, `GET /catalog/products`, `GET /catalog/products/:id` and `POST /messages/send-product`; `send-catalog` stays `501`, whatsapp-web.js unchanged. (#905)
-- Helm chart for Kubernetes deployments under `charts/openwa/`. Closes #695.
+- Helm chart for Kubernetes deployments under `charts/leadweave/`. Closes #695.
 
 ### Fixed
 
@@ -647,7 +647,7 @@ Large internal decomposition (~30,000 lines, mostly code motion); the HTTP contr
 
 ### Removed
 
-- `scripts/openwa.sh`, an orchestration helper superseded by the in-process Docker orchestration on `/api/infra`.
+- `scripts/leadweave.sh`, an orchestration helper superseded by the in-process Docker orchestration on `/api/infra`.
 
 ### Security
 
@@ -754,7 +754,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 - `cancelBatch` no longer overwrites a terminally FAILED batch to CANCELLED (FAILED added to the terminal-status guard).
 - IntegrationModule now imports QueueModule so ingress actually queues when `QUEUE_ENABLED=true`; `ingress_events` rows carry dispatch state and a 60s reconciler (`INGRESS_RECONCILE_*`) replays stuck deliveries; instance teardown checks for an enabled sibling before stripping shared session scope. (#921, #924, #922)
 - `message:persisted` now re-fires on every persisted transition (SENT/FAILED) with a `message:deleted` event for echo-merged rows; fixed the history and reactions cURLs in `docs/07-api-collection.md`. (#919, #910)
-- Orphan-Chromium sweep now matches the `--openwa-session=<id>` marker token-exactly, so restarting `sales` no longer kills sibling `sales2`. (#923)
+- Orphan-Chromium sweep now matches the `--leadweave-session=<id>` marker token-exactly, so restarting `sales` no longer kills sibling `sales2`. (#923)
 - A failed HTTP bind or a rejecting SIGTERM teardown now exits 1 instead of coasting; RED metrics record 401/403/429/404 rejections; a `start()` completing after its row was deleted re-purges both engines' auth dirs. (#949, #961, #952)
 - Infra config writes merge per key, drop the old mode's secrets on a builtin→external flip, re-run the production secret assertion at save time (400), and use strictly-coerced DTOs; SQLite path-collision guard, `REDIS_ENABLED` validation, decimal-only numeric env checks, positive-only `WEBHOOK_MAX_PAYLOAD_BYTES`, and a `storage-export-*` boot sweep added. **Breaking (behavior):** partial payloads preserve omitted fields; non-canonical `REDIS_ENABLED` and exponent/hex numeric values fail boot. (#946, #960)
 - Bulk batches re-validate rendered payloads post-gate, make all status transitions DB-conditional so CANCELLED stays terminal, and a periodic reaper (`MESSAGE_REAPER_INTERVAL_MS`/`_GRACE_MS`/`_BATCH_SIZE`) marks crash-stuck PENDING rows FAILED. (#955, #958)
@@ -769,7 +769,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 - Plugin install now requires `https` and an optional sha256 pin via URL fragment (`#sha256=…`), fail-closed on a mismatch. (#942)
 - Dashboard plugin config frame gets an injected meta-CSP (`img-src`/`media-src 'self' data:`, `connect-src 'none'`), and audit-log CSV cells are apostrophe-prefixed against formula injection. **Breaking (behavior):** concurrent sends over the body budget get 503, a 15s-silent connection is dropped, `http://` plugin installs are rejected, and hot-linked config-UI media renders broken. (#939)
 - Pinned all 61 workflow `uses:` refs to commit SHAs with Dependabot comments; `:latest` now moves only via `release.yml` after boot-smoke, serialized by a `concurrency:` group with digest-verified promotion. (#940)
-- Completed `.dockerignore` (`.git/`, `dashboard/node_modules`, `*.sqlite`, agent workspaces, etc.) with a `check-dockerignore.mjs` CI gate, and extracted `postinstall` to `scripts/postinstall.js` with failure propagation. **Breaking (behavior):** `docker pull openwa:latest` no longer moves on a main merge; `npm install` fails on a broken dashboard/patch. (#943)
+- Completed `.dockerignore` (`.git/`, `dashboard/node_modules`, `*.sqlite`, agent workspaces, etc.) with a `check-dockerignore.mjs` CI gate, and extracted `postinstall` to `scripts/postinstall.js` with failure propagation. **Breaking (behavior):** `docker pull leadweave:latest` no longer moves on a main merge; `npm install` fails on a broken dashboard/patch. (#943)
 - Create-instance and regenerate-secret responses now always start from `maskedView`, unmasking only the two documented "revealed once" fields, so secret-flagged config fields are no longer echoed in plaintext. (#929)
 - whatsapp-web.js adapter methods now answer honestly (501 for unwired catalog/subscribe, 403 on refusals, 503 `EngineTransportError` on transport death) with an additive per-participant `results` field. **Breaking (behavior):** callers reading a config secret back get `***`, and clients relying on phantom 2xx see new 4xx/5xx. (#925)
 - Plugin ingress routes with `signature.scheme: 'none'` are now rejected unless `ALLOW_UNSIGNED_INGRESS=true` is set.
@@ -849,7 +849,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 
 ### Added
 
-- Release images are now dual-published bit-identical to `docker.io/rmyndharis/openwa` alongside GHCR, with provenance and SBOM attestations verified pullable before release.
+- Release images are now dual-published bit-identical to `docker.io/rmyndharis/leadweave` alongside GHCR, with provenance and SBOM attestations verified pullable before release.
 - German (`de`) dashboard translation. Thanks @rjsebening.
 - Audit-log coverage for the admin infrastructure endpoints (config save, restart, export/import), with the coverage gate extended so a future operation cannot ship without one.
 - A single canonical `kind` discriminator (`individual`/`group`/`channel`/`status`/`broadcast`/`unknown`) threaded through REST, webhooks, WebSocket, plugins, and SDKs; `isGroup`/`isStatusBroadcast` unchanged.
@@ -871,7 +871,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 
 ### Changed
 
-- The SQLite driver is now the actively maintained `better-sqlite3` (current SQLite 3.53.x with FTS5 fixes); existing database files open as-is and all migrations apply unchanged. ([#848](https://github.com/rmyndharis/OpenWA/issues/848))
+- The SQLite driver is now the actively maintained `better-sqlite3` (current SQLite 3.53.x with FTS5 fixes); existing database files open as-is and all migrations apply unchanged. ([#848](https://github.com/rmyndharis/LeadWeave/issues/848))
 
 ### Fixed
 
@@ -881,7 +881,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 
 ### Fixed
 
-- Enabled plugins stay enabled across a gateway restart; enable state is tracked separately from running state, and enabled plugins are restarted after boot. A plugin that fails to start is logged and left disabled ([#856](https://github.com/rmyndharis/OpenWA/issues/856)).
+- Enabled plugins stay enabled across a gateway restart; enable state is tracked separately from running state, and enabled plugins are restarted after boot. A plugin that fails to start is logged and left disabled ([#856](https://github.com/rmyndharis/LeadWeave/issues/856)).
 - Messages handled by a plugin (chain stopped via `message:sending`/outgoing gate) are now recorded and delivered to webhooks instead of being dropped from history.
 - A plugin configuration or disable that fails to save now reports the failure instead of showing "Saved".
 - A plugin that ships its own settings editor no longer renders the generated form and second Save button underneath it.
@@ -917,7 +917,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 - Join groups & group settings: `POST /api/sessions/:sessionId/groups/join` joins via invite code; `GET`/`PUT /api/sessions/:sessionId/groups/:groupId/settings` read and update `announce`/`locked` and `ephemeralSeconds` (Baileys only — `501` on whatsapp-web.js). Boolean and numeric fields are read strictly.
 - Own-profile management: `PUT /api/sessions/:sessionId/profile/{name,status,picture}` set the account's display name, about text, and profile picture on both engines.
 - Incoming-call handling: a `call.received` webhook + Socket.IO event fires once per ringing call (both engines); `POST /api/sessions/:sessionId/calls/:callId/reject` rejects a call, and per-session `config.autoRejectCalls: true` auto-rejects. Unknown/expired call ids return `404`.
-- Docs: the README feature table points to the first-party Integration Fabric plugins in the [OpenWA-plugins](https://github.com/rmyndharis/OpenWA-plugins) repo, and `docs/23-community-integrations.md` clarifies its community-only scope.
+- Docs: the README feature table points to the first-party Integration Fabric plugins in the [LeadWeave-plugins](https://github.com/rmyndharis/LeadWeave-plugins) repo, and `docs/23-community-integrations.md` clarifies its community-only scope.
 
 ### Changed
 
@@ -940,7 +940,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 
 ### Added
 
-- The README gains a **"Before you connect a number"** section: OpenWA is unofficial, a per-engine ban-risk vs. resource-cost table, six safe-sending guardrails, the known cold-contact first-send silent drop (#830), and a pointer to the official Cloud API. Responds to discussions #87, #154, #436, #687, #694.
+- The README gains a **"Before you connect a number"** section: LeadWeave is unofficial, a per-engine ban-risk vs. resource-cost table, six safe-sending guardrails, the known cold-contact first-send silent drop (#830), and a pointer to the official Cloud API. Responds to discussions #87, #154, #436, #687, #694.
 
 ### Fixed
 
@@ -953,7 +953,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 
 - Design draft `docs/28-multitenancy.md`: the enterprise multitenancy proposal (nothing implemented yet).
 - The Chats room header now shows the contact/group profile picture (cached one hour), a floating scroll-to-bottom button appears once scrolled away from the latest message, and the header shows the prettified phone number with the raw JID retained on a muted monospace line. The composer send icon was enlarged.
-- The linked-device name is now brandable via the optional `BAILEYS_BROWSER_NAME` env var (default `OpenWA`). Thanks @clicsoluciones. (#822)
+- The linked-device name is now brandable via the optional `BAILEYS_BROWSER_NAME` env var (default `LeadWeave`). Thanks @clicsoluciones. (#822)
 
 ### Fixed
 
@@ -965,8 +965,8 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 
 ### Added
 
-- Reconnect-loop observability: an `openwa_session_reconnect_attempts_total` counter, plus a `session.reconnect_loop` webhook, warning log, and `openwa_session_reconnect_loop_alerts_total` tick on every fifth consecutive attempt; the streak re-arms after a stable connection.
-- The whatsapp-web.js engine sweeps orphaned Chromium processes carrying an `--openwa-session=<id>` marker before each (re)launch.
+- Reconnect-loop observability: an `leadweave_session_reconnect_attempts_total` counter, plus a `session.reconnect_loop` webhook, warning log, and `leadweave_session_reconnect_loop_alerts_total` tick on every fifth consecutive attempt; the streak re-arms after a stable connection.
+- The whatsapp-web.js engine sweeps orphaned Chromium processes carrying an `--leadweave-session=<id>` marker before each (re)launch.
 - Messages composed on a linked phone are now persisted to local history, deduplicated atomically against the REST send path, with delivery/read acks advancing on these rows.
 - The whatsapp-web.js own-send echo downloads media through the same capped inbound path, so phone-composed images persist and render.
 - A shared accessible modal dialog (Escape/overlay dismissal, focus trap, scroll lock, `role="dialog"`), first used by the Sessions page.
@@ -1171,7 +1171,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 
 ### Added
 
-- Prometheus counter `openwa_webhook_delivery_failures_total` on `/api/metrics`, incremented once per delivery that exhausts its retries.
+- Prometheus counter `leadweave_webhook_delivery_failures_total` on `/api/metrics`, incremented once per delivery that exhausts its retries.
 
 ### Changed
 
@@ -1214,7 +1214,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 - `POST /infra/import-data` no longer swallows a database error while clearing tables; a real fault rolls the import back with a 500.
 - A session no longer schedules a reconnect while the process is shutting down.
 - Documentation & config accuracy: `.env.example` documents `PORT` vs `API_PORT` and the `QUEUE_ENABLED`/`CACHE_ENABLED` toggles; refreshed `SECURITY.md` and Java SDK snippets; removed unused `uuid`/`@types/uuid`.
-- Bundled Compose no longer kills Chromium mid-spawn under multi-session whatsapp-web.js load; `pids_limit` default raised 512 → 2048, exposed as `OPENWA_PIDS_LIMIT` (#636).
+- Bundled Compose no longer kills Chromium mid-spawn under multi-session whatsapp-web.js load; `pids_limit` default raised 512 → 2048, exposed as `LEADWEAVE_PIDS_LIMIT` (#636).
 
 ## [0.8.9] - 2026-07-06
 
@@ -1283,7 +1283,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 ### Added
 
 - Plugins can send media (`image`/`video`/`audio`/`file` envelopes carrying `mediaUrl`) through `ctx.conversations.send`; a `replyTo` on a media envelope is rejected.
-- Official Java SDK (`com.rmyndharis:openwa`): a synchronous Java 17 client covering all 12 REST resources plus API-key validation, published to Maven Central as `com.rmyndharis:openwa:0.1.1`. (#602)
+- Official Java SDK (`com.rmyndharis:leadweave`): a synchronous Java 17 client covering all 12 REST resources plus API-key validation, published to Maven Central as `com.rmyndharis:leadweave:0.1.1`. (#602)
 
 ## [0.8.1] - 2026-07-02
 
@@ -1353,7 +1353,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 
 ### Added
 
-- Send true WhatsApp voice notes (PTT): `send-audio`, bulk send, and the `MessageSendAudio` tool accept an optional `ptt`; the server defaults the mimetype to `audio/ogg; codecs=opus` and stores `type: "voice"`. (OpenWA-n8n #13)
+- Send true WhatsApp voice notes (PTT): `send-audio`, bulk send, and the `MessageSendAudio` tool accept an optional `ptt`; the server defaults the mimetype to `audio/ogg; codecs=opus` and stores `type: "voice"`. (LeadWeave-n8n #13)
 
 ### Fixed
 
@@ -1441,7 +1441,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 ### Security
 
 - Hook re-entrancy is now blocked for sandboxed plugins; worker-initiated capability calls run inside the in-flight hook context. (#532)
-- Docker container teardown on `POST /infra/restart` is restricted to the managed allowlist (`postgres`/`redis`/`minio`) with exact `openwa-<service>` matching. (#534)
+- Docker container teardown on `POST /infra/restart` is restricted to the managed allowlist (`postgres`/`redis`/`minio`) with exact `leadweave-<service>` matching. (#534)
 - Failed API-key authentication attempts are recorded in the audit log (`api_key_auth_failed`). (#535)
 - The SSRF guard blocks the deprecated IPv6 site-local range (`fec0::/10`). (#536)
 - Session-scoped MCP tools require a session id before authorization. (#536)
@@ -1636,7 +1636,7 @@ The session-lifecycle security hardening release: lifecycle and logout operation
 ### Added
 
 - MCP server (opt-in, `MCP_ENABLED=true`): a curated ~39-tool agent surface over the Model Context Protocol at `POST /mcp`, reusing REST services, auth, roles, and per-session scoping; `MCP_READONLY=true` mounts read tools only. (relates to #256; thanks @tobiasstrebitzer)
-- Client SDKs: official hand-written libraries for JavaScript/TypeScript (`@rmyndharis/openwa`), Python (`rmyndharis-openwa`), and PHP (`rmyndharis/openwa`), each with the same fluent resource surface, a typed error hierarchy, and server-mirroring types; published at `0.1.0`. (#463)
+- Client SDKs: official hand-written libraries for JavaScript/TypeScript (`@rmyndharis/leadweave`), Python (`rmyndharis-leadweave`), and PHP (`rmyndharis/leadweave`), each with the same fluent resource surface, a typed error hierarchy, and server-mirroring types; published at `0.1.0`. (#463)
 
 ### Changed
 
@@ -2084,7 +2084,7 @@ endpoint, and a batch of correctness/housekeeping fixes.
 ### Fixed
 
 - Fixed duplicate outgoing messages in the dashboard Chats view (optimistic/echo race is now race-safe).
-- `dashboard/nginx.conf` now targets `openwa-api` for `/api/` and `/socket.io/`. Thanks @Abhishekrajpurohit (#259).
+- `dashboard/nginx.conf` now targets `leadweave-api` for `/api/` and `/socket.io/`. Thanks @Abhishekrajpurohit (#259).
 - The container entrypoint clears stale Chromium `SingletonLock`/`SingletonSocket`/`SingletonCookie` files so a session can re-launch after an unclean shutdown. Thanks @Abhishekrajpurohit (#259).
 
 ### Changed
@@ -2166,7 +2166,7 @@ endpoint, and a batch of correctness/housekeeping fixes.
 - Boot-time validation rejects an unknown `DATABASE_TYPE` and missing Postgres credentials.
 - Message-event idempotency keys are session-scoped.
 - Response-envelope docs corrected to the raw-payload shape; unused interceptor/filter removed; horizontal-scaling docs marked single-instance.
-- Headless Chromium now starts as the non-root `openwa` user in the Docker image. (closes #242)
+- Headless Chromium now starts as the non-root `leadweave` user in the Docker image. (closes #242)
 - Marking a 1:1 chat as read now accepts `@lid` JIDs. Thanks @suraj7974 (#241).
 - Allowlisted IPv6 literals in `SSRF_ALLOWED_HOSTS` match whether or not bracketed.
 - The dashboard returns to the login screen cleanly on a `401`.
@@ -2180,9 +2180,9 @@ endpoint, and a batch of correctness/housekeeping fixes.
 
 - Webhook reads now require `OPERATOR`+ (a `VIEWER` key gets `403`).
 - SSRF protection defaults ON — set `SSRF_ALLOWED_HOSTS` or `WEBHOOK_SSRF_PROTECT=false` for internal hosts.
-- Datastore secrets are now required — no `openwa`/`minioadmin` default; production refuses to boot with placeholders.
+- Datastore secrets are now required — no `leadweave`/`minioadmin` default; production refuses to boot with placeholders.
 - Bull Board `?apiKey=` removed — authenticate via `X-API-Key`/`Authorization: Bearer`.
-- New env knobs: `SSRF_ALLOWED_HOSTS`, `MEDIA_DOWNLOAD_MAX_BYTES`, `MEDIA_DOWNLOAD_TIMEOUT_MS`, `MAIN_DATABASE_SYNCHRONIZE`, `SHUTDOWN_DELAY_MS`, `OPENWA_MEM_LIMIT`, `METRICS_TOKEN`.
+- New env knobs: `SSRF_ALLOWED_HOSTS`, `MEDIA_DOWNLOAD_MAX_BYTES`, `MEDIA_DOWNLOAD_TIMEOUT_MS`, `MAIN_DATABASE_SYNCHRONIZE`, `SHUTDOWN_DELAY_MS`, `LEADWEAVE_MEM_LIMIT`, `METRICS_TOKEN`.
 
 ## [0.2.1] - 2026-06-15
 
@@ -2233,7 +2233,7 @@ endpoint, and a batch of correctness/housekeeping fixes.
 - CORS: a wildcard origin is refused in production; credentials only enabled with an explicit allowlist. (#221)
 - WebSocket: a session-scoped key can no longer subscribe to `*` or sessions outside its `allowedSessions`. (#221)
 - Authorization: plugin enable/disable/config and the infra read endpoints now require an ADMIN key. (#221, #226)
-- Docker: the container reaches the Docker API via a least-privilege `docker-socket-proxy` over TCP; Node runs as non-root `openwa` via a `gosu` entrypoint (`dumb-init` PID 1). Thanks @A831ARD0 (#227, #228; supersedes #129).
+- Docker: the container reaches the Docker API via a least-privilege `docker-socket-proxy` over TCP; Node runs as non-root `leadweave` via a `gosu` entrypoint (`dumb-init` PID 1). Thanks @A831ARD0 (#227, #228; supersedes #129).
 - Health: `/api/health` excluded from rate limiting. (#221)
 
 ### Dependencies
@@ -2408,7 +2408,7 @@ endpoint, and a batch of correctness/housekeeping fixes.
 
 ### 🎉 Initial Release
 
-First stable release of the OpenWA WhatsApp API Gateway.
+First stable release of the LeadWeave WhatsApp API Gateway.
 
 ### Core Features
 

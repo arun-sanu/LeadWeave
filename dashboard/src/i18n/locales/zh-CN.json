@@ -6,7 +6,7 @@
     }
   },
   "common": {
-    "appName": "OpenWA",
+    "appName": "LeadWeave",
     "loading": "正在加载...",
     "cancel": "取消",
     "delete": "删除",
@@ -63,7 +63,8 @@
     "messageTester": "消息测试器",
     "infrastructure": "基础设施",
     "plugins": "插件",
-    "logs": "日志"
+    "logs": "日志",
+    "campaigns": "????"
   },
   "chats": {
     "media": {
@@ -121,7 +122,9 @@
     "tab": {
       "chats": "聊天",
       "channels": "频道",
-      "status": "状态"
+      "status": "状态",
+      "groups": "群组",
+      "archive": "已归档"
     },
     "status": {
       "itemCount": "{{count}} 条更新",
@@ -168,7 +171,15 @@
       "delivered": "已送达",
       "read": "已读",
       "failed": "发送失败"
-    }
+    },
+    "emptyGroups": "暂无群组",
+    "emptyArchive": "暂无已归档对话",
+    "archiveChat": "归档对话",
+    "unarchiveChat": "取消归档",
+    "archivedSuccess": "对话已归档",
+    "unarchivedSuccess": "已取消归档",
+    "archiveFailed": "归档失败",
+    "unarchiveFailed": "取消归档失败"
   },
   "errorBoundary": {
     "title": "出了点问题",
@@ -185,7 +196,7 @@
     "connectionError": "无法连接到服务器。请重试。",
     "help": "需要帮助？",
     "viewDocs": "查看文档",
-    "footer": "由 Yudhi Armyndharis 和 OpenWA 社区用 ❤️ 打造",
+    "footer": "由 Yudhi Armyndharis 和 LeadWeave 社区用 ❤️ 打造",
     "version": "v{{version}} · {{date}}"
   },
   "dashboard": {
@@ -211,23 +222,7 @@
     "view": "查看",
     "disconnect": "断开连接",
     "errorPrefix": "错误：{{message}}",
-    "loadError": "加载数据失败",
-    "charts": {
-      "title": "消息分析",
-      "period": {
-        "24h": "24小时",
-        "7d": "7天",
-        "30d": "30天"
-      },
-      "overTime": "消息趋势",
-      "byType": "按类型分类的消息",
-      "topChats": "热门聊天",
-      "sent": "已发送",
-      "received": "已接收",
-      "messages": "消息",
-      "empty": "此期间没有消息活动。",
-      "error": "无法加载消息分析数据。请检查服务器日志。"
-    }
+    "loadError": "加载数据失败"
   },
   "sessionStatus": {
     "created": "新建",
@@ -694,7 +689,7 @@
       "postgres": "PostgreSQL",
       "postgresDesc": "适用于生产的数据库",
       "useBuiltIn": "使用内置 PostgreSQL 容器",
-      "builtInDesc": "OpenWA 将为你管理 PostgreSQL 容器",
+      "builtInDesc": "LeadWeave 将为你管理 PostgreSQL 容器",
       "dbName": "数据库名称",
       "schema": "模式",
       "schemaDesc": "PostgreSQL 模式（SQLite 忽略）。默认为 'public'。该模式必须已存在。",
@@ -729,7 +724,7 @@
       "enable": "启用 Redis",
       "enableDesc": "缓存、会话存储和 BullMQ 队列需要 Redis",
       "useBuiltIn": "使用内置 Redis 容器",
-      "builtInDesc": "OpenWA 将为你管理 Redis 容器",
+      "builtInDesc": "LeadWeave 将为你管理 Redis 容器",
       "queueTitle": "启用 BullMQ 队列系统",
       "queueDesc": "使用消息队列可靠地投递消息和 Webhook",
       "statsTitle": "队列统计",
@@ -751,7 +746,7 @@
       "s3": "Amazon S3",
       "s3Desc": "云存储（兼容 S3）",
       "useBuiltIn": "使用内置 MinIO 容器",
-      "builtInDesc": "OpenWA 将为你管理 MinIO（兼容 S3）容器",
+      "builtInDesc": "LeadWeave 将为你管理 MinIO（兼容 S3）容器",
       "storagePath": "存储路径",
       "bucket": "存储桶名称",
       "region": "区域",
@@ -802,7 +797,7 @@
       "importFailed": "无法导入数据",
       "importOk": "数据已导入",
       "importConfirm": "导入操作将用备份数据替换（REPLACE）当前所有数据（{{rows}} 行）。此操作无法撤销。是否继续？",
-      "invalidFile": "该文件不是有效的 OpenWA 数据备份。",
+      "invalidFile": "该文件不是有效的 LeadWeave 数据备份。",
       "importTooLarge": "备份超出请求大小限制。请在服务器上调高 BODY_SIZE_LIMIT 后重试。"
     },
     "statusLoadError": "无法加载当前基础设施状态。请刷新重试。"
@@ -822,7 +817,7 @@
     "uninstallConfirm": "卸载“{{name}}”？这将删除其文件。",
     "empty": {
       "title": "未找到插件",
-      "description": "安装插件以扩展 OpenWA 功能"
+      "description": "安装插件以扩展 LeadWeave 功能"
     },
     "config": {
       "title": "配置 {{name}}",
@@ -845,7 +840,7 @@
       "trustWarning": "插件以网关进程的完整权限运行——沙箱只能隔离崩溃，无法防御恶意代码。请只安装你信任的插件。",
       "choose": "选择 .zip 文件…",
       "tooLarge": "文件超过 5 MB 限制。",
-      "catalogHint": "直接从 OpenWA 插件目录安装。.zip 文件由服务器通过 SSRF 防护获取，然后经过验证并在沙箱中运行。",
+      "catalogHint": "直接从 LeadWeave 插件目录安装。.zip 文件由服务器通过 SSRF 防护获取，然后经过验证并在沙箱中运行。",
       "catalogTeaser": "在找插件吗？",
       "catalogTeaserSuffix": "浏览官方市场。",
       "tabCatalog": "目录",
