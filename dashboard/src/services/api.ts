@@ -1453,6 +1453,9 @@ export interface CampaignLead {
 export interface Campaign {
   id: string;
   name: string;
+  companyId?: string | null;
+  userId?: string | null;
+  creatorName?: string | null;
   sessionIds: string[];
   status: 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'cancelled';
   template: string;

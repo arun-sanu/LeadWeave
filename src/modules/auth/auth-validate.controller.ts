@@ -55,7 +55,7 @@ export class AuthValidateController {
     const cookieOptions = {
       httpOnly: true,
       secure: isSecure,
-      sameSite: 'strict' as const,
+      sameSite: 'lax' as const,
       path: '/',
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     };

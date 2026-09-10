@@ -2,7 +2,9 @@ import { AuthValidateController } from './auth-validate.controller';
 import { ApiKey, ApiKeyRole } from './entities/api-key.entity';
 
 describe('AuthValidateController', () => {
-  const controller = new AuthValidateController();
+  const mockAuthService = {} as any;
+  const mockSupabaseService = {} as any;
+  const controller = new AuthValidateController(mockAuthService, mockSupabaseService);
 
   const makeKey = (over: Partial<ApiKey> = {}): ApiKey =>
     ({ id: 'k1', role: ApiKeyRole.OPERATOR, isActive: true, allowedIps: null, ...over }) as ApiKey;

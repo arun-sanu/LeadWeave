@@ -22,7 +22,8 @@ import {
   Key,
   Puzzle,
   Layers,
-  CalendarClock
+  CalendarClock,
+  StickyNote
 } from 'lucide-react';
 
 import { type UserRole, useRole } from '../hooks/useRole';
@@ -35,6 +36,8 @@ import { CommandPalette } from './CommandPalette';
 import { ErrorBoundary } from './ErrorBoundary';
 import { LanMeshProvider } from "../contexts/LanMeshContext";
 import { LanMeshFloatingPill } from "./lan-mesh/LanMeshFloatingPill";
+import { FloatingNotepad } from './notepad/FloatingNotepad';
+import { useNotepadStore } from '../stores/useNotepadStore';
 import './Layout.css';
 
 const ROUTE_PREFETCHERS: Record<string, () => Promise<unknown>> = {
@@ -70,6 +73,8 @@ interface LayoutProps {
 export function Layout({ onLogout }: LayoutProps) {
   useGlobalBubbleListener();
   const { totalUnread } = useBubbleStore();
+  const isNotepadOpen = useNotepadStore(s => s.notes.some(n => n.isOpen));
+  const toggleNotepadOpen = useNotepadStore(s => s.toggleNotepadOpen);
   const { role, isDeveloper, setSimulatedRole } = useRole();
   const { t } = useTranslation();
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
@@ -99,6 +104,7 @@ export function Layout({ onLogout }: LayoutProps) {
     ...(isSuper || isSupport || isCompAdmin || isHr || isStandardUser
       ? [
           { to: '/', icon: LayoutDashboard, label: t('nav.dashboard', 'Dashboard') },
+          { to: '#notepad', icon: StickyNote, label: 'Notepad', isNotepad: true },
           { to: '/team', icon: Users, label: isSuper ? 'Global Users' : 'My Team' },
           { to: '/chats?tab=sessions', icon: MessageSquare, label: t('nav.chats', 'Chats') },
           // Webhooks: superadmin, support, companyadmin, user
@@ -122,6 +128,7 @@ export function Layout({ onLogout }: LayoutProps) {
 
   const profileNavItems = [
     { to: '/', icon: LayoutDashboard, label: t('nav.dashboard', 'Dashboard') },
+    { to: '#notepad', icon: StickyNote, label: 'Notepad', isNotepad: true },
     { to: '/profile', icon: User, label: t('nav.profile', 'Profile') },
     // API Keys: superadmin, support (not companyadmin)
     ...(isSuper || isSupport
@@ -144,6 +151,7 @@ export function Layout({ onLogout }: LayoutProps) {
 
   const managementNavItems = [
     { to: '/', icon: LayoutDashboard, label: t('nav.dashboard', 'Dashboard') },
+    { to: '#notepad', icon: StickyNote, label: 'Notepad', isNotepad: true },
     { to: '/management', icon: Layers, label: 'Management' },
     ...(isSuper || isSupport
     ? [{ to: '/companies', icon: Building2, label: 'Companies & Tenants' }]
@@ -224,10 +232,32 @@ export function Layout({ onLogout }: LayoutProps) {
         </div>
 
         <nav className="sidebar-nav">
-          {navItems.map(({ to, icon: Icon, label }) => {
+          {navItems.map((item) => {
+            const { to, icon: Icon, label } = item;
+            const isNotepad = 'isNotepad' in item && item.isNotepad;
             const hasUnread = to === '/chats' && totalUnread > 0;
             const unreadText = totalUnread > 99 ? '99+' : totalUnread;
             const ariaLabel = hasUnread ? `${label} ${unreadText}` : label;
+
+            if (isNotepad) {
+              return (
+                <button
+                  key="sidebar-notepad-btn"
+                  aria-label={label}
+                  title="Toggle Notepad & Sticky Notes"
+                  className={`nav-item ${isNotepadOpen ? 'active' : ''}`}
+                  onClick={() => {
+                    handleNavClick();
+                    toggleNotepadOpen();
+                  }}
+                  style={{ background: 'transparent', border: 'none', width: '100%', cursor: 'pointer', textAlign: 'left' }}
+                >
+                  <Icon size={20} />
+                  <span className="nav-label">{label}</span>
+                </button>
+              );
+            }
+
             return (
               <NavLink
                 key={to}
@@ -280,6 +310,7 @@ export function Layout({ onLogout }: LayoutProps) {
       </main>
 
       <FloatingBubbleContainer />
+      <FloatingNotepad />
 
       <CommandPalette open={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} />
 

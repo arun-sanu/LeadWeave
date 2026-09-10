@@ -73,6 +73,7 @@ export function Login({ onLogin }: LoginProps) {
 
       if (response.ok) {
         const data = await response.json().catch(() => ({}));
+        sessionStorage.setItem('leadweave_api_key', apiKey.trim());
         onLogin(data.role, false);
       } else {
         const errorData = await response.json().catch(() => ({}));
@@ -170,6 +171,7 @@ export function Login({ onLogin }: LoginProps) {
 
       if (response.ok) {
         const validateData = await response.json().catch(() => ({}));
+        sessionStorage.setItem('leadweave_supabase_token', token);
         sessionStorage.setItem('leadweave_user_name', fullName.trim());
         sessionStorage.setItem('leadweave_user_email', data.session?.user?.email || pseudoEmail);
         sessionStorage.setItem('leadweave_company_name', companyName.trim());
