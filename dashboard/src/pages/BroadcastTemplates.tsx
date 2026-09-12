@@ -136,7 +136,9 @@ export function BroadcastTemplates() {
     setCustomSavedTemplates(updated);
     try {
       localStorage.setItem('leadweave_saved_broadcast_templates', JSON.stringify(updated));
-    } catch {}
+    } catch (err) {
+      console.warn('Failed to save to localStorage:', err);
+    }
     toast.info('Template removed');
   };
 
@@ -171,6 +173,7 @@ export function BroadcastTemplates() {
     });
 
     return spinEvaluated;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageTemplate, rows, columns, previewRowIndex, spintaxSeed]);
 
   return (

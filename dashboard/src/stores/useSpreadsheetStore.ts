@@ -2,9 +2,9 @@ import { create } from 'zustand';
 
 export interface CampaignSpreadsheetState {
   columns: string[];
-  rows: any[];
+  rows: Record<string, unknown>[];
   setColumns: (columns: string[]) => void;
-  setRows: (rows: any[]) => void;
+  setRows: (rows: Record<string, unknown>[]) => void;
   updateCell: (rowId: string, field: string, value: string) => void;
   deleteRow: (rowId: string) => void;
   deleteColumn: (colName: string) => void;
@@ -27,8 +27,9 @@ export const useSpreadsheetStore = create<CampaignSpreadsheetState>((set) => ({
     set((state) => ({
       columns: state.columns.filter((c) => c !== colName),
       rows: state.rows.map((r) => {
-        const { [colName]: _, ...rest } = r;
-        return rest;
+        const copy = { ...r };
+        delete copy[colName];
+        return copy;
       }),
     })),
 }));

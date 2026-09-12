@@ -59,7 +59,12 @@ export function calculateTypingDuration(text: string, minMs = 1200, maxMs = 5000
  * Checks whether a natural batch breather pause should be taken after `consecutiveSends`.
  * Returns pause duration in ms if due, or 0 if no pause is needed.
  */
-export function calculateBatchBreather(consecutiveSends: number, batchSize = 10, breatherMinMs = 12000, breatherMaxMs = 25000): number {
+export function calculateBatchBreather(
+  consecutiveSends: number,
+  batchSize = 10,
+  breatherMinMs = 12000,
+  breatherMaxMs = 25000,
+): number {
   if (consecutiveSends > 0 && consecutiveSends % batchSize === 0) {
     return calculateHumanDelay(breatherMinMs, breatherMaxMs);
   }

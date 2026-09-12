@@ -693,7 +693,9 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
       const chats = [...(await engine.getChats())].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
       return paginate(chats, opts.limit, opts.offset);
     } catch (err) {
-      this.logger.error(`getChats failed for session ${id}: ${err instanceof Error ? err.stack || err.message : String(err)}`);
+      this.logger.error(
+        `getChats failed for session ${id}: ${err instanceof Error ? err.stack || err.message : String(err)}`,
+      );
       throw err;
     }
   }

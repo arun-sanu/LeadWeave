@@ -93,7 +93,9 @@ export function SessionsManager({
 
   const sessionsRef = useRef<Session[]>([]);
   const onSessionsChangeRef = useRef(onSessionsChange);
-  onSessionsChangeRef.current = onSessionsChange;
+  useEffect(() => {
+    onSessionsChangeRef.current = onSessionsChange;
+  }, [onSessionsChange]);
   const lastEmittedSignatureRef = useRef<string>('');
 
   useEffect(() => {

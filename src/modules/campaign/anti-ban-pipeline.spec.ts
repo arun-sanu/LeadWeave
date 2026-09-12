@@ -42,16 +42,16 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
     };
 
     mockCampaignRepo = {
-      create: jest.fn().mockImplementation((dto) => ({ ...dto, id: 'camp-1' })),
-      save: jest.fn().mockImplementation((camp) => Promise.resolve(camp)),
+      create: jest.fn().mockImplementation(dto => ({ ...dto, id: 'camp-1' })),
+      save: jest.fn().mockImplementation(camp => Promise.resolve(camp)),
       findOne: jest.fn(),
       find: jest.fn().mockResolvedValue([]),
       update: jest.fn().mockResolvedValue({ affected: 1 }),
     };
 
     mockLeadRepo = {
-      create: jest.fn().mockImplementation((dto) => ({ ...dto, id: 'lead-1' })),
-      save: jest.fn().mockImplementation((lead) => Promise.resolve(lead)),
+      create: jest.fn().mockImplementation(dto => ({ ...dto, id: 'lead-1' })),
+      save: jest.fn().mockImplementation(lead => Promise.resolve(lead)),
       findOne: jest.fn(),
       find: jest.fn(),
       count: jest.fn(),
@@ -84,7 +84,17 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
         template: 'Hello {{name}}',
         sessionIds: ['sess-1'],
         pacing: { minDelayMs: 1, maxDelayMs: 2, simulateTyping: false },
-        stats: { total: 2, pending: 2, sent: 0, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 2,
+          pending: 2,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -120,9 +130,7 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
       await (service as any).dispatchCampaignLeads('camp-pacing-1');
 
       // Campaign must be automatically PAUSED to protect the account
-      expect(mockCampaignRepo.save).toHaveBeenCalledWith(
-        expect.objectContaining({ status: CampaignStatus.PAUSED }),
-      );
+      expect(mockCampaignRepo.save).toHaveBeenCalledWith(expect.objectContaining({ status: CampaignStatus.PAUSED }));
 
       // Engine sendTextMessage must NOT have been called
       expect(mockEngine.sendTextMessage).not.toHaveBeenCalled();
@@ -139,7 +147,17 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
         template: 'Hello {{name}}',
         sessionIds: ['sess-1'],
         pacing: { minDelayMs: 1, maxDelayMs: 2, simulateTyping: false },
-        stats: { total: 1, pending: 1, sent: 0, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 1,
+          pending: 1,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -175,7 +193,17 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
         template: 'Hello',
         sessionIds: ['sess-1'],
         pacing: { minDelayMs: 1, maxDelayMs: 2, simulateTyping: false },
-        stats: { total: 1, pending: 1, sent: 0, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 1,
+          pending: 1,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -214,7 +242,17 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
         template: 'Test typing presence error',
         sessionIds: ['sess-1'],
         pacing: { minDelayMs: 1, maxDelayMs: 2, simulateTyping: true },
-        stats: { total: 1, pending: 1, sent: 0, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 1,
+          pending: 1,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -257,7 +295,17 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
         template: 'Multi-session test',
         sessionIds: ['sess-offline', 'sess-online'],
         pacing: { minDelayMs: 1, maxDelayMs: 2, simulateTyping: false },
-        stats: { total: 1, pending: 1, sent: 0, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 1,
+          pending: 1,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -295,7 +343,17 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
         template: 'Offline test',
         sessionIds: ['sess-1'],
         pacing: { minDelayMs: 1, maxDelayMs: 2, simulateTyping: false },
-        stats: { total: 1, pending: 1, sent: 0, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 1,
+          pending: 1,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -319,9 +377,7 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
 
       await (service as any).dispatchCampaignLeads(camp.id);
 
-      expect(mockCampaignRepo.save).toHaveBeenCalledWith(
-        expect.objectContaining({ status: CampaignStatus.PAUSED }),
-      );
+      expect(mockCampaignRepo.save).toHaveBeenCalledWith(expect.objectContaining({ status: CampaignStatus.PAUSED }));
     });
   });
 
@@ -334,7 +390,17 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
         template: 'Test message',
         sessionIds: ['sess-1'],
         pacing: { minDelayMs: 1, maxDelayMs: 2, simulateTyping: false },
-        stats: { total: 11, pending: 11, sent: 0, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 11,
+          pending: 11,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -392,7 +458,17 @@ describe('Anti-Ban Pacing & Delay Pipeline Integration', () => {
         template: 'Test single lead',
         sessionIds: ['sess-1'],
         pacing: { minDelayMs: 5000, maxDelayMs: 10000, simulateTyping: false },
-        stats: { total: 1, pending: 1, sent: 0, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 1,
+          pending: 1,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };

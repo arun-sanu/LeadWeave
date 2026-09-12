@@ -20,16 +20,8 @@ import { EngineRegistry } from '../../engine/engine-registry.service';
 import { HookManager } from '../../core/hooks/hook-manager.service';
 import { createLogger } from '../../common/services/logger.service';
 import { renderTemplate } from '../../common/utils/template-render';
-import {
-  calculateHumanDelay,
-  calculateTypingDuration,
-  calculateBatchBreather,
-} from '../../common/utils/human-jitter';
-import {
-  SendPacingService,
-  countsTowardSendBreaker,
-  isPacingLimitedError,
-} from '../message/send-pacing.service';
+import { calculateHumanDelay, calculateTypingDuration, calculateBatchBreather } from '../../common/utils/human-jitter';
+import { SendPacingService, countsTowardSendBreaker, isPacingLimitedError } from '../message/send-pacing.service';
 
 import { parseSpintax } from './utils/spintax.util';
 import { cleanPhoneNumber } from './utils/phone-cleaner.util';
@@ -81,7 +73,7 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
       this.logger.warn('Error in startup sweepScheduledCampaigns', { error: String(err) });
     });
     this.schedulerInterval = setInterval(() => {
-      this.sweepScheduledCampaigns().catch((err) => {
+      this.sweepScheduledCampaigns().catch(err => {
         this.logger.warn('Error in sweepScheduledCampaigns', { error: String(err) });
       });
     }, 30 * 1000);
@@ -157,8 +149,10 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     }
 
     if (dto.autoLaunch && !isScheduled) {
-      this.startCampaign(savedCampaign.id).catch((err) => {
-        this.logger.error('Failed to auto-launch campaign', err instanceof Error ? err.stack : String(err), { campaignId: savedCampaign.id });
+      this.startCampaign(savedCampaign.id).catch(err => {
+        this.logger.error('Failed to auto-launch campaign', err instanceof Error ? err.stack : String(err), {
+          campaignId: savedCampaign.id,
+        });
       });
     }
 
@@ -196,9 +190,17 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     const updated = await this.campaignRepo.findOne({ where: { id: campaignId } });
 
     // If campaign is currently running, wake up the dispatch worker if it was idle
-    if (campaign.status === CampaignStatus.RUNNING && campaign.dispatchMode !== 'manual' && !this.runningLoops.has(campaignId)) {
-      this.dispatchCampaignLeads(campaignId).catch((err) => {
-        this.logger.error('Error continuing campaign dispatch after adding leads', err instanceof Error ? err.stack : String(err), { campaignId });
+    if (
+      campaign.status === CampaignStatus.RUNNING &&
+      campaign.dispatchMode !== 'manual' &&
+      !this.runningLoops.has(campaignId)
+    ) {
+      this.dispatchCampaignLeads(campaignId).catch(err => {
+        this.logger.error(
+          'Error continuing campaign dispatch after adding leads',
+          err instanceof Error ? err.stack : String(err),
+          { campaignId },
+        );
       });
     }
 
@@ -230,8 +232,10 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
 
     // Trigger async non-blocking dispatch loop ONLY if automated
     if (campaign.dispatchMode !== 'manual') {
-      this.dispatchCampaignLeads(campaignId).catch((err) => {
-        this.logger.error('Error during campaign execution loop', err instanceof Error ? err.stack : String(err), { campaignId });
+      this.dispatchCampaignLeads(campaignId).catch(err => {
+        this.logger.error('Error during campaign execution loop', err instanceof Error ? err.stack : String(err), {
+          campaignId,
+        });
       });
     }
 
@@ -257,15 +261,11 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     const campaign = await this.campaignRepo.findOne({ where: { id: campaignId } });
     if (!campaign) throw new NotFoundException('Campaign not found');
 
-    const editableStatuses: CampaignStatus[] = [
-      CampaignStatus.DRAFT,
-      CampaignStatus.SCHEDULED,
-      CampaignStatus.PAUSED,
-    ];
+    const editableStatuses: CampaignStatus[] = [CampaignStatus.DRAFT, CampaignStatus.SCHEDULED, CampaignStatus.PAUSED];
 
     if (!editableStatuses.includes(campaign.status)) {
       throw new BadRequestException(
-        `Campaign cannot be edited while in '${campaign.status}' state. Please pause the campaign before editing.`
+        `Campaign cannot be edited while in '${campaign.status}' state. Please pause the campaign before editing.`,
       );
     }
 
@@ -419,15 +419,17 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
               const minD = campaign.pacing?.minDelayMs || 3000;
               const maxD = campaign.pacing?.maxDelayMs || 6000;
               const delay = calculateHumanDelay(minD, maxD);
-              await new Promise((resolve) => setTimeout(resolve, delay));
+              await new Promise(resolve => setTimeout(resolve, delay));
 
               // Natural human batch breather (e.g. after every 10 sends take a 12-25s pause)
               const bMin = campaign.pacing?.breatherMinMs ?? 12000;
               const bMax = campaign.pacing?.breatherMaxMs ?? 25000;
               const breather = calculateBatchBreather(consecutiveDispatches, 10, bMin, bMax);
               if (breather > 0) {
-                this.logger.log(`Natural batch breather pause (${Math.round(breather / 1000)}s) for campaign ${campaignId}`);
-                await new Promise((resolve) => setTimeout(resolve, breather));
+                this.logger.log(
+                  `Natural batch breather pause (${Math.round(breather / 1000)}s) for campaign ${campaignId}`,
+                );
+                await new Promise(resolve => setTimeout(resolve, breather));
               }
             }
           }
@@ -452,7 +454,7 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
   ): Promise<{ sent: boolean; pauseCampaignReason?: string }> {
     let engine = this.engineRegistry.get(lead.sessionId);
     if (!engine && campaign.sessionIds?.length > 1) {
-      const altSession = campaign.sessionIds.find((id) => id !== lead.sessionId && this.engineRegistry.get(id));
+      const altSession = campaign.sessionIds.find(id => id !== lead.sessionId && this.engineRegistry.get(id));
       if (altSession) {
         lead.sessionId = altSession;
         engine = this.engineRegistry.get(altSession);
@@ -519,13 +521,15 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
         try {
           await engine.sendChatState(lead.chatId, 'typing');
         } catch (error) {
-          this.logger.warn(`simulateTyping presence skipped: ${error instanceof Error ? error.message : String(error)}`);
+          this.logger.warn(
+            `simulateTyping presence skipped: ${error instanceof Error ? error.message : String(error)}`,
+          );
         }
       }
       try {
         const typingDuration = calculateTypingDuration(messageText, 1500, 5000);
         if (typingDuration > 0) {
-          await new Promise((resolve) => setTimeout(resolve, typingDuration));
+          await new Promise(resolve => setTimeout(resolve, typingDuration));
         }
       } catch (error) {
         this.logger.warn(`simulateTyping delay skipped: ${error instanceof Error ? error.message : String(error)}`);
@@ -588,7 +592,7 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     const lowerBody = body.toLowerCase();
 
     // Check opt-out keywords
-    const isOptOut = OPT_OUT_KEYWORDS.some((kw) => lowerBody === kw || lowerBody.startsWith(`${kw} `));
+    const isOptOut = OPT_OUT_KEYWORDS.some(kw => lowerBody === kw || lowerBody.startsWith(`${kw} `));
 
     if (isOptOut) {
       lead.status = CampaignLeadStatus.OPT_OUT;
@@ -809,7 +813,7 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     if (dto.name !== undefined) {
       lead.name = dto.name;
     }
-    
+
     if (dto.customVariables !== undefined) {
       // Merge custom variables
       lead.customVariables = {
@@ -832,10 +836,28 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     const totalDispatched = stats.sent + stats.delivered + stats.read + stats.replied + stats.optOut;
     const funnel = [
       { stage: 'Targeted', count: stats.total, percent: 100 },
-      { stage: 'Dispatched', count: totalDispatched, percent: stats.total ? Math.round((totalDispatched / stats.total) * 100) : 0 },
-      { stage: 'Delivered', count: stats.delivered + stats.read + stats.replied, percent: totalDispatched ? Math.round(((stats.delivered + stats.read + stats.replied) / totalDispatched) * 100) : 0 },
-      { stage: 'Read', count: stats.read + stats.replied, percent: totalDispatched ? Math.round(((stats.read + stats.replied) / totalDispatched) * 100) : 0 },
-      { stage: 'Replied', count: stats.replied, percent: totalDispatched ? Math.round((stats.replied / totalDispatched) * 100) : 0 },
+      {
+        stage: 'Dispatched',
+        count: totalDispatched,
+        percent: stats.total ? Math.round((totalDispatched / stats.total) * 100) : 0,
+      },
+      {
+        stage: 'Delivered',
+        count: stats.delivered + stats.read + stats.replied,
+        percent: totalDispatched
+          ? Math.round(((stats.delivered + stats.read + stats.replied) / totalDispatched) * 100)
+          : 0,
+      },
+      {
+        stage: 'Read',
+        count: stats.read + stats.replied,
+        percent: totalDispatched ? Math.round(((stats.read + stats.replied) / totalDispatched) * 100) : 0,
+      },
+      {
+        stage: 'Replied',
+        count: stats.replied,
+        percent: totalDispatched ? Math.round((stats.replied / totalDispatched) * 100) : 0,
+      },
     ];
 
     // Hourly reply timeline
@@ -879,8 +901,9 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
   async exportCampaignCsv(campaignId: string, stream: NodeJS.WritableStream): Promise<void> {
     const campaign = await this.getCampaign(campaignId);
 
-    const extraVarArray = (campaign.columnsMetadata || [])
-      .filter(k => k.toLowerCase() !== 'phone' && k.toLowerCase() !== 'name');
+    const extraVarArray = (campaign.columnsMetadata || []).filter(
+      k => k.toLowerCase() !== 'phone' && k.toLowerCase() !== 'name',
+    );
 
     const headers = [
       'Phone Number',
@@ -896,10 +919,11 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     ];
 
     const escapeCsv = (val: any) => `"${String(val ?? '').replace(/"/g, '""')}"`;
-    
+
     stream.write(headers.join(',') + '\\n');
 
-    const queryStream = await this.leadRepo.createQueryBuilder('lead')
+    const queryStream = await this.leadRepo
+      .createQueryBuilder('lead')
       .where('lead.campaignId = :campaignId', { campaignId })
       .orderBy('lead.createdAt', 'ASC')
       .stream();
@@ -909,7 +933,7 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
         const row = [
           escapeCsv(data.lead_phone_number),
           escapeCsv(data.lead_name || ''),
-          ...extraVarArray.map((k) => escapeCsv(data.lead_custom_variables?.[k] || '')),
+          ...extraVarArray.map(k => escapeCsv(data.lead_custom_variables?.[k] || '')),
           escapeCsv(data.lead_status),
           escapeCsv(data.lead_sent_at ? new Date(data.lead_sent_at).toISOString() : ''),
           escapeCsv(data.lead_delivered_at ? new Date(data.lead_delivered_at).toISOString() : ''),
@@ -926,7 +950,7 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
         resolve();
       });
 
-      queryStream.on('error', (err) => {
+      queryStream.on('error', err => {
         stream.emit('error', err);
         reject(err);
       });

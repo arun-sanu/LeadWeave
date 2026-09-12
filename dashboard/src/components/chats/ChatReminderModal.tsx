@@ -72,7 +72,7 @@ export function ChatReminderModal({ open, onClose, activeChat }: ChatReminderMod
 
       success(`Reminder saved for ${activeChat.name || contactPhone}! Added to Notice Board.`);
       onClose();
-    } catch (err) {
+    } catch {
       toastError('Failed to save reminder to Notice Board');
     } finally {
       setSubmitting(false);

@@ -26,65 +26,6 @@ export function useLanMesh(userName: string) {
   const webrtcPeersRef = useRef<Map<string, SimplePeer.Instance>>(new Map());
   const myIdRef = useRef<string>('');
 
-  useEffect(() => {
-    // Connect to the signaling server
-    const socket = io('/lan-mesh', {
-      transports: ['websocket']
-    });
-    socketRef.current = socket;
-
-    socket.on('connect', () => {
-      setIsConnected(true);
-      myIdRef.current = socket.id || '';
-      socket.emit('join-mesh', { name: userName }, (response: any) => {
-        // We get a list of existing peers, we must send an offer to each of them
-        if (response.status === 'ok') {
-          response.peers.forEach((peerId: string) => {
-            initiateWebRtcConnection(peerId, true);
-          });
-        }
-      });
-    });
-
-    socket.on('disconnect', () => {
-      setIsConnected(false);
-      // Clean up WebRTC connections if signaling drops
-      webrtcPeersRef.current.forEach(peer => peer.destroy());
-      webrtcPeersRef.current.clear();
-      setPeers([]);
-    });
-
-    socket.on('peer-joined', (data: LanPeerInfo) => {
-      // The new peer will initiate the connection, we just wait for the offer
-      setPeers(prev => [...prev.filter(p => p.peerId !== data.peerId), data]);
-    });
-
-    socket.on('peer-disconnected', (peerId: string) => {
-      setPeers(prev => prev.filter(p => p.peerId !== peerId));
-      if (webrtcPeersRef.current.has(peerId)) {
-        webrtcPeersRef.current.get(peerId)?.destroy();
-        webrtcPeersRef.current.delete(peerId);
-      }
-    });
-
-    socket.on('webrtc-signal', (data: { senderPeerId: string, signal: any }) => {
-      const { senderPeerId, signal } = data;
-      let peer = webrtcPeersRef.current.get(senderPeerId);
-      
-      if (!peer) {
-        // We received an offer from someone else
-        peer = initiateWebRtcConnection(senderPeerId, false);
-      }
-      
-      peer.signal(signal);
-    });
-
-    return () => {
-      socket.disconnect();
-      webrtcPeersRef.current.forEach(peer => peer.destroy());
-    };
-  }, [userName]);
-
   const initiateWebRtcConnection = (targetPeerId: string, initiator: boolean) => {
     const peer = new SimplePeer({
       initiator,
@@ -116,6 +57,67 @@ export function useLanMesh(userName: string) {
     webrtcPeersRef.current.set(targetPeerId, peer);
     return peer;
   };
+
+  useEffect(() => {
+    // Connect to the signaling server
+    const socket = io('/lan-mesh', {
+      transports: ['websocket']
+    });
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      setIsConnected(true);
+      myIdRef.current = socket.id || '';
+      socket.emit('join-mesh', { name: userName }, (response: { status: string; peers: string[] }) => {
+        // We get a list of existing peers, we must send an offer to each of them
+        if (response.status === 'ok') {
+          response.peers.forEach((peerId: string) => {
+            initiateWebRtcConnection(peerId, true);
+          });
+        }
+      });
+    });
+
+    socket.on('disconnect', () => {
+      setIsConnected(false);
+      // Clean up WebRTC connections if signaling drops
+      webrtcPeersRef.current.forEach(peer => peer.destroy());
+      webrtcPeersRef.current.clear();
+      setPeers([]);
+    });
+
+    socket.on('peer-joined', (data: LanPeerInfo) => {
+      // The new peer will initiate the connection, we just wait for the offer
+      setPeers(prev => [...prev.filter(p => p.peerId !== data.peerId), data]);
+    });
+
+    socket.on('peer-disconnected', (peerId: string) => {
+      setPeers(prev => prev.filter(p => p.peerId !== peerId));
+      if (webrtcPeersRef.current.has(peerId)) {
+        webrtcPeersRef.current.get(peerId)?.destroy();
+        webrtcPeersRef.current.delete(peerId);
+      }
+    });
+
+    socket.on('webrtc-signal', (data: { senderPeerId: string, signal: unknown }) => {
+      const { senderPeerId, signal } = data;
+      let peer = webrtcPeersRef.current.get(senderPeerId);
+      
+      if (!peer) {
+        // We received an offer from someone else
+        peer = initiateWebRtcConnection(senderPeerId, false);
+      }
+      
+      peer.signal(signal);
+    });
+
+    const peersMap = webrtcPeersRef.current;
+    return () => {
+      socket.disconnect();
+      peersMap.forEach(peer => peer.destroy());
+    };
+  }, [userName]);
+
 
   const sendMessage = useCallback((text: string) => {
     const msg: ChatMessage = {

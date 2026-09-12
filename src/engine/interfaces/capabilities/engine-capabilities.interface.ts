@@ -87,4 +87,3 @@ export interface ChatHistoryCapability {
     signal?: AbortSignal,
   ): Promise<IncomingMessage[]>;
 }
-

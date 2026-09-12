@@ -52,7 +52,6 @@ export function applySessionScopeToQuery<T>(
   sessionColumn = 'sessionId',
   explicitScope?: string[] | null,
 ): any {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { getActiveSessionScope } = require('../services/request-context');
   const scope = explicitScope !== undefined ? explicitScope : getActiveSessionScope();
   if (scope === null || scope === undefined) {
@@ -77,7 +76,6 @@ export function applyTenantScopeToQuery<T>(
   companyColumn = 'companyId',
   explicitCompanyId?: string | null,
 ): any {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { getActiveTenantScope } = require('../services/request-context');
   const companyId = explicitCompanyId !== undefined ? explicitCompanyId : getActiveTenantScope();
   if (!companyId) {
@@ -86,4 +84,3 @@ export function applyTenantScopeToQuery<T>(
   const colExpr = qb.alias ? `${qb.alias}.${companyColumn}` : companyColumn;
   return qb.andWhere(`${colExpr} = :__companyId`, { __companyId: companyId });
 }
-

@@ -26,9 +26,7 @@ export class SupabaseService {
     this.supabaseUrl = this.configService.get<string>('security.supabase.url') || process.env.SUPABASE_URL || '';
     this.anonKey = this.configService.get<string>('security.supabase.anonKey') || process.env.SUPABASE_ANON_KEY || '';
     this.serviceRoleKey =
-      this.configService.get<string>('security.supabase.serviceRoleKey') ||
-      process.env.SUPABASE_SERVICE_ROLE_KEY ||
-      '';
+      this.configService.get<string>('security.supabase.serviceRoleKey') || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
     this.jwtSecret =
       this.configService.get<string>('security.supabase.jwtSecret') || process.env.SUPABASE_JWT_SECRET || '';
 
@@ -41,7 +39,9 @@ export class SupabaseService {
       });
       this.logger.log('Supabase client initialized successfully');
     } else {
-      this.logger.log('Supabase credentials not fully configured; offline JWT verification will be used if secret provided');
+      this.logger.log(
+        'Supabase credentials not fully configured; offline JWT verification will be used if secret provided',
+      );
     }
   }
 
@@ -67,11 +67,7 @@ export class SupabaseService {
         if (decoded && decoded.sub) {
           const userMeta = (decoded['user_metadata'] as Record<string, unknown>) || {};
           const appMeta = (decoded['app_metadata'] as Record<string, unknown>) || {};
-          const userRole =
-            userMeta['role'] ||
-            appMeta['role'] ||
-            decoded['role'] ||
-            'authenticated';
+          const userRole = userMeta['role'] || appMeta['role'] || decoded['role'] || 'authenticated';
 
           const companyId =
             (userMeta['company_id'] as string) ||
@@ -80,8 +76,7 @@ export class SupabaseService {
             (appMeta['companyId'] as string);
 
           const assignedSessions =
-            (userMeta['assigned_sessions'] as string[]) ||
-            (userMeta['assignedSessions'] as string[]);
+            (userMeta['assigned_sessions'] as string[]) || (userMeta['assignedSessions'] as string[]);
 
           authUser = {
             id: decoded.sub,
@@ -112,11 +107,7 @@ export class SupabaseService {
         const user: User = data.user;
         const userMeta = user.user_metadata || {};
         const appMeta = user.app_metadata || {};
-        const userRole =
-          userMeta['role'] ||
-          appMeta['role'] ||
-          user.role ||
-          'authenticated';
+        const userRole = userMeta['role'] || appMeta['role'] || user.role || 'authenticated';
 
         const companyId =
           (userMeta['company_id'] as string) ||
@@ -125,8 +116,7 @@ export class SupabaseService {
           (appMeta['companyId'] as string);
 
         const assignedSessions =
-          (userMeta['assigned_sessions'] as string[]) ||
-          (userMeta['assignedSessions'] as string[]);
+          (userMeta['assigned_sessions'] as string[]) || (userMeta['assignedSessions'] as string[]);
 
         authUser = {
           id: user.id,
@@ -202,9 +192,7 @@ export class SupabaseService {
       if (data.companyId) payload.company_id = data.companyId;
       if (data.activeSessionsCount !== undefined) payload.active_sessions_count = data.activeSessionsCount;
 
-      const { error } = await this.supabaseClient
-        .from('instances')
-        .upsert(payload, { onConflict: 'id' });
+      const { error } = await this.supabaseClient.from('instances').upsert(payload, { onConflict: 'id' });
 
       if (error) {
         this.logger.debug(`Failed to sync instance metadata to Supabase: ${error.message}`);
@@ -275,4 +263,3 @@ export class SupabaseService {
     }
   }
 }
-

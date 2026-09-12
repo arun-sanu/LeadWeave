@@ -39,9 +39,7 @@ export function resetMessageSendMetrics(): void {
 
 export function renderOutboundMessageMetrics(): string[] {
   const lines: string[] = [];
-  lines.push(
-    '# HELP leadweave_outbound_messages_total Outbound messages dispatched through WhatsApp engines.',
-  );
+  lines.push('# HELP leadweave_outbound_messages_total Outbound messages dispatched through WhatsApp engines.');
   lines.push('# TYPE leadweave_outbound_messages_total counter');
   if (sendCounts.size === 0) {
     lines.push('leadweave_outbound_messages_total 0');

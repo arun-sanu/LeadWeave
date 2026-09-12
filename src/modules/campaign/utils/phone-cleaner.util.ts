@@ -5,4 +5,3 @@ export function cleanPhoneNumber(raw: string): { cleaned: string; chatId: string
     chatId: `${digitsOnly}@c.us`,
   };
 }
-

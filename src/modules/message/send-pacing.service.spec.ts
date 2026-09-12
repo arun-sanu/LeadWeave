@@ -249,7 +249,13 @@ describe('SendPacingService', () => {
       const findOne = jest.fn().mockResolvedValue(sessionAged(0));
       const exists = jest.fn().mockResolvedValue(true);
       const configService = {
-        get: () => ({ ...computeSendPacingConfig({}), enabled: true, breakerThreshold: 1, breakerCooldownMs: 30_000, warmupSchedule: [1000] }),
+        get: () => ({
+          ...computeSendPacingConfig({}),
+          enabled: true,
+          breakerThreshold: 1,
+          breakerCooldownMs: 30_000,
+          warmupSchedule: [1000],
+        }),
       } as unknown as ConfigService;
 
       const replicaA = new SendPacingService(
@@ -262,7 +268,11 @@ describe('SendPacingService', () => {
 
       // Replica A experiences send failure that trips breaker
       replicaA.recordSendFailure('s1');
-      expect(cacheService.setPacingBreaker).toHaveBeenCalledWith('s1', expect.objectContaining({ consecutiveFailures: 1 }), 30);
+      expect(cacheService.setPacingBreaker).toHaveBeenCalledWith(
+        's1',
+        expect.objectContaining({ consecutiveFailures: 1 }),
+        30,
+      );
 
       // Replica B receives request for same session; checks Redis and observes trip from Replica A
       cacheService.getPacingBreaker.mockResolvedValueOnce({ consecutiveFailures: 1, openedAt: Date.now() });

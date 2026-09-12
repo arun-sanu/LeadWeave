@@ -6,10 +6,7 @@ import { LeadSheetController } from './lead-sheet.controller';
 import { ContactModule } from '../contact/contact.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([LeadRecord], 'data'),
-    ContactModule,
-  ],
+  imports: [TypeOrmModule.forFeature([LeadRecord], 'data'), ContactModule],
   controllers: [LeadSheetController],
   providers: [LeadSheetService],
   exports: [LeadSheetService],

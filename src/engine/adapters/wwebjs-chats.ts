@@ -31,7 +31,9 @@ export class WwebjsChats {
     } catch (error) {
       // Same split every sibling read makes (see getChatsByLabel): a dead page is a 503 and an
       // early death signal, not an opaque 500 under a status that still says READY (#1081).
-      this.host.logger.error(`getChats failed with error: ${error instanceof Error ? error.stack || error.message : String(error)}`);
+      this.host.logger.error(
+        `getChats failed with error: ${error instanceof Error ? error.stack || error.message : String(error)}`,
+      );
       if (this.host.isPageTransportError(error)) {
         this.host.reportIfPageTransportError(error, 'getChats');
         throw new EngineTransportError('Transport died while listing chats');

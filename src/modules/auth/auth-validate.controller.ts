@@ -51,7 +51,8 @@ export class AuthValidateController {
     const authHeader = req.headers['authorization'];
     const rawToken = dto?.token || (authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : undefined);
 
-    const isSecure = process.env.NODE_ENV === 'production' || req.secure || req.headers['x-forwarded-proto'] === 'https';
+    const isSecure =
+      process.env.NODE_ENV === 'production' || req.secure || req.headers['x-forwarded-proto'] === 'https';
     const cookieOptions = {
       httpOnly: true,
       secure: isSecure,

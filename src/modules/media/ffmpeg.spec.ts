@@ -71,7 +71,10 @@ describe('ffmpeg encoder arguments', () => {
  * every conversion would still succeed — which is exactly why it is pinned here.
  */
 describe('ffmpeg invocation shape', () => {
-  const args = buildFfmpegArgs('/tmp/leadweave-convert-x/in.bin', '/tmp/leadweave-convert-x/out.ogg', ['-c:a', 'libopus']);
+  const args = buildFfmpegArgs('/tmp/leadweave-convert-x/in.bin', '/tmp/leadweave-convert-x/out.ogg', [
+    '-c:a',
+    'libopus',
+  ]);
 
   it('confines ffmpeg to the file protocol', () => {
     expect(args[args.indexOf('-protocol_whitelist') + 1]).toBe('file');

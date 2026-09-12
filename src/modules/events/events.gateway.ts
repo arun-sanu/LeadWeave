@@ -243,7 +243,8 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     // Accept credential via Socket.IO's `auth` field (apiKey or token), headers (x-api-key / authorization), or HttpOnly cookies.
     const handshakeAuth = client.handshake.auth as { apiKey?: string; token?: string } | undefined;
     const authHeader = client.handshake.headers['authorization'];
-    const bearerToken = typeof authHeader === 'string' && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : undefined;
+    const bearerToken =
+      typeof authHeader === 'string' && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : undefined;
     const cookieHeader = client.handshake.headers['cookie'];
     let cookieApiKey: string | undefined;
     let cookieToken: string | undefined;
@@ -253,7 +254,13 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
       const matchToken = /(?:^|;\s*)leadweave_token=([^;]+)/.exec(cookieHeader);
       if (matchToken) cookieToken = decodeURIComponent(matchToken[1]);
     }
-    const apiKey = handshakeAuth?.apiKey || handshakeAuth?.token || (client.handshake.headers['x-api-key'] as string) || bearerToken || cookieApiKey || cookieToken;
+    const apiKey =
+      handshakeAuth?.apiKey ||
+      handshakeAuth?.token ||
+      (client.handshake.headers['x-api-key'] as string) ||
+      bearerToken ||
+      cookieApiKey ||
+      cookieToken;
 
     if (!apiKey) {
       this.logger.warn(`Client ${client.id} rejected: No API key provided`);
@@ -403,7 +410,12 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     const clientIp = this.resolveClientIp(client);
     let subscriberKey: { allowedSessions?: string[] | null } | null = null;
     try {
-      if (rawApiKey && this.supabaseService?.isEnabled?.() && !rawApiKey.startsWith('owa_') && rawApiKey.includes('.')) {
+      if (
+        rawApiKey &&
+        this.supabaseService?.isEnabled?.() &&
+        !rawApiKey.startsWith('owa_') &&
+        rawApiKey.includes('.')
+      ) {
         const supabaseUser = await this.supabaseService.verifyToken(rawApiKey).catch(() => null);
         if (supabaseUser) {
           subscriberKey = { allowedSessions: [] };
@@ -416,7 +428,10 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
       subscriberKey = null;
     }
     if (!subscriberKey) {
-      client.emit('message', this.createError('UNAUTHORIZED', 'API key or session token is no longer valid', requestId));
+      client.emit(
+        'message',
+        this.createError('UNAUTHORIZED', 'API key or session token is no longer valid', requestId),
+      );
       client.disconnect();
       return this.createError('UNAUTHORIZED', 'API key or session token is no longer valid', requestId);
     }

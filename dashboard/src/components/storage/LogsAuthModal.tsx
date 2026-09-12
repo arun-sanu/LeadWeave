@@ -109,7 +109,7 @@ export function LogsAuthModal({ isOpen, onClose, onAuthenticated }: LogsAuthModa
         ) {
           isAuthorized = true;
           authenticatedRole = userRole || (emailLower.includes('super') ? 'superadmin' : 'developer');
-          setRole(authenticatedRole as any);
+          setRole(authenticatedRole as import('../../types/role').UserRole);
         } else {
           throw new Error('Access Denied: Your Supabase account does not have Superadmin, Developer or Support privileges.');
         }
@@ -134,7 +134,7 @@ export function LogsAuthModal({ isOpen, onClose, onAuthenticated }: LogsAuthModa
             : idLower.includes('support')
             ? 'support'
             : 'superadmin';
-          setRole(authenticatedRole as any);
+          setRole(authenticatedRole as import('../../types/role').UserRole);
         } else if (currentHasAccess && password.length >= 4) {
           isAuthorized = true;
           authenticatedRole = role || 'superadmin';

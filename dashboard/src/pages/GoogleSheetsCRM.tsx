@@ -25,7 +25,7 @@ export function GoogleSheetsCRM() {
   useDocumentTitle('Google Sheets CRM - LeadWeave');
   const { success, error } = useToast();
   const { data: allSessions = [] } = useSessionsQuery();
-  const readySessions = allSessions.filter((s: any) => s.status === 'ready');
+  const readySessions = allSessions.filter((s) => (s as { status: string; id: string }).status === 'ready');
 
   // Google Sheets Integration Modal State
   const [showSheetsModal, setShowSheetsModal] = useState(false);
@@ -84,7 +84,7 @@ export function GoogleSheetsCRM() {
   };
 
   // Live CRM Tracked Leads State
-  const [trackedLeads, setTrackedLeads] = useState<any[]>([]);
+  const [trackedLeads, setTrackedLeads] = useState<Record<string, unknown>[]>([]);
   const [isLoadingLeads, setIsLoadingLeads] = useState(false);
 
   return (
@@ -112,7 +112,7 @@ export function GoogleSheetsCRM() {
                 const activeSess = readySessions[0]?.id || 'default';
                 const res = await leadSheetApi.getAppsScriptTemplate(activeSess);
                 setSheetsScript(res.script);
-              } catch (err: any) {
+              } catch {
                 error('Failed to load Apps Script template');
               } finally {
                 setIsLoadingScript(false);
@@ -224,7 +224,7 @@ export function GoogleSheetsCRM() {
                 const res = await leadSheetApi.getLeads({ sessionId: activeSess });
                 setTrackedLeads(res || []);
                 success('Refreshed pipeline');
-              } catch (err: any) {
+              } catch {
                 error('Failed to refresh CRM leads');
               } finally {
                 setIsLoadingLeads(false);

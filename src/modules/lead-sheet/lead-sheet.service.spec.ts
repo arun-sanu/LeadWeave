@@ -93,10 +93,7 @@ describe('LeadSheetService', () => {
 
       expect(res.success).toBe(true);
       expect(res.status).toBe(LeadStatus.GREETING_SENT);
-      expect(mockEngine.sendTextMessage).toHaveBeenCalledWith(
-        '15550002222@c.us',
-        expect.stringContaining('Alice'),
-      );
+      expect(mockEngine.sendTextMessage).toHaveBeenCalledWith('15550002222@c.us', expect.stringContaining('Alice'));
     });
   });
 

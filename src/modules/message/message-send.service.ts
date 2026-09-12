@@ -765,7 +765,9 @@ export class MessageSendService {
       try {
         await engine.sendChatState(chatId, 'recording');
       } catch (error) {
-        this.logger.warn(`simulateRecording presence skipped: ${error instanceof Error ? error.message : String(error)}`);
+        this.logger.warn(
+          `simulateRecording presence skipped: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
     }
     try {

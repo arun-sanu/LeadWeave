@@ -15,7 +15,7 @@ export class AddSessionUserIdColumn1786500000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    if (await queryRunner.hasTable('sessions') && (await queryRunner.hasColumn('sessions', 'userId'))) {
+    if ((await queryRunner.hasTable('sessions')) && (await queryRunner.hasColumn('sessions', 'userId'))) {
       await queryRunner.query(`ALTER TABLE "sessions" DROP COLUMN "userId"`);
     }
   }

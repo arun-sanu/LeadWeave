@@ -171,7 +171,10 @@ describe('InfraStatusController.getStatus storage (reads the real storage.localP
   });
 
   it('reports the bucket in S3 mode so the active backend is visible', async () => {
-    const status = await buildController({ 'storage.type': 's3', 'storage.s3.bucket': 'my-leadweave-bucket' }).getStatus();
+    const status = await buildController({
+      'storage.type': 's3',
+      'storage.s3.bucket': 'my-leadweave-bucket',
+    }).getStatus();
     expect(status.storage.type).toBe('s3');
     expect(status.storage.bucket).toBe('my-leadweave-bucket');
   });

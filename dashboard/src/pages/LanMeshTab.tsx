@@ -123,7 +123,7 @@ export const LanMeshTab: React.FC = () => {
             Scanning for peers...
           </div>
         ) : (
-          peers.map((peer: any) => (
+          peers.map((peer: import('../contexts/LanMeshContext').LanPeerInfo) => (
             <div key={peer.peerId} className="chat-list-item" style={{ cursor: 'default' }}>
               <div className="chat-item-avatar-wrapper">
                 <div className="chat-item-avatar">
@@ -155,7 +155,7 @@ export const LanMeshTab: React.FC = () => {
               <p style={{ fontSize: '0.875rem', textAlign: 'center', maxWidth: '200px' }}>Mesh network is active. Say hello!</p>
             </div>
           ) : (
-            messages.map((msg: any, index: number) => {
+            messages.map((msg: import('../contexts/LanMeshContext').ChatMessage, index: number) => {
               const isMine = msg.senderName === userName;
               const isFirstInGroup = index === 0 || messages[index - 1].senderName !== msg.senderName;
               

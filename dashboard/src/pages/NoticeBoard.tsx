@@ -561,7 +561,7 @@ export function NoticeBoard() {
                   className="form-control"
                   aria-label="Task Type"
                   value={taskType}
-                  onChange={e => setTaskType(e.target.value as any)}
+                  onChange={e => setTaskType(e.target.value as 'call' | 'whatsapp' | 'quote' | 'general')}
                   style={{ width: '100%', background: '#0f172a' }}
                 >
                   <option value="call">📞 Callback Request</option>
@@ -579,7 +579,7 @@ export function NoticeBoard() {
                   className="form-control"
                   aria-label="Task Priority"
                   value={taskPriority}
-                  onChange={e => setTaskPriority(e.target.value as any)}
+                  onChange={e => setTaskPriority(e.target.value as 'low' | 'medium' | 'high' | 'urgent')}
                   style={{ width: '100%', background: '#0f172a' }}
                 >
                   <option value="low">Low Priority</option>

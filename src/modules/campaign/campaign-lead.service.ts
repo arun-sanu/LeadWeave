@@ -69,24 +69,17 @@ export class CampaignLeadService {
     const limit = query.limit || 50;
     const skip = (page - 1) * limit;
 
-    const qb = this.leadRepo
-      .createQueryBuilder('lead')
-      .where('lead.campaignId = :campaignId', { campaignId });
+    const qb = this.leadRepo.createQueryBuilder('lead').where('lead.campaignId = :campaignId', { campaignId });
 
     if (query.status) {
       qb.andWhere('lead.status = :status', { status: query.status });
     }
 
     if (query.search) {
-      qb.andWhere(
-        '(lead.phoneNumber LIKE :search OR lead.name LIKE :search)',
-        { search: `%${query.search}%` },
-      );
+      qb.andWhere('(lead.phoneNumber LIKE :search OR lead.name LIKE :search)', { search: `%${query.search}%` });
     }
 
-    qb.orderBy('lead.createdAt', 'ASC')
-      .skip(skip)
-      .take(limit);
+    qb.orderBy('lead.createdAt', 'ASC').skip(skip).take(limit);
 
     const [items, total] = await qb.getManyAndCount();
     return { items, total };
@@ -139,4 +132,3 @@ export class CampaignLeadService {
     }
   }
 }
-

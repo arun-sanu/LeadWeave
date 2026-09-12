@@ -15,8 +15,8 @@ describe('CampaignService', () => {
 
   beforeEach(async () => {
     mockCampaignRepo = {
-      create: jest.fn((entity) => ({ id: 'camp-123', ...entity })),
-      save: jest.fn(async (entity) => entity),
+      create: jest.fn(entity => ({ id: 'camp-123', ...entity })),
+      save: jest.fn(async entity => entity),
       update: jest.fn(async () => ({ affected: 1 })),
       findOne: jest.fn(),
       find: jest.fn(),
@@ -24,8 +24,8 @@ describe('CampaignService', () => {
     };
 
     mockLeadRepo = {
-      create: jest.fn((entity) => ({ id: 'lead-123', ...entity })),
-      save: jest.fn(async (entity) => entity),
+      create: jest.fn(entity => ({ id: 'lead-123', ...entity })),
+      save: jest.fn(async entity => entity),
       findOne: jest.fn(),
       find: jest.fn(),
       count: jest.fn(),
@@ -108,7 +108,17 @@ describe('CampaignService', () => {
       mockLeadRepo.findOne.mockResolvedValue(mockLead);
       mockCampaignRepo.findOne.mockResolvedValue({
         id: 'camp-123',
-        stats: { total: 1, pending: 0, sent: 1, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 1,
+          pending: 0,
+          sent: 1,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
       });
       mockLeadRepo.count.mockResolvedValue(1);
 
@@ -135,7 +145,17 @@ describe('CampaignService', () => {
       mockLeadRepo.findOne.mockResolvedValue(mockLead);
       mockCampaignRepo.findOne.mockResolvedValue({
         id: 'camp-123',
-        stats: { total: 1, pending: 0, sent: 1, delivered: 0, read: 0, replied: 0, optOut: 0, failed: 0, responseRate: 0 },
+        stats: {
+          total: 1,
+          pending: 0,
+          sent: 1,
+          delivered: 0,
+          read: 0,
+          replied: 0,
+          optOut: 0,
+          failed: 0,
+          responseRate: 0,
+        },
       });
       mockLeadRepo.count.mockResolvedValue(1);
 
@@ -248,9 +268,9 @@ describe('CampaignService', () => {
 
       mockCampaignRepo.findOne.mockResolvedValue(mockCampaign);
 
-      await expect(
-        service.updateCampaign('camp-101', { name: 'Updated Name' }),
-      ).rejects.toThrow('Campaign cannot be edited while in \'running\' state');
+      await expect(service.updateCampaign('camp-101', { name: 'Updated Name' })).rejects.toThrow(
+        "Campaign cannot be edited while in 'running' state",
+      );
     });
   });
 

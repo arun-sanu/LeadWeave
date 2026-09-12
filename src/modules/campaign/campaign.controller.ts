@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Body,
-  Param,
-  Query,
-  Res,
-  Header,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param, Query, Res, Header, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { CampaignService } from './campaign.service';
@@ -52,11 +41,7 @@ export class CampaignController {
   @RequireUnscopedKey()
   @ApiOperation({ summary: 'Update configuration of an unfinished or paused campaign' })
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
-  async updateCampaign(
-    @Param('id') id: string,
-    @Body() dto: UpdateCampaignDto,
-    @CurrentApiKey() _apiKey?: ApiKey,
-  ) {
+  async updateCampaign(@Param('id') id: string, @Body() dto: UpdateCampaignDto, @CurrentApiKey() _apiKey?: ApiKey) {
     return this.campaignService.updateCampaign(id, dto);
   }
 
@@ -88,11 +73,7 @@ export class CampaignController {
   @RequireUnscopedKey()
   @ApiOperation({ summary: 'Dynamically add more numbers/leads to an existing campaign' })
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
-  async addLeads(
-    @Param('id') id: string,
-    @Body() dto: AddCampaignLeadsDto,
-    @CurrentApiKey() _apiKey?: ApiKey,
-  ) {
+  async addLeads(@Param('id') id: string, @Body() dto: AddCampaignLeadsDto, @CurrentApiKey() _apiKey?: ApiKey) {
     return this.campaignService.addLeads(id, dto);
   }
 
@@ -115,11 +96,7 @@ export class CampaignController {
   @ApiOperation({ summary: 'Manually dispatch a specific lead 1-by-1 from the spreadsheet' })
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
   @ApiParam({ name: 'leadId', description: 'Lead UUID' })
-  async sendSingleLead(
-    @Param('id') id: string,
-    @Param('leadId') leadId: string,
-    @CurrentApiKey() _apiKey?: ApiKey,
-  ) {
+  async sendSingleLead(@Param('id') id: string, @Param('leadId') leadId: string, @CurrentApiKey() _apiKey?: ApiKey) {
     return this.campaignService.sendSingleLead(id, leadId);
   }
 
@@ -127,10 +104,7 @@ export class CampaignController {
   @RequireUnscopedKey()
   @ApiOperation({ summary: 'Manually dispatch the next pending lead 1-by-1 in the spreadsheet' })
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
-  async sendNextLead(
-    @Param('id') id: string,
-    @CurrentApiKey() _apiKey?: ApiKey,
-  ) {
+  async sendNextLead(@Param('id') id: string, @CurrentApiKey() _apiKey?: ApiKey) {
     return this.campaignService.sendNextLead(id);
   }
 
@@ -138,11 +112,7 @@ export class CampaignController {
   @RequireUnscopedKey()
   @ApiOperation({ summary: 'Get spreadsheet rows for a campaign with search and status filters' })
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
-  async listLeads(
-    @Param('id') id: string,
-    @Query() query: CampaignLeadsQueryDto,
-    @CurrentApiKey() _apiKey?: ApiKey,
-  ) {
+  async listLeads(@Param('id') id: string, @Query() query: CampaignLeadsQueryDto, @CurrentApiKey() _apiKey?: ApiKey) {
     return this.campaignService.listLeads(id, query);
   }
 
@@ -159,11 +129,7 @@ export class CampaignController {
   @ApiOperation({ summary: 'Export campaign spreadsheet with delivery and response data as CSV' })
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
   @Header('Content-Type', 'text/csv')
-  async exportCsv(
-    @Param('id') id: string,
-    @Res() res: Response,
-    @CurrentApiKey() _apiKey?: ApiKey,
-  ) {
+  async exportCsv(@Param('id') id: string, @Res() res: Response, @CurrentApiKey() _apiKey?: ApiKey) {
     res.setHeader('Content-Disposition', `attachment; filename="campaign-${id}-export.csv"`);
     res.status(HttpStatus.OK);
     await this.campaignService.exportCampaignCsv(id, res);

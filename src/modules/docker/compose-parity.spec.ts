@@ -189,16 +189,19 @@ describe('DockerService managed specs ↔ docker-compose.yml parity', () => {
     });
   });
 
-  it.each(PROFILES)('%s: sets no CPU/memory/PID limits on either path (only leadweave-api is limited)', async profile => {
-    const svc = compose.services[profile];
-    expect(svc.mem_limit).toBeUndefined();
-    expect(svc.pids_limit).toBeUndefined();
-    expect(svc.deploy).toBeUndefined();
-    const cfg = await capture(profile);
-    expect(cfg.HostConfig.Memory).toBeUndefined();
-    expect(cfg.HostConfig.NanoCpus).toBeUndefined();
-    expect(cfg.HostConfig.PidsLimit).toBeUndefined();
-  });
+  it.each(PROFILES)(
+    '%s: sets no CPU/memory/PID limits on either path (only leadweave-api is limited)',
+    async profile => {
+      const svc = compose.services[profile];
+      expect(svc.mem_limit).toBeUndefined();
+      expect(svc.pids_limit).toBeUndefined();
+      expect(svc.deploy).toBeUndefined();
+      const cfg = await capture(profile);
+      expect(cfg.HostConfig.Memory).toBeUndefined();
+      expect(cfg.HostConfig.NanoCpus).toBeUndefined();
+      expect(cfg.HostConfig.PidsLimit).toBeUndefined();
+    },
+  );
 
   it('postgres: provisions the fixed built-in credentials; compose defaults agree on user/db only', async () => {
     const cfg = await capture('postgres');

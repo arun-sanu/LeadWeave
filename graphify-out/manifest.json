@@ -18,9 +18,9 @@
     "semantic_hash": "af147f678eb3c8257140b7892cd166a1"
   },
   "dashboard/src/App.tsx": {
-    "mtime": 1789031705.2731133,
-    "seen": 1789197346.7261612,
-    "ast_hash": "e2e4a64b720101aecdbfacda1703b04c",
+    "mtime": 1789203583.3317513,
+    "seen": 1789205399.6707652,
+    "ast_hash": "f452f530ede99adcd0f580bdfa00712c",
     "semantic_hash": ""
   },
   "dashboard/src/a11y-controls.test.ts": {
@@ -54,9 +54,9 @@
     "semantic_hash": "16b02c9b1220a43bf252034a553b0cb2"
   },
   "dashboard/src/components/Layout.tsx": {
-    "mtime": 1789031705.285113,
-    "seen": 1789197346.7261696,
-    "ast_hash": "b975af3a61b6062f0482ddc69a3e336b",
+    "mtime": 1789204399.1059082,
+    "seen": 1789205399.6707742,
+    "ast_hash": "2c0ef578ed14df6d950b355558aa29ff",
     "semantic_hash": ""
   },
   "dashboard/src/components/Modal.tsx": {
@@ -264,9 +264,9 @@
     "semantic_hash": ""
   },
   "dashboard/src/hooks/useWebSocket.ts": {
-    "mtime": 1788769141.1104958,
-    "seen": 1788855294.2626393,
-    "ast_hash": "5cea4835b191cdffc93629d4038e4574",
+    "mtime": 1789203583.3637512,
+    "seen": 1789205399.6708398,
+    "ast_hash": "3188eb386615853ba4dc228db1393d56",
     "semantic_hash": ""
   },
   "dashboard/src/i18n/index.ts": {
@@ -420,9 +420,9 @@
     "semantic_hash": ""
   },
   "dashboard/src/utils/authLifecycle.test.ts": {
-    "mtime": 1789196909.9765704,
-    "seen": 1789197346.7263038,
-    "ast_hash": "28929870bee3ef7082cb8bb147231c53",
+    "mtime": 1789203663.4156053,
+    "seen": 1789205399.6709023,
+    "ast_hash": "d3b09f813dfa7f85b16d4d08f3b0249e",
     "semantic_hash": ""
   },
   "dashboard/src/utils/authLifecycle.ts": {
@@ -810,9 +810,9 @@
     "semantic_hash": "123ac955488f3850fe733a468e7b8dff"
   },
   "dashboard/vite.config.ts": {
-    "mtime": 1788763465.6595855,
-    "seen": 1788763529.3480747,
-    "ast_hash": "a43100a82e784c3965a1cb7ad8062fec",
+    "mtime": 1789208674.5731406,
+    "seen": 1789209224.4469056,
+    "ast_hash": "53a90418dbc278f6e28120c7a79e9f38",
     "semantic_hash": ""
   },
   "docker-entrypoint.sh": {
@@ -834,9 +834,9 @@
     "semantic_hash": "fa439650fa28a1a7aa8c2b6d81c8cc20"
   },
   "package.json": {
-    "mtime": 1788859126.4579582,
-    "seen": 1788863753.7689705,
-    "ast_hash": "170a31e12c71ebc1c238a5964692ec3a",
+    "mtime": 1789208796.507671,
+    "seen": 1789209224.446921,
+    "ast_hash": "92991be99e36d1d8f60933b7075afe10",
     "semantic_hash": ""
   },
   "scripts/backup.sh": {
@@ -846,10 +846,10 @@
     "semantic_hash": ""
   },
   "scripts/check-audit.mjs": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0880656,
-    "ast_hash": "9a9f2d4a9151e29656198d25bd15b18c",
-    "semantic_hash": "9a9f2d4a9151e29656198d25bd15b18c"
+    "mtime": 1789208437.7120445,
+    "seen": 1789209224.4469256,
+    "ast_hash": "5805b3e490f78a81902734110a67467e",
+    "semantic_hash": ""
   },
   "scripts/check-audit.spec.mjs": {
     "mtime": 1787218536.0,
@@ -858,15 +858,15 @@
     "semantic_hash": "6fbdc4aef143b5972bf61f4eb1482fad"
   },
   "scripts/check-chart-behaviour.mjs": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2599137,
-    "ast_hash": "a74f27e5bad9f49eb93d0382a1dd73df",
+    "mtime": 1789208148.4437282,
+    "seen": 1789209224.4469275,
+    "ast_hash": "4e7fd32d62af375fbf89745d2c2ebe6e",
     "semantic_hash": ""
   },
   "scripts/check-contract-shapes.mjs": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2599144,
-    "ast_hash": "b008c56b9a883f3dd15a8d20ad9b25f2",
+    "mtime": 1789201683.3746011,
+    "seen": 1789202064.7955918,
+    "ast_hash": "80c5531fd813cdc24584fb3229d8fdd3",
     "semantic_hash": ""
   },
   "scripts/check-contract-shapes.spec.mjs": {
@@ -906,9 +906,9 @@
     "semantic_hash": "1b79eeaf50031cf54125440a46420915"
   },
   "scripts/check-sdk-events.mjs": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2599206,
-    "ast_hash": "723abe728752b3ba8debdca652e5460d",
+    "mtime": 1789201683.3746011,
+    "seen": 1789202064.7955973,
+    "ast_hash": "d7f7c7e39b5e966a0243cb8b773c18dd",
     "semantic_hash": ""
   },
   "scripts/check-sdk-routes.mjs": {
@@ -1146,15 +1146,15 @@
     "semantic_hash": ""
   },
   "sdk/go/example_test.go": {
-    "mtime": 1787797807.6846416,
-    "seen": 1787797840.2599597,
-    "ast_hash": "aa4dcdcb9521024ff4533add36a132d7",
+    "mtime": 1789201467.5987203,
+    "seen": 1789202064.7956376,
+    "ast_hash": "05e581ad0732c328ba6900e516194b61",
     "semantic_hash": ""
   },
   "sdk/go/go.mod": {
-    "mtime": 1787797807.6846416,
-    "seen": 1787797840.259961,
-    "ast_hash": "af26d388ede301174eb84d146e547e78",
+    "mtime": 1789201467.5987203,
+    "seen": 1789202064.7956383,
+    "ast_hash": "5e2fd80ac82714c153ca34326eb98a59",
     "semantic_hash": ""
   },
   "sdk/go/groups.go": {
@@ -1368,15 +1368,15 @@
     "semantic_hash": ""
   },
   "sdk/java/pom.xml": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2599897,
-    "ast_hash": "ba4b5bfc05bae399b0f62f7f42fbbead",
+    "mtime": 1789208111.876209,
+    "seen": 1789209224.4470024,
+    "ast_hash": "b2bcbc1bc7a46b8df51959d3b0dd8bbe",
     "semantic_hash": ""
   },
   "sdk/javascript/package.json": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.260168,
-    "ast_hash": "7223734a7cab41cb7740ccebbbae1fa7",
+    "mtime": 1789201621.5052993,
+    "seen": 1789202064.7958279,
+    "ast_hash": "30b21c8706615af7d87d584b106dc118",
     "semantic_hash": ""
   },
   "sdk/javascript/scripts/smoke.mjs": {
@@ -1386,9 +1386,9 @@
     "semantic_hash": ""
   },
   "sdk/javascript/src/client.ts": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2601697,
-    "ast_hash": "6a4f91a62e6721cca2e138d6d76999f0",
+    "mtime": 1789201600.1648738,
+    "seen": 1789202064.7958295,
+    "ast_hash": "3fab5da5709e1ae9929c6a03dcbd1c09",
     "semantic_hash": ""
   },
   "sdk/javascript/src/errors.ts": {
@@ -1404,9 +1404,9 @@
     "semantic_hash": ""
   },
   "sdk/javascript/src/index.ts": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2601724,
-    "ast_hash": "0f60de51cd44da2019ddc3a2f723bbeb",
+    "mtime": 1789201600.1648738,
+    "seen": 1789202064.795832,
+    "ast_hash": "25e954388d8f0654083c4494645e7467",
     "semantic_hash": ""
   },
   "sdk/javascript/src/resources/calls.ts": {
@@ -1578,9 +1578,9 @@
     "semantic_hash": "019c4d736a374ff702e03ab07a6f0a31"
   },
   "sdk/php/composer.json": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2602086,
-    "ast_hash": "ec733779805d4669f7d58fb23916dfee",
+    "mtime": 1789201580.1644893,
+    "seen": 1789202064.7958558,
+    "ast_hash": "8e111cd8b0e1ba7ff6fc5e706cf948c2",
     "semantic_hash": ""
   },
   "sdk/php/src/Client.php": {
@@ -1746,9 +1746,9 @@
     "semantic_hash": ""
   },
   "sdk/python/pyproject.toml": {
-    "mtime": 1787797807.6846416,
-    "seen": 1787797840.2602599,
-    "ast_hash": "90d115066fac279f156da9022fc82cdf",
+    "mtime": 1789201899.424229,
+    "seen": 1789202064.7959058,
+    "ast_hash": "8ef102009affb295f1cdbc732c754a74",
     "semantic_hash": ""
   },
   "sdk/python/tests/conftest.py": {
@@ -2106,9 +2106,9 @@
     "semantic_hash": "d4b59be854bbe3aa06855fca4386c33f"
   },
   "src/common/security/session-scope.ts": {
-    "mtime": 1788314517.5215914,
-    "seen": 1788314684.2048762,
-    "ast_hash": "f93c7cbcc124bd861ce101008b07b181",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4472957,
+    "ast_hash": "6a16a3d1cc8a4312e276b05de05d018c",
     "semantic_hash": ""
   },
   "src/common/security/ssrf-guard.spec.ts": {
@@ -2436,9 +2436,9 @@
     "semantic_hash": "8d496f23bb86f38313054c27b3e1c1a1"
   },
   "src/config/bootstrap-security.spec.ts": {
-    "mtime": 1787797807.6406422,
-    "seen": 1787797840.260378,
-    "ast_hash": "4eb620d2001bddcb73302a3f08ed2ecf",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4473455,
+    "ast_hash": "7b0a78d2332993cd58b2045a08b0783b",
     "semantic_hash": ""
   },
   "src/config/bootstrap-security.ts": {
@@ -2454,9 +2454,9 @@
     "semantic_hash": ""
   },
   "src/config/configuration.ts": {
-    "mtime": 1788680616.8429227,
-    "seen": 1788680744.0918558,
-    "ast_hash": "5d94a0e0f426e385d12a78e45d07ccef",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4473476,
+    "ast_hash": "e294df8d9b4ab6b6e938dd398d084ea6",
     "semantic_hash": ""
   },
   "src/config/dashboard-csp.spec.ts": {
@@ -2598,9 +2598,9 @@
     "semantic_hash": ""
   },
   "src/config/swagger.config.ts": {
-    "mtime": 1787797630.595491,
-    "seen": 1787797665.1546335,
-    "ast_hash": "9bf650873361b69118c07cccfad54264",
+    "mtime": 1789201448.418518,
+    "seen": 1789202064.7960343,
+    "ast_hash": "b13b7fb9655ad64122370802818a0ac6",
     "semantic_hash": ""
   },
   "src/config/wa-web-version-example-pin.spec.ts": {
@@ -2754,9 +2754,9 @@
     "semantic_hash": ""
   },
   "src/core/hooks/hook-manager.service.ts": {
-    "mtime": 1788679569.393206,
-    "seen": 1788679678.8136659,
-    "ast_hash": "79d6b54ab4b159d5cc12843e334722a6",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4473886,
+    "ast_hash": "493975a73f2db518349eae1dbaad89e9",
     "semantic_hash": ""
   },
   "src/core/hooks/hook.interfaces.spec.ts": {
@@ -4014,9 +4014,9 @@
     "semantic_hash": "6d2201c1b27cea763effdad4ab71324f"
   },
   "src/engine/adapters/wwebjs-chats.ts": {
-    "mtime": 1788063005.6420615,
-    "seen": 1788064728.5705466,
-    "ast_hash": "053fcfe6200ea9a6117df1cb537e1849",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4475644,
+    "ast_hash": "f64e5ec47835518947e321ad69f780ef",
     "semantic_hash": ""
   },
   "src/engine/adapters/wwebjs-contacts.ts": {
@@ -4344,9 +4344,9 @@
     "semantic_hash": "1285179acb0c09926dccede4816f4772"
   },
   "src/modules/audit/audit.service.ts": {
-    "mtime": 1787479402.2506883,
-    "seen": 1787479581.0987115,
-    "ast_hash": "f1f0fd549e5aa01a20c41659d0c898a6",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476101,
+    "ast_hash": "af3c5830f9c69cc12421c7fb5b0ec42d",
     "semantic_hash": ""
   },
   "src/modules/audit/dto/audit-response.dto.ts": {
@@ -4398,9 +4398,9 @@
     "semantic_hash": ""
   },
   "src/modules/auth/auth-validate.controller.ts": {
-    "mtime": 1788866999.09782,
-    "seen": 1788867081.95511,
-    "ast_hash": "46df6851d79aecddb4b5c3a6cd56a643",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476173,
+    "ast_hash": "08bc369011199171e1ad38b1203aa45d",
     "semantic_hash": ""
   },
   "src/modules/auth/auth.controller.spec.ts": {
@@ -4434,9 +4434,9 @@
     "semantic_hash": "cf4ff786933ee6b2b79fd096b3307560"
   },
   "src/modules/auth/auth.service.ts": {
-    "mtime": 1788846317.3234468,
-    "seen": 1788855294.2634892,
-    "ast_hash": "33cb5c5c24c66aea06795c001f06c522",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476223,
+    "ast_hash": "297ea8b655a262d4fc6ea0fc44b8e32b",
     "semantic_hash": ""
   },
   "src/modules/auth/bootstrap-key-file.spec.ts": {
@@ -4500,9 +4500,9 @@
     "semantic_hash": ""
   },
   "src/modules/auth/guards/api-key.guard.ts": {
-    "mtime": 1788844849.836234,
-    "seen": 1788855294.2634985,
-    "ast_hash": "01ae94081d7b887d953faddc4245f7b4",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476311,
+    "ast_hash": "351f7614e1267abae46df990f0e07eee",
     "semantic_hash": ""
   },
   "src/modules/auth/query-session-scope-coverage.spec.ts": {
@@ -4782,9 +4782,9 @@
     "semantic_hash": ""
   },
   "src/modules/docker/compose-parity.spec.ts": {
-    "mtime": 1788680724.8413165,
-    "seen": 1788680744.0922232,
-    "ast_hash": "77205f05c77c9e563db5791223a3c195",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.447685,
+    "ast_hash": "a4febbcb491f644d3a5babf125393f0d",
     "semantic_hash": ""
   },
   "src/modules/docker/docker.module.ts": {
@@ -4800,9 +4800,9 @@
     "semantic_hash": ""
   },
   "src/modules/docker/docker.service.ts": {
-    "mtime": 1787797807.6326423,
-    "seen": 1787797840.26075,
-    "ast_hash": "90a6474f2434ff70b47cc3fcc51ca4ca",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476874,
+    "ast_hash": "4a7b1544f17724b3efa52ef79bd7a61e",
     "semantic_hash": ""
   },
   "src/modules/docker/index.ts": {
@@ -4824,9 +4824,9 @@
     "semantic_hash": ""
   },
   "src/modules/events/events.gateway.ts": {
-    "mtime": 1788768994.8282635,
-    "seen": 1788855294.2635543,
-    "ast_hash": "26fd3ed261e53d6ed960562f5dd9f38c",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476905,
+    "ast_hash": "52cdff0dd94852e83e1754f6e2ab8843",
     "semantic_hash": ""
   },
   "src/modules/events/events.module.ts": {
@@ -5028,9 +5028,9 @@
     "semantic_hash": "579dd21ca5303840614f4da6fca329e0"
   },
   "src/modules/infra/infra-status.controller.spec.ts": {
-    "mtime": 1787797807.6246424,
-    "seen": 1787797840.2607837,
-    "ast_hash": "a800105636d40ae4270ba3f09ce1299a",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4477184,
+    "ast_hash": "aa55edcbcbbe3d1db037a880b89690f8",
     "semantic_hash": ""
   },
   "src/modules/infra/infra-status.controller.ts": {
@@ -5406,9 +5406,9 @@
     "semantic_hash": "e54bc1e00ae6f0a02729c6803eb86dff"
   },
   "src/modules/mcp/mcp.server.spec.ts": {
-    "mtime": 1787993839.0654516,
-    "seen": 1787993941.6014628,
-    "ast_hash": "498384c84078d097d691a935357589eb",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4477773,
+    "ast_hash": "904db1f00257ae150a522e87bea480dc",
     "semantic_hash": ""
   },
   "src/modules/mcp/mcp.server.ts": {
@@ -5436,9 +5436,9 @@
     "semantic_hash": ""
   },
   "src/modules/media/ffmpeg.spec.ts": {
-    "mtime": 1787797807.6366422,
-    "seen": 1787797840.2608523,
-    "ast_hash": "0e6c38bb23106a491c6cbc363bf1a746",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4477832,
+    "ast_hash": "50d921282b8cc01fb5c731f78e708fa0",
     "semantic_hash": ""
   },
   "src/modules/media/ffmpeg.ts": {
@@ -5586,9 +5586,9 @@
     "semantic_hash": ""
   },
   "src/modules/message/message-send.service.ts": {
-    "mtime": 1789108739.8327534,
-    "seen": 1789197346.7273545,
-    "ast_hash": "67426da0610c2ecf1c487a50635c66c8",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.447804,
+    "ast_hash": "957af9a328cf9762224088d87dd90444",
     "semantic_hash": ""
   },
   "src/modules/message/message-status.util.spec.ts": {
@@ -5670,9 +5670,9 @@
     "semantic_hash": "91003a49c83927a6211ad9e611859667"
   },
   "src/modules/message/send-pacing.service.spec.ts": {
-    "mtime": 1788265274.1384137,
-    "seen": 1788313596.4335165,
-    "ast_hash": "2b6b99d4c035297a93dfd1756ac2a21e",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4478147,
+    "ast_hash": "a1c3d0b5df31b5efe6624340f55bd532",
     "semantic_hash": ""
   },
   "src/modules/message/send-pacing.service.ts": {
@@ -5700,9 +5700,9 @@
     "semantic_hash": ""
   },
   "src/modules/metrics/metrics.service.ts": {
-    "mtime": 1787993256.5780826,
-    "seen": 1787993353.6804094,
-    "ast_hash": "47da8dae1966f6b574cefa6e4d44fe03",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4478195,
+    "ast_hash": "68b7a716c051f888d3b4b870b05cff49",
     "semantic_hash": ""
   },
   "src/modules/plugins/catalog.spec.ts": {
@@ -6384,9 +6384,9 @@
     "semantic_hash": "df0da6508947747c80e2943dc450e285"
   },
   "src/modules/session/session.service.ts": {
-    "mtime": 1788524888.6223538,
-    "seen": 1788525124.8804471,
-    "ast_hash": "685b5cdabddf1ec5d2bcda79948b24e1",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4479141,
+    "ast_hash": "4f733378ff9f9977e234ba9e1662747a",
     "semantic_hash": ""
   },
   "src/modules/settings/dto/settings-response.dto.ts": {
@@ -7055,1470 +7055,6 @@
     "ast_hash": "ce0683ca4b9abd1e864430ad97fe6084",
     "semantic_hash": "ce0683ca4b9abd1e864430ad97fe6084"
   },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/ClientConfig.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2599907,
-    "ast_hash": "9ca8cbe574dfab550997a4e56c628dea",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/PostCardClient.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2599921,
-    "ast_hash": "72c750fed192d9210490b0553247f117",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardApiError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2599928,
-    "ast_hash": "72607dbe56eccb27a10b5c38bf4ff93c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardAuthError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2599936,
-    "ast_hash": "9bdbefe1f6c8c3d22255358808855cb6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardConflictError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2599943,
-    "ast_hash": "31de3a4ea69dab3ca3f95fbe8ae29b3c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2599952,
-    "ast_hash": "4f602dd0b7d7bf6720f30113a12d1137",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardForbiddenError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.259996,
-    "ast_hash": "8bb7ef64e4e217018093ffee1b92d17b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardNotFoundError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2599967,
-    "ast_hash": "44092fe3cca3cdab1ced625caf969cba",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardNotImplementedError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2599976,
-    "ast_hash": "1b0538b06a0bd104a7ead7ad920ce327",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardRateLimitError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2599986,
-    "ast_hash": "bd642c8ebcaa804804bf37132257327a",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardServiceUnavailableError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2599998,
-    "ast_hash": "5f5a109dadb4673220704edb009ffe8c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/errors/PostCardTimeoutError.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2600007,
-    "ast_hash": "35327d5efd3ab0aed522c996236debf6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/http/BinaryResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260002,
-    "ast_hash": "c3343c25269e7437801393ec9107c114",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/http/DefaultHttpTransport.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600026,
-    "ast_hash": "1f707b3d82e3c79a5c0a62736a5619ff",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/http/Http.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600036,
-    "ast_hash": "fade75649bcbcffa962251fe99e6bf00",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/http/HttpMethod.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600043,
-    "ast_hash": "448f60cc97cee64276ece0688ca47cd4",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/http/HttpRequestData.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600052,
-    "ast_hash": "306747adb845c15cfb653c082579810e",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/http/HttpResponseData.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260006,
-    "ast_hash": "91d3bac865d42fa41dd4262cb6c7aa8c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/http/HttpTransport.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600067,
-    "ast_hash": "fdea5ab004b325e2033e3553442e8546",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/AccountRestriction.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600074,
-    "ast_hash": "7de464226821cec34c97bc57c88daba1",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/AccountRestrictionKind.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260008,
-    "ast_hash": "4af554d4755d25d3a556bd58e2e47d7b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/AddLabelRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600093,
-    "ast_hash": "ce6772a7513d2e4c53102e509ae53d70",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ArchiveChatRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600102,
-    "ast_hash": "d3bfdd0e8adf5616191efa0513c88bc0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/AuthValidateResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260011,
-    "ast_hash": "bf42d332a3ca0cd24ac8cae0079c14fc",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BatchLifecycleStatus.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600121,
-    "ast_hash": "a7ee1e2cd29658d9da421158e54c5b86",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BatchMessageResult.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260013,
-    "ast_hash": "933af8bd1005c1b54ac58f436af5b5b9",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BatchMessageStatus.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600138,
-    "ast_hash": "6c8f1ce4ee457fe4a58ea18ced9c7df6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BatchProgress.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600145,
-    "ast_hash": "896370bb53913d47f82188b3fc6f4958",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BatchStatusResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600152,
-    "ast_hash": "4cc2951018e6a4485167e2787aa38c26",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BulkMediaRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600162,
-    "ast_hash": "febeb76d04a623c63403d36b8f74966a",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BulkMessageContent.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260017,
-    "ast_hash": "9453ea6447d64b2ae28b5ce7c714b482",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BulkMessageItem.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600176,
-    "ast_hash": "ffbda4f5267987298caabd9c6b83cd20",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BulkMessageResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600183,
-    "ast_hash": "c04b956019ae1c1df5646a6fa1e0a5c9",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/BulkMessageType.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600193,
-    "ast_hash": "6708d4e47f6f9d6792243a1bde7f6218",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CallLinkResponse.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.26002,
-    "ast_hash": "ad0c740386b3d4cc9fc8b979f77e4706",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CallLinkType.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600207,
-    "ast_hash": "b51dcb8933e7e88da5e750a4d3a82c17",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CatalogInfo.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600214,
-    "ast_hash": "b9fa1be9d9280099c510ba3b31299b8a",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CatalogProduct.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260022,
-    "ast_hash": "3f1ce16695373a651d44157d13054a0f",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CatalogProductsQuery.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600234,
-    "ast_hash": "6eda8eefe2f557c59a2927315d8b0567",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ChannelMessageQuery.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260024,
-    "ast_hash": "3320d28fdd6903a844f40d37d7b4f6b7",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ChannelMessageRecord.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260025,
-    "ast_hash": "c63210ec088e45ff91a856bd5b78830a",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ChannelRecord.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600262,
-    "ast_hash": "30f1fb7cb4d11642b5cbe15e330ac2d0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ChatHistoryMessage.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260027,
-    "ast_hash": "459c311c4a6390f2fc8f0c5b861595a0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ChatKind.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600276,
-    "ast_hash": "1c54cba5624883269ee6f49f55bc75a9",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ChatPresence.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600284,
-    "ast_hash": "cb0367c95eed9dc5c203d119ac770f0c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ChatState.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260029,
-    "ast_hash": "f637e3748fd35d72f5e2350d4708ec8e",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ChatSummary.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.26003,
-    "ast_hash": "0275cb679f8c55adba462fe80e2d3fae",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CheckNumberResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260031,
-    "ast_hash": "a48e53ed93d3f7379dd43dfa9ea49cdb",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ContactPhoneResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600317,
-    "ast_hash": "372fa98f92e7a32ef3c03e2fbb957db7",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ContactRecord.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600322,
-    "ast_hash": "46adac3ca26b34b9afc315e5c324eef2",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ConvertMediaRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600331,
-    "ast_hash": "92a5274e26d60d5bcf0dc7df0e8a5d0e",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ConvertedMedia.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600338,
-    "ast_hash": "54e647a484a714d21950157c5cdd827b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CreateCallLinkRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600348,
-    "ast_hash": "2de7b04bc8a36be2c73e48692ef36e41",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CreateChannelRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600355,
-    "ast_hash": "6d285cefa25040092df15ceef8ef69f5",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CreateGroupRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600365,
-    "ast_hash": "6b76683f787e51a7777fa88c14d4d4e7",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CreateSessionRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600372,
-    "ast_hash": "343a8664cbd15d260fb256c38f97fe52",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CreateTemplateRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260038,
-    "ast_hash": "b0ddaae91aab0d3e6b7cfc2a487bc2ca",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CreateWebhookRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600386,
-    "ast_hash": "69a2018c3d10b643e1b0c950a4f39342",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/CustomLinkPreview.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600393,
-    "ast_hash": "4e6be1fd912b86f82cf82b2e61609adb",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/DeleteChatRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600403,
-    "ast_hash": "e30df72f22288f206edcca2a3d6dc646",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/DeleteMessageRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600412,
-    "ast_hash": "cf6e3093c3c6416105fb21b3ffeae7fa",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/DeliveryFailureQuery.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260042,
-    "ast_hash": "611cbb0095a74f7100fabf46476946cf",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/DeliveryStatus.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260043,
-    "ast_hash": "e131eb22cd6f3f6c6f2a7977158c0e81",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/DemoteChannelAdminRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600439,
-    "ast_hash": "406d988e2fd88151ba41c5a1b95102b9",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/EditMessageRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600446,
-    "ast_hash": "4503f8c2fcbb6ac1b9325052308ea2e9",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ForwardMessageRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600453,
-    "ast_hash": "99db4262fdfb23ec0cab416db4ea7636",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupDescriptionRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600458,
-    "ast_hash": "eb99051e29881fe460c6aed4ccf0a222",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupInfo.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600465,
-    "ast_hash": "091baaae4bd77f3e9eaa33fd698f0d2c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupJoinInfo.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600477,
-    "ast_hash": "f8335a99b395363d3b06e3f8f1b6c8d4",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupMembershipRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600484,
-    "ast_hash": "44b9eec6111974e8baafe359582b7e55",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupParticipant.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260049,
-    "ast_hash": "cae19c92aa840dc784254d9340efa23d",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupPictureResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.26005,
-    "ast_hash": "b498fe0000873e2bc506c6ba6e8cc72c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupSettings.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260051,
-    "ast_hash": "815a0b83680fa3ed856a3d89dec4e412",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupSubjectRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600517,
-    "ast_hash": "8193bff49f686bc0096ce888685bcaa6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/GroupSummary.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600527,
-    "ast_hash": "200b4b5c944ff125a281c0a18d5c6657",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/HealthReadyDetails.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600539,
-    "ast_hash": "8c25dc5bb07b814ee3ee74cf49461420",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/HealthReadyResponse.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600546,
-    "ast_hash": "8e6038a122ca422dee012e9386035cfb",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/HealthResponse.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260055,
-    "ast_hash": "fa549ace1c388ff330a8ee4b47b54c10",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/InviteCodeResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600558,
-    "ast_hash": "cf708c01bcc2a2e29a6b2b18d192dacc",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/JoinGroupRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600567,
-    "ast_hash": "8c5693df6b9a9e4f3bae2f4dd8b8ff5f",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/JoinGroupResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600577,
-    "ast_hash": "eb43b69d3532cd008743512e622d811c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/LabelRecord.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600584,
-    "ast_hash": "2ed7cb916bac7285d7fbab89d5dc4a95",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ListChatsQuery.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600594,
-    "ast_hash": "f156b0096221ab9451a5b00a4deaf0f2",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ListContactsQuery.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.26006,
-    "ast_hash": "8c1b348d4cdf87080d1153889b67e155",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ListGroupsQuery.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600613,
-    "ast_hash": "e3fc4072a0be95b2e9c9c3051a18fc01",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ListMessagesQuery.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260062,
-    "ast_hash": "25dfe7f589fdb8c30d3ccbcf44c03d9a",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ListSessionsQuery.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260063,
-    "ast_hash": "c0e2aad5566bc7df06190eb9e4fae58b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MarkChatReadRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600636,
-    "ast_hash": "ed74cf28fb93fc43eb2c6d7473bc10aa",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MarkChatRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600646,
-    "ast_hash": "18e7c5cd19b1203ac931ca77c6ed1082",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MediaConversionAvailability.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600656,
-    "ast_hash": "e5e529de42895864df9b438876157970",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MemberAddMode.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600663,
-    "ast_hash": "bc89bf1027b2f73924bec074fe1f2149",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MembershipRequestActionRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260067,
-    "ast_hash": "58a7499a48158f83a7739f69d2dd9595",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MembershipRequestMethod.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260068,
-    "ast_hash": "fcc6382d321134e2d71072aa8e8a51d6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MessageDirection.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260069,
-    "ast_hash": "9f46ba5037c5410bcda37e774edf83a6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MessageHistoryQuery.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600696,
-    "ast_hash": "da1d2ad6b6b534d03053a199a3158a45",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MessageListResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600703,
-    "ast_hash": "3e542c4caceef458b599723e53c91c4b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MessageRecord.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600713,
-    "ast_hash": "b970f6a0844c35e80e4bc921c6ae87e9",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MessageResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260072,
-    "ast_hash": "52b7bb7b09b04bbf7c4bd34b627782ef",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MessageType.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600727,
-    "ast_hash": "7eb4e7db43820bacebe72eab0c70f492",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MuteChannelRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600734,
-    "ast_hash": "8b2270eff2d8e23465ca04102553c731",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/MuteChatRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600741,
-    "ast_hash": "25bbb74b239c18fee624266856acadcc",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/PaginatedProducts.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600753,
-    "ast_hash": "e1a16f79fffd358080f800abfebdf6e4",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/PairingCodeResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600758,
-    "ast_hash": "b2148e71ae0f36753f50d0f0f7ba964c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ParticipantPresence.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260077,
-    "ast_hash": "57a63d2518aaa4b764bcfb689389aadb",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ParticipantResult.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600777,
-    "ast_hash": "fbd9445349e27f09e6955eacbc3d5caa",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ParticipantsRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600787,
-    "ast_hash": "7779462c08787d18fb230e5f6b0d42d3",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ParticipantsResult.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600794,
-    "ast_hash": "b90bb97f84450507f495afd52839b54f",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/PinChatRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600803,
-    "ast_hash": "969ea94ed28e07b202246db7d66aca1b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/PinMessageRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260081,
-    "ast_hash": "a2d6125d975c04b2665acaa11176b6bd",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/PresenceState.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600822,
-    "ast_hash": "d4b56c96b2c0cd2a6dc5d91dd6b55da0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ProductMessageResponse.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600832,
-    "ast_hash": "6a7d53cadaaff7c4033e991e77fbd789",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ProfilePictureResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260084,
-    "ast_hash": "d5884a6d754a871316906029f45870cd",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ProfilePicturesResponse.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600846,
-    "ast_hash": "53878402402278d502034f57b4129ad0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ProxyType.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600856,
-    "ast_hash": "ae50047477f802e68b822095691b06a1",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/QrCodeResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600863,
-    "ast_hash": "581297e62fe6b76004ba425aaeab80e8",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ReactMessageRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600873,
-    "ast_hash": "7fa51f8720f95e4f68463d9c41f5efec",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ReactionRecord.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260088,
-    "ast_hash": "142ea455afe59f44a1e80320c0d64008",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ReactionSender.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260089,
-    "ast_hash": "80138cabd93be0590a375bfcbafc6c7e",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/ReplyMessageRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600899,
-    "ast_hash": "22703e2c32fb0d15f2674fabd43634a8",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/RequestPairingCodeRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600908,
-    "ast_hash": "32f56c1e286065dec146352c529664c3",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SearchHit.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260092,
-    "ast_hash": "dfb607f726f9fb0a4b709fdb979fd5ef",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SearchQuery.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600927,
-    "ast_hash": "642e9eee2ec98b7cb0307a81acb7d34f",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SearchResults.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600932,
-    "ast_hash": "0736579d9aab63f83b5bd276ec54b856",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendAudioRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600942,
-    "ast_hash": "6e8dadaf1c7c544fc879f7cf26f867b0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendBulkRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260095,
-    "ast_hash": "b3cc46f0c51dd89ac3142149aa518f7d",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendChatStateRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600958,
-    "ast_hash": "cf7fc3f354522b55ee8daf254b3ef42c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendContactRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600965,
-    "ast_hash": "35098651fb68e615e1128bf0399cffe5",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendImageStatusRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600973,
-    "ast_hash": "bf9b781f3d7e15c20464660ef37f6f2c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendLocationRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2600982,
-    "ast_hash": "4bcb7ff9a8ab4114e7d1f0943df798bb",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendMediaRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2600994,
-    "ast_hash": "49adc8c3d5b8dff0ab806192586ec92e",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendPollRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601001,
-    "ast_hash": "86d42f1afe21d06ef1fb541cb40fad85",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendProductRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260101,
-    "ast_hash": "f0780257669a3f79b767adc494c32857",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendTemplateRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260102,
-    "ast_hash": "ed575f283a21cea44caac58388406e35",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendTextRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601032,
-    "ast_hash": "339390cb630c1e613ed4f46584e96057",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendTextStatusRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260104,
-    "ast_hash": "09abdd7b3889c74a2ec383a112805a6b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendVideoStatusRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601047,
-    "ast_hash": "7e29c22c8584ad1f2151a8eda339f56d",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SendVoiceStatusRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601051,
-    "ast_hash": "3aad90783c250af1b3a1bd0b2e066ee4",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SessionConfig.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601063,
-    "ast_hash": "60a3f11f9a73b6e803477a66262e3ca3",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SessionResponse.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260107,
-    "ast_hash": "ab2633b31834e7cd5414d65fc49d0819",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SessionStatsOverview.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601078,
-    "ast_hash": "38fcf1f56e7cfcf09d4d46a40824d318",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SessionStatus.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601085,
-    "ast_hash": "bec2fde3fe9e3e8032ea77d6c4c65ea3",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SetGroupPictureRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601094,
-    "ast_hash": "cd51bb375f1a6cea83952da1198c65b7",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SetOwnPresenceRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601101,
-    "ast_hash": "f4a0cb5e2db37583b9a739c2962f13c5",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SetProfileNameRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260111,
-    "ast_hash": "65f5d19a0ce855f99bc9cf293d3ac1c2",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SetProfilePictureRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601118,
-    "ast_hash": "75c235132d6ad077249f9eca4af23602",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SetProfileStatusRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601125,
-    "ast_hash": "e9bd0e01a5e3f639f9bdc81a8377b104",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/StarMessageRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601135,
-    "ast_hash": "c87261542dead89019c75cc1f4783121",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/StatusContact.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601142,
-    "ast_hash": "4aabad70df0f5e196de6bdd94b16e7ed",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/StatusListResult.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601147,
-    "ast_hash": "672b0ab895c3c615a62f4d979e206802",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/StatusMediaInput.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601156,
-    "ast_hash": "e3c350ba96bb3e53cc82a99a726eaaa6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/StatusRecord.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601166,
-    "ast_hash": "970846572ea4ab1a5e9f622b3adf7a01",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/StatusResult.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601175,
-    "ast_hash": "bf2e758fca741d9c9278dce7be52dd81",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SubscribeChannelRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601182,
-    "ast_hash": "ee457d79003822487a170d37ce6ad26d",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SubscribePresenceRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260119,
-    "ast_hash": "6e905c8a282e2a51422add1511076146",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/SuccessResult.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601202,
-    "ast_hash": "d349f91bc26fe646258d958060214f0e",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/TemplateRecord.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260121,
-    "ast_hash": "3caf8d922daded569b5959d2f1557743",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/TransferChannelOwnershipRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601218,
-    "ast_hash": "e29f7076cd21df55e37b0e89d06a776b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/UnpinMessageRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601225,
-    "ast_hash": "e93168073eb473e0b61d50bdb52870a0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/UpdateSessionConfigRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601235,
-    "ast_hash": "1d8e5142012abda64e7f114b407fc8c9",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/UpdateSessionConfigRequestSerializer.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601242,
-    "ast_hash": "3942b0df29acf1f1d9568d26dd2b7398",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/UpdateTemplateRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260125,
-    "ast_hash": "0f64aa4f1a0090bbfccb69dd8af20265",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/UpdateWebhookRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601256,
-    "ast_hash": "9638ed38631fbecbdd415217f7d8f8c2",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/UpsertContactRequest.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601264,
-    "ast_hash": "1dcd0f65b8a4e5bc85a34c9a6fbc5f61",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/UpsertLabelRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601273,
-    "ast_hash": "7988d415954bff47401e0b482707b303",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/VotePollRequest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.260128,
-    "ast_hash": "43ac8167800416149abf6758fd065660",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/WebhookEvent.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601287,
-    "ast_hash": "a15389bea3867fd0f6eb38efcb7cb00b",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/WebhookFilterCondition.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601292,
-    "ast_hash": "1b6f8adad28fc452e1db50e7459089c5",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/WebhookFilters.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601302,
-    "ast_hash": "bbc4433e95db499ded7a15d792a8d412",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/WebhookResponse.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260131,
-    "ast_hash": "26f899468ad106359e58929257190296",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/model/WebhookTestResult.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601316,
-    "ast_hash": "37b6ef8065ef77aa841cb15a9e9b4179",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/package-info.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601323,
-    "ast_hash": "8d3e85d594108793a55247e27f3292b0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/CallsResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260133,
-    "ast_hash": "e4c49b63ce734ada4ddb467b10509b6e",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/CatalogResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260134,
-    "ast_hash": "4f195da9dc98a15fbb2a4590fd07861f",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/ChannelsResource.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2601347,
-    "ast_hash": "baa90f339e0089a910f46cb8f4debf7c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/ChatsResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601354,
-    "ast_hash": "7afb8b65682c33c9173fb3ad787a72fd",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/ContactsResource.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2601364,
-    "ast_hash": "c3335f5a2ac0520d9d709749ca89ed11",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/GroupsResource.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2601373,
-    "ast_hash": "5fc131c88152f9ad1f3c9317c32447af",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/HealthResource.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.260138,
-    "ast_hash": "1c92ce276db2aecca12042bed882306d",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/LabelsResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260139,
-    "ast_hash": "b363fa6d68d02c85c46b44815d8879a7",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/MediaResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601397,
-    "ast_hash": "bcf10254cd1ce6bfc4638c631fb7b265",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/MessagesResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260141,
-    "ast_hash": "f616f47a697e39f4dd05a203b5d02383",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/ProfileResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601418,
-    "ast_hash": "f2b3f74d8f6f479d464412ba6e42b4d0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/SearchResource.java": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2601426,
-    "ast_hash": "8754e0e2c6985e5b11cab30c8c9340fd",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/SessionsResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601433,
-    "ast_hash": "2a34c996f125dda729a90e4a05161b13",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/StatusResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601442,
-    "ast_hash": "1f73076bcfc3337b81ef88edfb6dc456",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/TemplatesResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.260145,
-    "ast_hash": "76359e096ffd7f1eb8252820c4215e1c",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/main/java/com/rmyndharis/postcard/resources/WebhooksResource.java": {
-    "mtime": 1787797807.6726418,
-    "seen": 1787797840.2601457,
-    "ast_hash": "16480c07db7f7648e718b859b0bc348f",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/ClientTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601464,
-    "ast_hash": "d7b6cd3c9731e99d37ffc198ccaf2440",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/ConfigTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.260148,
-    "ast_hash": "160c32b39134c77dd3169c3bb933a448",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/EnumWireTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601488,
-    "ast_hash": "6f00d8a9cf1a5c5ccb6497b6fc1c2479",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/ScaffoldTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601497,
-    "ast_hash": "b9b4672a862d41617ccbf9c48820a433",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/errors/ErrorsTest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601504,
-    "ast_hash": "74031503c608e9249e8a28725906865a",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/http/HttpTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601514,
-    "ast_hash": "a9d7fe13850c4e9e6207775db70ecc51",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/model/ChatHistoryMessageDecodeTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601523,
-    "ast_hash": "2e546a4d51d99483a1fca830d2120d12",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/model/UpdateSessionConfigRequestTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.260153,
-    "ast_hash": "1da05497c48545e5403cc9b290314cfc",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/CallsResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601538,
-    "ast_hash": "e4280e42fb09fd60716d3c1c9ea1cab3",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/CatalogResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.260155,
-    "ast_hash": "f776e5ea9b11f01a7c2b0bb301a70473",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/ChannelsResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601562,
-    "ast_hash": "3d177eb8938581157aebbbedd24f56c6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/ChatsResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.260157,
-    "ast_hash": "6d2854c4ab286075db6efc31e76a8dc4",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/ContactsResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.260158,
-    "ast_hash": "65ff4695ccaa32289250001fe3bb689f",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/GroupsResourceTest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601588,
-    "ast_hash": "88a6bec2c41927eec9d90dab112bc987",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/HealthResourceTest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601595,
-    "ast_hash": "54a054cdb76cba466d73cc5fc0847ea0",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/LabelsResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601602,
-    "ast_hash": "97a7fd182cd80803d8d96f00c66eebeb",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/MediaResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.260161,
-    "ast_hash": "4c31c696343e605c08bb7e30cc302383",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/MessagesResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601619,
-    "ast_hash": "7d245b7e10ffaa545879b4fb07a15920",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/ProfileResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601626,
-    "ast_hash": "d9931d46494179f8ab0a0ab25caf0233",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/SearchResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601635,
-    "ast_hash": "8634c3df97cf154a3850a69798198c19",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/SessionsResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2601643,
-    "ast_hash": "f387198ebd63b27bde4844ce8f59ec66",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/StatusResourceTest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601652,
-    "ast_hash": "e8c08cb006920e05223df38ea83e39d6",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/TemplatesResourceTest.java": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.260166,
-    "ast_hash": "96b6ad20650b8b7c537bf24310a644d8",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/resources/WebhooksResourceTest.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601666,
-    "ast_hash": "124c34a6e4998563ed1a2a813a672117",
-    "semantic_hash": ""
-  },
-  "sdk/java/src/test/java/com/rmyndharis/postcard/support/MockTransport.java": {
-    "mtime": 1787797807.6686418,
-    "seen": 1787797840.2601674,
-    "ast_hash": "3cb5a87cf5a921d228c5680b32e5c541",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardApiException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2602103,
-    "ast_hash": "e81e4e0e73e353818960ba1f1aba502e",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardAuthException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.260211,
-    "ast_hash": "6358f668751955361e0d0a0d1d46ae1f",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardConflictException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2602117,
-    "ast_hash": "e1f534e6e300acd61b58365a0fb11613",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2602127,
-    "ast_hash": "5f63275110639bc9187815b7451da09f",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardForbiddenException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2602139,
-    "ast_hash": "9dbda6883666d74121464c605e70d442",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardNotFoundException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2602146,
-    "ast_hash": "57346c60315e065328c3aeea3314e7fc",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardNotImplementedException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.260215,
-    "ast_hash": "2c5224a91320ef821c9f1c6ea5d74be5",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardRateLimitException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2602158,
-    "ast_hash": "c91d5ac6bc2874d7dd7e3a959e2124b5",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardServiceUnavailableException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2602165,
-    "ast_hash": "af2575df4ca54c0eb24cfe3e2eaed50b",
-    "semantic_hash": ""
-  },
-  "sdk/php/src/Exceptions/PostCardTimeoutException.php": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2602174,
-    "ast_hash": "6866643fec4744dd1c816c62a15d021b",
-    "semantic_hash": ""
-  },
-  "sdk/python/postcard/__init__.py": {
-    "mtime": 1787797807.6886415,
-    "seen": 1787797840.2602384,
-    "ast_hash": "c8420fdbb95df67bc4086e85d4cffaf7",
-    "semantic_hash": ""
-  },
-  "sdk/python/postcard/_http.py": {
-    "mtime": 1787797807.6886415,
-    "seen": 1787797840.2602391,
-    "ast_hash": "27ff9de8135431069b44094766c8bab9",
-    "semantic_hash": ""
-  },
-  "sdk/python/postcard/client.py": {
-    "mtime": 1787797807.6886415,
-    "seen": 1787797840.26024,
-    "ast_hash": "581a60a70c7be770cc60018514df2861",
-    "semantic_hash": ""
-  },
-  "sdk/python/postcard/errors.py": {
-    "mtime": 1787797807.6886415,
-    "seen": 1787797840.2602408,
-    "ast_hash": "1f72a2fba05749c7a8f53645ee28b004",
-    "semantic_hash": ""
-  },
-  "sdk/python/postcard/resources/__init__.py": {
-    "mtime": 1787797807.6886415,
-    "seen": 1787797840.2602417,
-    "ast_hash": "d3396a521529a4294e76cf7974b6cf65",
-    "semantic_hash": ""
-  },
-  "sdk/python/postcard/resources/calls.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884025,
-    "ast_hash": "f001e22ae9dfb8fd61168b51e7827781",
-    "semantic_hash": "f001e22ae9dfb8fd61168b51e7827781"
-  },
-  "sdk/python/postcard/resources/catalog.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884035,
-    "ast_hash": "f27c380ddabad52bb89c9f495f818593",
-    "semantic_hash": "f27c380ddabad52bb89c9f495f818593"
-  },
-  "sdk/python/postcard/resources/channels.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.088404,
-    "ast_hash": "a955a9bc1155af72a347ece2dc80cc11",
-    "semantic_hash": "a955a9bc1155af72a347ece2dc80cc11"
-  },
-  "sdk/python/postcard/resources/chats.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884047,
-    "ast_hash": "a8483cc994bf3a2a39b36f5ec73669dd",
-    "semantic_hash": "a8483cc994bf3a2a39b36f5ec73669dd"
-  },
-  "sdk/python/postcard/resources/contacts.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.088406,
-    "ast_hash": "2092542112b05d41c29ea8dd4082d2b7",
-    "semantic_hash": "2092542112b05d41c29ea8dd4082d2b7"
-  },
-  "sdk/python/postcard/resources/groups.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884068,
-    "ast_hash": "42d0a49e6dac0117bd8e13ffcfc1bcb0",
-    "semantic_hash": "42d0a49e6dac0117bd8e13ffcfc1bcb0"
-  },
-  "sdk/python/postcard/resources/health.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884075,
-    "ast_hash": "22e75278270317a6cf93293e1240b1d1",
-    "semantic_hash": "22e75278270317a6cf93293e1240b1d1"
-  },
-  "sdk/python/postcard/resources/labels.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884082,
-    "ast_hash": "03efff667757f32974e179d1b61ac7dd",
-    "semantic_hash": "03efff667757f32974e179d1b61ac7dd"
-  },
-  "sdk/python/postcard/resources/media.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884092,
-    "ast_hash": "1eaa72ba289238f99e51a9499e125c19",
-    "semantic_hash": "1eaa72ba289238f99e51a9499e125c19"
-  },
-  "sdk/python/postcard/resources/messages.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884097,
-    "ast_hash": "e0ac9308bc70fe6c616d82d4e42d45d6",
-    "semantic_hash": "e0ac9308bc70fe6c616d82d4e42d45d6"
-  },
-  "sdk/python/postcard/resources/profile.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884104,
-    "ast_hash": "276663d18eb21da7c157d4293e52349a",
-    "semantic_hash": "276663d18eb21da7c157d4293e52349a"
-  },
-  "sdk/python/postcard/resources/search.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.088411,
-    "ast_hash": "58652e584ec23912a8269094622ec68c",
-    "semantic_hash": "58652e584ec23912a8269094622ec68c"
-  },
-  "sdk/python/postcard/resources/sessions.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884118,
-    "ast_hash": "a5dd202b943442f8b4aade9133b6be2e",
-    "semantic_hash": "a5dd202b943442f8b4aade9133b6be2e"
-  },
-  "sdk/python/postcard/resources/status.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884128,
-    "ast_hash": "7fd5d4e807fd4c7eadf38c8144f50295",
-    "semantic_hash": "7fd5d4e807fd4c7eadf38c8144f50295"
-  },
-  "sdk/python/postcard/resources/templates.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884135,
-    "ast_hash": "8f2acb0348ae71f7800184b6cb9095f4",
-    "semantic_hash": "8f2acb0348ae71f7800184b6cb9095f4"
-  },
-  "sdk/python/postcard/resources/webhooks.py": {
-    "mtime": 1787218536.0,
-    "seen": 1787380282.0884144,
-    "ast_hash": "833ca8b6246d29a49cb4ddcd3417ec6b",
-    "semantic_hash": "833ca8b6246d29a49cb4ddcd3417ec6b"
-  },
-  "sdk/python/postcard/types.py": {
-    "mtime": 1787797807.6886415,
-    "seen": 1787797840.2602592,
-    "ast_hash": "67d13155e51d40c7280948184b38a169",
-    "semantic_hash": ""
-  },
   "dashboard/src/i18n/locales/ar.json": {
     "mtime": 1788063153.780668,
     "seen": 1788064728.569517,
@@ -8598,9 +7134,9 @@
     "semantic_hash": ""
   },
   "openapi.json": {
-    "mtime": 1787797805.8606653,
-    "seen": 1787797840.259909,
-    "ast_hash": "441feb777a922939bf07a23882003ed8",
+    "mtime": 1789201448.410518,
+    "seen": 1789202064.7955837,
+    "ast_hash": "8982bbbd81873a86a08ac7c3ad58cc44",
     "semantic_hash": ""
   },
   "scripts/upstream-surface.snapshot.json": {
@@ -8664,15 +7200,15 @@
     "semantic_hash": ""
   },
   ".github/ISSUE_TEMPLATE/bug_report.yml": {
-    "mtime": 1787797807.644642,
-    "seen": 1787797840.2611372,
-    "ast_hash": "a8970fe79f34c2fbbfffb68a8ba27620",
+    "mtime": 1789201439.8744411,
+    "seen": 1789202064.7975428,
+    "ast_hash": "675627d5defe18f2ed51e8dd3ee40141",
     "semantic_hash": ""
   },
   ".github/ISSUE_TEMPLATE/config.yml": {
-    "mtime": 1787797807.644642,
-    "seen": 1787797840.261138,
-    "ast_hash": "0bae002caff89eb051a7d5fd9361df74",
+    "mtime": 1789201439.878441,
+    "seen": 1789202064.797544,
+    "ast_hash": "c07c567156a485312b1c50f1ed019482",
     "semantic_hash": ""
   },
   ".github/ISSUE_TEMPLATE/feature_request.yml": {
@@ -8694,9 +7230,9 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1787797807.644642,
-    "seen": 1787797840.2611418,
-    "ast_hash": "d9f44f026c8d58269fb30bd884c43ecf",
+    "mtime": 1789208148.4397283,
+    "seen": 1789209224.4488847,
+    "ast_hash": "696c6aaf641dad522d73f03eae4d10a1",
     "semantic_hash": ""
   },
   ".github/workflows/java-sdk-release.yml": {
@@ -8766,27 +7302,27 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1787797805.8606653,
-    "seen": 1787797840.2611516,
-    "ast_hash": "dc7c97d960fe8727ab8180fd1339bf57",
+    "mtime": 1789201621.5012991,
+    "seen": 1789202064.7975588,
+    "ast_hash": "0c794a800e14a3488888af8d44fd3fd1",
     "semantic_hash": ""
   },
   "SECURITY.md": {
-    "mtime": 1787797805.8686652,
-    "seen": 1787797840.2611523,
-    "ast_hash": "ad5028f80f99df9b9c79738ee9e8d482",
+    "mtime": 1789201439.8744411,
+    "seen": 1789202064.7975595,
+    "ast_hash": "456e44dc337fafbab9b56092f527e1b0",
     "semantic_hash": ""
   },
   "charts/postcard/Chart.yaml": {
-    "mtime": 1787797807.5966427,
-    "seen": 1787797840.261153,
-    "ast_hash": "c19271e7138814e3f8e7167681ed4181",
+    "mtime": 1789201448.410518,
+    "seen": 1789202064.7975602,
+    "ast_hash": "6090f76f3f9a25820ad613addef40d6a",
     "semantic_hash": ""
   },
   "charts/postcard/README.md": {
-    "mtime": 1787797807.5966427,
-    "seen": 1787797840.2611537,
-    "ast_hash": "c6ac05c76bddcc10222cb2a188a5c638",
+    "mtime": 1789201448.410518,
+    "seen": 1789202064.7975614,
+    "ast_hash": "1eabb4656dc3a6dfda5b71f79fc17f43",
     "semantic_hash": ""
   },
   "charts/postcard/templates/NOTES.txt": {
@@ -8844,9 +7380,9 @@
     "semantic_hash": ""
   },
   "dashboard/README.md": {
-    "mtime": 1787797807.6926415,
-    "seen": 1787797840.2611618,
-    "ast_hash": "a47e1679f8ac16f137b29cecaf551663",
+    "mtime": 1789201448.410518,
+    "seen": 1789202064.7975702,
+    "ast_hash": "e62380adad1bc5e5365a40ba4b23e9e0",
     "semantic_hash": ""
   },
   "dashboard/index.html": {
@@ -8910,9 +7446,9 @@
     "semantic_hash": ""
   },
   "docs/08-development-guidelines.md": {
-    "mtime": 1787797807.656642,
-    "seen": 1787797840.2611706,
-    "ast_hash": "0ab64b46e38225d7ab108394f5859258",
+    "mtime": 1789201448.410518,
+    "seen": 1789202064.7975836,
+    "ast_hash": "d0abb65ca5cf5e092e78810b831cebc4",
     "semantic_hash": ""
   },
   "docs/09-testing-strategy.md": {
@@ -8934,9 +7470,9 @@
     "semantic_hash": ""
   },
   "docs/12-troubleshooting-faq.md": {
-    "mtime": 1787797807.660642,
-    "seen": 1787797840.261174,
-    "ast_hash": "89faa5c54aa883dfea59a878f952505e",
+    "mtime": 1789201483.5789163,
+    "seen": 1789202064.7975872,
+    "ast_hash": "25e7956b1ae0699fc957c29eb5914e1c",
     "semantic_hash": ""
   },
   "docs/13-horizontal-scaling.md": {
@@ -8952,9 +7488,9 @@
     "semantic_hash": ""
   },
   "docs/15-project-roadmap.md": {
-    "mtime": 1787797807.652642,
-    "seen": 1787797840.2611763,
-    "ast_hash": "4f2229362eac3e751f238e36bfbefcc3",
+    "mtime": 1789201669.8583095,
+    "seen": 1789202064.7975898,
+    "ast_hash": "88d740ceae5f1377dd6e49e7f7925df2",
     "semantic_hash": ""
   },
   "docs/16-risk-management.md": {
@@ -8970,21 +7506,21 @@
     "semantic_hash": ""
   },
   "docs/18-sdk-design.md": {
-    "mtime": 1787797807.648642,
-    "seen": 1787797840.2611787,
-    "ast_hash": "2180fdbaded00dedc7cbae1112c367ba",
+    "mtime": 1789201666.230232,
+    "seen": 1789202064.7975922,
+    "ast_hash": "acf1fc4373744d9f64993dc5cd937f95",
     "semantic_hash": ""
   },
   "docs/19-plugin-architecture.md": {
-    "mtime": 1787797807.652642,
-    "seen": 1787797840.2611794,
-    "ast_hash": "0dcdb3c566a032b978bde30ad91da5e4",
+    "mtime": 1789201483.5789163,
+    "seen": 1789202064.7975929,
+    "ast_hash": "136c4be6799de13cd082ddbd0389f516",
     "semantic_hash": ""
   },
   "docs/20-community-guidelines.md": {
-    "mtime": 1787797807.656642,
-    "seen": 1787797840.2611802,
-    "ast_hash": "290191106967aca50c5a92648e6ac38b",
+    "mtime": 1789201483.5789163,
+    "seen": 1789202064.7975936,
+    "ast_hash": "c85a40b486f1a01ebe136037c69e1fd9",
     "semantic_hash": ""
   },
   "docs/21-glossary.md": {
@@ -8994,15 +7530,15 @@
     "semantic_hash": ""
   },
   "docs/22-n8n-integration.md": {
-    "mtime": 1787797807.648642,
-    "seen": 1787797840.2611816,
-    "ast_hash": "9939f9ae9add9370a9ade16b103a3cad",
+    "mtime": 1789201483.5789163,
+    "seen": 1789202064.797595,
+    "ast_hash": "1f2b63c7b72b5b04025931c433358d6b",
     "semantic_hash": ""
   },
   "docs/23-community-integrations.md": {
-    "mtime": 1787797807.660642,
-    "seen": 1787797840.2611825,
-    "ast_hash": "1451fd0b46816d962e72e8099d2496ec",
+    "mtime": 1789201467.5987203,
+    "seen": 1789202064.797596,
+    "ast_hash": "85340e822a5137b9d45e2fa8d9bf7f3e",
     "semantic_hash": ""
   },
   "docs/24-mcp-integration.md": {
@@ -9012,9 +7548,9 @@
     "semantic_hash": ""
   },
   "docs/25-integration-fabric.md": {
-    "mtime": 1787797807.648642,
-    "seen": 1787797840.261184,
-    "ast_hash": "5e66b3d2aa0b680ef492f9269fcff99b",
+    "mtime": 1789201467.5987203,
+    "seen": 1789202064.7975976,
+    "ast_hash": "b013803c951d48561e39c9ad0c5b2b3c",
     "semantic_hash": ""
   },
   "docs/26-global-search.md": {
@@ -9054,9 +7590,9 @@
     "semantic_hash": ""
   },
   "docs/README.md": {
-    "mtime": 1787797807.648642,
-    "seen": 1787797840.2611895,
-    "ast_hash": "f33af2283124de494b2c4878ee63e0e5",
+    "mtime": 1789201493.9550557,
+    "seen": 1789202064.7976036,
+    "ast_hash": "2b6bd0ebc6ceae414e2927cf9aba47c1",
     "semantic_hash": ""
   },
   "docs/examples/chat-history-limits.md": {
@@ -9084,39 +7620,39 @@
     "semantic_hash": ""
   },
   "sdk/README.md": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.2611952,
-    "ast_hash": "cfd84c8b08770366e268ca028ed08b8e",
+    "mtime": 1789201871.820877,
+    "seen": 1789202064.79761,
+    "ast_hash": "55bc031b9a428353e96ba989791db277",
     "semantic_hash": ""
   },
   "sdk/go/README.md": {
-    "mtime": 1787797807.6806417,
-    "seen": 1787797840.2611964,
-    "ast_hash": "d428e6062c234ccb3a2948f992887e2b",
+    "mtime": 1789201621.5052993,
+    "seen": 1789202064.7976108,
+    "ast_hash": "3d7a8007847f238c1d09b1d20d0fa827",
     "semantic_hash": ""
   },
   "sdk/java/README.md": {
-    "mtime": 1787797807.6646419,
-    "seen": 1787797840.261197,
-    "ast_hash": "2e3e08b2ef490e0c57c0b306e81a3b52",
+    "mtime": 1789208111.876209,
+    "seen": 1789209224.4489458,
+    "ast_hash": "67b59a9160c97bb49757fa97de32ef27",
     "semantic_hash": ""
   },
   "sdk/javascript/README.md": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2611978,
-    "ast_hash": "63bbb98a08eb522756a25a841658875b",
+    "mtime": 1789201871.820877,
+    "seen": 1789202064.7976122,
+    "ast_hash": "48020563a7a249a46654e585cce0ade4",
     "semantic_hash": ""
   },
   "sdk/php/README.md": {
-    "mtime": 1787797807.6766417,
-    "seen": 1787797840.2611983,
-    "ast_hash": "d34d780dcacf4d492c890e6379475f93",
+    "mtime": 1789201774.4402206,
+    "seen": 1789202064.7976134,
+    "ast_hash": "c615358ac1c72eb6e5547cb8a3adfed3",
     "semantic_hash": ""
   },
   "sdk/python/README.md": {
-    "mtime": 1787797807.6846416,
-    "seen": 1787797840.261199,
-    "ast_hash": "486f9498581b8afccbb7d5d370f400e7",
+    "mtime": 1789201887.156503,
+    "seen": 1789202064.7976139,
+    "ast_hash": "2185448e827cdda24425a298a1da1b71",
     "semantic_hash": ""
   },
   "dashboard/public/favicon.svg": {
@@ -9150,21 +7686,21 @@
     "semantic_hash": ""
   },
   "dashboard/src/components/bubbles/FloatingBubbleContainer.tsx": {
-    "mtime": 1789193939.245764,
-    "seen": 1789197346.72618,
-    "ast_hash": "20eb14dafe1954a5fec630e4b794fb78",
+    "mtime": 1789204156.6366563,
+    "seen": 1789205399.670785,
+    "ast_hash": "516f4e57094d0774a89df7c512edd56d",
     "semantic_hash": ""
   },
   "dashboard/src/components/bubbles/useBubbleStore.ts": {
-    "mtime": 1789193930.565869,
-    "seen": 1789197346.726187,
-    "ast_hash": "beb208d5353ef40d4139f9213db2a8d3",
+    "mtime": 1789204399.1059082,
+    "seen": 1789205399.670793,
+    "ast_hash": "50ba94e6d1a9edcf0370b32ad17a73cd",
     "semantic_hash": ""
   },
   "dashboard/src/hooks/useGlobalBubbleListener.ts": {
-    "mtime": 1789193948.7616491,
-    "seen": 1789197346.7262254,
-    "ast_hash": "fad558c1b6a1c0df4bac905ccbce88b5",
+    "mtime": 1789204399.1059082,
+    "seen": 1789205399.6708293,
+    "ast_hash": "d5057d800c82039b9be43156f9c66665",
     "semantic_hash": ""
   },
   "dashboard/src/pages/Companies.tsx": {
@@ -9186,9 +7722,9 @@
     "semantic_hash": ""
   },
   "dashboard/src/pages/Profile.tsx": {
-    "mtime": 1789031705.289113,
-    "seen": 1789197346.72628,
-    "ast_hash": "c167cb147fe52b051037d0b232468756",
+    "mtime": 1789203583.3637512,
+    "seen": 1789205399.67088,
+    "ast_hash": "1991be3261cfca4c272fe87a92b39276",
     "semantic_hash": ""
   },
   "dashboard/src/pages/Subscriptions.tsx": {
@@ -9222,9 +7758,9 @@
     "semantic_hash": ""
   },
   "src/modules/auth/supabase.service.ts": {
-    "mtime": 1788846291.8355663,
-    "seen": 1788855294.2635021,
-    "ast_hash": "ca6d77784916485671e6aa40b473ec03",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476342,
+    "ast_hash": "e96995f219e06975274e7cee6cb03c3d",
     "semantic_hash": ""
   },
   "electron-builder.yml": {
@@ -9528,9 +8064,9 @@
     "semantic_hash": ""
   },
   "dashboard/src/utils/timezoneGuard.ts": {
-    "mtime": 1787681420.3063211,
-    "seen": 1787681545.7643976,
-    "ast_hash": "447e1d66ccbea54d23784b9c7458b03c",
+    "mtime": 1789202304.522842,
+    "seen": 1789205399.6709497,
+    "ast_hash": "4a8c8e421d5506553ea97af556292356",
     "semantic_hash": ""
   },
   "dashboard/src/components/SciFiGauges.tsx": {
@@ -9546,9 +8082,9 @@
     "semantic_hash": ""
   },
   "dashboard/src/pages/BroadcastExcel.tsx": {
-    "mtime": 1788663522.4021957,
-    "seen": 1788668480.1222794,
-    "ast_hash": "d5bb94c53b93c66927e9181f23df37c3",
+    "mtime": 1789203583.3637512,
+    "seen": 1789205399.6708589,
+    "ast_hash": "2ce22e44229f03d7ce40c1ed4e9f07ee",
     "semantic_hash": ""
   },
   "dashboard/src/pages/BroadcastSettings.tsx": {
@@ -9558,27 +8094,27 @@
     "semantic_hash": ""
   },
   "dashboard/src/pages/BroadcastTemplates.tsx": {
-    "mtime": 1789031946.2615967,
-    "seen": 1789197346.7262592,
-    "ast_hash": "7e4f924301248e0b1afbce8ee9fd4d41",
+    "mtime": 1789203583.3637512,
+    "seen": 1789205399.6708603,
+    "ast_hash": "5a52634aefa2c36e972a2fec97a61009",
     "semantic_hash": ""
   },
   "dashboard/src/pages/GoogleSheetsCRM.tsx": {
-    "mtime": 1788146771.4668136,
-    "seen": 1788199763.6466641,
-    "ast_hash": "d52626ea14be1f4278cfbf9d20a603a6",
+    "mtime": 1789203583.3477511,
+    "seen": 1789205399.6708689,
+    "ast_hash": "59cdba437a765e8cecd9fc9227c33a58",
     "semantic_hash": ""
   },
   "dashboard/src/pages/NoticeBoard.tsx": {
-    "mtime": 1789103595.5760834,
-    "seen": 1789197346.726277,
-    "ast_hash": "1d39e740a04c741419a5756eaedce9a8",
+    "mtime": 1789203583.3637512,
+    "seen": 1789205399.670877,
+    "ast_hash": "850cc0ad85fe683bc3d61519866f46d5",
     "semantic_hash": ""
   },
   "src/modules/lead-sheet/dto/trigger-lead.dto.ts": {
-    "mtime": 1787998644.4714081,
-    "seen": 1788000890.4756823,
-    "ast_hash": "1ec007ba545608e0adb1b215226f807b",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.447769,
+    "ast_hash": "3389b832a0216fe604c04cb7db8fe6ec",
     "semantic_hash": ""
   },
   "src/modules/lead-sheet/entities/lead-record.entity.ts": {
@@ -9594,21 +8130,21 @@
     "semantic_hash": ""
   },
   "src/modules/lead-sheet/lead-sheet.module.ts": {
-    "mtime": 1787682850.8283315,
-    "seen": 1787797665.1550462,
-    "ast_hash": "32dd4a98e328771e6827953200cabb72",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4477713,
+    "ast_hash": "17f9fe0ba7f96e81fef283cce5c0a999",
     "semantic_hash": ""
   },
   "src/modules/lead-sheet/lead-sheet.service.spec.ts": {
-    "mtime": 1787713827.5792813,
-    "seen": 1787797665.155047,
-    "ast_hash": "6ca3faad077941af6f1e421b585bd8d6",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4477723,
+    "ast_hash": "933c58710f1383eedf2ed0f13361c6ff",
     "semantic_hash": ""
   },
   "src/modules/lead-sheet/lead-sheet.service.ts": {
-    "mtime": 1787713817.8396912,
-    "seen": 1787797665.1550474,
-    "ast_hash": "0324b29080492b24f8bc79ae764890a0",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.447773,
+    "ast_hash": "a5dfb9c88a6d14acb593ae4fd5c20df8",
     "semantic_hash": ""
   },
   ".agents/skills/nestjs-best-practices/SKILL.md": {
@@ -14586,15 +13122,15 @@
     "semantic_hash": ""
   },
   "src/common/metrics/message-send-metrics.spec.ts": {
-    "mtime": 1787993202.0987785,
-    "seen": 1787993353.6798978,
-    "ast_hash": "dba7035c162eed56176244385a481e81",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4472713,
+    "ast_hash": "8e35124d8a2a3498e65c0b242bb82862",
     "semantic_hash": ""
   },
   "src/common/metrics/message-send-metrics.ts": {
-    "mtime": 1787993240.6062865,
-    "seen": 1787993353.6798995,
-    "ast_hash": "e1401d4311c9e16c1e3bf5ba1ad9be42",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4472718,
+    "ast_hash": "15ed31b0539853de884670188382fb86",
     "semantic_hash": ""
   },
   "src/modules/metrics/metrics.controller.spec.ts": {
@@ -14880,9 +13416,9 @@
     "semantic_hash": ""
   },
   "dashboard/src/components/chats/ChatReminderModal.tsx": {
-    "mtime": 1788525016.312803,
-    "seen": 1788525124.879057,
-    "ast_hash": "5e6256e8b284e7f34707b93e31647e2d",
+    "mtime": 1789203583.3477511,
+    "seen": 1789205399.6707988,
+    "ast_hash": "0ec690c4c8ad6b8bea3c71ec03c74fb3",
     "semantic_hash": ""
   },
   "dashboard/src/components/chats/EmojiText.tsx": {
@@ -17478,39 +16014,39 @@
     "semantic_hash": ""
   },
   "dashboard/src/pages/CampaignAnalytics.tsx": {
-    "mtime": 1789196909.9765704,
-    "seen": 1789197346.726261,
-    "ast_hash": "eb0d2928c50c93300b8e46d39c22d05c",
+    "mtime": 1789203583.3637512,
+    "seen": 1789205399.6708624,
+    "ast_hash": "6a47c5c50f45c19b1a60f81950c06b25",
     "semantic_hash": ""
   },
   "src/modules/campaign/campaign.controller.ts": {
-    "mtime": 1789117997.999652,
-    "seen": 1789197346.7271886,
-    "ast_hash": "9838c90c0080bd34b694dc13136ea5b5",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.44765,
+    "ast_hash": "9f80329550deb854bd867383637f0906",
     "semantic_hash": ""
   },
   "src/modules/campaign/campaign.module.ts": {
-    "mtime": 1789123949.51596,
-    "seen": 1789197346.7271895,
-    "ast_hash": "86e1501f099e0e1c613aaa03c87a14c4",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476511,
+    "ast_hash": "249d5aacea4a7c880cab0f23d328cbc4",
     "semantic_hash": ""
   },
   "src/modules/campaign/campaign.service.spec.ts": {
-    "mtime": 1789117998.0036519,
-    "seen": 1789197346.7271905,
-    "ast_hash": "a1196e90fb7a0973245850b99f5bb449",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476519,
+    "ast_hash": "cb52d0ad5140014becee44ffe6570177",
     "semantic_hash": ""
   },
   "src/modules/campaign/campaign.service.ts": {
-    "mtime": 1789123949.51596,
-    "seen": 1789197346.7271914,
-    "ast_hash": "a4488ece87cded4faf43208d80648d80",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476526,
+    "ast_hash": "12226dd49f096276cd13497343c3c106",
     "semantic_hash": ""
   },
   "src/modules/campaign/dto/add-leads.dto.ts": {
-    "mtime": 1788231869.3624578,
-    "seen": 1788241766.276358,
-    "ast_hash": "96325358f57b905456cfe511ff7dd347",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476533,
+    "ast_hash": "cfa816ed1073e382a831c130c4e679a9",
     "semantic_hash": ""
   },
   "src/modules/campaign/dto/campaign-query.dto.ts": {
@@ -17520,9 +16056,9 @@
     "semantic_hash": ""
   },
   "src/modules/campaign/dto/create-campaign.dto.ts": {
-    "mtime": 1789117998.0036519,
-    "seen": 1789197346.7271945,
-    "ast_hash": "0232c01ad8b7b2339fbfc2604a5ab3bc",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476554,
+    "ast_hash": "0f1ba7942efa9d52740a0e8cb0a8aece",
     "semantic_hash": ""
   },
   "src/modules/campaign/entities/campaign-lead.entity.ts": {
@@ -17538,9 +16074,9 @@
     "semantic_hash": ""
   },
   "dashboard/src/components/sessions/SessionsManager.tsx": {
-    "mtime": 1789032446.3787048,
-    "seen": 1789197346.7262113,
-    "ast_hash": "adff34ce017186f86b622def02d77bce",
+    "mtime": 1789203583.3517513,
+    "seen": 1789205399.6708148,
+    "ast_hash": "06810198f7dc90f64f2d8a2e8212ef98",
     "semantic_hash": ""
   },
   "scripts/deep-performance-network-audit.js": {
@@ -17556,15 +16092,15 @@
     "semantic_hash": ""
   },
   "src/common/utils/human-jitter.spec.ts": {
-    "mtime": 1788267087.9910896,
-    "seen": 1788313596.4324136,
-    "ast_hash": "1954f5cc169e988c580841b3b94d087c",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4473262,
+    "ast_hash": "d4be5bba5965af5d161687447a3bbb48",
     "semantic_hash": ""
   },
   "src/common/utils/human-jitter.ts": {
-    "mtime": 1788313974.4164314,
-    "seen": 1788314255.516083,
-    "ast_hash": "24834cde569d6487f284672ddc6fe197",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4473271,
+    "ast_hash": "80ff005f869060589d0e9064dcdf893d",
     "semantic_hash": ""
   },
   "deploy/ingress/envoy.consistent-hash.yaml": {
@@ -17580,33 +16116,33 @@
     "semantic_hash": ""
   },
   "src/common/security/deep-audit-phases-123.spec.ts": {
-    "mtime": 1788314174.5191712,
-    "seen": 1788314255.516042,
-    "ast_hash": "64371a3aa0e7f6921778fd9ec6e6ab01",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4472916,
+    "ast_hash": "d750d4b1367e24a36f02b1fd21e40928",
     "semantic_hash": ""
   },
   "src/database/migrations/1786400000000-AddTenantCompanyIdIsolation.ts": {
-    "mtime": 1788314552.6449113,
-    "seen": 1788314684.2050734,
-    "ast_hash": "03529a3f1da26197448f1aa0c276b264",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.44748,
+    "ast_hash": "ed0b487b385547da8b7e2d0146c36566",
     "semantic_hash": ""
   },
   "src/common/security/deep-audit-phase-6.spec.ts": {
-    "mtime": 1788314993.5336356,
-    "seen": 1788315111.3766313,
-    "ast_hash": "e581eab07694da748c53447b901874c5",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.447291,
+    "ast_hash": "0eb0c261b561dcb1671b019e4fe7a2ef",
     "semantic_hash": ""
   },
   "src/common/security/deep-audit-phases-45.spec.ts": {
-    "mtime": 1788680756.2568574,
-    "seen": 1788680814.0911899,
-    "ast_hash": "14a5d47f7ff0dc08cdff8e21d03fe265",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4472923,
+    "ast_hash": "0201553215ff148d020d806500742a11",
     "semantic_hash": ""
   },
   "dashboard/src/components/storage/LogsAuthModal.tsx": {
-    "mtime": 1788333608.5053577,
-    "seen": 1788525124.8790734,
-    "ast_hash": "be22aeed8988db65042be0f0271c5ddd",
+    "mtime": 1789203583.3517513,
+    "seen": 1789205399.6708162,
+    "ast_hash": "93da60b37d9c1314213127a356435392",
     "semantic_hash": ""
   },
   "dashboard/src/components/storage/StorageLogsViewerModal.tsx": {
@@ -17658,15 +16194,15 @@
     "semantic_hash": ""
   },
   "dashboard/src/contexts/LanMeshContext.tsx": {
-    "mtime": 1788423269.0175672,
-    "seen": 1788525124.8790774,
-    "ast_hash": "c5c7ebf76ad3b0af347c68b1ad49eba9",
+    "mtime": 1789203583.3477511,
+    "seen": 1789205399.6708198,
+    "ast_hash": "631fa027e880ba899398c12b21c4785c",
     "semantic_hash": ""
   },
   "dashboard/src/hooks/useLanMesh.ts": {
-    "mtime": 1788412976.1744146,
-    "seen": 1788525124.8790896,
-    "ast_hash": "ef555493b323da86ac37ea66f5618b7c",
+    "mtime": 1789203583.3477511,
+    "seen": 1789205399.670831,
+    "ast_hash": "68d55124023212a998aaea764d3aac24",
     "semantic_hash": ""
   },
   "dashboard/src/pages/AudienceDataSelection.tsx": {
@@ -17682,21 +16218,21 @@
     "semantic_hash": ""
   },
   "dashboard/src/pages/LanMeshTab.tsx": {
-    "mtime": 1788662979.2516704,
-    "seen": 1788668480.1222978,
-    "ast_hash": "1fdfd87f15abf9869aa111e9d8699f25",
+    "mtime": 1789203583.3637512,
+    "seen": 1789205399.6708713,
+    "ast_hash": "d0f1b14822fd342efc450b9a97fc9c01",
     "semantic_hash": ""
   },
   "dashboard/src/stores/useSpreadsheetStore.ts": {
-    "mtime": 1788349513.5274503,
-    "seen": 1788525124.8791592,
-    "ast_hash": "45c887f90b35ca1930d89b214208266e",
+    "mtime": 1789203583.3637512,
+    "seen": 1789205399.6708965,
+    "ast_hash": "79e51d1963cafcd1533a61eac8c43e11",
     "semantic_hash": ""
   },
   "src/database/migrations/1786500000000-AddSessionUserIdColumn.ts": {
-    "mtime": 1788524613.0976372,
-    "seen": 1788525124.8799555,
-    "ast_hash": "f8edb9e9c308f82d66a7db365feaf0aa",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.447481,
+    "ast_hash": "e203f55aa936de8087545a60b72eb742",
     "semantic_hash": ""
   },
   "src/modules/campaign/dto/update-lead.dto.ts": {
@@ -17706,21 +16242,21 @@
     "semantic_hash": ""
   },
   "src/modules/lan-mesh/lan-discovery.service.ts": {
-    "mtime": 1788412899.963415,
-    "seen": 1788525124.88029,
-    "ast_hash": "5b618967b3d1b8e58f45e09c170777fd",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4477658,
+    "ast_hash": "6a326bea02262abafc425dac953f7406",
     "semantic_hash": ""
   },
   "src/modules/lan-mesh/lan-mesh.module.ts": {
-    "mtime": 1788412885.907602,
-    "seen": 1788525124.880291,
-    "ast_hash": "036c065058299e42f8d13d72a2b86fb0",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4477665,
+    "ast_hash": "99a20691c5f39345aa20fb582218d720",
     "semantic_hash": ""
   },
   "src/modules/lan-mesh/lan-signaling.gateway.ts": {
-    "mtime": 1788420363.6316404,
-    "seen": 1788525124.880292,
-    "ast_hash": "39683bb6fc29bafeccad25b16061bfa0",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4477677,
+    "ast_hash": "646aaef69cc3aeab99c849e7bb277b89",
     "semantic_hash": ""
   },
   "src/modules/session/session-tenant-workspace.spec.ts": {
@@ -17748,15 +16284,15 @@
     "semantic_hash": ""
   },
   "src/common/middleware/session-router.middleware.spec.ts": {
-    "mtime": 1788673055.7927108,
-    "seen": 1788673121.7617223,
-    "ast_hash": "d5ba1e05c046483528355d3d36e35ca9",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4472835,
+    "ast_hash": "7d2274c44110119f654f8a8985815b2d",
     "semantic_hash": ""
   },
   "src/common/middleware/session-router.middleware.ts": {
-    "mtime": 1788682970.6231978,
-    "seen": 1788743510.3036418,
-    "ast_hash": "7b128e01553f30ac71d28501486fe6d8",
+    "mtime": 1789209317.9015007,
+    "seen": 1789209485.8668654,
+    "ast_hash": "05bf43af455d6fe44fc4b2950dd14a6f",
     "semantic_hash": ""
   },
   "dashboard/src/components/chats/ChannelRoomView.tsx": {
@@ -17784,9 +16320,9 @@
     "semantic_hash": ""
   },
   "src/modules/auth/instance-heartbeat.service.ts": {
-    "mtime": 1788846363.4432333,
-    "seen": 1788855294.2634993,
-    "ast_hash": "4577a49219b4995be1abfe74db5cdf08",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476316,
+    "ast_hash": "17e3490ae2457e5045faaa214f98215f",
     "semantic_hash": ""
   },
   ".agents/rules/git-upload-exclusion-rules.md": {
@@ -17838,15 +16374,15 @@
     "semantic_hash": ""
   },
   "dashboard/src/components/notepad/NotepadSearchModal.tsx": {
-    "mtime": 1789025104.4897764,
-    "seen": 1789030451.9257495,
-    "ast_hash": "a8210bde6f17a10c814525fc200974ac",
+    "mtime": 1789203583.3517513,
+    "seen": 1789205399.670812,
+    "ast_hash": "5fc71a471f8a008f469d62e008461164",
     "semantic_hash": ""
   },
   "dashboard/src/components/notepad/NotepadShareModal.tsx": {
-    "mtime": 1789196422.2057736,
-    "seen": 1789197346.7262084,
-    "ast_hash": "253d056c09f5d551a0d8a65fe5d2d2bc",
+    "mtime": 1789203583.3517513,
+    "seen": 1789205399.6708126,
+    "ast_hash": "7bccf263c56ecb58eec5db80c5a7686e",
     "semantic_hash": ""
   },
   "dashboard/src/stores/useNotepadStore.test.ts": {
@@ -17940,9 +16476,9 @@
     "semantic_hash": ""
   },
   "dashboard/src/components/bubbles/bubbleUtils.ts": {
-    "mtime": 1789123227.3615668,
-    "seen": 1789197346.726186,
-    "ast_hash": "3da5abea18865c8a16df7a865c4c8800",
+    "mtime": 1789203583.3477511,
+    "seen": 1789205399.6707902,
+    "ast_hash": "466ce68420d35b7528a6da08094a110b",
     "semantic_hash": ""
   },
   "dashboard/src/components/campaigns/EditableCell.tsx": {
@@ -17976,51 +16512,1527 @@
     "semantic_hash": ""
   },
   "src/engine/interfaces/capabilities/engine-capabilities.interface.ts": {
-    "mtime": 1789123949.51596,
-    "seen": 1789197346.727131,
-    "ast_hash": "b14e7094b368256ae9c49cc1bfdd71d2",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4475977,
+    "ast_hash": "f3bffafa7c1ad1b460a2504a2b39d921",
     "semantic_hash": ""
   },
   "src/engine/interfaces/models/engine-status.enum.ts": {
-    "mtime": 1789123227.3615668,
-    "seen": 1789197346.7271318,
-    "ast_hash": "cbe6f10c8df468e4a61d1864821dacb4",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4475987,
+    "ast_hash": "2b2465e187656f0458f8cdb60a12d7d4",
     "semantic_hash": ""
   },
   "src/modules/campaign/anti-ban-pipeline.spec.ts": {
-    "mtime": 1789108739.8287535,
-    "seen": 1789197346.7271862,
-    "ast_hash": "25be95d3b0f8548f881778078aae8f87",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476483,
+    "ast_hash": "990c50ca44fc7823996fcac762837cec",
     "semantic_hash": ""
   },
   "src/modules/campaign/campaign-lead.service.ts": {
-    "mtime": 1789123949.51596,
-    "seen": 1789197346.7271872,
-    "ast_hash": "2244d4badff8ac4c643c87e69ca3969d",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.447649,
+    "ast_hash": "bd15736a2d6ff9e5287d9bbb967c5896",
     "semantic_hash": ""
   },
   "src/modules/campaign/dto/update-campaign.dto.ts": {
-    "mtime": 1789117998.0036519,
-    "seen": 1789197346.7271955,
-    "ast_hash": "0813e85065360ecb648fbf66f13a53ad",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476564,
+    "ast_hash": "bd48b4d1c10daf1a336a61c1bc07beb0",
     "semantic_hash": ""
   },
   "src/modules/campaign/utils/phone-cleaner.util.ts": {
-    "mtime": 1789123227.3655667,
-    "seen": 1789197346.7271993,
-    "ast_hash": "9d92ac7838a5aaf792928a57c62b26b8",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476604,
+    "ast_hash": "5f1ef77d1c8a07e235dc7e14213ab2ad",
     "semantic_hash": ""
   },
   "src/modules/campaign/utils/spintax.util.ts": {
-    "mtime": 1789123227.3655667,
-    "seen": 1789197346.7272,
-    "ast_hash": "c6f53c20d40aab9aca6f79d2e0ebde3c",
+    "mtime": 1789208912.5622842,
+    "seen": 1789209224.4476614,
+    "ast_hash": "66a38366e0eae1def4d29715845c2e71",
     "semantic_hash": ""
   },
   "src/modules/message/bulk-and-campaign-timestamp-audit.spec.ts": {
     "mtime": 1789110209.0058095,
     "seen": 1789197346.7273383,
     "ast_hash": "0f8b17749e672f388849121c78b1d305",
+    "semantic_hash": ""
+  },
+  "dashboard/src/components/bubbles/useBubbleStore.test.ts": {
+    "mtime": 1789204399.1059082,
+    "seen": 1789205399.6707916,
+    "ast_hash": "e1cffe9ec5ea1e9436a96466f672bf85",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/ClientConfig.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.447004,
+    "ast_hash": "37830a03ed148bcfe2c5b3d426cb479c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/PostCardClient.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470053,
+    "ast_hash": "cc75613902a19d8b83643c0a2e3686f5",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveApiError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470062,
+    "ast_hash": "3020c3455ce72ed493e13e9b9d6604ac",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveAuthError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470074,
+    "ast_hash": "deb9c8cb2de32ff0793098e432826a27",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveConflictError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470088,
+    "ast_hash": "c0d6938414af5317de37b3eb64b329a4",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470098,
+    "ast_hash": "69b55069ec0e1dfe1285959cc1888136",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveForbiddenError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470108,
+    "ast_hash": "18e5a7c7cb2142a42854929ff2ea67db",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveNotFoundError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470115,
+    "ast_hash": "aaefd9f1d09563e22832300e24ae9dfe",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveNotImplementedError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470124,
+    "ast_hash": "4b2ec3be611d30c63f94e7a1b62a2f64",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveRateLimitError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470131,
+    "ast_hash": "bee350df189c41fef1b76be1bc033b2d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveServiceUnavailableError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.447014,
+    "ast_hash": "3aa294739e893b5b284eb4cb4d2aab55",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/errors/LeadWeaveTimeoutError.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470148,
+    "ast_hash": "db37703e16489dd1ee973fbd0084902d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/http/BinaryResponse.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470158,
+    "ast_hash": "c8f09472537f039d79402b29cc1e51e9",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/http/DefaultHttpTransport.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470165,
+    "ast_hash": "0890cfad2d41b946fbfdbf0031d68c4f",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/http/Http.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470177,
+    "ast_hash": "954aa164af09391800ab2ee0facd3084",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/http/HttpMethod.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470184,
+    "ast_hash": "fcea90b9704e810817f5d7435d5016e1",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/http/HttpRequestData.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470193,
+    "ast_hash": "881daae0f1496cc0749d6f53b56f9207",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/http/HttpResponseData.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.44702,
+    "ast_hash": "501cf1f17c644c0ffce438071d40aa63",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/http/HttpTransport.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470205,
+    "ast_hash": "412abf4a1fba5502797f45f457003b71",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/AccountRestriction.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470212,
+    "ast_hash": "c958f7f82315576b0b5591f642f02d20",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/AccountRestrictionKind.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.447022,
+    "ast_hash": "e48fa5b4faba1bda3f7c9635dbe7b428",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/AddLabelRequest.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.447023,
+    "ast_hash": "8018fcaa788a60e752a5ac2043ac0be6",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ArchiveChatRequest.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470234,
+    "ast_hash": "60fd4f0c55f64aafd2b1fe0e76b3e8a4",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/AuthValidateResponse.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.447024,
+    "ast_hash": "1b2466146681f09f0ba4830ee7c0914e",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BatchLifecycleStatus.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470248,
+    "ast_hash": "caaa7397debd91d9a09692d88c7cabf5",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BatchMessageResult.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470258,
+    "ast_hash": "85af75a0a7b848fb3d014a6ab85596ec",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BatchMessageStatus.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470263,
+    "ast_hash": "c9d9f62859868aa8efe54bde9f1fe791",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BatchProgress.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.447027,
+    "ast_hash": "9070500916e32787ea56aed19e3a1dd3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BatchStatusResponse.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470277,
+    "ast_hash": "45877acd3ee07f9dd80f6dd745a33477",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BulkMediaRequest.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470284,
+    "ast_hash": "9f18ce8eef947e9de322106a35c49911",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BulkMessageContent.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470289,
+    "ast_hash": "13f51de88298e16b6fdf83aae5826f0d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BulkMessageItem.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470298,
+    "ast_hash": "aa90b0005aa5f7739ec7dea994d5ad29",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BulkMessageResponse.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470305,
+    "ast_hash": "ae6fa44e49bf2090d4867212a8258fcf",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/BulkMessageType.java": {
+    "mtime": 1789208061.860874,
+    "seen": 1789209224.4470313,
+    "ast_hash": "77c4e8617d4dff6a33d39b91546d94e4",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CallLinkResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447032,
+    "ast_hash": "5cc56faee782dc798e66e68e8922f731",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CallLinkType.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470332,
+    "ast_hash": "918eb11939f4c86174574600fcfd102a",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CatalogInfo.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447034,
+    "ast_hash": "9b2aec53817be6167daf4f26da7b3e2a",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CatalogProduct.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470346,
+    "ast_hash": "5372fcdfdfff5ba840331236c1bc5d08",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CatalogProductsQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470353,
+    "ast_hash": "c90f47d2ef26dd8874f7ecd943621cc1",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ChannelMessageQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470363,
+    "ast_hash": "b0004d3f68abbe55e6d083dcabdc2f89",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ChannelMessageRecord.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470367,
+    "ast_hash": "a06820c67e582b84a43309803a7081a4",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ChannelRecord.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470375,
+    "ast_hash": "acb3d3ef13cd3e582fa6b0f8a3885da3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ChatHistoryMessage.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447038,
+    "ast_hash": "3320223b7f9ee9ef0d39958451f69f12",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ChatKind.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470387,
+    "ast_hash": "3c6d49c1fc3299df8f42dc3ba4fb26d8",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ChatPresence.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470396,
+    "ast_hash": "7bc4e1de2c99a7b399e0e25f755c83e2",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ChatState.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470403,
+    "ast_hash": "1b79c1b0cb6b8ec3c16793fed09d4a2c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ChatSummary.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470408,
+    "ast_hash": "f92a3893e268e2194b2cd46422210299",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CheckNumberResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470415,
+    "ast_hash": "c997a1aed7a90acd09b77027bd537d69",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ContactPhoneResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470422,
+    "ast_hash": "8613d411d4900403275e514cf0b815f0",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ContactRecord.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470432,
+    "ast_hash": "8658c4a63668381480ebe79b6e4439bd",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ConvertMediaRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447044,
+    "ast_hash": "1b04a414e241df5421060e30cb1be00f",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ConvertedMedia.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470444,
+    "ast_hash": "26da4faa037a1b1d5017def65e29d8ae",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CreateCallLinkRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447045,
+    "ast_hash": "811409c3c8097bd12bf3602f454b9c63",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CreateChannelRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470458,
+    "ast_hash": "fb8e6ff81c305fb91871ffc4b9912f7d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CreateGroupRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470465,
+    "ast_hash": "b3758835abe0248e4c9a93c7921e6b27",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CreateSessionRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470472,
+    "ast_hash": "30dea84fbbe7494d7214737438e472ae",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CreateTemplateRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447048,
+    "ast_hash": "5f4e46e10713ccb3a4964ebc97276065",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CreateWebhookRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470487,
+    "ast_hash": "ff6af72a4ce768789b7e4a726a84e65b",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/CustomLinkPreview.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470494,
+    "ast_hash": "4c856810d1b156b6babda597c6d79104",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/DeleteChatRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.44705,
+    "ast_hash": "66c62620ae7d7b32060ac003ba1f29a0",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/DeleteMessageRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470508,
+    "ast_hash": "6927e8779daebe62efb0b39fa69bb931",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/DeliveryFailureQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470515,
+    "ast_hash": "d07fea8f8d07aa826cf0cfcff78b98ad",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/DeliveryStatus.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447052,
+    "ast_hash": "2ea388ef73d2dd557aec025880654f33",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/DemoteChannelAdminRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470525,
+    "ast_hash": "b4eab4e3fb0954da4a089525f179494e",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/EditMessageRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470532,
+    "ast_hash": "a1999d7b209fb98a649b701ba00a1eda",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ForwardMessageRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447054,
+    "ast_hash": "2f87154688a6c810e446114279829d63",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupDescriptionRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470546,
+    "ast_hash": "cdddab9a86dfb84b53020513c0d9430b",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupInfo.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470553,
+    "ast_hash": "6822b3f8f6945b0faf99a39365c61a3d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupJoinInfo.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470563,
+    "ast_hash": "34700b3a0a57b749a83084bb7185bcfe",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupMembershipRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470572,
+    "ast_hash": "e825b9b796874981bad1712514d72818",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupParticipant.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447058,
+    "ast_hash": "0b24d06307793c4b426de80d78b44ef3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupPictureResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470584,
+    "ast_hash": "86378589d746dcd13fb27df1c11ee3e7",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupSettings.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470592,
+    "ast_hash": "a6d4f95af7ac7caecb6d9083a98f1826",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupSubjectRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470596,
+    "ast_hash": "e51cd33370157e017a042c73c4933e66",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/GroupSummary.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470606,
+    "ast_hash": "35063655f3c70bdbd6f68ced0408bf0e",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/HealthReadyDetails.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447061,
+    "ast_hash": "935ed974d3cfdac197fbb67421677454",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/HealthReadyResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470618,
+    "ast_hash": "cf4c3cb2202581165ae71faec1d8b188",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/HealthResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470623,
+    "ast_hash": "8f1e8c3848434dc3aaa38f250df23387",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/InviteCodeResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447063,
+    "ast_hash": "0c541d862e2a394007f06d837b2a78f6",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/JoinGroupRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470644,
+    "ast_hash": "8aa184248258b7ad916a0ca99cce3279",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/JoinGroupResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447065,
+    "ast_hash": "fa51d53616925270c01be27045c50f35",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/LabelRecord.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470656,
+    "ast_hash": "0c0e0dddf611f4b352634a3102704ccf",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ListChatsQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470663,
+    "ast_hash": "d0b446f69762f3ec068ab2a67c0f952c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ListContactsQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470668,
+    "ast_hash": "144362098f605cae7a098f4f14db4a71",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ListGroupsQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470677,
+    "ast_hash": "45e0f2e1b1b9db6bae8bdd939db767b7",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ListMessagesQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470685,
+    "ast_hash": "31e78a4a63cca12703c0993152fed406",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ListSessionsQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447069,
+    "ast_hash": "9fa45182eab6551cc13f284eec220c13",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MarkChatReadRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470696,
+    "ast_hash": "3095dac9965d6600d12a48959fd54e4c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MarkChatRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470708,
+    "ast_hash": "e03a853b1ce0f2c0edee6099b4739a94",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MediaConversionAvailability.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470713,
+    "ast_hash": "7fef54a310af8813cabe424868a5b8a4",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MemberAddMode.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470723,
+    "ast_hash": "61b97f79c3c3001e15ef262a47811bc8",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MembershipRequestActionRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470727,
+    "ast_hash": "5d135e55ff413452e499365b98a075e2",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MembershipRequestMethod.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470735,
+    "ast_hash": "fbeea7541f51d052d5516dc1b5846f87",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MessageDirection.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470744,
+    "ast_hash": "ac9d9da71d93b329020e9d482c7d820a",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MessageHistoryQuery.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470751,
+    "ast_hash": "ab4000f9828388cc8b9c47cfdbe17eef",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MessageListResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447076,
+    "ast_hash": "9d8ded74c0fa8fc6df59ea862a38c0e3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MessageRecord.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470768,
+    "ast_hash": "161427a2c3b04820dc4443aef5bf4d05",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MessageResponse.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470778,
+    "ast_hash": "d89761f1f2b2415857dc29461129879c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MessageType.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470785,
+    "ast_hash": "355e28aca91e8857f3fe8a51946d0531",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MuteChannelRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.447079,
+    "ast_hash": "77ad6728abfdeb79db905fb33351571c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/MuteChatRequest.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.44708,
+    "ast_hash": "3e552ee633c25458667e9e708de1ea90",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/PaginatedProducts.java": {
+    "mtime": 1789208061.864874,
+    "seen": 1789209224.4470806,
+    "ast_hash": "510fada7a963c52066cd56e912b8120d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/PairingCodeResponse.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470816,
+    "ast_hash": "1df1cb38871360fb9ac4148a6ae3d451",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ParticipantPresence.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470823,
+    "ast_hash": "0dab29f6c198e805d1dfbf20eed0627f",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ParticipantResult.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470828,
+    "ast_hash": "1b0dae2c580b5f58253b0bfff9eab4d5",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ParticipantsRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470835,
+    "ast_hash": "e89ae71bc82aa5ad036682688eae9782",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ParticipantsResult.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470842,
+    "ast_hash": "e5b6a4855efa0dbbf415a0e8e55164e8",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/PinChatRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470854,
+    "ast_hash": "7500c90a780120d4d732a5470e83e12f",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/PinMessageRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447086,
+    "ast_hash": "e729022cf808432a701a6ffd2b3038fd",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/PresenceState.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470868,
+    "ast_hash": "dc3b1a3a3c1d7cc952684e24a242ce51",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ProductMessageResponse.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470875,
+    "ast_hash": "f30ad2f540cf232325a7a876fb537dcf",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ProfilePictureResponse.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470885,
+    "ast_hash": "ff9e731d12e69ddaed06a087e4834f76",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ProfilePicturesResponse.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447089,
+    "ast_hash": "50fae6168b3982ca8956bf7d72c1b4e0",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ProxyType.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.44709,
+    "ast_hash": "8d5ade2db9aa3888751d3b08b284a51c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/QrCodeResponse.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470904,
+    "ast_hash": "ea82c09d575986a7321f37268856945d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ReactMessageRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447091,
+    "ast_hash": "11e1de81883ab90af45ca6838b89ef6a",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ReactionRecord.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447092,
+    "ast_hash": "36c310e631893e25a89b4e252c13f2e5",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ReactionSender.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470928,
+    "ast_hash": "239d60d7dffcd118ddfd5873f0ab4ec9",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/ReplyMessageRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470935,
+    "ast_hash": "984f641e65a1006c2011971390a48ef4",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/RequestPairingCodeRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447094,
+    "ast_hash": "87f0abca3ef825654bf8693d93551235",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SearchHit.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470947,
+    "ast_hash": "02548577fd1b558f7120dc8421473f13",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SearchQuery.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470956,
+    "ast_hash": "76245d8a5eea9dab8264f28356c6d86c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SearchResults.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470963,
+    "ast_hash": "b8fbd10ead253becdb9102741d87208f",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendAudioRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447097,
+    "ast_hash": "16aa02a2d801557bca9064d99d00ee1f",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendBulkRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470978,
+    "ast_hash": "53b26618a34fee5f609ee5546eb07e5c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendChatStateRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470987,
+    "ast_hash": "3b4cb77551c87f741acc6e4be6a3ec1b",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendContactRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4470997,
+    "ast_hash": "53f33686c101048b369e33827b9f27b4",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendImageStatusRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471004,
+    "ast_hash": "f830281758e22aa898ad79cdc087931f",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendLocationRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447101,
+    "ast_hash": "95487b80f2e23133a5f6ba7ccd0ef7d9",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendMediaRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447102,
+    "ast_hash": "e3a296e79fb9763357ed3fdb5ccc34c6",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendPollRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471028,
+    "ast_hash": "46b43b68132e757eb6ba87ca43386e60",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendProductRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471035,
+    "ast_hash": "802172cccff200350a49229f686315d9",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendTemplateRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471045,
+    "ast_hash": "134864b3d3066241fd692fa0fa6bad04",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendTextRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471052,
+    "ast_hash": "cf159e62d7921ce87c4708c9ca10e00e",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendTextStatusRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471061,
+    "ast_hash": "3a81ceeb8b50351a48ccb7f5f439db77",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendVideoStatusRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471066,
+    "ast_hash": "55a3401c904ed7051fcb6bd7133d2770",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SendVoiceStatusRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471073,
+    "ast_hash": "d7b67368a546709a93c0fd8e16eed000",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SessionConfig.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447108,
+    "ast_hash": "909ba581c908331cefa3ff7ed6a9c6cd",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SessionResponse.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471085,
+    "ast_hash": "1422eab947587871c516c9867143921b",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SessionStatsOverview.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471097,
+    "ast_hash": "89a7eadbd4e21a3eb0ca02e5a2d88e20",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SessionStatus.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471104,
+    "ast_hash": "fe46f00539b416fc4d6cd873e1c961d1",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SetGroupPictureRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471111,
+    "ast_hash": "96147f3c51354f13d1fe4ce00db04d37",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SetOwnPresenceRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471118,
+    "ast_hash": "ad652d69f7530ed668d5cdbd4e426fd7",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SetProfileNameRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471128,
+    "ast_hash": "61b1d0a3448169a4110614214727ea3a",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SetProfilePictureRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471133,
+    "ast_hash": "0d752cc2eb9f0d5f4deefece7d28630c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SetProfileStatusRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471142,
+    "ast_hash": "eedcaa66cf72a909ca0c17a5667ed3e3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/StarMessageRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471152,
+    "ast_hash": "054fc0f5943ac1d198f9b969e36760d0",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/StatusContact.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471157,
+    "ast_hash": "409ce2f06c8a5d2b3d036453b8e88e6c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/StatusListResult.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471166,
+    "ast_hash": "d74c6bd84144c54fe9a400fabfd52513",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/StatusMediaInput.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471173,
+    "ast_hash": "a05789a6b9927b66f6b54b657a2172da",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/StatusRecord.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471178,
+    "ast_hash": "3b482565cf0ef682f5c6b77d2f56cacb",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/StatusResult.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471185,
+    "ast_hash": "b166fe4372170cbec51df7c29b7c7460",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SubscribeChannelRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471195,
+    "ast_hash": "a55227d8dcaed04b00cd902d7b758d06",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SubscribePresenceRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.44712,
+    "ast_hash": "672c9226f7ea7c49edaa4fd030bbf8c7",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/SuccessResult.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471207,
+    "ast_hash": "0e905fd662999ca5d03ac3088b322c51",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/TemplateRecord.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471214,
+    "ast_hash": "1459051c0940c2a52bad059b780515e3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/TransferChannelOwnershipRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447122,
+    "ast_hash": "118f7e55b801fa4a632650c533eeeadb",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/UnpinMessageRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447123,
+    "ast_hash": "8a593d96250875b98b400c7aac6b904a",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/UpdateSessionConfigRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471238,
+    "ast_hash": "6e53c8e70ae8febe095613dd3f3488fc",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/UpdateSessionConfigRequestSerializer.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471245,
+    "ast_hash": "8cb5e11465b3dc764ee694df7359a466",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/UpdateTemplateRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447125,
+    "ast_hash": "df83868d7da2d685f2b27d2868ea00b3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/UpdateWebhookRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471257,
+    "ast_hash": "35d8fc1e21ea545dd805592db220d26b",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/UpsertContactRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471266,
+    "ast_hash": "b495f6ba522b711b468a2d7416a424ee",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/UpsertLabelRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471273,
+    "ast_hash": "0acf91681d5d7aa01bbe8936f53bb889",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/VotePollRequest.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471278,
+    "ast_hash": "f3295a44a00500ab0c7f0e84f13a5c70",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/WebhookEvent.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471285,
+    "ast_hash": "8b9c9f38c24665f185314c6688224c80",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/WebhookFilterCondition.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471292,
+    "ast_hash": "3b63554ce8c151a77daf8292c80d7f73",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/WebhookFilters.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471302,
+    "ast_hash": "e1928577a5d04b2f5d9ea66a6549090c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/WebhookResponse.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447131,
+    "ast_hash": "d7a5b658b5ba8e352032ccaae273b528",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/model/WebhookTestResult.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.4471314,
+    "ast_hash": "9201b2cffaab8058c7189ba224ca4f52",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/package-info.java": {
+    "mtime": 1789208061.8688738,
+    "seen": 1789209224.447132,
+    "ast_hash": "9bbd4495b1772e38c7ed241b687163f2",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/CallsResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471328,
+    "ast_hash": "eaad29b14410ca12bc9a0cdd165d1274",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/CatalogResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471338,
+    "ast_hash": "b585579b9b68c51df09239154885f043",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/ChannelsResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471347,
+    "ast_hash": "8ec1649a54bb11472fc43fed54a5be0d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/ChatsResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471354,
+    "ast_hash": "6a529bcd7b0dd481c4a3d4cb7fc9d485",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/ContactsResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471362,
+    "ast_hash": "2f7449c9b335f12a19a9a4a63a3173a6",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/GroupsResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471374,
+    "ast_hash": "4a6ba8a2aea614c520378bf638337436",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/HealthResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.447138,
+    "ast_hash": "3faa65aa36a96b7f1cb451fd97395633",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/LabelsResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471388,
+    "ast_hash": "284c6826967bc4e95533572ce9cfd62c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/MediaResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471393,
+    "ast_hash": "19bb877f262b5f1facd78d586b026dee",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/MessagesResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.44714,
+    "ast_hash": "3bc52a037e2e55795b597d25b7a5177d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/ProfileResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.447141,
+    "ast_hash": "28e3bd3da5b675f2922de4b8c251f2a3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/SearchResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471416,
+    "ast_hash": "0efa470792f8b265293eb150f15e3a29",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/SessionsResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471424,
+    "ast_hash": "9479feadbb8e71f652f59c7698c992ed",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/StatusResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471428,
+    "ast_hash": "b44a736ae13d20542f22072a35c3b0e7",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/TemplatesResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471438,
+    "ast_hash": "db2f4bb8f3130563755548f9a0fabd72",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/main/java/com/arunsanu/leadweave/resources/WebhooksResource.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471443,
+    "ast_hash": "3b93d4c21734c452c5e5f4c64f9713bf",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/ClientTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.447145,
+    "ast_hash": "ba7a7f19a41dfba470e72d5e8558680c",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/ConfigTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471457,
+    "ast_hash": "1cad2884e3b420a7e617b59153091319",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/EnumWireTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471464,
+    "ast_hash": "a3eb9489a675da3cffbe793b5845b19a",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/ScaffoldTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471474,
+    "ast_hash": "f30b09a241a31398600e005164dec336",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/errors/ErrorsTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.447148,
+    "ast_hash": "e97f77ad3b20d9a236baffb9d15bf146",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/http/HttpTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471488,
+    "ast_hash": "57c2befa92bd7aa4f700db93b721fe6d",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/model/ChatHistoryMessageDecodeTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471495,
+    "ast_hash": "1274f157b1db82cc8bf9d2785be9d5a3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/model/UpdateSessionConfigRequestTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.4471502,
+    "ast_hash": "7f70a9bd36b25864e294dc4e960b3f21",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/CallsResourceTest.java": {
+    "mtime": 1789208061.8728738,
+    "seen": 1789209224.447151,
+    "ast_hash": "bf530d91e50d7efcab0c87f97c3be38e",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/CatalogResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471517,
+    "ast_hash": "5940983cc03d99c84a1be1a9591dd266",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/ChannelsResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471521,
+    "ast_hash": "72ae46a20b479622c852ee165330252a",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/ChatsResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471529,
+    "ast_hash": "d331c523545458241cba881389ad9a90",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/ContactsResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471536,
+    "ast_hash": "18a5eec6a248dccbd7ec5cfa5c97d82f",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/GroupsResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471545,
+    "ast_hash": "6be52709b4b93b74874a99ec9298e1b3",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/HealthResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471552,
+    "ast_hash": "c88c0a9b6227eeb473d84e938ed049f6",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/LabelsResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471562,
+    "ast_hash": "1b9268861eb96abd232ec38a9aba8d49",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/MediaResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471567,
+    "ast_hash": "ddd430281f88e0bf7b75c149163f72a9",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/MessagesResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471576,
+    "ast_hash": "83e0aeaa914dabc934518377acfe1425",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/ProfileResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.447158,
+    "ast_hash": "5a57e205c0d3e45a8a88bfe118fc2869",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/SearchResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471588,
+    "ast_hash": "2cc5e43cc1ba0036747d326d4fbef558",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/SessionsResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471593,
+    "ast_hash": "775b4a732eb2ec8733bbf1e9122efd2e",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/StatusResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.44716,
+    "ast_hash": "d249904a7755656be2d6cf37aae6f68b",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/TemplatesResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471607,
+    "ast_hash": "9bd8bd07bd3522b70e95055934124aaa",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/resources/WebhooksResourceTest.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471617,
+    "ast_hash": "87984d59cdd7916c587fe56e6c3bd889",
+    "semantic_hash": ""
+  },
+  "sdk/java/src/test/java/com/arunsanu/leadweave/support/MockTransport.java": {
+    "mtime": 1789208061.8768737,
+    "seen": 1789209224.4471624,
+    "ast_hash": "d149de22f55134532edf914638270128",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveApiException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.4471934,
+    "ast_hash": "e81e4e0e73e353818960ba1f1aba502e",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveAuthException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.447194,
+    "ast_hash": "6358f668751955361e0d0a0d1d46ae1f",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveConflictException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.4471948,
+    "ast_hash": "e1f534e6e300acd61b58365a0fb11613",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.4471955,
+    "ast_hash": "5f63275110639bc9187815b7451da09f",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveForbiddenException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.4471965,
+    "ast_hash": "9dbda6883666d74121464c605e70d442",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveNotFoundException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.447197,
+    "ast_hash": "57346c60315e065328c3aeea3314e7fc",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveNotImplementedException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.4471977,
+    "ast_hash": "2c5224a91320ef821c9f1c6ea5d74be5",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveRateLimitException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.4471984,
+    "ast_hash": "c91d5ac6bc2874d7dd7e3a959e2124b5",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveServiceUnavailableException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.4471989,
+    "ast_hash": "af2575df4ca54c0eb24cfe3e2eaed50b",
+    "semantic_hash": ""
+  },
+  "sdk/php/src/Exceptions/LeadWeaveTimeoutException.php": {
+    "mtime": 1787797807.6806417,
+    "seen": 1789209224.4471998,
+    "ast_hash": "6866643fec4744dd1c816c62a15d021b",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/__init__.py": {
+    "mtime": 1787797807.6886415,
+    "seen": 1789209224.4472213,
+    "ast_hash": "c8420fdbb95df67bc4086e85d4cffaf7",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/_http.py": {
+    "mtime": 1787797807.6886415,
+    "seen": 1789209224.447222,
+    "ast_hash": "27ff9de8135431069b44094766c8bab9",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/client.py": {
+    "mtime": 1787797807.6886415,
+    "seen": 1789209224.4472227,
+    "ast_hash": "581a60a70c7be770cc60018514df2861",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/errors.py": {
+    "mtime": 1787797807.6886415,
+    "seen": 1789209224.4472237,
+    "ast_hash": "1f72a2fba05749c7a8f53645ee28b004",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/__init__.py": {
+    "mtime": 1787797807.6886415,
+    "seen": 1789209224.4472244,
+    "ast_hash": "d3396a521529a4294e76cf7974b6cf65",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/calls.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.447225,
+    "ast_hash": "f001e22ae9dfb8fd61168b51e7827781",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/catalog.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472258,
+    "ast_hash": "f27c380ddabad52bb89c9f495f818593",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/channels.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472265,
+    "ast_hash": "a955a9bc1155af72a347ece2dc80cc11",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/chats.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472272,
+    "ast_hash": "a8483cc994bf3a2a39b36f5ec73669dd",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/contacts.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472284,
+    "ast_hash": "2092542112b05d41c29ea8dd4082d2b7",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/groups.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472291,
+    "ast_hash": "42d0a49e6dac0117bd8e13ffcfc1bcb0",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/health.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472296,
+    "ast_hash": "22e75278270317a6cf93293e1240b1d1",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/labels.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472306,
+    "ast_hash": "03efff667757f32974e179d1b61ac7dd",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/media.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.447231,
+    "ast_hash": "1eaa72ba289238f99e51a9499e125c19",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/messages.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472318,
+    "ast_hash": "e0ac9308bc70fe6c616d82d4e42d45d6",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/profile.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472325,
+    "ast_hash": "276663d18eb21da7c157d4293e52349a",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/search.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.447233,
+    "ast_hash": "58652e584ec23912a8269094622ec68c",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/sessions.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472337,
+    "ast_hash": "a5dd202b943442f8b4aade9133b6be2e",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/status.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472346,
+    "ast_hash": "7fd5d4e807fd4c7eadf38c8144f50295",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/templates.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.4472353,
+    "ast_hash": "8f2acb0348ae71f7800184b6cb9095f4",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/resources/webhooks.py": {
+    "mtime": 1787218536.0,
+    "seen": 1789209224.447236,
+    "ast_hash": "833ca8b6246d29a49cb4ddcd3417ec6b",
+    "semantic_hash": ""
+  },
+  "sdk/python/leadweave/types.py": {
+    "mtime": 1787797807.6886415,
+    "seen": 1789209224.4472368,
+    "ast_hash": "67d13155e51d40c7280948184b38a169",
+    "semantic_hash": ""
+  },
+  "patch_middleware.js": {
+    "mtime": 1789209265.1421194,
+    "seen": 1789209485.8664196,
+    "ast_hash": "6dbe0cc23c6e769465d6b03dcefd9aa3",
     "semantic_hash": ""
   }
 }

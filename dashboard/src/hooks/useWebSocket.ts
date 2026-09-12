@@ -270,7 +270,9 @@ export function useWebSocket(events: WebSocketEvents = {}) {
   }, [connect]);
 
   const eventsRef = useRef(events);
-  eventsRef.current = events;
+  useEffect(() => {
+    eventsRef.current = events;
+  }, [events]);
 
   // Register the single envelope handler and fan out to the typed callbacks.
   useEffect(() => {

@@ -48,6 +48,18 @@ const ALLOWLIST = [
       'whatsapp-web.js ships a release whose puppeteer pin carries @puppeteer/browsers 3.x. Re-check with ' +
       '`npm view whatsapp-web.js dependencies.puppeteer` then `npm view puppeteer-core@<v> dependencies`.',
   },
+  {
+    id: 'GHSA-7pqw-9j4j-h8q3',
+    package: 'extract-zip',
+    reason:
+      'No patched version exists — the advisory covers extract-zip * and 2.0.1 is the latest publish. ' +
+      'It reaches us only through the same exact puppeteer-core/@puppeteer-browsers chain documented for ' +
+      'GHSA-jmr9-qjv8-65gv above; the vulnerable extraction runs only while the Docker image downloads a ' +
+      'version-pinned Chrome for Testing build over HTTPS, never in the shipped application at runtime.',
+    removeWhen:
+      'whatsapp-web.js ships a release whose puppeteer pin carries @puppeteer/browsers 3.x. Re-check with ' +
+      '`npm view whatsapp-web.js dependencies.puppeteer` then `npm view puppeteer-core@<v> dependencies`.',
+  },
 ];
 
 const BLOCKING = new Set(['high', 'critical']);

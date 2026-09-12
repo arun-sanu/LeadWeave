@@ -26,7 +26,10 @@ export class TriggerLeadDto {
   @IsString()
   greetingTemplate?: string;
 
-  @ApiPropertyOptional({ description: 'Google Spreadsheet ID or Sheet Name', example: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms' })
+  @ApiPropertyOptional({
+    description: 'Google Spreadsheet ID or Sheet Name',
+    example: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+  })
   @IsOptional()
   @IsString()
   sheetId?: string;
@@ -38,7 +41,8 @@ export class TriggerLeadDto {
   rowIndex?: number;
 
   @ApiPropertyOptional({
-    description: 'Google Apps Script Webhook URL to call back when status updates (GREETING_SENT, REPLIED, OPT_OUT, W-RNR)',
+    description:
+      'Google Apps Script Webhook URL to call back when status updates (GREETING_SENT, REPLIED, OPT_OUT, W-RNR)',
     example: 'https://script.google.com/macros/s/AKfycbx.../exec',
   })
   @IsOptional()

@@ -31,13 +31,13 @@ export class AddTenantCompanyIdIsolation1786400000000 implements MigrationInterf
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    if (await queryRunner.hasTable('lead_records') && (await queryRunner.hasColumn('lead_records', 'company_id'))) {
+    if ((await queryRunner.hasTable('lead_records')) && (await queryRunner.hasColumn('lead_records', 'company_id'))) {
       await queryRunner.query(`ALTER TABLE "lead_records" DROP COLUMN "company_id"`);
     }
-    if (await queryRunner.hasTable('campaigns') && (await queryRunner.hasColumn('campaigns', 'company_id'))) {
+    if ((await queryRunner.hasTable('campaigns')) && (await queryRunner.hasColumn('campaigns', 'company_id'))) {
       await queryRunner.query(`ALTER TABLE "campaigns" DROP COLUMN "company_id"`);
     }
-    if (await queryRunner.hasTable('sessions') && (await queryRunner.hasColumn('sessions', 'companyId'))) {
+    if ((await queryRunner.hasTable('sessions')) && (await queryRunner.hasColumn('sessions', 'companyId'))) {
       await queryRunner.query(`ALTER TABLE "sessions" DROP COLUMN "companyId"`);
     }
   }

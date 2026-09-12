@@ -4,10 +4,7 @@ import * as path from 'node:path';
 import * as os from 'node:os';
 import { StorageService } from '../storage/storage.service';
 import { ConfigService } from '@nestjs/config';
-import {
-  stripBase64DataUri,
-  assertBase64WithinMediaCap,
-} from '../../modules/message/media-cap.util';
+import { stripBase64DataUri, assertBase64WithinMediaCap } from '../../modules/message/media-cap.util';
 import {
   spendInlineMediaBudget,
   resolveMessageListInlineMediaBudgetBytes,
@@ -80,9 +77,7 @@ describe('Deep & Hard Stress Test Suite: Phase 6 (Streaming Media Uploads & Memo
       await expect(storageService.putStream(maliciousKey, stream)).rejects.toThrow(
         /Refusing to store an unsafe storage key/,
       );
-      await expect(storageService.getStream(maliciousKey)).rejects.toThrow(
-        /Refusing to read an unsafe storage key/,
-      );
+      await expect(storageService.getStream(maliciousKey)).rejects.toThrow(/Refusing to read an unsafe storage key/);
     });
   });
 

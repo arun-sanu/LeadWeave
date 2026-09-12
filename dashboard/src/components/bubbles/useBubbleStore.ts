@@ -23,8 +23,16 @@ export interface LivelyAlert {
   timestamp: number;
 }
 
+export interface BubbleStoreSnapshot {
+  bubbles: ChatBubble[];
+  activeBubbleId: string | null;
+  expandedDocks: Record<string, boolean>;
+  livelyAlert: LivelyAlert | null;
+  totalUnread: number;
+}
+
 const STORAGE_KEY = 'leadweave_active_bubbles';
-const MAX_BUBBLES = 30;
+const MAX_BUBBLES = 25;
 
 class BubbleStore {
   private bubbles: ChatBubble[] = [];
@@ -33,6 +41,7 @@ class BubbleStore {
   private livelyAlert: LivelyAlert | null = null;
   private alertTimeout: ReturnType<typeof setTimeout> | null = null;
   private saveTimeout: ReturnType<typeof setTimeout> | null = null;
+  private notifyTimeout: ReturnType<typeof setTimeout> | null = null;
   private listeners: Set<() => void> = new Set();
 
   constructor() {
@@ -71,9 +80,19 @@ class BubbleStore {
     }, 300);
   }
 
+  private notifyListenersDebounced() {
+    if (this.notifyTimeout) {
+      clearTimeout(this.notifyTimeout);
+    }
+    this.notifyTimeout = setTimeout(() => {
+      this.notifyTimeout = null;
+      this.listeners.forEach((listener) => listener());
+    }, 50);
+  }
+
   private notify() {
     this.saveToStorageDebounced();
-    this.listeners.forEach((listener) => listener());
+    this.notifyListenersDebounced();
   }
 
   public subscribe(listener: () => void) {
@@ -83,7 +102,7 @@ class BubbleStore {
     };
   }
 
-  public getSnapshot() {
+  public getSnapshot(): BubbleStoreSnapshot {
     const totalUnread = this.bubbles.reduce((sum, b) => sum + (b.unreadCount || 0), 0);
     return {
       bubbles: this.bubbles,
@@ -141,8 +160,8 @@ class BubbleStore {
     const existingIndex = this.bubbles.findIndex((b) => b.chatId === chatId);
     if (existingIndex >= 0) {
       const existing = this.bubbles[existingIndex];
-      const isExistingNumeric = !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()\-]/g, '')) || existing.name.includes('@');
-      const isNewBetter = name && !/^\+?\d+$/.test(name.replace(/[\s()\-]/g, '')) && !name.includes('@');
+      const isExistingNumeric = !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) || existing.name.includes('@');
+      const isNewBetter = name && !/^\+?\d+$/.test(name.replace(/[\s()-]/g, '')) && !name.includes('@');
       if (isNewBetter || isExistingNumeric) {
         this.bubbles = [
           ...this.bubbles.slice(0, existingIndex),
@@ -169,8 +188,8 @@ class BubbleStore {
 
     if (existingIndex >= 0) {
       const existing = this.bubbles[existingIndex];
-      const isExistingNumeric = !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()\-]/g, '')) || existing.name.includes('@');
-      const isNewBetter = data.name && !/^\+?\d+$/.test(data.name.replace(/[\s()\-]/g, '')) && !data.name.includes('@');
+      const isExistingNumeric = !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) || existing.name.includes('@');
+      const isNewBetter = data.name && !/^\+?\d+$/.test(data.name.replace(/[\s()-]/g, '')) && !data.name.includes('@');
       const resolvedName = isNewBetter ? data.name : (!isExistingNumeric ? existing.name : data.name);
       const updatedUnread = data.incrementUnread
         ? existing.unreadCount + 1
@@ -255,11 +274,11 @@ class BubbleStore {
         const existing = updatedBubbles[existingIndex];
         const isExistingNumeric =
           !existing.name ||
-          /^\+?\d+$/.test(existing.name.replace(/[\s()\-]/g, '')) ||
+          /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) ||
           existing.name.includes('@');
         const isNewBetter =
           data.name &&
-          !/^\+?\d+$/.test(data.name.replace(/[\s()\-]/g, '')) &&
+          !/^\+?\d+$/.test(data.name.replace(/[\s()-]/g, '')) &&
           !data.name.includes('@');
         const resolvedName = isNewBetter ? data.name : !isExistingNumeric ? existing.name : data.name;
         const updatedUnread = data.incrementUnread
@@ -323,6 +342,7 @@ class BubbleStore {
 
     if (hasChanges) {
       this.bubbles = updatedBubbles;
+      // Emit only one notification for the entire batch, with alerts included
       if (latestAlertData) {
         this.triggerLivelyAlert({
           id: `alert-${Date.now()}`,
@@ -346,9 +366,11 @@ class BubbleStore {
     this.livelyAlert = alert;
     this.alertTimeout = setTimeout(() => {
       this.livelyAlert = null;
-      this.notify();
+      this.notifyListenersDebounced();
+      this.saveToStorageDebounced();
     }, 4500);
-    this.notify();
+    this.notifyListenersDebounced();
+    this.saveToStorageDebounced();
   }
 
   public dismissLivelyAlert() {
@@ -410,14 +432,23 @@ class BubbleStore {
 
 export const bubbleStore = new BubbleStore();
 
-export function useBubbleStore() {
-  const [snapshot, setSnapshot] = useState(() => bubbleStore.getSnapshot());
+const selectWholeBubbleSnapshot = (snapshot: BubbleStoreSnapshot) => snapshot;
+
+export function useBubbleStore<T = BubbleStoreSnapshot>(
+  selector: (snapshot: BubbleStoreSnapshot) => T = selectWholeBubbleSnapshot as (snapshot: BubbleStoreSnapshot) => T,
+): T {
+  const [selectedSnapshot, setSelectedSnapshot] = useState(() => selector(bubbleStore.getSnapshot()));
 
   useEffect(() => {
-    return bubbleStore.subscribe(() => {
-      setSnapshot(bubbleStore.getSnapshot());
-    });
-  }, []);
+    setSelectedSnapshot(selector(bubbleStore.getSnapshot()));
 
-  return snapshot;
+    return bubbleStore.subscribe(() => {
+      const nextSelectedSnapshot = selector(bubbleStore.getSnapshot());
+      setSelectedSnapshot(currentSnapshot =>
+        Object.is(currentSnapshot, nextSelectedSnapshot) ? currentSnapshot : nextSelectedSnapshot,
+      );
+    });
+  }, [selector]);
+
+  return selectedSnapshot;
 }

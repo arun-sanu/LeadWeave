@@ -1,8 +1,4 @@
-import {
-  recordMessageSendMetric,
-  getMessageSendMetrics,
-  resetMessageSendMetrics,
-} from './message-send-metrics';
+import { recordMessageSendMetric, getMessageSendMetrics, resetMessageSendMetrics } from './message-send-metrics';
 
 describe('message-send-metrics', () => {
   beforeEach(() => {

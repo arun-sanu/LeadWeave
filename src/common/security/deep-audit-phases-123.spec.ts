@@ -7,9 +7,7 @@ import {
   calculateTypingDuration,
   calculateBatchBreather,
 } from '../utils/human-jitter';
-import defaultDataSource, {
-  buildPostgresDataSourceOptions,
-} from '../../database/data-source';
+import defaultDataSource, { buildPostgresDataSourceOptions } from '../../database/data-source';
 import { MessageSendService } from '../../modules/message/message-send.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -285,9 +283,11 @@ describe('Deep & Hard Stress Test Suite: Phases 1, 2, and 3', () => {
             {
               provide: HookManager,
               useValue: {
-                execute: jest.fn().mockImplementation((event, payload) =>
-                  Promise.resolve({ continue: true, data: { input: payload?.input } }),
-                ),
+                execute: jest
+                  .fn()
+                  .mockImplementation((event, payload) =>
+                    Promise.resolve({ continue: true, data: { input: payload?.input } }),
+                  ),
               },
             },
             { provide: TemplateService, useValue: {} },

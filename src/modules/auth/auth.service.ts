@@ -127,7 +127,6 @@ export class AuthService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-
   /** Flush the coalesced usage counters before the DB connection closes. See ApiKeyUsageTracker. */
   async onModuleDestroy(): Promise<void> {
     await this.usageTracker.flushOnShutdown();

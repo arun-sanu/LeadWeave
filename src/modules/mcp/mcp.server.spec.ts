@@ -205,14 +205,16 @@ describe('mountMcpServer (raw-Express request-handling path)', () => {
   }
 
   const mount = (customTool?: AnyToolDescriptor): Harness => {
-    const tool = customTool ?? ({
-      name: 'MessageSendText',
-      description: 'Send a text message (session-scoped write tool)',
-      inputSchema: z.object({ sessionId: z.string(), to: z.string(), text: z.string() }),
-      tier: 'write',
-      sessionScoped: true,
-      handler: jest.fn().mockResolvedValue({ sent: true }),
-    } as unknown as AnyToolDescriptor);
+    const tool =
+      customTool ??
+      ({
+        name: 'MessageSendText',
+        description: 'Send a text message (session-scoped write tool)',
+        inputSchema: z.object({ sessionId: z.string(), to: z.string(), text: z.string() }),
+        tier: 'write',
+        sessionScoped: true,
+        handler: jest.fn().mockResolvedValue({ sent: true }),
+      } as unknown as AnyToolDescriptor);
     const registry = { list: jest.fn(() => [tool]) };
     const authService = { validateApiKey: jest.fn(), hasPermission: jest.fn(() => true) };
     const auditService = { logWarn: jest.fn() };
@@ -410,7 +412,12 @@ describe('mountMcpServer (raw-Express request-handling path)', () => {
     const rateLimiter = new KeyRateLimiter(10, 1000);
 
     mountMcpServer(adapter as any, registry, authService, rateLimiter, rateLimiter, { basePath: '/custom-mcp/' });
-    expect(adapter.post).toHaveBeenCalledWith('/custom-mcp', expect.any(Function), expect.any(Function), expect.any(Function));
+    expect(adapter.post).toHaveBeenCalledWith(
+      '/custom-mcp',
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function),
+    );
   });
 });
 
@@ -421,7 +428,7 @@ describe('auditMcpAuthFailure (direct unit tests)', () => {
 
   it('logs ForbiddenException with string message and context', () => {
     const auditService = { logWarn: jest.fn() };
-    auditMcpAuthFailure(auditService as any, new ForbiddenException('Forbidden access'), {
+    auditMcpAuthFailure(auditService, new ForbiddenException('Forbidden access'), {
       ipAddress: '1.1.1.1',
       method: 'POST',
       path: '/mcp',
@@ -437,7 +444,7 @@ describe('auditMcpAuthFailure (direct unit tests)', () => {
 
   it('does not log non-auth exceptions (e.g. BadRequestException)', () => {
     const auditService = { logWarn: jest.fn() };
-    auditMcpAuthFailure(auditService as any, new BadRequestException('Invalid input'), {
+    auditMcpAuthFailure(auditService, new BadRequestException('Invalid input'), {
       ipAddress: '1.1.1.1',
     });
 

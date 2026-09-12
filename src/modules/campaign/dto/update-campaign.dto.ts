@@ -1,12 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsDateString,
-  IsIn,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsDateString, IsIn, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CampaignPacingDto } from './create-campaign.dto';
 
@@ -51,4 +44,3 @@ export class UpdateCampaignDto {
   @IsIn(['automated', 'manual'])
   dispatchMode?: 'automated' | 'manual';
 }
-

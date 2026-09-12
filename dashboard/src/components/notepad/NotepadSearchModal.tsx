@@ -141,7 +141,7 @@ export const NotepadSearchModal: React.FC<NotepadSearchModalProps> = ({ onClose 
             <select
               className="notepad-sort-select"
               value={sortBy}
-              onChange={e => setSortBy(e.target.value as any)}
+              onChange={e => setSortBy(e.target.value as 'newest' | 'oldest' | 'title')}
               aria-label="Sort notes"
             >
               <option value="newest">Newest First</option>

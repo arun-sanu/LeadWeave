@@ -178,11 +178,7 @@ export class HookManager {
     for (const registration of registrations) {
       try {
         ctx.data = currentData;
-        const result = await withHookTimeout(
-          registration.handler(ctx),
-          timeoutMs,
-          registration.id,
-        );
+        const result = await withHookTimeout(registration.handler(ctx), timeoutMs, registration.id);
 
         // A handler that reports an error discards its output: do NOT apply its (possibly partial or
         // corrupted) data mutation, even though HookResult allows returning data and error together.

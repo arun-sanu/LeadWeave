@@ -20,69 +20,79 @@ interface RawIncomingMessage {
   metadata?: Record<string, unknown>;
 }
 
+interface PendingBubbleMessage {
+  message: ChatMessage;
+  sessionId: string;
+}
+
 export function useGlobalBubbleListener() {
   const subscribedSessionsRef = useRef<Set<string>>(new Set());
+  const pendingMessageBatchRef = useRef<Map<string, PendingBubbleMessage>>(new Map());
+  const batchFlushTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const flushMessageBatch = useCallback(() => {
+    if (batchFlushTimeoutRef.current) {
+      clearTimeout(batchFlushTimeoutRef.current);
+      batchFlushTimeoutRef.current = null;
+    }
+    if (pendingMessageBatchRef.current.size === 0) return;
+
+    const messages = Array.from(pendingMessageBatchRef.current.values());
+    pendingMessageBatchRef.current.clear();
+
+    const bubbleUpdates = messages.map(({ message: msg, sessionId }) => ({
+      chatId: msg.chatId,
+      sessionId,
+      name: msg.chatName || formatPhoneForDisplay(msg.from || msg.to || '') || 'Contact',
+      incrementUnread: msg.direction === 'incoming',
+      lastMessage: msg.body || `[${msg.type}]`,
+      lastMessageObject: msg,
+      showLivelyAlert: msg.direction === 'incoming',
+    }));
+
+    bubbleStore.batchAddOrUpdateBubbles(bubbleUpdates);
+  }, []);
 
   const handleMessage = useCallback((event: { sessionId?: string; message?: Record<string, unknown> }) => {
     if (!event?.message) return;
 
     const raw = event.message as unknown as RawIncomingMessage;
-    
-    // An incoming message is one not sent by us
     const isIncoming = raw.direction === 'incoming' || raw.fromMe === false || (!raw.fromMe && raw.direction !== 'outgoing');
-
     const targetChatId = raw.chatId || raw.from || raw.to;
 
-    if (isIncoming && targetChatId) {
-      const resolvedPushName = raw.chatName || raw.contact?.pushName || raw.contact?.name;
-      const contactName =
-        resolvedPushName && !resolvedPushName.includes('@')
-          ? resolvedPushName
-          : (typeof targetChatId === 'string' ? (formatPhoneForDisplay(targetChatId) || targetChatId.split('@')[0]) : 'Contact');
+    if (!isIncoming || !targetChatId) return;
 
-      let messagePreview = 'New message';
-      if (typeof raw.body === 'string' && raw.body.trim()) {
-        messagePreview = raw.body;
-      } else if (raw.type && raw.type !== 'text') {
-        const typeLabels: Record<string, string> = {
-          image: '📷 Photo',
-          video: '🎥 Video',
-          audio: '🎵 Audio',
-          voice: '🎤 Voice note',
-          document: '📄 Document',
-          sticker: '✨ Sticker',
-          location: '📍 Location',
-          contact: '👤 Contact card',
-        };
-        messagePreview = typeLabels[raw.type] || `[${raw.type}]`;
-      }
+    // Avoid duplicate updates when Chats.tsx is already handling active room events
+    if (window.location.pathname.includes('/chats')) return;
 
-      const mappedMsg: ChatMessage = {
-        id: raw.id || `msg-${Date.now()}`,
-        waMessageId: raw.waMessageId || raw.id || `wamid-${Date.now()}`,
-        chatId: targetChatId,
-        from: raw.from || targetChatId,
-        to: raw.to || 'me',
-        body: raw.body || '',
-        type: (raw.type as ChatMessage['type']) || 'text',
-        direction: 'incoming',
-        status: 'delivered',
-        timestamp: raw.timestamp || Math.floor(Date.now() / 1000),
-        createdAt: new Date().toISOString(),
-        metadata: raw.metadata as ChatMessage['metadata'],
-      };
+    const mappedMsg: ChatMessage = {
+      id: raw.id || `msg-${Date.now()}`,
+      waMessageId: raw.waMessageId || raw.id || `wamid-${Date.now()}`,
+      chatId: targetChatId,
+      from: raw.from || targetChatId,
+      to: raw.to || 'me',
+      body: raw.body || '',
+      type: (raw.type as ChatMessage['type']) || 'text',
+      direction: 'incoming',
+      status: 'delivered',
+      timestamp: raw.timestamp || Math.floor(Date.now() / 1000),
+      createdAt: new Date().toISOString(),
+      metadata: raw.metadata as ChatMessage['metadata'],
+    };
 
-      bubbleStore.addOrUpdateBubble({
-        chatId: targetChatId,
-        sessionId: event.sessionId || 'default',
-        name: contactName,
-        incrementUnread: true,
-        lastMessage: messagePreview,
-        lastMessageObject: mappedMsg,
-        showLivelyAlert: true,
-      });
+    // Batch message updates: accumulate and flush on a timer to avoid
+    // 200+ synchronous DOM re-renders when multiple messages arrive
+    const dedupeKey = `${targetChatId}`;
+    pendingMessageBatchRef.current.set(dedupeKey, {
+      message: mappedMsg,
+      sessionId: event.sessionId || 'default',
+    });
+
+    if (batchFlushTimeoutRef.current) {
+      clearTimeout(batchFlushTimeoutRef.current);
     }
-  }, []);
+    batchFlushTimeoutRef.current = setTimeout(flushMessageBatch, 50);
+  }, [flushMessageBatch]);
 
   // Referentially stable wsEvents object to prevent useWebSocket re-attaching listeners on every render
   const wsEvents = useMemo(
@@ -97,6 +107,12 @@ export function useGlobalBubbleListener() {
   useEffect(() => {
     if (!isConnected) {
       subscribedSessionsRef.current.clear();
+      // Flush any pending messages on disconnect
+      if (batchFlushTimeoutRef.current) {
+        clearTimeout(batchFlushTimeoutRef.current);
+        batchFlushTimeoutRef.current = null;
+      }
+      flushMessageBatch();
       return;
     }
 
@@ -120,7 +136,7 @@ export function useGlobalBubbleListener() {
                   const topChats = chats.slice(0, 15);
                   const bubbleItems = topChats.map((chat) => {
                     const displayName =
-                      chat.name && !/^\+?\d+$/.test(chat.name.replace(/[\s()\-]/g, '')) && !chat.name.includes('@')
+                      chat.name && !/^\+?\d+$/.test(chat.name.replace(/[\s()-]/g, '')) && !chat.name.includes('@')
                         ? chat.name
                         : (formatPhoneForDisplay(chat.name || chat.id) || chat.name || chat.id.split('@')[0]);
 
@@ -146,7 +162,16 @@ export function useGlobalBubbleListener() {
     }
 
     void subscribeToActiveSessions();
-  }, [isConnected, subscribe]);
+
+    // Cleanup batch flush timeout on unmount
+    return () => {
+      if (batchFlushTimeoutRef.current) {
+        clearTimeout(batchFlushTimeoutRef.current);
+        batchFlushTimeoutRef.current = null;
+      }
+      flushMessageBatch();
+    };
+  }, [isConnected, subscribe, flushMessageBatch]);
 
   return { isConnected };
 }

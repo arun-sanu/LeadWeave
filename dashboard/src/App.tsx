@@ -54,7 +54,7 @@ function AppContent() {
   const [isInitializing, setIsInitializing] = useState(true);
   const { setRole, role } = useRole();
 
-  const handleLogin = (validatedRole?: string, _isSupabase = false) => {
+  const handleLogin = (validatedRole?: string) => {
     sessionStorage.setItem('leadweave_logged_in', 'true');
     setRole(isUserRole(validatedRole) ? validatedRole : 'viewer');
     setIsAuthenticated(true);

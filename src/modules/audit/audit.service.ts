@@ -91,7 +91,9 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
     const apiKeyId = context.apiKey?.id ?? (actor?.userId ? `supabase:${actor.userId}` : actor?.apiKeyId);
     const apiKeyName = context.apiKey?.name ?? actor?.userEmail ?? actor?.apiKeyName;
     const ipAddress = context.ipAddress ?? actor?.ipAddress;
-    const userMeta = actor?.userId ? { userId: actor.userId, userEmail: actor.userEmail, userRole: actor.userRole } : {};
+    const userMeta = actor?.userId
+      ? { userId: actor.userId, userEmail: actor.userEmail, userRole: actor.userRole }
+      : {};
     const metadata =
       context.metadata || requestId || actor?.userId
         ? { ...(context.metadata ?? {}), ...(requestId ? { requestId } : {}), ...userMeta }

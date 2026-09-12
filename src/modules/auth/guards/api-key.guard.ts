@@ -79,9 +79,7 @@ export class ApiKeyGuard implements CanActivate {
 
         // Map Supabase user role to ApiKeyRole for role enforcement
         const mappedRole = this.mapSupabaseRoleToApiKeyRole(supabaseUser.role);
-        const effectiveAllowedSessions = (isSuperAdmin || isCompanyAdmin)
-          ? null
-          : (supabaseUser.assignedSessions || []);
+        const effectiveAllowedSessions = isSuperAdmin || isCompanyAdmin ? null : supabaseUser.assignedSessions || [];
 
         setRequestActor({
           userId: supabaseUser.id,
@@ -105,7 +103,7 @@ export class ApiKeyGuard implements CanActivate {
           allowedIps: [],
           companyId,
         };
-        (request as Request & { apiKey: typeof syntheticApiKey; user?: typeof supabaseUser }).apiKey = syntheticApiKey as ApiKey;
+        (request as Request & { apiKey: typeof syntheticApiKey; user?: typeof supabaseUser }).apiKey = syntheticApiKey;
         (request as Request & { user?: typeof supabaseUser }).user = supabaseUser;
 
         return true;
@@ -175,8 +173,8 @@ export class ApiKeyGuard implements CanActivate {
     }
 
     // 2. Validate Origin / Referer header if present
-    const origin = request.headers['origin'] as string | undefined;
-    const referer = request.headers['referer'] as string | undefined;
+    const origin = request.headers['origin'];
+    const referer = request.headers['referer'];
     const host = request.headers['host'];
 
     if (origin) {
@@ -261,4 +259,3 @@ export class ApiKeyGuard implements CanActivate {
     return resolveClientIp(request, trustedProxies);
   }
 }
-

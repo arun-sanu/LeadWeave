@@ -136,7 +136,7 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
     socket.on('connect', () => {
       setIsConnected(true);
       myIdRef.current = socket.id || '';
-      socket.emit('join-mesh', { name }, (response: any) => {
+      socket.emit('join-mesh', { name }, (response: { status: string; peers: string[] }) => {
         if (response && response.status === 'ok' && Array.isArray(response.peers)) {
           response.peers.forEach((peerId: string) => {
             initiateWebRtcConnection(peerId, true);
@@ -167,7 +167,7 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
       }
     });
 
-    socket.on('webrtc-signal', (data: { senderPeerId: string, signal: any }) => {
+    socket.on('webrtc-signal', (data: { senderPeerId: string, signal: unknown }) => {
       const { senderPeerId, signal } = data;
       let peer = webrtcPeersRef.current.get(senderPeerId);
       
@@ -184,7 +184,9 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
       sessionStorage.setItem('leadweave_user_name', trimmed);
       localStorage.setItem('leadweave_user_name', trimmed);
       localStorage.setItem('openwa_lan_mesh_name', trimmed);
-    } catch {}
+    } catch (err) {
+      console.warn('Failed to save mesh name:', err);
+    }
     setUserName(trimmed);
     setHasJoined(true);
     connectToSignaling(trimmed);
@@ -294,11 +296,12 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
   }, []);
 
   useEffect(() => {
+    const peersMap = webrtcPeersRef.current;
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
-      webrtcPeersRef.current.forEach(peer => peer.destroy());
+      peersMap.forEach(peer => peer.destroy());
     };
   }, []);
 

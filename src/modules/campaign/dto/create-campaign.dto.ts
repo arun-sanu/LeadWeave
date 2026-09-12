@@ -32,13 +32,19 @@ export class CampaignPacingDto {
   @IsBoolean()
   simulateTyping?: boolean = true;
 
-  @ApiPropertyOptional({ default: 12000, description: 'Batch breather minimum pause in milliseconds (every 10 messages)' })
+  @ApiPropertyOptional({
+    default: 12000,
+    description: 'Batch breather minimum pause in milliseconds (every 10 messages)',
+  })
   @IsOptional()
   @ToStrictNumber()
   @IsNumber()
   breatherMinMs?: number = 12000;
 
-  @ApiPropertyOptional({ default: 25000, description: 'Batch breather maximum pause in milliseconds (every 10 messages)' })
+  @ApiPropertyOptional({
+    default: 25000,
+    description: 'Batch breather maximum pause in milliseconds (every 10 messages)',
+  })
   @IsOptional()
   @ToStrictNumber()
   @IsNumber()

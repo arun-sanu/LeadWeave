@@ -12,8 +12,10 @@ import { PLUGIN_MESSAGE_PORT, type PluginMessagePort } from '../../core/plugins/
 import { ContactService } from '../contact/contact.service';
 
 const OPT_OUT_KEYWORDS = ['stop', 'unsubscribe', 'cancel', 'quit', 'optout', 'opt-out'];
-const DEFAULT_GREETING = 'Hi {{Name}}! 👋 Thank you for your interest. Are you looking for more details or a quick quote?';
-const APOLOGY_NOTE = 'Understood! So sorry to bother you {{Name}}. We have removed you from our contact list. Have a wonderful day ahead! 🙏';
+const DEFAULT_GREETING =
+  'Hi {{Name}}! 👋 Thank you for your interest. Are you looking for more details or a quick quote?';
+const APOLOGY_NOTE =
+  'Understood! So sorry to bother you {{Name}}. We have removed you from our contact list. Have a wonderful day ahead! 🙏';
 const TIMEOUT_HOURS = 20;
 
 @Injectable()
@@ -44,11 +46,14 @@ export class LeadSheetService implements OnModuleInit, OnModuleDestroy {
     );
 
     // 2. Start background sweep timer for 20-hour W-RNR timeouts (runs every 5 mins)
-    this.sweepTimer = setInterval(() => {
-      this.sweepExpiredTimeouts().catch(err => {
-        this.logger.warn('Error in sweepExpiredTimeouts', { error: String(err) });
-      });
-    }, 5 * 60 * 1000);
+    this.sweepTimer = setInterval(
+      () => {
+        this.sweepExpiredTimeouts().catch(err => {
+          this.logger.warn('Error in sweepExpiredTimeouts', { error: String(err) });
+        });
+      },
+      5 * 60 * 1000,
+    );
   }
 
   onModuleDestroy() {

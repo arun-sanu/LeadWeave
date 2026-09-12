@@ -37,7 +37,7 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
       try {
         const list = await sessionApi.list();
         if (Array.isArray(list) && list.length > 0) {
-          setSessions(list.map((s: any) => ({ id: s.id, name: s.sessionName || s.id })));
+          setSessions(list.map((s: { id: string; sessionName?: string }) => ({ id: s.id, name: s.sessionName || s.id })));
           setSessionId(list[0].id);
         }
       } catch {
@@ -64,8 +64,8 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
       } else {
         setStatusMsg({ type: 'error', text: 'LAN Mesh service unavailable' });
       }
-    } catch (err: any) {
-      setStatusMsg({ type: 'error', text: err?.message || 'Failed to share to LAN' });
+    } catch (err: unknown) {
+      setStatusMsg({ type: 'error', text: err instanceof Error ? err.message : 'Failed to share to LAN' });
     }
   };
 
@@ -89,8 +89,8 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
       await messageApi.sendText(sessionId, formattedChatId, formattedShareText);
       setStatusMsg({ type: 'success', text: 'Sent to WhatsApp chat successfully!' });
       setPhoneNumber('');
-    } catch (err: any) {
-      setStatusMsg({ type: 'error', text: err?.message || 'Failed to send message' });
+    } catch (err: unknown) {
+      setStatusMsg({ type: 'error', text: err instanceof Error ? err.message : 'Failed to send message' });
     } finally {
       setIsSending(false);
     }

@@ -12,9 +12,12 @@ export class InstanceHeartbeatService implements OnModuleInit, OnModuleDestroy {
 
   onModuleInit(): void {
     // Run heartbeat every 5 minutes (300,000 ms)
-    this.heartbeatInterval = setInterval(() => {
-      void this.performHeartbeat();
-    }, 5 * 60 * 1000);
+    this.heartbeatInterval = setInterval(
+      () => {
+        void this.performHeartbeat();
+      },
+      5 * 60 * 1000,
+    );
 
     // Initial heartbeat after 10 seconds
     setTimeout(() => {
@@ -35,7 +38,7 @@ export class InstanceHeartbeatService implements OnModuleInit, OnModuleDestroy {
       if (!supabaseService?.isEnabled?.()) return;
 
       const instanceId = process.env.INSTANCE_ID || process.env.HOSTNAME || `lw-node-${os.hostname()}`;
-      
+
       // Determine active session count if SessionManager is loaded
       let activeSessionsCount = 0;
       try {

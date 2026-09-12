@@ -66,7 +66,7 @@ export function BroadcastExcel() {
       ['phone', 'mobile', 'number', 'tel', 'whatsapp', 'name', 'recipient', 'contact'].some(k => c.toLowerCase().includes(k))
     );
 
-    let parsedHeaders: string[] = [];
+    let parsedHeaders: string[];
     let dataLines: string[][];
 
     if (looksLikeHeader) {
@@ -107,7 +107,7 @@ export function BroadcastExcel() {
     const finalCols = mappingNameIdx >= 0 ? ['name', ...customCols] : customCols;
     
     const newRows = data.map((line, idx) => {
-      const rowObj: any = { 
+      const rowObj: Record<string, string> = { 
         id: `row_${Date.now()}_${idx}`, 
         phone: line[mappingPhoneIdx] || '' 
       };
@@ -168,7 +168,7 @@ export function BroadcastExcel() {
           success('Added 1 contact from clipboard');
         }
       }
-    } catch (err) {
+    } catch {
       alert('Could not read clipboard. Please press Ctrl+V to paste data instead.');
     }
   };

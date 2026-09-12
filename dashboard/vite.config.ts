@@ -84,10 +84,13 @@ export default defineConfig({
         ws: true,
         changeOrigin: true,
         configure: (proxy) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           proxy.on('error', (_err, _req, _res) => {
             // Silently suppress ECONNRESET / EPIPE error logging when connection closes
           });
+           
           proxy.on('proxyReqWs', (_proxyReq, _req, socket) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             socket.on('error', (_err) => {
               // Suppress unhandled errors on the WebSocket proxy socket
             });

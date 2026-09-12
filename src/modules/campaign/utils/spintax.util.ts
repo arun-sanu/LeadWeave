@@ -16,4 +16,3 @@ export function parseSpintax(text: string): string {
   }
   return result;
 }
-

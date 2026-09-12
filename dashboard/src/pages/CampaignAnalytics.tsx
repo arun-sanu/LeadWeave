@@ -600,11 +600,11 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
 
   const currentCampaign = analyticsData?.campaign || campaigns.find((c) => c.id === selectedCampaignId);
   const stats = analyticsData?.stats || currentCampaign?.stats || (currentCampaign ? {
-    total: (currentCampaign as any).totalLeads ?? 0,
-    sent: (currentCampaign as any).sentCount ?? 0,
-    delivered: (currentCampaign as any).deliveredCount ?? 0,
-    read: (currentCampaign as any).readCount ?? 0,
-    failed: (currentCampaign as any).failedCount ?? 0,
+    total: ((currentCampaign as Record<string, unknown>).totalLeads as number) ?? 0,
+    sent: ((currentCampaign as Record<string, unknown>).sentCount as number) ?? 0,
+    delivered: ((currentCampaign as Record<string, unknown>).deliveredCount as number) ?? 0,
+    read: ((currentCampaign as Record<string, unknown>).readCount as number) ?? 0,
+    failed: ((currentCampaign as Record<string, unknown>).failedCount as number) ?? 0,
     pending: 0,
     replied: 0,
     deliveryRate: 0,
@@ -1279,11 +1279,11 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                   </linearGradient>
                 </defs>
                 {/* Render bars for each time slot */}
-                {(analyticsData?.timeline || []).map((item: any, idx: number, arr: Array<any>) => {
+                {(analyticsData?.timeline || []).map((item: Record<string, unknown>, idx: number, arr: Array<Record<string, unknown>>) => {
                   const replies = Number(item.replies ?? item.sent ?? 0) || 0;
                   const optOuts = Number(item.optOuts ?? item.failed ?? 0) || 0;
-                  const key = item.time || item.timestamp || `slot-${idx}`;
-                  const maxCount = Math.max(...arr.map((x: any) => (Number(x.replies ?? x.sent ?? 0) || 0) + (Number(x.optOuts ?? x.failed ?? 0) || 0)), 1);
+                  const key = String(item.time || item.timestamp || `slot-${idx}`);
+                  const maxCount = Math.max(...arr.map((x: Record<string, unknown>) => (Number(x.replies ?? x.sent ?? 0) || 0) + (Number(x.optOuts ?? x.failed ?? 0) || 0)), 1);
                   const barWidth = Math.max(8, 380 / (arr.length || 1) - 4);
                   const x = 10 + idx * (380 / (arr.length || 1));
                   const hReplies = (replies / maxCount) * 110;

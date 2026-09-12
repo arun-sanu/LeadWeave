@@ -150,6 +150,14 @@ afterEach(() => {
   sessionStorage.clear();
   fetchCalls.length = 0;
   validateBody = { valid: true, role: 'operator' };
+  // Drain any pending timers and microtasks to prevent background subscriptions
+  // from keeping the Node process alive. Using jest.clearAllTimers if available,
+  // or manually flushing via a microqueue yield.
+  if (typeof global.gc === 'function') {
+    global.gc();
+  }
+  // Yield once more to flush any remaining microtasks scheduled by cleanup handlers
+  return new Promise(resolve => setImmediate(resolve));
 });
 
 // Types a key into the login form and submits it, then waits until App has applied the role from

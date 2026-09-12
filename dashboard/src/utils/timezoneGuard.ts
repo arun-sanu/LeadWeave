@@ -72,7 +72,7 @@ export function isWithinSafeWindow(
 ): { isSafe: boolean; recipientLocalHour: number; recipientLocalTimeStr: string; countryName: string } {
   const country = detectPhoneCountry(phoneOrDigits);
   const utcHours = nowUtc.getUTCHours() + nowUtc.getUTCMinutes() / 60;
-  let localHour = (utcHours + country.approximateUtcOffset + 24) % 24;
+  const localHour = (utcHours + country.approximateUtcOffset + 24) % 24;
 
   const hourInt = Math.floor(localHour);
   const minInt = Math.floor((localHour - hourInt) * 60);

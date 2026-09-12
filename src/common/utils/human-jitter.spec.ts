@@ -1,9 +1,4 @@
-import {
-  gaussianRandom,
-  calculateHumanDelay,
-  calculateTypingDuration,
-  calculateBatchBreather,
-} from './human-jitter';
+import { gaussianRandom, calculateHumanDelay, calculateTypingDuration, calculateBatchBreather } from './human-jitter';
 
 describe('Human-Mimicking Anti-Ban Jitter Engine', () => {
   describe('gaussianRandom', () => {

@@ -7,11 +7,7 @@ import { EngineRegistry } from '../../engine/engine-registry.service';
 import { HookManager } from '../../core/hooks/hook-manager.service';
 import { QUEUE_NAMES } from '../../modules/queue/queue-names';
 import { applyTenantScopeToQuery } from './session-scope';
-import {
-  runWithRequestId,
-  setRequestActor,
-  getActiveTenantScope,
-} from '../services/request-context';
+import { runWithRequestId, setRequestActor, getActiveTenantScope } from '../services/request-context';
 import { Session } from '../../modules/session/entities/session.entity';
 import { LeadRecord } from '../../modules/lead-sheet/entities/lead-record.entity';
 import { AddTenantCompanyIdIsolation1786400000000 } from '../../database/migrations/1786400000000-AddTenantCompanyIdIsolation';
@@ -213,10 +209,7 @@ describe('Deep & Hard Stress Test Suite: Phases 4 and 5', () => {
           });
         };
 
-        const [resA, resB] = await Promise.all([
-          runTenantJob('company-acme-corp'),
-          runTenantJob('company-globex-inc'),
-        ]);
+        const [resA, resB] = await Promise.all([runTenantJob('company-acme-corp'), runTenantJob('company-globex-inc')]);
 
         expect(resA.activeTenant).toBe('company-acme-corp');
         expect(resA.qb.andWhere).toHaveBeenCalledWith('t.companyId = :__companyId', {

@@ -27,7 +27,7 @@ import {
 import { type UserRole, useRole } from '../hooks/useRole';
 
 import { FloatingBubbleContainer } from './bubbles/FloatingBubbleContainer';
-import { useBubbleStore } from './bubbles/useBubbleStore';
+import { type BubbleStoreSnapshot, useBubbleStore } from './bubbles/useBubbleStore';
 import { useGlobalBubbleListener } from '../hooks/useGlobalBubbleListener';
 import { LeadWeaveLogo } from './LeadWeaveLogo';
 import { CommandPalette } from './CommandPalette';
@@ -63,6 +63,8 @@ const prefetchRoute = (to: string) => {
   }
 };
 
+const selectTotalUnread = (snapshot: BubbleStoreSnapshot) => snapshot.totalUnread;
+
 interface LayoutProps {
   onLogout: () => void;
   userRole: UserRole | null;
@@ -70,7 +72,7 @@ interface LayoutProps {
 
 export function Layout({ onLogout }: LayoutProps) {
   useGlobalBubbleListener();
-  const { totalUnread } = useBubbleStore();
+  const totalUnread = useBubbleStore(selectTotalUnread);
   const isNotepadOpen = useNotepadStore(s => s.notes.some(n => n.isOpen));
   const toggleNotepadOpen = useNotepadStore(s => s.toggleNotepadOpen);
   const { role, isDeveloper, setSimulatedRole } = useRole();
@@ -394,4 +396,3 @@ export function Layout({ onLogout }: LayoutProps) {
     </LanMeshProvider>
   );
 }
-

@@ -141,7 +141,9 @@ export class MetricsService {
     lines.push('# TYPE leadweave_session_reconnect_attempts_total counter');
     lines.push(`leadweave_session_reconnect_attempts_total ${getSessionReconnectAttemptsTotal()}`);
 
-    lines.push('# HELP leadweave_session_reconnect_loop_alerts_total Reconnect-loop alerts emitted since process start.');
+    lines.push(
+      '# HELP leadweave_session_reconnect_loop_alerts_total Reconnect-loop alerts emitted since process start.',
+    );
     lines.push('# TYPE leadweave_session_reconnect_loop_alerts_total counter');
     lines.push(`leadweave_session_reconnect_loop_alerts_total ${getSessionReconnectLoopAlertsTotal()}`);
 
@@ -153,7 +155,9 @@ export class MetricsService {
     // at its first occurrence is easier to alert on than one pinned at zero for every reason.
     const refusals = getSendPacingRefusals();
     if (refusals.size > 0) {
-      lines.push('# HELP leadweave_send_pacing_refusals_total Sends refused by the pacing governor since process start.');
+      lines.push(
+        '# HELP leadweave_send_pacing_refusals_total Sends refused by the pacing governor since process start.',
+      );
       lines.push('# TYPE leadweave_send_pacing_refusals_total counter');
       for (const [reason, count] of refusals) {
         lines.push(`leadweave_send_pacing_refusals_total{reason="${this.escapeLabel(reason)}"} ${count}`);

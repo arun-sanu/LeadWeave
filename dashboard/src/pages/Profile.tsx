@@ -29,12 +29,14 @@ import './Profile.css';
 
 type Tab = 'account' | 'hr' | 'team' | 'webhooks' | 'support' | 'security' | 'templates';
 
+const validTabs: Tab[] = ['account', 'hr', 'team', 'webhooks', 'support', 'security', 'templates'];
+
 export function Profile() {
   const { role } = useRole();
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab') as Tab | null;
 
-  const validTabs: Tab[] = ['account', 'hr', 'team', 'webhooks', 'support', 'security', 'templates'];
+
 
   const [activeTab, setActiveTabState] = useState<Tab>(() => {
     if (tabParam && validTabs.includes(tabParam)) {

@@ -157,7 +157,11 @@ describe('assertNoDefaultSecretsInProduction', () => {
       /ALLOW_DEV_API_KEY/,
     );
     expect(() =>
-      assertNoDefaultSecretsInProduction({ nodeEnv: 'staging', databaseType: 'postgres', databasePassword: 'leadweave' }),
+      assertNoDefaultSecretsInProduction({
+        nodeEnv: 'staging',
+        databaseType: 'postgres',
+        databasePassword: 'leadweave',
+      }),
     ).toThrow(/DATABASE_PASSWORD/);
   });
 
@@ -379,7 +383,11 @@ describe('assertNoDefaultSecretsInProduction', () => {
   it('does not check the DB password when using sqlite', () => {
     // DATABASE_PASSWORD is irrelevant for sqlite, so a leftover default must not block boot.
     expect(() =>
-      assertNoDefaultSecretsInProduction({ nodeEnv: 'production', databaseType: 'sqlite', databasePassword: 'leadweave' }),
+      assertNoDefaultSecretsInProduction({
+        nodeEnv: 'production',
+        databaseType: 'sqlite',
+        databasePassword: 'leadweave',
+      }),
     ).not.toThrow();
   });
 

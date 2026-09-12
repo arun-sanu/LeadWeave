@@ -66,7 +66,7 @@ describe('SessionRouterMiddleware', () => {
     req.params = { sessionId: 'sess-peer' };
     mockEngineRegistry.has.mockReturnValue(false);
     mockSessionOwnershipService.isHeldElsewhere.mockResolvedValue(true);
-    
+
     const heldMap = new Map();
     heldMap.set('sess-peer', { nodeId: 'node-b', nodeUrl: 'http://pod-b.internal:3000' });
     mockSessionOwnershipService.heldByOthers.mockResolvedValue(heldMap);
