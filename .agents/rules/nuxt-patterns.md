@@ -1,11 +1,11 @@
 ---
 paths:
-  - "**/nuxt.config.*"
-  - "**/app.config.*"
-  - "**/app.vue"
-  - "**/server/**/*.ts"
-  - "**/pages/**"
-  - "**/middleware/**"
+  - '**/nuxt.config.*'
+  - '**/app.config.*'
+  - '**/app.vue'
+  - '**/server/**/*.ts'
+  - '**/pages/**'
+  - '**/middleware/**'
 ---
 
 # Nuxt Patterns

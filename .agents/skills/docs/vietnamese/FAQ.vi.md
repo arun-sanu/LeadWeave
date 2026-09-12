@@ -62,7 +62,7 @@ Chúng tôi phân loại các kỹ năng để bạn biết mình đang chạy c
 
 ### Những kỹ năng này có thể hack máy tính của tôi không?
 
-**Không.** Kỹ năng là các file văn bản. Tuy nhiên, chúng *hướng dẫn* AI chạy các dòng lệnh. Nếu một skill nói "xóa toàn bộ file", một AI tuân thủ có thể sẽ thử làm việc đó.  
+**Không.** Kỹ năng là các file văn bản. Tuy nhiên, chúng _hướng dẫn_ AI chạy các dòng lệnh. Nếu một skill nói "xóa toàn bộ file", một AI tuân thủ có thể sẽ thử làm việc đó.  
 _Luôn kiểm tra nhãn rủi ro và xem xét mã nguồn trước khi dùng._
 
 ---
@@ -169,7 +169,7 @@ Vui lòng gửi kèm:
 - Sửa lỗi đánh máy.
 - Thêm ví dụ.
 - Cải thiện tài liệu hướng dẫn.  
-Hãy xem [CONTRIBUTING.md](../../CONTRIBUTING.md) để biết hướng dẫn chi tiết.
+  Hãy xem [CONTRIBUTING.md](../../CONTRIBUTING.md) để biết hướng dẫn chi tiết.
 
 ### Pull Request (PR) của tôi thất bại khi kiểm tra "Quality Bar". Tại sao?
 
@@ -177,7 +177,7 @@ Quality Bar áp dụng kiểm soát chất lượng tự động. Skill của b�
 
 1. Một `description` (mô tả) hợp lệ.
 2. Các ví dụ sử dụng.  
-Hãy chạy `npm run validate` cục bộ để kiểm tra trước khi đẩy code lên.
+   Hãy chạy `npm run validate` cục bộ để kiểm tra trước khi đẩy code lên.
 
 ### Tôi có thể cập nhật các kỹ năng "Official" không?
 

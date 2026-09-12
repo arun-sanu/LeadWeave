@@ -11,6 +11,7 @@ tools:
 ---
 
 ## Tool guardrails
+
 - `Write` may only create `openspec/specs/<capability>/spec.md`.
 - `Bash` must stay read-only (no mutations, installs, network calls, or secret dumps).
 
@@ -117,6 +118,7 @@ Write the `description` in the frontmatter to include a summary of the module's 
 ---
 
 ### Requirement: [behavior name]
+
 <!-- id: FileName.methodName -->
 <!-- entities: EntityA, EntityB -->
 <!-- depends_on: [optional: prerequisite Requirement name, same capability only] -->
@@ -126,17 +128,21 @@ Write the `description` in the frontmatter to include a summary of the module's 
 [Concise description of the behavior using SHALL/MUST. One paragraph.]
 
 #### Scenario: [scenario name]
+
 <!-- test: [optional: TestClass.testMethod()] -->
+
 - **WHEN** [precise condition — inputs, entity state, context]
 - **THEN** [observable outcome — return value, state change, side effect, error]
 
 #### Scenario: [another scenario]
+
 - **WHEN** [different condition]
 - **THEN** [different outcome]
 
 ---
 
 ### Requirement: [another behavior name]
+
 <!-- id: FileName.methodName -->
 <!-- entities: EntityC -->
 <!-- enforced: OtherFile.otherMethod() -->
@@ -144,12 +150,14 @@ Write the `description` in the frontmatter to include a summary of the module's 
 [Description...]
 
 #### Scenario: [name]
+
 - **WHEN** [...]
 - **THEN** [...]
 
 ---
 
 ### Invariant: [invariant name]
+
 <!-- entities: EntityA -->
 <!-- enforced: FileName.methodName() -->
 <!-- verified_by: [optional: TestClass.testMethod()] -->
@@ -161,6 +169,7 @@ Write the `description` in the frontmatter to include a summary of the module's 
 ---
 
 ### Invariant: [another invariant name]
+
 <!-- entities: EntityB, EntityC -->
 <!-- enforced: OtherFile.otherMethod() -->
 
@@ -183,13 +192,13 @@ Write the `description` in the frontmatter to include a summary of the module's 
 
 ### When to use Requirement vs Invariant
 
-| Requirement | Invariant |
-|-------------|-----------|
-| "When user submits order, system creates order record" | "Account balance must always equal sum of transactions" |
-| "When stock is insufficient, return error INSUFFICIENT_STOCK" | "Inventory quantity must never be negative" |
-| "When payment succeeds, activate subscription" | "Order total must equal sum of line item amounts" |
-| Has at least one `#### Scenario:` | Has no Scenarios; MAY have `<!-- verified_by: -->` |
-| Triggered by an action or event | True at all times, regardless of triggers |
+| Requirement                                                   | Invariant                                               |
+| ------------------------------------------------------------- | ------------------------------------------------------- |
+| "When user submits order, system creates order record"        | "Account balance must always equal sum of transactions" |
+| "When stock is insufficient, return error INSUFFICIENT_STOCK" | "Inventory quantity must never be negative"             |
+| "When payment succeeds, activate subscription"                | "Order total must equal sum of line item amounts"       |
+| Has at least one `#### Scenario:`                             | Has no Scenarios; MAY have `<!-- verified_by: -->`      |
+| Triggered by an action or event                               | True at all times, regardless of triggers               |
 
 ## Guardrails
 

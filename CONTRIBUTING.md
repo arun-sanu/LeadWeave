@@ -85,12 +85,12 @@ questions rather than defects in LeadWeave. Routing them correctly upfront saves
 (time to answer, time to triage, cleaner issue history). When in doubt, open a Discussion
 first — it can always be promoted to an Issue if a real defect is confirmed.
 
-| Open an **Issue** (here)                                                 | Open a **Discussion**                                                       |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Open an **Issue** (here)                                                    | Open a **Discussion**                                                       |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | Reproducible defect in LeadWeave code with clear steps, expected vs. actual | Setup / configuration help ("my proxy doesn't work, how do I configure X?") |
-| Crash, panic, wrong API response, regression after upgrade               | Provider-specific quirks (webshare, IPRoyal, brightdata, Twilio, etc.)      |
-| Documented behavior contradicted by actual behavior                      | "Is X possible?" / "What's the best way to Y?"                              |
-| Security issue (use `SECURITY.md` instead)                               | Hosting-platform / network / firewall questions                             |
+| Crash, panic, wrong API response, regression after upgrade                  | Provider-specific quirks (webshare, IPRoyal, brightdata, Twilio, etc.)      |
+| Documented behavior contradicted by actual behavior                         | "Is X possible?" / "What's the best way to Y?"                              |
+| Security issue (use `SECURITY.md` instead)                                  | Hosting-platform / network / firewall questions                             |
 
 When an Issue lands in the gray zone, maintainers will label it `needs-info`,
 `not-a-bug`, or `move-to-discussions`. If after follow-up it turns out to be

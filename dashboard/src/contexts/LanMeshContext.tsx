@@ -90,14 +90,14 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
       trickle: false,
     });
 
-    peer.on('signal', (signalData) => {
+    peer.on('signal', signalData => {
       socketRef.current?.emit('webrtc-signal', {
         targetPeerId,
-        signal: signalData
+        signal: signalData,
       });
     });
 
-    peer.on('data', (data) => {
+    peer.on('data', data => {
       try {
         const parsedData = JSON.parse(data.toString()) as ChatMessage;
         setMessages(prev => [...prev, parsedData]);
@@ -113,7 +113,7 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
       setPeers(prev => prev.filter(p => p.peerId !== targetPeerId));
     });
 
-    peer.on('error', (err) => {
+    peer.on('error', err => {
       console.warn('WebRTC peer error:', err);
       webrtcPeersRef.current.delete(targetPeerId);
       setPeers(prev => prev.filter(p => p.peerId !== targetPeerId));
@@ -123,74 +123,80 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
     return peer;
   }, []);
 
-  const connectToSignaling = useCallback((name: string) => {
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-    }
+  const connectToSignaling = useCallback(
+    (name: string) => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
 
-    const socket = io('/lan-mesh', {
-      transports: ['websocket']
-    });
-    socketRef.current = socket;
+      const socket = io('/lan-mesh', {
+        transports: ['websocket'],
+      });
+      socketRef.current = socket;
 
-    socket.on('connect', () => {
-      setIsConnected(true);
-      myIdRef.current = socket.id || '';
-      socket.emit('join-mesh', { name }, (response: { status: string; peers: string[] }) => {
-        if (response && response.status === 'ok' && Array.isArray(response.peers)) {
-          response.peers.forEach((peerId: string) => {
-            initiateWebRtcConnection(peerId, true);
-          });
+      socket.on('connect', () => {
+        setIsConnected(true);
+        myIdRef.current = socket.id || '';
+        socket.emit('join-mesh', { name }, (response: { status: string; peers: string[] }) => {
+          if (response && response.status === 'ok' && Array.isArray(response.peers)) {
+            response.peers.forEach((peerId: string) => {
+              initiateWebRtcConnection(peerId, true);
+            });
+          }
+        });
+      });
+
+      socket.on('disconnect', () => {
+        setIsConnected(false);
+        webrtcPeersRef.current.forEach(peer => peer.destroy());
+        webrtcPeersRef.current.clear();
+        setPeers([]);
+      });
+
+      socket.on('peer-joined', (data: LanPeerInfo) => {
+        setPeers(prev => {
+          const filtered = prev.filter(p => p.peerId !== data.peerId);
+          return [...filtered, data];
+        });
+      });
+
+      socket.on('peer-disconnected', (peerId: string) => {
+        setPeers(prev => prev.filter(p => p.peerId !== peerId));
+        if (webrtcPeersRef.current.has(peerId)) {
+          webrtcPeersRef.current.get(peerId)?.destroy();
+          webrtcPeersRef.current.delete(peerId);
         }
       });
-    });
 
-    socket.on('disconnect', () => {
-      setIsConnected(false);
-      webrtcPeersRef.current.forEach(peer => peer.destroy());
-      webrtcPeersRef.current.clear();
-      setPeers([]);
-    });
+      socket.on('webrtc-signal', (data: { senderPeerId: string; signal: unknown }) => {
+        const { senderPeerId, signal } = data;
+        let peer = webrtcPeersRef.current.get(senderPeerId);
 
-    socket.on('peer-joined', (data: LanPeerInfo) => {
-      setPeers(prev => {
-        const filtered = prev.filter(p => p.peerId !== data.peerId);
-        return [...filtered, data];
+        if (!peer) {
+          peer = initiateWebRtcConnection(senderPeerId, false);
+        }
+        peer.signal(signal);
       });
-    });
+    },
+    [initiateWebRtcConnection],
+  );
 
-    socket.on('peer-disconnected', (peerId: string) => {
-      setPeers(prev => prev.filter(p => p.peerId !== peerId));
-      if (webrtcPeersRef.current.has(peerId)) {
-        webrtcPeersRef.current.get(peerId)?.destroy();
-        webrtcPeersRef.current.delete(peerId);
+  const join = useCallback(
+    (name: string) => {
+      const trimmed = name.trim() || getProfileAssignedName();
+      try {
+        sessionStorage.setItem('leadweave_user_name', trimmed);
+        localStorage.setItem('leadweave_user_name', trimmed);
+        localStorage.setItem('openwa_lan_mesh_name', trimmed);
+      } catch (err) {
+        console.warn('Failed to save mesh name:', err);
       }
-    });
-
-    socket.on('webrtc-signal', (data: { senderPeerId: string, signal: unknown }) => {
-      const { senderPeerId, signal } = data;
-      let peer = webrtcPeersRef.current.get(senderPeerId);
-      
-      if (!peer) {
-        peer = initiateWebRtcConnection(senderPeerId, false);
-      }
-      peer.signal(signal);
-    });
-  }, [initiateWebRtcConnection]);
-
-  const join = useCallback((name: string) => {
-    const trimmed = name.trim() || getProfileAssignedName();
-    try {
-      sessionStorage.setItem('leadweave_user_name', trimmed);
-      localStorage.setItem('leadweave_user_name', trimmed);
-      localStorage.setItem('openwa_lan_mesh_name', trimmed);
-    } catch (err) {
-      console.warn('Failed to save mesh name:', err);
-    }
-    setUserName(trimmed);
-    setHasJoined(true);
-    connectToSignaling(trimmed);
-  }, [connectToSignaling]);
+      setUserName(trimmed);
+      setHasJoined(true);
+      connectToSignaling(trimmed);
+    },
+    [connectToSignaling],
+  );
 
   const leave = useCallback(() => {
     setHasJoined(false);
@@ -235,57 +241,63 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
   }, [join]);
 
-  const sendMessage = useCallback((text: string) => {
-    const trimmed = text.trim();
-    if (!trimmed) return;
+  const sendMessage = useCallback(
+    (text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
 
-    const currentProfileName = userName || getProfileAssignedName();
+      const currentProfileName = userName || getProfileAssignedName();
 
-    const msg: ChatMessage = {
-      id: Math.random().toString(36).substring(7),
-      senderId: myIdRef.current,
-      senderName: currentProfileName,
-      text: trimmed,
-      timestamp: Date.now()
-    };
-    
-    setMessages(prev => [...prev, msg]);
-    
-    const payload = JSON.stringify(msg);
-    webrtcPeersRef.current.forEach(peer => {
-      if (peer.connected) {
-        peer.send(payload);
-      }
-    });
-  }, [userName]);
+      const msg: ChatMessage = {
+        id: Math.random().toString(36).substring(7),
+        senderId: myIdRef.current,
+        senderName: currentProfileName,
+        text: trimmed,
+        timestamp: Date.now(),
+      };
 
-  const sendFile = useCallback((file: File) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result) {
-        const currentProfileName = userName || getProfileAssignedName();
+      setMessages(prev => [...prev, msg]);
 
-        const msg: ChatMessage = {
-          id: Math.random().toString(36).substring(7),
-          senderId: myIdRef.current,
-          senderName: currentProfileName,
-          fileName: file.name,
-          text: `Shared a file: ${file.name}`,
-          timestamp: Date.now()
-        };
-        
-        const payload = JSON.stringify(msg);
-        webrtcPeersRef.current.forEach(peer => {
-          if (peer.connected) {
-            peer.send(payload);
-          }
-        });
-        
-        setMessages(prev => [...prev, msg]);
-      }
-    };
-    reader.readAsArrayBuffer(file);
-  }, [userName]);
+      const payload = JSON.stringify(msg);
+      webrtcPeersRef.current.forEach(peer => {
+        if (peer.connected) {
+          peer.send(payload);
+        }
+      });
+    },
+    [userName],
+  );
+
+  const sendFile = useCallback(
+    (file: File) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          const currentProfileName = userName || getProfileAssignedName();
+
+          const msg: ChatMessage = {
+            id: Math.random().toString(36).substring(7),
+            senderId: myIdRef.current,
+            senderName: currentProfileName,
+            fileName: file.name,
+            text: `Shared a file: ${file.name}`,
+            timestamp: Date.now(),
+          };
+
+          const payload = JSON.stringify(msg);
+          webrtcPeersRef.current.forEach(peer => {
+            if (peer.connected) {
+              peer.send(payload);
+            }
+          });
+
+          setMessages(prev => [...prev, msg]);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    },
+    [userName],
+  );
 
   const markMessagesRead = useCallback(() => {
     setUnreadCount(0);
@@ -318,14 +330,10 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
     sendMessage,
     sendFile,
     markMessagesRead,
-    clearLatestIncomingMessage
+    clearLatestIncomingMessage,
   };
 
-  return (
-    <LanMeshContext.Provider value={value}>
-      {children}
-    </LanMeshContext.Provider>
-  );
+  return <LanMeshContext.Provider value={value}>{children}</LanMeshContext.Provider>;
 };
 
 export function useLanMeshContext() {

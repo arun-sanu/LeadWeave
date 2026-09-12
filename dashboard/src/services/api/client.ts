@@ -88,4 +88,3 @@ export async function requestBlob(endpoint: string): Promise<Blob> {
 
   return response.blob();
 }
-

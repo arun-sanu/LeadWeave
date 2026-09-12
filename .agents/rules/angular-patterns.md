@@ -1,11 +1,12 @@
 ---
 paths:
-  - "**/*.component.ts"
-  - "**/*.component.html"
-  - "**/*.service.ts"
-  - "**/*.store.ts"
-  - "**/*.routes.ts"
+  - '**/*.component.ts'
+  - '**/*.component.html'
+  - '**/*.service.ts'
+  - '**/*.store.ts'
+  - '**/*.routes.ts'
 ---
+
 # Angular Patterns
 
 > This file extends [common/patterns.md](common-patterns.md) with Angular specific content.
@@ -53,8 +54,7 @@ export class UserDetailComponent {
 
   userResource = resource({
     request: () => ({ id: this.userId() }),
-    loader: ({ request }) =>
-      firstValueFrom(inject(UserService).getUser(request.id)),
+    loader: ({ request }) => firstValueFrom(inject(UserService).getUser(request.id)),
   });
 }
 ```
@@ -88,9 +88,7 @@ export class UserComponent {
   private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.userService.updates$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(update => this.handleUpdate(update));
+    this.userService.updates$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(update => this.handleUpdate(update));
   }
 }
 ```
@@ -105,7 +103,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   {
     path: 'admin',
-    canMatch: [authGuard],           // CanMatch prevents loading the chunk at all
+    canMatch: [authGuard], // CanMatch prevents loading the chunk at all
     loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES),
   },
   {
@@ -125,16 +123,14 @@ export const routes: Routes = [
 ```typescript
 export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
-  return auth.isAuthenticated()
-    ? true
-    : inject(Router).createUrlTree(['/login']);
+  return auth.isAuthenticated() ? true : inject(Router).createUrlTree(['/login']);
 };
 ```
 
 ### Data Resolvers
 
 ```typescript
-export const userResolver: ResolveFn<User> = (route) => {
+export const userResolver: ResolveFn<User> = route => {
   return inject(UserService).getUser(route.paramMap.get('id')!);
 };
 ```
@@ -145,7 +141,7 @@ Enable smooth route transitions with the View Transitions API:
 
 ```typescript
 // app.config.ts
-provideRouter(routes, withViewTransitions())
+provideRouter(routes, withViewTransitions());
 ```
 
 ## Dependency Injection Patterns
@@ -156,7 +152,7 @@ Provide services at component or route level when they should not be singletons:
 
 ```typescript
 @Component({
-  providers: [UserEditService],   // scoped to this component subtree
+  providers: [UserEditService], // scoped to this component subtree
 })
 export class UserEditComponent {}
 ```
@@ -194,7 +190,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 Register in `app.config.ts`:
 
 ```typescript
-provideHttpClient(withInterceptors([authInterceptor, errorInterceptor]))
+provideHttpClient(withInterceptors([authInterceptor, errorInterceptor]));
 ```
 
 ## RxJS Operators
@@ -241,7 +237,9 @@ When using SSR, avoid `window`, `document`, `localStorage` directly — use `isP
 Use Angular CDK for headless, accessible components (Accordion, Listbox, Combobox, Menu, Tabs, Toolbar, Tree, Grid). Style ARIA attributes rather than managing them manually:
 
 ```css
-[aria-selected="true"] { background: var(--color-selected); }
+[aria-selected='true'] {
+  background: var(--color-selected);
+}
 ```
 
 ## Skill Reference

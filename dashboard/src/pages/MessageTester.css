@@ -161,7 +161,7 @@
 }
 
 .message-tester .response-status.success {
-  background: rgba(var(--accent-rgb), 0.10);
+  background: rgba(var(--accent-rgb), 0.1);
   color: var(--primary-text);
 }
 

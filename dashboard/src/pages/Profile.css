@@ -83,7 +83,7 @@
   width: 84px;
   height: 84px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FFB703 0%, #FF672C 100%);
+  background: linear-gradient(135deg, #ffb703 0%, #ff672c 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -204,7 +204,7 @@
 }
 
 .profile-page .hud-menu-item.support-pill.active {
-  background: linear-gradient(135deg, #FFB703, #FF672C);
+  background: linear-gradient(135deg, #ffb703, #ff672c);
   border-left: none;
   color: #ffffff;
   padding-left: 16px;
@@ -274,7 +274,9 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .profile-page .cyber-field-card:hover {
@@ -399,7 +401,9 @@
   color: #ffffff;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .profile-page .cyber-input-wrapper input:focus {
@@ -547,7 +551,7 @@
   padding: 10px 22px;
   border-radius: 999px;
   border: none;
-  background: linear-gradient(135deg, #FFB703 0%, #FF672C 100%);
+  background: linear-gradient(135deg, #ffb703 0%, #ff672c 100%);
   color: #ffffff;
   font-size: 13px;
   font-weight: 600;
@@ -557,15 +561,21 @@
 }
 
 .profile-page .cyber-action-btn:hover {
-  background: linear-gradient(135deg, #FFC107 0%, #FF7640 100%);
+  background: linear-gradient(135deg, #ffc107 0%, #ff7640 100%);
   box-shadow: 0 6px 18px rgba(255, 103, 44, 0.45);
   transform: translateY(-1px);
 }
 
 /* Animations */
 @keyframes hudFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .profile-page .fade-in {
@@ -578,4 +588,3 @@
   padding: 0;
   max-width: 100%;
 }
-

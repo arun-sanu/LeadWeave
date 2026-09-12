@@ -32,36 +32,36 @@ The candidates are now enabled as editorial bundle plugins. Running `npm run bun
 
 These should become the primary marketplace surface.
 
-| Plugin | Job | Why it deserves focus |
-| --- | --- | --- |
-| AAS Web App Builder | Build modern React/Next.js web apps. | High-demand, coherent path from UI design to implementation, forms, Tailwind, and SEO. |
-| AAS Product Design Studio | Create richer UI, brand, motion, 3D, and visual assets. | Stronger than a generic design bundle; it has a clear creative/product promise. |
-| AAS Security Engineer | Run authorized testing, audit, and hardening workflows. | Security is deep enough to justify a standalone plugin with explicit boundaries. |
-| AAS Secure App Builder | Build secure application features. | Keeps defensive implementation separate from offensive assessment. |
-| AAS Documents & Presentations | Create, edit, convert, and automate DOCX/XLSX/PPTX/PDF/Google files. | Concrete productivity plugin with obvious user value and room for app integrations. |
-| AAS Data Analytics | Track, query, visualize, dashboard, and experiment. | Data workflows need a repeatable toolchain, not one isolated skill. |
-| AAS Agent & MCP Builder | Build agentic apps, MCP tools, RAG, and eval loops. | Maps directly to plugin-based agent workflows because it can grow into MCP config. |
-| AAS QA & Test Automation | Write, debug, stabilize, and scale tests. | Testing is a workflow chain: TDD, browser automation, failure diagnosis, and regression prevention. |
-| AAS DevOps & Cloud | Ship infrastructure, deployment, and operational workflows. | Strong fit for scripts, deployment gates, incident practice, and cloud patterns. |
-| AAS Accessibility & Inclusive UX | Audit, test, and fix accessible product experiences. | Accessibility is a standalone product-quality workflow across audit, automated scans, screen readers, fixes, and QA. |
-| AAS API Platform Builder | Design language-agnostic API platforms. | Complements Python API Builder with OpenAPI, auth, security, documentation, load testing, and observability. |
-| AAS SaaS Launch & Revenue | Launch, price, monetize, measure, and grow SaaS products. | Turns startup, pricing, payments, analytics, lifecycle, referral, and SEO skills into one revenue workflow. |
-| AAS AI Product & Evaluation Ops | Define, evaluate, instrument, and improve AI product features. | Covers the PM/product side of AI: metrics, evals, tracing, experiments, model evaluation, and context constraints. |
+| Plugin                           | Job                                                                  | Why it deserves focus                                                                                                |
+| -------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| AAS Web App Builder              | Build modern React/Next.js web apps.                                 | High-demand, coherent path from UI design to implementation, forms, Tailwind, and SEO.                               |
+| AAS Product Design Studio        | Create richer UI, brand, motion, 3D, and visual assets.              | Stronger than a generic design bundle; it has a clear creative/product promise.                                      |
+| AAS Security Engineer            | Run authorized testing, audit, and hardening workflows.              | Security is deep enough to justify a standalone plugin with explicit boundaries.                                     |
+| AAS Secure App Builder           | Build secure application features.                                   | Keeps defensive implementation separate from offensive assessment.                                                   |
+| AAS Documents & Presentations    | Create, edit, convert, and automate DOCX/XLSX/PPTX/PDF/Google files. | Concrete productivity plugin with obvious user value and room for app integrations.                                  |
+| AAS Data Analytics               | Track, query, visualize, dashboard, and experiment.                  | Data workflows need a repeatable toolchain, not one isolated skill.                                                  |
+| AAS Agent & MCP Builder          | Build agentic apps, MCP tools, RAG, and eval loops.                  | Maps directly to plugin-based agent workflows because it can grow into MCP config.                                   |
+| AAS QA & Test Automation         | Write, debug, stabilize, and scale tests.                            | Testing is a workflow chain: TDD, browser automation, failure diagnosis, and regression prevention.                  |
+| AAS DevOps & Cloud               | Ship infrastructure, deployment, and operational workflows.          | Strong fit for scripts, deployment gates, incident practice, and cloud patterns.                                     |
+| AAS Accessibility & Inclusive UX | Audit, test, and fix accessible product experiences.                 | Accessibility is a standalone product-quality workflow across audit, automated scans, screen readers, fixes, and QA. |
+| AAS API Platform Builder         | Design language-agnostic API platforms.                              | Complements Python API Builder with OpenAPI, auth, security, documentation, load testing, and observability.         |
+| AAS SaaS Launch & Revenue        | Launch, price, monetize, measure, and grow SaaS products.            | Turns startup, pricing, payments, analytics, lifecycle, referral, and SEO skills into one revenue workflow.          |
+| AAS AI Product & Evaluation Ops  | Define, evaluate, instrument, and improve AI product features.       | Covers the PM/product side of AI: metrics, evals, tracing, experiments, model evaluation, and context constraints.   |
 
 ## Tier 2 Plugins
 
 These are promising and should be hardened after Tier 1.
 
-| Plugin | Job | Why it is promising |
-| --- | --- | --- |
-| AAS Marketing, SEO & Growth | Plan, write, measure, and improve acquisition work. | Better as a growth workflow than many isolated copy/SEO skills. |
-| AAS Automation Builder | Design durable automations across tools. | Can become much stronger when paired with apps and MCP configuration. |
-| AAS Observability IR | Monitor systems, debug production, and write postmortems. | Operational work benefits from consistent proof gates. |
-| AAS Python API Builder | Build Python APIs and services with tests. | Language-specialized plugin with practical framework coverage. |
-| AAS Mobile App Builder | Ship Expo, React Native, Flutter, and iOS apps. | Covers architecture, release, CI, native platforms, and store optimization. |
-| AAS Data Engineering Platform | Build pipelines, transforms, warehouses, embeddings, and RAG-ready data foundations. | Connects analytics engineering, data pipelines, vector databases, and AI data foundations. |
-| AAS Privacy & Compliance Engineering | Engineer privacy and compliance controls. | Uses existing GDPR, PCI, privacy-by-design, compliance, spec, and security review skills without inventing new skills. |
-| AAS Localization & International Growth | Expand products across languages and markets. | Combines existing i18n, hreflang, SEO, content, copy, analytics, and market research skills. |
+| Plugin                                  | Job                                                                                  | Why it is promising                                                                                                    |
+| --------------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| AAS Marketing, SEO & Growth             | Plan, write, measure, and improve acquisition work.                                  | Better as a growth workflow than many isolated copy/SEO skills.                                                        |
+| AAS Automation Builder                  | Design durable automations across tools.                                             | Can become much stronger when paired with apps and MCP configuration.                                                  |
+| AAS Observability IR                    | Monitor systems, debug production, and write postmortems.                            | Operational work benefits from consistent proof gates.                                                                 |
+| AAS Python API Builder                  | Build Python APIs and services with tests.                                           | Language-specialized plugin with practical framework coverage.                                                         |
+| AAS Mobile App Builder                  | Ship Expo, React Native, Flutter, and iOS apps.                                      | Covers architecture, release, CI, native platforms, and store optimization.                                            |
+| AAS Data Engineering Platform           | Build pipelines, transforms, warehouses, embeddings, and RAG-ready data foundations. | Connects analytics engineering, data pipelines, vector databases, and AI data foundations.                             |
+| AAS Privacy & Compliance Engineering    | Engineer privacy and compliance controls.                                            | Uses existing GDPR, PCI, privacy-by-design, compliance, spec, and security review skills without inventing new skills. |
+| AAS Localization & International Growth | Expand products across languages and markets.                                        | Combines existing i18n, hreflang, SEO, content, copy, analytics, and market research skills.                           |
 
 ## Recommended Product Changes
 
@@ -70,11 +70,13 @@ These are promising and should be hardened after Tier 1.
 3. Rename or reframe bundle plugins as product plugins where the job is clear.
 4. Add richer `interface` metadata to the strongest plugin manifests: display name, short description, brand color, and default prompt.
 5. Add per-plugin quality gates:
-  - every skill exists in canonical `skills_index.json`;
-   - every skill is Codex-supported before Codex publication;
-   - every skill is Claude-supported before Claude publication;
-   - every plugin has a 5-10 skill target range unless it has a concrete reason to be larger;
-   - every plugin description says who it is for, what it helps do, and what it does not cover.
+
+- every skill exists in canonical `skills_index.json`;
+- every skill is Codex-supported before Codex publication;
+- every skill is Claude-supported before Claude publication;
+- every plugin has a 5-10 skill target range unless it has a concrete reason to be larger;
+- every plugin description says who it is for, what it helps do, and what it does not cover.
+
 6. Move social and launch messaging from daily individual skills to plugin stories:
    - "Web App Builder: from design to tested Next.js app";
    - "Documents & Presentations: DOCX/PPTX/XLSX/PDF without manual file surgery";

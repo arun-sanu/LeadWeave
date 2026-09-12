@@ -68,7 +68,7 @@ export function isWithinSafeWindow(
   phoneOrDigits: string,
   startHour: number = 8,
   endHour: number = 20,
-  nowUtc: Date = new Date()
+  nowUtc: Date = new Date(),
 ): { isSafe: boolean; recipientLocalHour: number; recipientLocalTimeStr: string; countryName: string } {
   const country = detectPhoneCountry(phoneOrDigits);
   const utcHours = nowUtc.getUTCHours() + nowUtc.getUTCMinutes() / 60;

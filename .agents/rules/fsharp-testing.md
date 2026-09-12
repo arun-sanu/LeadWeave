@@ -1,9 +1,10 @@
 ---
 paths:
-  - "**/*.fs"
-  - "**/*.fsx"
-  - "**/*.fsproj"
+  - '**/*.fs'
+  - '**/*.fsx'
+  - '**/*.fsproj'
 ---
+
 # F# Testing
 
 > This file extends [common/testing.md](common-testing.md) with F#-specific content.

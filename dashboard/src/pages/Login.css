@@ -31,7 +31,9 @@
   z-index: 100;
   user-select: none;
   cursor: default;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .login-container .login-top-left-brand:hover {
@@ -146,7 +148,8 @@
 }
 
 @keyframes statusPulseGreen {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
     box-shadow: 0 0 7px rgba(var(--success-rgb), 0.75);
@@ -159,7 +162,8 @@
 }
 
 @keyframes statusPulseAmber {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
     box-shadow: 0 0 7px rgba(245, 158, 11, 0.65);
@@ -172,7 +176,8 @@
 }
 
 @keyframes statusPulseRed {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
     box-shadow: 0 0 8px rgba(239, 68, 68, 0.75);
@@ -247,7 +252,9 @@
   border-radius: 9999px;
   color: var(--text-primary);
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
   font-family: inherit;
 }
 
@@ -341,7 +348,9 @@
   color: var(--text-primary);
   outline: none;
   box-sizing: border-box;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .login-container .google-oval-input-box input:hover {
@@ -372,7 +381,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .login-container .google-input-visibility:hover {
@@ -413,7 +424,9 @@
   padding: 10px 16px;
   border-radius: 9999px;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .login-container .google-btn-text:hover {
@@ -432,7 +445,10 @@
   min-width: 90px;
   border-radius: 9999px;
   cursor: pointer;
-  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -500,7 +516,9 @@
   height: 14px;
   width: auto;
   opacity: 0.75;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .login-container .login-footer .footer-tech-stack img:hover {

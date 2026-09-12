@@ -6,28 +6,28 @@ Use this reference when extracting the Kage architecture or diagnosing a multi-s
 
 Kage is a dark Japanese editorial world, not a generic Three.js showcase.
 
-| Layer | Kage treatment |
-| --- | --- |
-| World | Kyoto mountain sanctuary at night, centered temple, approach stairs, torii, lanterns, fog, water, red moon |
-| Type | Muted sage-white sans, uppercase wide tracking, oversized KAGE word, large vertical Japanese characters |
-| Accent | Vermilion red, dim amber lanterns, restrained gold hardware |
-| Foreground | Grass, maple/sakura branches, pine, stones, walls, ruins and hills anchored to viewport edges |
-| Surface | Heavy film grain, dark blue-black haze, slow bloom, no glossy glass dashboard |
-| Motion | Damped camera travel, subtle ambient drift, word-level headings, foreground rise/fade/blur |
+| Layer      | Kage treatment                                                                                             |
+| ---------- | ---------------------------------------------------------------------------------------------------------- |
+| World      | Kyoto mountain sanctuary at night, centered temple, approach stairs, torii, lanterns, fog, water, red moon |
+| Type       | Muted sage-white sans, uppercase wide tracking, oversized KAGE word, large vertical Japanese characters    |
+| Accent     | Vermilion red, dim amber lanterns, restrained gold hardware                                                |
+| Foreground | Grass, maple/sakura branches, pine, stones, walls, ruins and hills anchored to viewport edges              |
+| Surface    | Heavy film grain, dark blue-black haze, slow bloom, no glossy glass dashboard                              |
+| Motion     | Damped camera travel, subtle ambient drift, word-level headings, foreground rise/fade/blur                 |
 
 ## Detail and surface implementation
 
 Kage reaches depth through several coordinated systems rather than a single texture overlay:
 
-| system | reference treatment | transferable lesson |
-| --- | --- | --- |
-| Sky and ridge | Procedural `CanvasTexture` plates, dark silhouette layers, and exponential fog | Separate distant planes and control whether each participates in fog; a black ridge with the wrong fog flag becomes a pale band |
-| Temple | Standard materials for timber, tile, gold hardware, and ground; emissive/basic paper and shoji layers | Use PBR where light response carries form, and unlit/emissive layers where a practical must stay luminous |
-| Moon and lantern glow | Textured discs/sprites plus restrained additive glow | Coordinate visible emitter, glow, and nearby light instead of asking bloom to create the lamp |
-| Trees and leaves | Instanced foliage with seeded placement and restrained material variation | Spend geometry on silhouette clusters while keeping draw calls bounded |
-| Grounding | Rough dark platforms, rocks, stairs, grass, fog, and contact shadows | Layer medium-scale contact details before adding tiny particles |
-| Foreground | Alpha WebP cut-outs parked in sections and moved into a fixed viewport host | Treat cut-outs as near-plane scenery, not rectangular content cards |
-| Finish | ACES-style exposure, restrained bloom/post, film grain, haze, and cold/warm contrast | Compose the unprocessed frame first; use finish effects to unify depth and material response |
+| system                | reference treatment                                                                                   | transferable lesson                                                                                                             |
+| --------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Sky and ridge         | Procedural `CanvasTexture` plates, dark silhouette layers, and exponential fog                        | Separate distant planes and control whether each participates in fog; a black ridge with the wrong fog flag becomes a pale band |
+| Temple                | Standard materials for timber, tile, gold hardware, and ground; emissive/basic paper and shoji layers | Use PBR where light response carries form, and unlit/emissive layers where a practical must stay luminous                       |
+| Moon and lantern glow | Textured discs/sprites plus restrained additive glow                                                  | Coordinate visible emitter, glow, and nearby light instead of asking bloom to create the lamp                                   |
+| Trees and leaves      | Instanced foliage with seeded placement and restrained material variation                             | Spend geometry on silhouette clusters while keeping draw calls bounded                                                          |
+| Grounding             | Rough dark platforms, rocks, stairs, grass, fog, and contact shadows                                  | Layer medium-scale contact details before adding tiny particles                                                                 |
+| Foreground            | Alpha WebP cut-outs parked in sections and moved into a fixed viewport host                           | Treat cut-outs as near-plane scenery, not rectangular content cards                                                             |
+| Finish                | ACES-style exposure, restrained bloom/post, film grain, haze, and cold/warm contrast                  | Compose the unprocessed frame first; use finish effects to unify depth and material response                                    |
 
 The procedural texture functions and material constants in the bundled demo are part of the approved reference. Reuse them when reproducing Kage; use the general material and texture ledger for unrelated worlds.
 
@@ -62,12 +62,12 @@ These are the reference Kage waypoints. Adapt only after preserving the same com
 
 ```js
 const CAM = [
-  { p: [ 0.0,  4.05,  13.6], t: [ 0.0,  6.60, -18.0], fov: 36 },
-  { p: [-5.6,  2.35,  11.6], t: [ 1.2,  5.60, -14.0], fov: 48 },
-  { p: [ 1.2,  3.60,   2.2], t: [-0.6,  7.50, -22.0], fov: 40 },
-  { p: [ 5.2,  2.10,  -3.4], t: [-2.6,  7.00, -20.0], fov: 46 },
-  { p: [ 0.0,  7.60, -16.0], t: [ 0.0, 13.00, -40.0], fov: 42 },
-  { p: [ 0.0, 10.50, -20.0], t: [ 0.0,  3.00, -34.0], fov: 46 }
+  { p: [0.0, 4.05, 13.6], t: [0.0, 6.6, -18.0], fov: 36 },
+  { p: [-5.6, 2.35, 11.6], t: [1.2, 5.6, -14.0], fov: 48 },
+  { p: [1.2, 3.6, 2.2], t: [-0.6, 7.5, -22.0], fov: 40 },
+  { p: [5.2, 2.1, -3.4], t: [-2.6, 7.0, -20.0], fov: 46 },
+  { p: [0.0, 7.6, -16.0], t: [0.0, 13.0, -40.0], fov: 42 },
+  { p: [0.0, 10.5, -20.0], t: [0.0, 3.0, -34.0], fov: 46 },
 ];
 ```
 
@@ -112,16 +112,16 @@ The right chapter rail, nav highlight, and section ownership read `activeChapter
 
 ## Failure signatures
 
-| Symptom | Likely cause |
-| --- | --- |
-| Chapter label changes late | UI is reading damped camera progress |
-| Reverse scroll lands differently | wheel delta or one-way triggers are the source of truth |
-| Flash at section boundary | renderer, scene, or poster is being swapped |
-| Foreground looks like a card | cut-out is section-relative instead of fixed near-plane scenery |
-| Tall mobile loses the gate | wide camera values are reused without aspect pullback |
-| Camera feels floaty | endpoints were not composed before smoothing was added |
-| World pauses between sections | scroll timeline is section-local instead of global |
-| Page becomes inaccessible | canvas text replaced semantic DOM or scroll was hijacked |
+| Symptom                          | Likely cause                                                    |
+| -------------------------------- | --------------------------------------------------------------- |
+| Chapter label changes late       | UI is reading damped camera progress                            |
+| Reverse scroll lands differently | wheel delta or one-way triggers are the source of truth         |
+| Flash at section boundary        | renderer, scene, or poster is being swapped                     |
+| Foreground looks like a card     | cut-out is section-relative instead of fixed near-plane scenery |
+| Tall mobile loses the gate       | wide camera values are reused without aspect pullback           |
+| Camera feels floaty              | endpoints were not composed before smoothing was added          |
+| World pauses between sections    | scroll timeline is section-local instead of global              |
+| Page becomes inaccessible        | canvas text replaced semantic DOM or scroll was hijacked        |
 
 ## Verification sequence
 

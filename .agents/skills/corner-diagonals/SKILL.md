@@ -6,12 +6,14 @@ description: Apply diagonal-cut corners and chamfered edges to buttons, cards, p
 # Corner Diagonals
 
 ## Scope
+
 - Apply only to buttons, cards, panels, and container shells.
 - Use when surfaces need diagonal-cut corners or chamfered edges.
 - Keep the hit area readable and usable even when the visual shape is clipped.
 - Reuse the same corner logic across surfaces so it feels like a system.
 
 ## Visual Target
+
 - Diagonal cuts should feel engineered, sharp, and intentional.
 - Cuts stay subtle and proportional to the component size.
 - One or more corners can be chamfered, but the silhouette should still read quickly.
@@ -32,6 +34,7 @@ description: Apply diagonal-cut corners and chamfered edges to buttons, cards, p
 ```
 
 ## Core Shapes
+
 Use `clip-path: polygon(...)` for true diagonal silhouettes.
 
 ```css
@@ -63,19 +66,12 @@ Use `clip-path: polygon(...)` for true diagonal silhouettes.
 
 .cut-top-right-bottom-left {
   --cut: var(--corner-cut-md);
-  clip-path: polygon(
-    0 0,
-    calc(100% - var(--cut)) 0,
-    100% var(--cut),
-    100% 100%,
-    var(--cut) 100%,
-    0 100%,
-    0 0
-  );
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 100%, 0 0);
 }
 ```
 
 ## Bordered Shell
+
 For bordered surfaces, use an outer wrapper and inner surface with the same polygon.
 
 ```css
@@ -105,9 +101,7 @@ For bordered surfaces, use an outer wrapper and inner surface with the same poly
 
 ```html
 <section class="cut-shell">
-  <div class="cut-shell__inner">
-    ...
-  </div>
+  <div class="cut-shell__inner">...</div>
 </section>
 ```
 
@@ -147,6 +141,7 @@ For bordered surfaces, use an outer wrapper and inner surface with the same poly
 ```
 
 ## Secondary Button
+
 Use a darker shell with diagonal outline treatment.
 
 ```css
@@ -169,6 +164,7 @@ Use a darker shell with diagonal outline treatment.
 ```
 
 ## Recommended Patterns
+
 - Primary buttons: clipped hex-like or chamfered rectangles with one consistent cut amount.
 - Secondary buttons: dark shells with diagonal outline treatment and restrained hover fill.
 - Cards and panels: thin framed containers with one or two diagonal corners.
@@ -176,6 +172,7 @@ Use a darker shell with diagonal outline treatment.
 - Mirrored pairings: top-left plus bottom-right, or top-right plus bottom-left.
 
 ## Tuning Knobs
+
 - Cut size: `6px-10px` for small controls, `12px-18px` for cards, `20px-32px` for large panels.
 - Border treatment: use a thin stroke, gradient shell, or inset line to make the silhouette legible.
 - Consistency: reuse the same polygon family across buttons and containers.
@@ -183,6 +180,7 @@ Use a darker shell with diagonal outline treatment.
 - Motion: brighten fills, reveal borders, or slide overlays; keep the shape stable.
 
 ## Avoid
+
 - Random cut sizes across similar components.
 - Aggressive clipping that harms readability or makes the component feel broken.
 - Mixing rounded pills and chamfered geometry without clear hierarchy.
@@ -190,6 +188,7 @@ Use a darker shell with diagonal outline treatment.
 - Flooding every diagonal surface with a bright accent color.
 
 ## Quick Checks
+
 - Border, background, and hit area follow the same diagonal geometry.
 - Text still has comfortable horizontal padding after the cut.
 - Buttons keep at least `44px` height for touch targets.

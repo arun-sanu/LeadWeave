@@ -63,7 +63,11 @@ export function DatabaseUsage() {
           <div className="storage-bar">
             <div className="bar-segment" style={{ width: '45%', background: '#3b82f6' }} title="Acme Logistics (45%)" />
             <div className="bar-segment" style={{ width: '35%', background: '#8b5cf6' }} title="Globex Health (35%)" />
-            <div className="bar-segment" style={{ width: '20%', background: '#f59e0b' }} title="Apex Real Estate (20%)" />
+            <div
+              className="bar-segment"
+              style={{ width: '20%', background: '#f59e0b' }}
+              title="Apex Real Estate (20%)"
+            />
           </div>
         </div>
 
@@ -96,10 +100,16 @@ export function DatabaseUsage() {
           <tbody>
             {companies.map(c => (
               <tr key={c.id}>
-                <td><strong>{c.name}</strong> ({c.slug})</td>
+                <td>
+                  <strong>{c.name}</strong> ({c.slug})
+                </td>
                 <td>{c.plan}</td>
-                <td>{c.activeUsersCount} / {c.maxUsers} Users</td>
-                <td>{c.activeSessionsCount} / {c.maxSessions} Numbers</td>
+                <td>
+                  {c.activeUsersCount} / {c.maxUsers} Users
+                </td>
+                <td>
+                  {c.activeSessionsCount} / {c.maxSessions} Numbers
+                </td>
                 <td>{c.plan === 'Pro' ? '128 MB' : c.plan === 'Growth' ? '99.5 MB' : '57 MB'}</td>
                 <td>
                   <span style={{ color: c.status === 'active' ? '#16a34a' : '#d97706', fontWeight: 700 }}>

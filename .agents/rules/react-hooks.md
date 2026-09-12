@@ -1,12 +1,13 @@
 ---
 paths:
-  - "**/*.tsx"
-  - "**/*.jsx"
-  - "**/hooks/**/*.ts"
-  - "**/hooks/**/*.js"
-  - "**/use-*.ts"
-  - "**/use-*.tsx"
+  - '**/*.tsx'
+  - '**/*.jsx'
+  - '**/hooks/**/*.ts'
+  - '**/hooks/**/*.js'
+  - '**/use-*.ts'
+  - '**/use-*.tsx'
 ---
+
 # React Hooks
 
 > This file covers **React hooks** (`useState`, `useEffect`, `useMemo`, `useCallback`, custom hooks) — NOT the Claude Code `hooks/` runtime system. Naming matches the per-language convention `rules/<lang>/hooks.md` used across this repo.
@@ -50,7 +51,7 @@ function Foo({ enabled }: { enabled: boolean }) {
 
 ```tsx
 // WRONG: effect for derived state
-const [fullName, setFullName] = useState("");
+const [fullName, setFullName] = useState('');
 useEffect(() => {
   setFullName(`${first} ${last}`);
 }, [first, last]);
@@ -141,12 +142,12 @@ Use this hook to subscribe to any external store (browser API, third-party state
 
 ```tsx
 const isOnline = useSyncExternalStore(
-  (cb) => {
-    window.addEventListener("online", cb);
-    window.addEventListener("offline", cb);
+  cb => {
+    window.addEventListener('online', cb);
+    window.addEventListener('offline', cb);
     return () => {
-      window.removeEventListener("online", cb);
-      window.removeEventListener("offline", cb);
+      window.removeEventListener('online', cb);
+      window.removeEventListener('offline', cb);
     };
   },
   () => navigator.onLine,

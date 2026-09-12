@@ -1,36 +1,37 @@
 ---
 paths:
-  - "**/*.css"
-  - "**/*.scss"
-  - "**/*.sass"
-  - "**/*.less"
-  - "**/*.html"
-  - "**/*.tsx"
-  - "**/*.jsx"
-  - "**/*.vue"
-  - "**/*.svelte"
+  - '**/*.css'
+  - '**/*.scss'
+  - '**/*.sass'
+  - '**/*.less'
+  - '**/*.html'
+  - '**/*.tsx'
+  - '**/*.jsx'
+  - '**/*.vue'
+  - '**/*.svelte'
 ---
+
 > This file extends [common/performance.md](common-performance.md) with web-specific performance content.
 
 # Web Performance Rules
 
 ## Core Web Vitals Targets
 
-| Metric | Target |
-|--------|--------|
-| LCP | < 2.5s |
-| INP | < 200ms |
-| CLS | < 0.1 |
-| FCP | < 1.5s |
-| TBT | < 200ms |
+| Metric | Target  |
+| ------ | ------- |
+| LCP    | < 2.5s  |
+| INP    | < 200ms |
+| CLS    | < 0.1   |
+| FCP    | < 1.5s  |
+| TBT    | < 200ms |
 
 ## Bundle Budget
 
-| Page Type | JS Budget (gzipped) | CSS Budget |
-|-----------|---------------------|------------|
-| Landing page | < 150kb | < 30kb |
-| App page | < 300kb | < 50kb |
-| Microsite | < 80kb | < 15kb |
+| Page Type    | JS Budget (gzipped) | CSS Budget |
+| ------------ | ------------------- | ---------- |
+| Landing page | < 150kb             | < 30kb     |
+| App page     | < 300kb             | < 50kb     |
+| Microsite    | < 80kb              | < 15kb     |
 
 ## Loading Strategy
 

@@ -4,13 +4,13 @@
 
 LeadWeave ships five official, hand-written client libraries for the REST API. They are not generated from an OpenAPI spec — each is written directly against the real API surface (paths, request DTOs, response shapes) and **unit-tested with a mocked HTTP transport that asserts on the exact request path, method, and body**, so drift in what an SDK _sends_ is caught at test time rather than in production. That mechanism says nothing about what an SDK expects _back_; see §18.6 for how response shapes are held to the contract.
 
-| Language                | Package                                                                                | Install                              | Notes                                                                            |
-| ----------------------- | -------------------------------------------------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------- |
+| Language                | Package                                                                                    | Install                                | Notes                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------- | -------------------------------------------------------------------------------- |
 | JavaScript / TypeScript | [`@arun-sanu/leadweave`](https://www.npmjs.com/package/@arun-sanu/leadweave)               | `npm install @arun-sanu/leadweave`     | Dual ESM + CJS, bundled `.d.ts` types, Node 18+                                  |
 | Python                  | [`arun-sanu-leadweave`](https://pypi.org/project/arun-sanu-leadweave/)                     | `pip install arun-sanu-leadweave`      | Synchronous (httpx), PEP 561 typed, Python 3.9+                                  |
 | PHP                     | [`arun-sanu/leadweave`](https://packagist.org/packages/arun-sanu/leadweave)                | `composer require arun-sanu/leadweave` | Synchronous (Guzzle 7), PSR-4, PHP 8.1+                                          |
-| Java                    | [`com.arun-sanu:leadweave`](https://central.sonatype.com/artifact/com.arun-sanu/leadweave) | Maven Central                        | Sync, `java.net.http`. See [`sdk/java/README.md`](../sdk/java/README.md).        |
-| Go                      | [`github.com/arun-sanu/LeadWeave/sdk/go`](../sdk/go)                                     | `go get`                             | Stdlib-only, no third-party deps. See [`sdk/go/README.md`](../sdk/go/README.md). |
+| Java                    | [`com.arun-sanu:leadweave`](https://central.sonatype.com/artifact/com.arun-sanu/leadweave) | Maven Central                          | Sync, `java.net.http`. See [`sdk/java/README.md`](../sdk/java/README.md).        |
+| Go                      | [`github.com/arun-sanu/LeadWeave/sdk/go`](../sdk/go)                                       | `go get`                               | Stdlib-only, no third-party deps. See [`sdk/go/README.md`](../sdk/go/README.md). |
 
 > The import names differ from the dist names where the ecosystem requires it. Python installs `arun-sanu-leadweave` but imports `leadweave`; the client class is `LeadWeaveClient` in JS/Python and `LeadWeave\Client` in PHP.
 
@@ -105,7 +105,7 @@ The constructor takes a single `LeadWeaveClientOptions` object. `baseUrl` and `a
 
 | Option           | Type                     | Required | Default            | Description                                                                                                                                                                    |
 | ---------------- | ------------------------ | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `baseUrl`        | `string`                 | yes      | —                  | Base URL of the LeadWeave API, e.g. `http://localhost:2785`. A trailing slash is trimmed; a path prefix (e.g. `https://host/v1`) is preserved.                                    |
+| `baseUrl`        | `string`                 | yes      | —                  | Base URL of the LeadWeave API, e.g. `http://localhost:2785`. A trailing slash is trimmed; a path prefix (e.g. `https://host/v1`) is preserved.                                 |
 | `apiKey`         | `string`                 | yes      | —                  | API key sent as the `X-API-Key` header on every request.                                                                                                                       |
 | `timeoutMs`      | `number`                 | no       | `30000`            | Per-request timeout in milliseconds. Overridable per call via `RequestOptions.timeoutMs` on the raw `request()` method.                                                        |
 | `defaultHeaders` | `Record<string, string>` | no       | `{}`               | Headers merged onto every request. The `Content-Type: application/json` and `X-API-Key` headers always take precedence.                                                        |
@@ -350,8 +350,8 @@ Media bodies share the `SendMediaRequest` shape: `{ chatId, url? | base64?, mime
 
 On a non-2xx response the SDK throws a typed `LeadWeaveApiError` subclass carrying `.status` (HTTP status), `.body` (parsed JSON error envelope, or raw text), and `.errorKind` (the NestJS `error` field, `undefined` when the gateway omits it — which is the norm for a validation rejection in production, where `disableErrorMessages` is on). All error classes extend `LeadWeaveError` and are exported, so they are `instanceof`-checkable. A timeout throws `LeadWeaveTimeoutError`, which extends `LeadWeaveError` directly (not `LeadWeaveApiError`).
 
-| Error class                     | HTTP status | Meaning                                                                                       |
-| ------------------------------- | ----------- | --------------------------------------------------------------------------------------------- |
+| Error class                        | HTTP status | Meaning                                                                                       |
+| ---------------------------------- | ----------- | --------------------------------------------------------------------------------------------- |
 | `LeadWeaveAuthError`               | 401         | Missing or invalid API key.                                                                   |
 | `LeadWeaveForbiddenError`          | 403         | The key's role is insufficient (e.g. an OPERATOR-only route).                                 |
 | `LeadWeaveNotFoundError`           | 404         | Resource not found.                                                                           |
@@ -477,7 +477,7 @@ LeadWeaveClient(
 | ----------------- | ----------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `base_url`        | `str`                         | _(required)_ | Gateway base URL, e.g. `http://localhost:2785`. Raises `ValueError` if empty. A trailing `/` is stripped; any path prefix is preserved. |
 | `api_key`         | `str`                         | _(required)_ | API key sent as the `X-API-Key` header. Raises `ValueError` if empty.                                                                   |
-| `timeout`         | `float`                       | `30.0`       | Per-request timeout in seconds. A breach raises `LeadWeaveTimeoutError`.                                                                   |
+| `timeout`         | `float`                       | `30.0`       | Per-request timeout in seconds. A breach raises `LeadWeaveTimeoutError`.                                                                |
 | `default_headers` | `Mapping[str, str] \| None`   | `None`       | Extra headers applied to every request. Applied **first**, so the SDK's `X-API-Key` and `Content-Type: application/json` always win.    |
 | `transport`       | `httpx.BaseTransport \| None` | `None`       | Optional `httpx` transport override (e.g. `httpx.MockTransport`) sharing the one connection pool. Useful for testing.                   |
 
@@ -717,8 +717,8 @@ Resources are accessed as properties on the client (e.g. `client.messages`). All
 
 Every error inherits from `LeadWeaveError`. A non-2xx response raises an `LeadWeaveApiError` (or a more specific subclass picked by status); a timeout raises `LeadWeaveTimeoutError`. The API-error classes carry `.status` (HTTP code), `.body` (parsed JSON or raw text), and `.error_kind` (the NestJS `error` field).
 
-| Exception                       | Trigger                                                  |
-| ------------------------------- | -------------------------------------------------------- |
+| Exception                          | Trigger                                                  |
+| ---------------------------------- | -------------------------------------------------------- |
 | `LeadWeaveAuthError`               | HTTP `401` — missing or invalid API key                  |
 | `LeadWeaveForbiddenError`          | HTTP `403` — insufficient role                           |
 | `LeadWeaveNotFoundError`           | HTTP `404` — resource not found                          |
@@ -1059,9 +1059,9 @@ All payloads are associative arrays; all listed methods are synchronous and retu
 
 All exceptions live in `LeadWeave\Exceptions` and descend from `LeadWeaveException` (which extends PHP's `\Exception`). Any non-2xx response is raised as an `LeadWeaveApiException`; the static `classify()` factory picks the most specific subclass by status code. An `LeadWeaveApiException` carries the HTTP status (`getStatus(): int`), the parsed error body (`getBody(): mixed`), and the NestJS `error` kind when present (`getErrorKind(): ?string`).
 
-| Exception                           | Extends              | Trigger                                                                                      |
-| ----------------------------------- | -------------------- | -------------------------------------------------------------------------------------------- |
-| `LeadWeaveException`                   | `\Exception`         | Base for all SDK errors (also thrown for missing `baseUrl`/`apiKey`).                        |
+| Exception                              | Extends                 | Trigger                                                                                      |
+| -------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------- |
+| `LeadWeaveException`                   | `\Exception`            | Base for all SDK errors (also thrown for missing `baseUrl`/`apiKey`).                        |
 | `LeadWeaveApiException`                | `LeadWeaveException`    | Any non-2xx (including unfollowed 3xx and other 4xx/5xx).                                    |
 | `LeadWeaveAuthException`               | `LeadWeaveApiException` | `401` — missing/invalid API key.                                                             |
 | `LeadWeaveForbiddenException`          | `LeadWeaveApiException` | `403` — insufficient role (e.g. operator-only endpoint).                                     |
@@ -1125,8 +1125,8 @@ For installation and node-by-node configuration, see the dedicated [n8n Integrat
 
 The five SDKs are versioned **independently of the gateway** and of each other, each following SemVer. An SDK version does **not** track the gateway version — check the registry for the current one rather than inferring it from the gateway's. Pin the SDK version your code is tested against and treat a major SDK bump as potentially breaking.
 
-| SDK                   | Registry             | Package                               |
-| --------------------- | -------------------- | ------------------------------------- |
+| SDK                   | Registry             | Package                                 |
+| --------------------- | -------------------- | --------------------------------------- |
 | JavaScript/TypeScript | npm                  | `@arun-sanu/leadweave`                  |
 | Python                | PyPI                 | `arun-sanu-leadweave`                   |
 | PHP                   | Packagist            | `arun-sanu/leadweave`                   |

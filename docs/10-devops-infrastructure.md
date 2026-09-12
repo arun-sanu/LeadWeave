@@ -924,8 +924,8 @@ export class MetricsService {
 
 **Exported metric names** (the complete set — nothing else is emitted):
 
-| Metric                                       | Type      | Labels                              | Meaning                                                                                      |
-| -------------------------------------------- | --------- | ----------------------------------- | -------------------------------------------------------------------------------------------- |
+| Metric                                          | Type      | Labels                              | Meaning                                                                                      |
+| ----------------------------------------------- | --------- | ----------------------------------- | -------------------------------------------------------------------------------------------- |
 | `leadweave_up`                                  | gauge     | —                                   | Always `1` when scraped                                                                      |
 | `leadweave_process_uptime_seconds`              | gauge     | —                                   | Process uptime                                                                               |
 | `leadweave_process_resident_memory_bytes`       | gauge     | —                                   | RSS                                                                                          |
@@ -942,9 +942,9 @@ export class MetricsService {
 | `leadweave_sessions_restricted`                 | gauge     | —                                   | Sessions whose account WhatsApp is currently restricting                                     |
 | `leadweave_send_pacing_refusals_total`          | counter   | `reason`                            | Sends refused by the pacing governor since process start                                     |
 | `leadweave_outbound_messages_total`             | counter   | `type`, `engine`, `status`          | Outbound messages dispatched through WhatsApp engines                                        |
-| `leadweave_outbound_message_avg_duration_ms`     | gauge     | —                                   | Average duration in ms to dispatch an outbound message                                       |
-| `http_requests_total`                        | counter   | `method`, `route`, `status`         | HTTP requests served, by method, route and status                                            |
-| `http_request_duration_seconds`              | histogram | `method`, `route`                   | HTTP request duration (`_bucket` / `_sum` / `_count`)                                        |
+| `leadweave_outbound_message_avg_duration_ms`    | gauge     | —                                   | Average duration in ms to dispatch an outbound message                                       |
+| `http_requests_total`                           | counter   | `method`, `route`, `status`         | HTTP requests served, by method, route and status                                            |
+| `http_request_duration_seconds`                 | histogram | `method`, `route`                   | HTTP request duration (`_bucket` / `_sum` / `_count`)                                        |
 
 The last two are deliberately **unprefixed** so a generic RED dashboard or alert rule matches them
 without knowing anything about LeadWeave. They come from `src/common/metrics/request-metrics.ts`, which
@@ -1065,8 +1065,8 @@ export class MessageService {
 
 These are the metrics LeadWeave actually exports at `GET /api/metrics`:
 
-| Category     | Metric                                        | Description                                             | Alert Idea                       |
-| ------------ | --------------------------------------------- | ------------------------------------------------------- | -------------------------------- |
+| Category     | Metric                                           | Description                                             | Alert Idea                       |
+| ------------ | ------------------------------------------------ | ------------------------------------------------------- | -------------------------------- |
 | **Liveness** | `leadweave_up`                                   | Always `1` when scraped (absence/scrape-failure = down) | Target down                      |
 | **Sessions** | `leadweave_sessions_total`                       | Configured sessions                                     | Near your expected session count |
 | **Sessions** | `leadweave_sessions_active`                      | READY (active) sessions                                 | Drops below expected             |

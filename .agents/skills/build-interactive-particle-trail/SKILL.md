@@ -34,7 +34,7 @@ if (count) {
   previous.copy(current);
   idle = 0;
 } else if ((idle += dt) > 0.055) {
-  spawn(current);       // a resting hand trickles; it does not pump
+  spawn(current); // a resting hand trickles; it does not pump
   idle = 0;
 }
 ```
@@ -43,15 +43,15 @@ A timer emitter leaves dots behind a fast flick and piles them under a resting h
 
 Use these landed defaults:
 
-| parameter | default | failure prevented |
-| --- | ---: | --- |
-| path spacing | 7 px/world units | wider gaps read as samples, tighter gaps become a ribbon |
-| per-frame cap | 14 motes | teleports overwrite the whole pool |
-| idle interval | 55 ms | no idle emission feels dead; faster becomes a hotspot |
-| pool size | 620 | enough overlap for a 1.6 s trail without unbounded allocation |
-| lifetime | 1.6 s | shorter trails break; longer trails cloud the content |
-| random size | 0.50–1.15 | identical points read as a stippled brush |
-| DPR cap | 2 | fill cost spikes on dense displays |
+| parameter     |          default | failure prevented                                             |
+| ------------- | ---------------: | ------------------------------------------------------------- |
+| path spacing  | 7 px/world units | wider gaps read as samples, tighter gaps become a ribbon      |
+| per-frame cap |         14 motes | teleports overwrite the whole pool                            |
+| idle interval |            55 ms | no idle emission feels dead; faster becomes a hotspot         |
+| pool size     |              620 | enough overlap for a 1.6 s trail without unbounded allocation |
+| lifetime      |            1.6 s | shorter trails break; longer trails cloud the content         |
+| random size   |        0.50–1.15 | identical points read as a stippled brush                     |
+| DPR cap       |                2 | fill cost spikes on dense displays                            |
 
 ## Recycle a GPU pool
 

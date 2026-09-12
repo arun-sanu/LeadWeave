@@ -51,10 +51,10 @@ Danh sách các trường hợp biên hoặc những việc mà skill _không th
 
 Chúng tôi cũng phân loại skill dựa trên người duy trì chúng:
 
-| Cấp độ        | Huy hiệu | Ý nghĩa                                              |
-| :------------ | :------- | :--------------------------------------------------- |
-| **Official**  | 🟣       | Do đội ngũ cốt lõi duy trì. Độ tin cậy cao.          |
-| **Community** | ⚪       | Do cộng đồng đóng góp. Hỗ trợ theo khả năng tốt nhất. |
+| Cấp độ        | Huy hiệu | Ý nghĩa                                                          |
+| :------------ | :------- | :--------------------------------------------------------------- |
+| **Official**  | 🟣       | Do đội ngũ cốt lõi duy trì. Độ tin cậy cao.                      |
+| **Community** | ⚪       | Do cộng đồng đóng góp. Hỗ trợ theo khả năng tốt nhất.            |
 | **Verified**  | ✨       | Skill cộng đồng đã vượt qua vòng kiểm duyệt thủ công chuyên sâu. |
 
 ---

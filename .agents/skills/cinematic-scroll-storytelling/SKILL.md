@@ -6,12 +6,14 @@ description: Create cinematic scroll-driven landing pages with Lenis smooth scro
 # Cinematic Scroll Storytelling
 
 ## Use When
+
 - A page should feel like a premium editorial story that unfolds as the user scrolls.
 - The user mentions scroll-driven storytelling, scroll-linked animation, sticky card stacks, parallax, split text, preloader, or cinematic progression.
 - A portfolio, studio, product, or landing page needs section-by-section reveals with layered depth.
 - The implementation can use GSAP, ScrollTrigger, and Lenis.
 
 ## Effect Vocabulary
+
 - Scroll-driven storytelling: sections reveal as a sequence while scrolling.
 - Scroll-linked animation: progress is tied directly to scroll with `scrub`.
 - Scroll-triggered motion: animation starts when a section enters the viewport.
@@ -24,6 +26,7 @@ description: Create cinematic scroll-driven landing pages with Lenis smooth scro
 - Preloader: opening loading screen, progress bar, and intro transition.
 
 ## Target Feel
+
 - Luxury editorial website.
 - High-end creative studio portfolio.
 - Apple-level motion polish.
@@ -31,6 +34,7 @@ description: Create cinematic scroll-driven landing pages with Lenis smooth scro
 - Immersive cinematic landing page.
 
 Avoid:
+
 - Bounce, elastic, or springy motion.
 - Aggressive scale jumps.
 - Flashy gaming-style effects.
@@ -44,14 +48,14 @@ npm i gsap lenis
 ```
 
 ```js
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 if (!reduceMotion) {
   const lenis = new Lenis({
@@ -60,19 +64,20 @@ if (!reduceMotion) {
     wheelMultiplier: 0.9,
   });
 
-  lenis.on("scroll", ScrollTrigger.update);
+  lenis.on('scroll', ScrollTrigger.update);
 
-  gsap.ticker.add((time) => {
+  gsap.ticker.add(time => {
     lenis.raf(time * 1000);
   });
 
   gsap.ticker.lagSmoothing(0);
 }
 
-window.addEventListener("load", () => ScrollTrigger.refresh());
+window.addEventListener('load', () => ScrollTrigger.refresh());
 ```
 
 ## Motion Tokens
+
 - Enter ease: `power3.out` or `power4.out`.
 - Scrubbed scenes: `ease: "none"` with `scrub: 0.8` to `1.4`.
 - Text reveal duration: `0.8s` to `1.1s`.
@@ -85,6 +90,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
 - Sticky card scale depth: `1` down to `0.92`.
 
 ## Page Anatomy
+
 1. Preloader: black screen, progress bar, brand/title, intro fade.
 2. Hero: image parallax, masked headline reveal, subtle scroll cue.
 3. Intro: word-by-word kinetic typography.
@@ -102,7 +108,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
 
 <main>
   <section class="hero" data-parallax-section>
-    <img data-parallax-layer data-speed="-0.18" src="/hero.jpg" alt="">
+    <img data-parallax-layer data-speed="-0.18" src="/hero.jpg" alt="" />
     <h1 data-split-reveal>Design that unfolds with cinematic restraint.</h1>
   </section>
 
@@ -126,8 +132,8 @@ Use a preloader to set the cinematic tone, then hand off into the hero reveal.
 
 ```js
 function initPreloader() {
-  const loader = document.querySelector("[data-preloader]");
-  const bar = document.querySelector("[data-preloader-bar]");
+  const loader = document.querySelector('[data-preloader]');
+  const bar = document.querySelector('[data-preloader-bar]');
   if (!loader) return Promise.resolve();
 
   if (reduceMotion) {
@@ -135,17 +141,20 @@ function initPreloader() {
     return Promise.resolve();
   }
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const tl = gsap.timeline({
-      defaults: { ease: "power3.out" },
+      defaults: { ease: 'power3.out' },
       onComplete: () => {
         loader.remove();
         resolve();
       },
     });
 
-    tl.fromTo(bar, { scaleX: 0, transformOrigin: "left" }, { scaleX: 1, duration: 1.1 })
-      .to(loader, { yPercent: -100, duration: 0.9, ease: "power4.inOut" }, "+=0.15");
+    tl.fromTo(bar, { scaleX: 0, transformOrigin: 'left' }, { scaleX: 1, duration: 1.1 }).to(
+      loader,
+      { yPercent: -100, duration: 0.9, ease: 'power4.inOut' },
+      '+=0.15',
+    );
   });
 }
 ```
@@ -156,58 +165,58 @@ Use masked overflow containers. Avoid splitting text that contains links or mean
 
 ```js
 function splitWords(element) {
-  if (element.dataset.splitReady === "true") return;
+  if (element.dataset.splitReady === 'true') return;
 
-  const text = element.textContent || "";
+  const text = element.textContent || '';
   const parts = text.split(/(\s+)/);
-  element.textContent = "";
-  element.setAttribute("aria-label", text.trim());
+  element.textContent = '';
+  element.setAttribute('aria-label', text.trim());
 
-  parts.forEach((part) => {
+  parts.forEach(part => {
     if (!part.trim()) {
       element.appendChild(document.createTextNode(part));
       return;
     }
 
-    const mask = document.createElement("span");
-    const word = document.createElement("span");
-    mask.className = "split-word-mask";
-    word.className = "split-word";
+    const mask = document.createElement('span');
+    const word = document.createElement('span');
+    mask.className = 'split-word-mask';
+    word.className = 'split-word';
     word.textContent = part;
-    mask.setAttribute("aria-hidden", "true");
+    mask.setAttribute('aria-hidden', 'true');
     mask.appendChild(word);
     element.appendChild(mask);
   });
 
-  element.dataset.splitReady = "true";
+  element.dataset.splitReady = 'true';
 }
 
 function initSplitReveals() {
   if (reduceMotion) {
-    gsap.set("[data-split-reveal]", { autoAlpha: 1 });
+    gsap.set('[data-split-reveal]', { autoAlpha: 1 });
     return;
   }
 
-  gsap.utils.toArray("[data-split-reveal]").forEach((element) => {
+  gsap.utils.toArray('[data-split-reveal]').forEach(element => {
     splitWords(element);
-    const words = element.querySelectorAll(".split-word");
+    const words = element.querySelectorAll('.split-word');
 
     gsap.fromTo(
       words,
-      { yPercent: 110, autoAlpha: 0, filter: "blur(8px)" },
+      { yPercent: 110, autoAlpha: 0, filter: 'blur(8px)' },
       {
         yPercent: 0,
         autoAlpha: 1,
-        filter: "blur(0px)",
+        filter: 'blur(0px)',
         duration: 0.95,
-        ease: "power4.out",
+        ease: 'power4.out',
         stagger: 0.05,
         scrollTrigger: {
           trigger: element,
-          start: "top 82%",
+          start: 'top 82%',
           once: true,
         },
-      }
+      },
     );
   });
 }
@@ -233,30 +242,30 @@ Use these for normal sections. They should play once and feel composed, not twit
 ```js
 function initSectionReveals() {
   if (reduceMotion) {
-    gsap.set("[data-story-section], [data-reveal-item]", { autoAlpha: 1, clearProps: "all" });
+    gsap.set('[data-story-section], [data-reveal-item]', { autoAlpha: 1, clearProps: 'all' });
     return;
   }
 
-  gsap.utils.toArray("[data-story-section]").forEach((section) => {
-    const items = section.querySelectorAll("[data-reveal-item]");
+  gsap.utils.toArray('[data-story-section]').forEach(section => {
+    const items = section.querySelectorAll('[data-reveal-item]');
     const targets = items.length ? items : section.children;
 
     gsap.fromTo(
       targets,
-      { y: 36, autoAlpha: 0, filter: "blur(8px)" },
+      { y: 36, autoAlpha: 0, filter: 'blur(8px)' },
       {
         y: 0,
         autoAlpha: 1,
-        filter: "blur(0px)",
+        filter: 'blur(0px)',
         duration: 1,
-        ease: "power4.out",
+        ease: 'power4.out',
         stagger: 0.08,
         scrollTrigger: {
           trigger: section,
-          start: "top 82%",
+          start: 'top 82%',
           once: true,
         },
-      }
+      },
     );
   });
 }
@@ -270,22 +279,23 @@ Use scrubbed timelines for cinematic progression. Keep scrubbed animation linear
 function initProgressionScenes() {
   if (reduceMotion) return;
 
-  gsap.utils.toArray("[data-progress-scene]").forEach((scene) => {
-    const media = scene.querySelector("[data-progress-media]");
-    const copy = scene.querySelectorAll("[data-progress-copy]");
+  gsap.utils.toArray('[data-progress-scene]').forEach(scene => {
+    const media = scene.querySelector('[data-progress-media]');
+    const copy = scene.querySelectorAll('[data-progress-copy]');
 
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: scene,
-        start: "top top",
-        end: "+=140%",
-        scrub: 1.1,
-        pin: true,
-        anticipatePin: 1,
-      },
-    })
-      .fromTo(media, { scale: 1.08 }, { scale: 1, ease: "none" })
-      .fromTo(copy, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, stagger: 0.15, ease: "none" }, 0.15);
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: scene,
+          start: 'top top',
+          end: '+=140%',
+          scrub: 1.1,
+          pin: true,
+          anticipatePin: 1,
+        },
+      })
+      .fromTo(media, { scale: 1.08 }, { scale: 1, ease: 'none' })
+      .fromTo(copy, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, stagger: 0.15, ease: 'none' }, 0.15);
   });
 }
 ```
@@ -311,8 +321,8 @@ Use `position: sticky` for layout, and ScrollTrigger for layered scale/depth. Ea
 function initStickyCardStack() {
   if (reduceMotion) return;
 
-  gsap.utils.toArray("[data-sticky-stack]").forEach((stack) => {
-    const cards = gsap.utils.toArray(stack.querySelectorAll("[data-stack-card]"));
+  gsap.utils.toArray('[data-sticky-stack]').forEach(stack => {
+    const cards = gsap.utils.toArray(stack.querySelectorAll('[data-stack-card]'));
 
     cards.forEach((card, index) => {
       const nextCard = cards[index + 1];
@@ -322,11 +332,11 @@ function initStickyCardStack() {
         scale: 0.92 + index * 0.015,
         autoAlpha: 0.72,
         y: -24,
-        ease: "none",
+        ease: 'none',
         scrollTrigger: {
           trigger: nextCard,
-          start: "top 78%",
-          end: "top 24%",
+          start: 'top 78%',
+          end: 'top 24%',
           scrub: true,
           invalidateOnRefresh: true,
         },
@@ -344,17 +354,17 @@ Use parallax for hero images, background layers, and footer reveals. Keep distan
 function initParallax() {
   if (reduceMotion) return;
 
-  gsap.utils.toArray("[data-parallax-layer]").forEach((layer) => {
+  gsap.utils.toArray('[data-parallax-layer]').forEach(layer => {
     const speed = Number(layer.dataset.speed || -0.16);
-    const section = layer.closest("[data-parallax-section]") || layer;
+    const section = layer.closest('[data-parallax-section]') || layer;
 
     gsap.to(layer, {
       y: () => window.innerHeight * speed,
-      ease: "none",
+      ease: 'none',
       scrollTrigger: {
         trigger: section,
-        start: "top bottom",
-        end: "bottom top",
+        start: 'top bottom',
+        end: 'bottom top',
         scrub: 1,
         invalidateOnRefresh: true,
       },
@@ -369,7 +379,7 @@ Footer parallax reveal:
 function initFooterReveal() {
   if (reduceMotion) return;
 
-  const footer = document.querySelector("[data-footer-parallax]");
+  const footer = document.querySelector('[data-footer-parallax]');
   if (!footer) return;
 
   gsap.fromTo(
@@ -378,19 +388,20 @@ function initFooterReveal() {
     {
       yPercent: 0,
       autoAlpha: 1,
-      ease: "none",
+      ease: 'none',
       scrollTrigger: {
         trigger: footer,
-        start: "top bottom",
-        end: "top 45%",
+        start: 'top bottom',
+        end: 'top 45%',
         scrub: 1,
       },
-    }
+    },
   );
 }
 ```
 
 ## Build Order
+
 1. Build the static page first.
 2. Add preloader and hero entrance.
 3. Add split text reveals.
@@ -408,6 +419,7 @@ Create a cinematic scroll-driven landing page with smooth Lenis scrolling, GSAP 
 ```
 
 ## QA Checklist
+
 - Content is readable with JavaScript disabled.
 - Reduced-motion users see static content and no smooth-scroll layer.
 - Scroll-triggered reveals play once.

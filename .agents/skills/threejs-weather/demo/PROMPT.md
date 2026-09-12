@@ -22,7 +22,7 @@ Use `$threejs-weather` to build **Four Weathers Over One Field** as a single sta
 - One fixed pool per precipitation type, sized against the frustum, thinned with `setDrawRange` rather than reallocated.
 - Keep the attribute's own array (`attr.array`), never the array you passed to `Float32BufferAttribute`.
 - The particle volume is anchored ahead of the camera and rotated to face it, with `frustumCulled = false`.
-- Lightning is a dedicated light plus a DOM flash layer *under* the typography, never a change to the time-of-day state.
+- Lightning is a dedicated light plus a DOM flash layer _under_ the typography, never a change to the time-of-day state.
 - Falling snow and settled snow are separate variables on separate clocks.
 - Anything whose colour is mixed inside a shader gets a uniform for the snow, because the material colour cannot reach it.
 - Re-light only when the slow values have actually moved.

@@ -1,8 +1,9 @@
 ---
 paths:
-  - "**/*.spec.ts"
-  - "**/*.test.ts"
+  - '**/*.spec.ts'
+  - '**/*.test.ts'
 ---
+
 # Angular Testing
 
 > This file extends [common/testing.md](common-testing.md) with Angular specific content.

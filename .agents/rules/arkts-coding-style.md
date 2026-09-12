@@ -1,11 +1,12 @@
 ---
 paths:
-  - "**/*.ets"
-  - "**/*.ts"
-  - "**/module.json5"
-  - "**/oh-package.json5"
-  - "**/build-profile.json5"
+  - '**/*.ets'
+  - '**/*.ts'
+  - '**/module.json5'
+  - '**/oh-package.json5'
+  - '**/build-profile.json5'
 ---
+
 # HarmonyOS / ArkTS Coding Style
 
 > This file extends [common/coding-style.md](common-coding-style.md) with HarmonyOS and ArkTS-specific content.
@@ -123,11 +124,11 @@ ArkTS is a strict, statically-typed subset of TypeScript. Violating these constr
 ```typescript
 // Use try/catch with proper error handling
 try {
-  const result = await riskyOperation()
-  return result
+  const result = await riskyOperation();
+  return result;
 } catch (error) {
-  hilog.error(0x0000, 'TAG', 'Operation failed: %{public}s', error)
-  throw new Error('User-friendly error message')
+  hilog.error(0x0000, 'TAG', 'Operation failed: %{public}s', error);
+  throw new Error('User-friendly error message');
 }
 ```
 
@@ -138,16 +139,16 @@ Follow the common immutability principles - create new objects instead of mutati
 ```typescript
 // BAD: mutation
 function updateUser(user: UserModel, name: string): UserModel {
-  user.name = name  // direct mutation
-  return user
+  user.name = name; // direct mutation
+  return user;
 }
 
 // GOOD: immutable - create new instance
 function updateUser(user: UserModel, name: string): UserModel {
-  const updated = new UserModel()
-  updated.id = user.id
-  updated.name = name
-  updated.email = user.email
-  return updated
+  const updated = new UserModel();
+  updated.id = user.id;
+  updated.name = name;
+  updated.email = user.email;
+  return updated;
 }
 ```

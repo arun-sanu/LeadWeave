@@ -27,7 +27,13 @@ interface ChatLike {
  */
 export function filterChats<T extends ChatLike>(chats: T[], query: string): T[] {
   return chats.filter(
-    c => !c.archived && !c.isGroup && c.kind !== 'group' && c.kind !== 'channel' && c.kind !== 'status' && matches(query, c.name, c.id),
+    c =>
+      !c.archived &&
+      !c.isGroup &&
+      c.kind !== 'group' &&
+      c.kind !== 'channel' &&
+      c.kind !== 'status' &&
+      matches(query, c.name, c.id),
   );
 }
 
@@ -35,18 +41,14 @@ export function filterChats<T extends ChatLike>(chats: T[], query: string): T[] 
  * Groups tab: group conversations only (excluding archived).
  */
 export function filterGroupChats<T extends ChatLike>(chats: T[], query: string): T[] {
-  return chats.filter(
-    c => !c.archived && (c.isGroup || c.kind === 'group') && matches(query, c.name, c.id),
-  );
+  return chats.filter(c => !c.archived && (c.isGroup || c.kind === 'group') && matches(query, c.name, c.id));
 }
 
 /**
  * Archive tab: all archived direct chats and groups.
  */
 export function filterArchivedChats<T extends ChatLike>(chats: T[], query: string): T[] {
-  return chats.filter(
-    c => Boolean(c.archived) && matches(query, c.name, c.id),
-  );
+  return chats.filter(c => Boolean(c.archived) && matches(query, c.name, c.id));
 }
 
 /** Channels tab: same search box, matched on the channel's own name/id. */

@@ -6,16 +6,19 @@ description: Create a futuristic, premium, clean dark-blue mesh-gradient design 
 # Mesh Gradient Dark Blue Clean
 
 ## Use When
+
 - The whole page should feel futuristic, premium, clean, and infrastructural.
 - A dark-blue mesh gradient should power the composition, not sit behind it as a generic backdrop.
 - The interface needs a central hero shell, restrained navigation, floating network hints, framed sections, and slow technical motion.
 
 ## Direction
+
 Build on a near-black foundation with a deep navy or steel-blue undertone. Place a shader-like mesh gradient, CPPN-style field, abstract WebGL veil, or canvas light field inside the main hero shell. Keep the surrounding system disciplined: crisp typography, thin rails, corner markers, tiny status dots, quiet frames, and sparse node callouts.
 
 This is not an airy blue page. This is not generic glassmorphism. The mesh is the visual engine inside a minimal system shell.
 
 ## System Recipe
+
 1. Foundation: near-black navy, not flat black.
 2. Hero shell: large rounded container with a subtle white-to-transparent gradient border and darker inner fill.
 3. Mesh field: blue-led procedural canvas or WebGL layer inside the shell.
@@ -64,6 +67,7 @@ This is not an airy blue page. This is not generic glassmorphism. The mesh is th
 ```
 
 ## Hero Shell
+
 Use a border-gradient wrapper and a darker content surface. The mesh canvas sits behind the content inside the shell.
 
 ```css
@@ -77,7 +81,7 @@ Use a border-gradient wrapper and a darker content surface. The mesh canvas sits
     linear-gradient(145deg, rgba(255, 255, 255, 0.46), rgba(147, 197, 253, 0.18), rgba(255, 255, 255, 0.04)) border-box;
   box-shadow:
     0 40px 100px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .mesh-shell__field {
@@ -94,9 +98,7 @@ Use a border-gradient wrapper and a darker content surface. The mesh canvas sits
   z-index: 2;
   min-height: clamp(560px, 72vh, 820px);
   padding: clamp(28px, 6vw, 84px);
-  background:
-    linear-gradient(180deg, rgba(4, 9, 18, 0.22), rgba(4, 9, 18, 0.62)),
-    var(--mesh-shell-inner);
+  background: linear-gradient(180deg, rgba(4, 9, 18, 0.22), rgba(4, 9, 18, 0.62)), var(--mesh-shell-inner);
 }
 ```
 
@@ -112,22 +114,23 @@ Use a border-gradient wrapper and a darker content surface. The mesh canvas sits
 ```
 
 ## Canvas Mesh Field
+
 Use WebGL or Three.js for the final build when available. This 2D canvas pattern is a good fallback for warped gradients, soft mesh movement, and smoky blue highlights.
 
 ```js
 function initDarkBlueMesh(canvas) {
-  const ctx = canvas.getContext("2d");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let width = 0;
   let height = 0;
   let frame = 0;
   let rafId = 0;
 
   const points = [
-    { x: 0.18, y: 0.30, r: 0.45, color: "rgba(29, 78, 216, 0.55)" },
-    { x: 0.68, y: 0.22, r: 0.38, color: "rgba(49, 46, 129, 0.58)" },
-    { x: 0.78, y: 0.72, r: 0.52, color: "rgba(56, 90, 124, 0.48)" },
-    { x: 0.42, y: 0.58, r: 0.34, color: "rgba(219, 234, 254, 0.18)" },
+    { x: 0.18, y: 0.3, r: 0.45, color: 'rgba(29, 78, 216, 0.55)' },
+    { x: 0.68, y: 0.22, r: 0.38, color: 'rgba(49, 46, 129, 0.58)' },
+    { x: 0.78, y: 0.72, r: 0.52, color: 'rgba(56, 90, 124, 0.48)' },
+    { x: 0.42, y: 0.58, r: 0.34, color: 'rgba(219, 234, 254, 0.18)' },
   ];
 
   function resize() {
@@ -142,9 +145,9 @@ function initDarkBlueMesh(canvas) {
 
   function draw(time = 0) {
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "#030712";
+    ctx.fillStyle = '#030712';
     ctx.fillRect(0, 0, width, height);
-    ctx.globalCompositeOperation = "screen";
+    ctx.globalCompositeOperation = 'screen';
 
     points.forEach((point, index) => {
       const drift = reduceMotion ? 0 : Math.sin(time * 0.00018 + index) * 24;
@@ -153,14 +156,14 @@ function initDarkBlueMesh(canvas) {
       const radius = Math.max(width, height) * point.r;
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
       gradient.addColorStop(0, point.color);
-      gradient.addColorStop(1, "rgba(3, 7, 18, 0)");
+      gradient.addColorStop(1, 'rgba(3, 7, 18, 0)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
     });
 
-    ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = "rgba(255, 255, 255, 0.035)";
-    for (let y = (frame % 28); y < height; y += 28) {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.035)';
+    for (let y = frame % 28; y < height; y += 28) {
       ctx.fillRect(0, y, width, 1);
     }
 
@@ -176,11 +179,11 @@ function initDarkBlueMesh(canvas) {
 
   resize();
   draw();
-  window.addEventListener("resize", handleResize);
+  window.addEventListener('resize', handleResize);
 
   return () => {
     cancelAnimationFrame(rafId);
-    window.removeEventListener("resize", handleResize);
+    window.removeEventListener('resize', handleResize);
   };
 }
 ```
@@ -210,7 +213,7 @@ function initDarkBlueMesh(canvas) {
 }
 
 .mesh-nav a:hover,
-.mesh-nav a[aria-current="page"] {
+.mesh-nav a[aria-current='page'] {
   color: var(--mesh-text);
   background: rgba(255, 255, 255, 0.08);
 }
@@ -234,7 +237,7 @@ function initDarkBlueMesh(canvas) {
 }
 
 .mesh-node::before {
-  content: "";
+  content: '';
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -277,6 +280,7 @@ function initDarkBlueMesh(canvas) {
 ```
 
 ## Motion Defaults
+
 - Mesh drift: very slow, 12s to 28s loops, no sharp easing.
 - Scan streaks: sparse vertical drops or horizontal lines, low opacity.
 - Text: masked reveal on hero headline and section labels only.
@@ -284,6 +288,7 @@ function initDarkBlueMesh(canvas) {
 - Reduced motion: freeze mesh, remove shimmer, keep layout and contrast intact.
 
 ## Tuning Knobs
+
 - Mesh visibility: increase opacity only until mood is legible; copy stays primary.
 - Blue hue: shift between indigo, navy, cobalt, and steel blue while preserving the dark base.
 - Shell contrast: tune outer border, inner fill, and canvas opacity until layers feel crisp.
@@ -291,6 +296,7 @@ function initDarkBlueMesh(canvas) {
 - Motion intensity: slow and atmospheric, never game-like.
 
 ## Avoid
+
 - Flat CSS gradients with no mesh-like depth or procedural character.
 - Bright cyan overload or electric-blue glow everywhere.
 - Crowded dashboards, excessive floating widgets, or competing cards.
@@ -299,6 +305,7 @@ function initDarkBlueMesh(canvas) {
 - Airy light-blue sections that break the dark premium atmosphere.
 
 ## Quick Checks
+
 - The mesh is visible inside the hero shell and feels dimensional.
 - The foundation reads near-black navy, not flat black or bright blue.
 - The shell has a crisp border-gradient edge and darker inner surface.

@@ -111,7 +111,9 @@ export function LogsAuthModal({ isOpen, onClose, onAuthenticated }: LogsAuthModa
           authenticatedRole = userRole || (emailLower.includes('super') ? 'superadmin' : 'developer');
           setRole(authenticatedRole as import('../../types/role').UserRole);
         } else {
-          throw new Error('Access Denied: Your Supabase account does not have Superadmin, Developer or Support privileges.');
+          throw new Error(
+            'Access Denied: Your Supabase account does not have Superadmin, Developer or Support privileges.',
+          );
         }
       } else {
         // 2. Standalone / Local Auth fallback verification
@@ -132,21 +134,23 @@ export function LogsAuthModal({ isOpen, onClose, onAuthenticated }: LogsAuthModa
           authenticatedRole = idLower.includes('dev')
             ? 'developer'
             : idLower.includes('support')
-            ? 'support'
-            : 'superadmin';
+              ? 'support'
+              : 'superadmin';
           setRole(authenticatedRole as import('../../types/role').UserRole);
         } else if (currentHasAccess && password.length >= 4) {
           isAuthorized = true;
           authenticatedRole = role || 'superadmin';
         } else {
-          throw new Error('Invalid credentials or unauthorized role. Access restricted to Superadmins, Developers & Support.');
+          throw new Error(
+            'Invalid credentials or unauthorized role. Access restricted to Superadmins, Developers & Support.',
+          );
         }
       }
 
       if (isAuthorized) {
         toast.success(
           'Diagnostic Console Unlocked',
-          `Authenticated as ${authenticatedRole.toUpperCase()}. Access granted.`
+          `Authenticated as ${authenticatedRole.toUpperCase()}. Access granted.`,
         );
         onAuthenticated();
         onClose();
@@ -163,17 +167,15 @@ export function LogsAuthModal({ isOpen, onClose, onAuthenticated }: LogsAuthModa
   return (
     <div className="glass-modal-backdrop" onClick={onClose}>
       <div className="glass-auth-modal" onClick={e => e.stopPropagation()}>
-        <button
-          type="button"
-          className="glass-modal-close-btn"
-          onClick={onClose}
-          aria-label="Close modal"
-        >
+        <button type="button" className="glass-modal-close-btn" onClick={onClose} aria-label="Close modal">
           <X size={15} />
         </button>
 
         <div className="glass-auth-header">
-          <div className="glass-auth-icon-box" style={{ display: 'flex', gap: '10px', alignItems: 'center', background: 'transparent' }}>
+          <div
+            className="glass-auth-icon-box"
+            style={{ display: 'flex', gap: '10px', alignItems: 'center', background: 'transparent' }}
+          >
             <LeadWeaveLogo size={32} />
           </div>
           <h3 style={{ marginTop: '0.5rem' }}>Protected Diagnostic Console</h3>

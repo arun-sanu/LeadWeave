@@ -49,7 +49,6 @@ _For everyone. Install these first._
 - [`systematic-debugging`](../../skills/systematic-debugging/): Debug from evidence instead of guesses.
 - [`git-pushing`](../../skills/git-pushing/): Save your work safely.
 
-
 ---
 
 ## Security & Compliance
@@ -82,7 +81,6 @@ _For building secure applications._
 - [`dependency-management-deps-audit`](../../skills/dependency-management-deps-audit/): Audit dependency vulnerabilities, licenses, and supply-chain risk.
 - [`cc-skill-security-review`](../../skills/cc-skill-security-review/): Security checklist for features.
 - [`pci-compliance`](../../skills/pci-compliance/): Payment card security standards.
-
 
 ---
 
@@ -132,7 +130,6 @@ _For end-to-end web application development._
 - [`stripe-integration`](../../skills/stripe-integration/): Payments and subscriptions.
 - [`e2e-testing-patterns`](../../skills/e2e-testing-patterns/): Verify critical user journeys with reliable E2E tests.
 
-
 ---
 
 ## 🤖 AI & Agents
@@ -164,7 +161,6 @@ _For building production LLM applications._
 - [`langfuse`](../../skills/langfuse/): LLM observability and tracing.
 - [`llm-evaluation`](../../skills/llm-evaluation/): Measure LLM quality with automated and human evaluation.
 
-
 ---
 
 ## 🎮 Game Development
@@ -182,7 +178,6 @@ _For building games with AI assistants._
 - [`godot-gdscript-patterns`](../../skills/godot-gdscript-patterns/): Godot 4 GDScript patterns.
 - [`game-development/game-audio`](../../skills/game-development/game-audio/): Design sound effects, music systems, and adaptive game audio.
 - [`algorithmic-art`](../../skills/algorithmic-art/): Generate assets with code.
-
 
 ---
 
@@ -225,7 +220,6 @@ _For low-level and performance-critical code._
 - [`golang-pro`](../../skills/golang-pro/): Go development expertise.
 - [`memory-safety-patterns`](../../skills/memory-safety-patterns/): Memory-safe programming.
 - [`cpp-pro`](../../skills/cpp-pro/): Modern C++ development.
-
 
 ---
 
@@ -271,7 +265,6 @@ _For driving user acquisition and retention._
 - [`ab-test-setup`](../../skills/ab-test-setup/): Validated learning experiments.
 - [`email-sequence`](../../skills/email-sequence/): Automated email campaigns.
 
-
 ---
 
 ## DevOps & Infrastructure
@@ -304,7 +297,6 @@ _For production reliability._
 - [`postmortem-writing`](../../skills/postmortem-writing/): Blameless postmortems.
 - [`performance-engineer`](../../skills/performance-engineer/): Application performance optimization.
 
-
 ---
 
 ## 📊 Data & Analytics
@@ -335,7 +327,6 @@ _For building data pipelines._
 - [`data-quality-frameworks`](../../skills/data-quality-frameworks/): Validate pipelines with contracts, dbt tests, and quality monitoring.
 - [`vector-database-engineer`](../../skills/vector-database-engineer/): Vector databases for RAG.
 
-
 ---
 
 ## 🎨 Creative & Content
@@ -352,7 +343,6 @@ _For visuals, content, and branding._
 - [`copy-editing`](../../skills/copy-editing/): Polish your prose.
 - [`algorithmic-art`](../../skills/algorithmic-art/): Code-generated masterpieces.
 - [`interactive-portfolio`](../../skills/interactive-portfolio/): Portfolios that land jobs.
-
 
 ---
 
@@ -371,7 +361,6 @@ _For breaking things before users do._
 - [`systematic-debugging`](../../skills/systematic-debugging/): Diagnose failures from evidence instead of guesses.
 - [`code-review-checklist`](../../skills/code-review-checklist/): Catch bugs in PRs.
 - [`ci-cd-and-automation`](../../skills/ci-cd-and-automation/): Run automated test gates consistently in CI/CD.
-
 
 ---
 
@@ -529,7 +518,6 @@ _Teams shipping infrastructure, deployments, and operational workflows._
 - [`incident-responder`](../../skills/incident-responder/): Respond to incidents with clear procedure.
 - [`devops-troubleshooter`](../../skills/devops-troubleshooter/): Diagnose infrastructure and deployment issues.
 
-
 ---
 
 ## 🧩 Specialized Product Plugins - Next Wave
@@ -618,7 +606,6 @@ _Mobile teams shipping Expo, React Native, Flutter, and iOS apps._
 - [`ios-developer`](../../skills/ios-developer/): Develop iOS apps with Swift.
 - [`app-store-optimization`](../../skills/app-store-optimization/): Improve App Store and Play Store visibility.
 - [`multi-platform-apps-multi-platform`](../../skills/multi-platform-apps-multi-platform/): Plan and build multi-platform app experiences.
-
 
 ---
 
@@ -814,7 +801,6 @@ _For document-heavy workflows, spreadsheets, PDFs, and presentations._
 - [`google-slides-automation`](../../skills/google-slides-automation/): Automate presentation updates in Google Slides.
 - [`google-sheets-automation`](../../skills/google-sheets-automation/): Automate reads and writes in Google Sheets.
 
-
 ---
 
 ## 🧰 Maintainer & OSS
@@ -848,7 +834,6 @@ _For creating and maintaining high-quality SKILL.md assets._
 - [`documentation-generation-doc-generate`](../../skills/documentation-generation-doc-generate/): Generate maintainable technical docs.
 - [`lint-and-validate`](../../skills/lint-and-validate/): Validate quality after edits.
 - [`verification-before-completion`](../../skills/verification-before-completion/): Confirm changes before claiming done.
-
 
 ---
 
@@ -919,7 +904,6 @@ _PMs, founders, and AI product teams defining, measuring, and improving AI featu
 - [`product-manager`](../../skills/product-manager/): Apply product management judgment and planning.
 - [`ab-test-setup`](../../skills/ab-test-setup/): Plan and validate experiments.
 - [`hugging-face-evaluation`](../../skills/hugging-face-evaluation/): Evaluate AI models and datasets with Hugging Face workflows.
-
 
 ---
 

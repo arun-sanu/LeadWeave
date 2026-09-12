@@ -6,12 +6,14 @@ description: Create a real 3D WebGL object with geometric mesh depth, physically
 # WebGL 3D Object
 
 ## Use When
+
 - A hero, feature block, or product moment needs one strong 3D object.
 - The visual should show real geometry, lighting, highlights, and edges.
 - A faceted mesh should float or rotate subtly inside a web layout.
 - CSS transforms, SVG illusions, or flat gradients are not enough.
 
 ## Rules
+
 1. Use real 3D geometry: `IcosahedronGeometry`, `DodecahedronGeometry`, `BoxGeometry`, custom `BufferGeometry`, or a glTF mesh.
 2. Use a perspective camera so the object has depth and scale.
 3. Use PBR material: `MeshStandardMaterial` or `MeshPhysicalMaterial`.
@@ -47,7 +49,7 @@ description: Create a real 3D WebGL object with geometric mesh depth, physically
 ## Three.js Object Recipe
 
 ```js
-import * as THREE from "three";
+import * as THREE from 'three';
 
 function initWebGL3DObject(canvas, options = {}) {
   if (!canvas) return () => {};
@@ -97,16 +99,13 @@ function initWebGL3DObject(canvas, options = {}) {
   rim.position.set(-4.2, 1.2, -2.8);
   scene.add(rim);
 
-  const shadowPlane = new THREE.Mesh(
-    new THREE.PlaneGeometry(5.2, 5.2),
-    new THREE.ShadowMaterial({ opacity: 0.18 })
-  );
+  const shadowPlane = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 5.2), new THREE.ShadowMaterial({ opacity: 0.18 }));
   shadowPlane.position.set(0, -1.65, 0);
   shadowPlane.rotation.x = -Math.PI / 2;
   shadowPlane.receiveShadow = true;
   scene.add(shadowPlane);
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let rafId = 0;
 
   function resize() {
@@ -137,11 +136,11 @@ function initWebGL3DObject(canvas, options = {}) {
 
   resize();
   render();
-  window.addEventListener("resize", handleResize);
+  window.addEventListener('resize', handleResize);
 
   return () => {
     cancelAnimationFrame(rafId);
-    window.removeEventListener("resize", handleResize);
+    window.removeEventListener('resize', handleResize);
     geometry.dispose();
     material.dispose();
     shadowPlane.geometry.dispose();
@@ -150,37 +149,38 @@ function initWebGL3DObject(canvas, options = {}) {
   };
 }
 
-const cleanupObject = initWebGL3DObject(
-  document.querySelector("[data-webgl-3d-object]"),
-  {
-    color: 0x8aa4ff,
-    rimColor: 0x7dd3fc,
-    metalness: 0.48,
-    roughness: 0.34,
-    emissive: 0x101833,
-  }
-);
+const cleanupObject = initWebGL3DObject(document.querySelector('[data-webgl-3d-object]'), {
+  color: 0x8aa4ff,
+  rimColor: 0x7dd3fc,
+  metalness: 0.48,
+  roughness: 0.34,
+  emissive: 0x101833,
+});
 ```
 
 ## Material Defaults
+
 - Premium metal: `metalness: 0.45-0.7`, `roughness: 0.25-0.45`.
 - Soft ceramic: `metalness: 0.0-0.15`, `roughness: 0.38-0.62`.
 - Glow-tinted tech object: low `emissive` with `emissiveIntensity: 0.12-0.35`.
 - Faceted object: set `flatShading: true`; smooth product object: set it to `false`.
 
 ## Lighting Defaults
+
 - Key light: directional, high front-side angle, strongest source.
 - Ambient fill: low intensity so shadows stay visible.
 - Rim light: brand-tinted or cool light from behind to reveal edges.
 - Shadows: enable only when the object needs grounded depth; keep map size moderate.
 
 ## Motion Defaults
+
 - Rotation: slow, continuous, and secondary to the page content.
 - Floating: `0.04` to `0.12` units on Y.
 - Reduced motion: render a still frame or only allow direct interaction.
 - Avoid camera movement unless the object is the main interaction.
 
 ## Avoid
+
 - CSS 3D transforms pretending to be WebGL.
 - Unlit materials when the ask is real lighting and depth.
 - Flat planes with gradients instead of actual geometry.
@@ -189,6 +189,7 @@ const cleanupObject = initWebGL3DObject(
 - Letting the object compete with foreground copy or CTAs.
 
 ## Quick Checks
+
 - The object has visible form, edges, highlights, and shadows.
 - The material uses `metalness`, `roughness`, and optional `emissive`.
 - Directional and ambient lights are both present.

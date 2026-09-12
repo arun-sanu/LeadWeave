@@ -5,8 +5,29 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { nextReconnectState } from '../utils/reconnectState';
 import { applyIncomingToChatList } from '../utils/chatList';
-import { filterChats, filterGroupChats, filterArchivedChats, filterChannels, groupStatusesByContact } from '../utils/chatFilters';
-import { ArrowLeft, Loader2, Megaphone, CircleDashed, AlertCircle, MessageSquare, ExternalLink, Archive, ArchiveRestore, X, Smartphone, MessageCircle, Search, Network } from 'lucide-react';
+import {
+  filterChats,
+  filterGroupChats,
+  filterArchivedChats,
+  filterChannels,
+  groupStatusesByContact,
+} from '../utils/chatFilters';
+import {
+  ArrowLeft,
+  Loader2,
+  Megaphone,
+  CircleDashed,
+  AlertCircle,
+  MessageSquare,
+  ExternalLink,
+  Archive,
+  ArchiveRestore,
+  X,
+  Smartphone,
+  MessageCircle,
+  Search,
+  Network,
+} from 'lucide-react';
 import { useProfilePicture } from '../hooks/useProfilePicture';
 import { useProfilePictures } from '../hooks/useProfilePictures';
 import { useResolvedPhone } from '../hooks/useResolvedPhone';
@@ -140,7 +161,8 @@ export function Chats() {
 
   const locationContext = useContext(UNSAFE_LocationContext);
   const navigationContext = useContext(UNSAFE_NavigationContext);
-  const locationSearch = locationContext?.location?.search ?? (typeof window !== 'undefined' ? window.location.search : '');
+  const locationSearch =
+    locationContext?.location?.search ?? (typeof window !== 'undefined' ? window.location.search : '');
   const navigateFn = useMemo(() => {
     const nav = navigationContext?.navigator;
     if (!nav) return null;
@@ -176,19 +198,22 @@ export function Chats() {
     setActiveStatusContactId(null);
   }, []);
 
-  const handleSetLeftPaneMode = useCallback((mode: 'chats' | 'sessions' | 'lan-mesh') => {
-    setLeftPaneMode(mode);
-    if (mode !== 'chats') {
-      closeActiveRoom();
-    }
-    if (navigateFn) {
-      navigateFn(`?tab=${mode}`, { replace: true });
-    } else if (typeof window !== 'undefined' && window.history?.replaceState) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('tab', mode);
-      window.history.replaceState(null, '', url.toString());
-    }
-  }, [navigateFn, closeActiveRoom]);
+  const handleSetLeftPaneMode = useCallback(
+    (mode: 'chats' | 'sessions' | 'lan-mesh') => {
+      setLeftPaneMode(mode);
+      if (mode !== 'chats') {
+        closeActiveRoom();
+      }
+      if (navigateFn) {
+        navigateFn(`?tab=${mode}`, { replace: true });
+      } else if (typeof window !== 'undefined' && window.history?.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('tab', mode);
+        window.history.replaceState(null, '', url.toString());
+      }
+    },
+    [navigateFn, closeActiveRoom],
+  );
 
   useEffect(() => {
     const params = new URLSearchParams(locationSearch);
@@ -373,9 +398,12 @@ export function Chats() {
     }
   }, [sessionsQuery, syncSessionsList, t, showErrorToast]);
 
-  const handleSessionsChange = useCallback((updatedList: Session[]) => {
-    syncSessionsList(updatedList);
-  }, [syncSessionsList]);
+  const handleSessionsChange = useCallback(
+    (updatedList: Session[]) => {
+      syncSessionsList(updatedList);
+    },
+    [syncSessionsList],
+  );
 
   // 2. Fetch chats when active session changes
   const loadChats = useCallback(
@@ -676,12 +704,9 @@ export function Chats() {
     [queryClient],
   );
 
-  const handleSessionStatusReceived = useCallback(
-    () => {
-      void loadSessions();
-    },
-    [loadSessions],
-  );
+  const handleSessionStatusReceived = useCallback(() => {
+    void loadSessions();
+  }, [loadSessions]);
 
   // The events object must be referentially stable: useWebSocket re-registers its socket handler
   // on every identity change, so an inline literal would tear down and re-attach per render.
@@ -826,8 +851,6 @@ export function Chats() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeChat?.id, markChatRead]);
 
-
-
   // Helper formats
   const formatChatTime = useCallback(
     (timestamp?: number) => {
@@ -853,9 +876,7 @@ export function Chats() {
       if (!selectedSessionId) return;
 
       // Optimistic local state update
-      setChats(prevChats =>
-        prevChats.map(c => (c.id === chatToArchive.id ? { ...c, archived: archive } : c)),
-      );
+      setChats(prevChats => prevChats.map(c => (c.id === chatToArchive.id ? { ...c, archived: archive } : c)));
       if (activeChat?.id === chatToArchive.id) {
         setActiveChat(prev => (prev ? { ...prev, archived: archive } : null));
       }
@@ -866,9 +887,7 @@ export function Chats() {
         queryClient.invalidateQueries({ queryKey: ['chats', selectedSessionId] });
       } catch {
         // Rollback on failure
-        setChats(prevChats =>
-          prevChats.map(c => (c.id === chatToArchive.id ? { ...c, archived: !archive } : c)),
-        );
+        setChats(prevChats => prevChats.map(c => (c.id === chatToArchive.id ? { ...c, archived: !archive } : c)));
         if (activeChat?.id === chatToArchive.id) {
           setActiveChat(prev => (prev ? { ...prev, archived: !archive } : null));
         }
@@ -884,11 +903,7 @@ export function Chats() {
   const filteredArchivedChats = filterArchivedChats(chats, searchQuery);
 
   const currentListChats =
-    activeTab === 'groups'
-      ? filteredGroupChats
-      : activeTab === 'archive'
-        ? filteredArchivedChats
-        : filteredDirectChats;
+    activeTab === 'groups' ? filteredGroupChats : activeTab === 'archive' ? filteredArchivedChats : filteredDirectChats;
 
   // The channels zero-state ("not subscribed to any channels") stays keyed on the UNFILTERED list
   // below, so a non-matching search renders an empty list rather than claiming there are none.
@@ -925,8 +940,6 @@ export function Chats() {
     [messages, formatChatTime],
   );
 
-
-
   const isRoomOpen = leftPaneMode === 'chats' && Boolean(activeChat || activeChannel || activeStatusGroup);
 
   // Global ESC key listener to close the translucent glass full page popup
@@ -949,7 +962,6 @@ export function Chats() {
 
   return (
     <div className="chats-page">
-
       {/* Real-time connection permanently dropped — let the user re-establish it instead of
           silently showing stale chats. */}
       {connectionFailed && (
@@ -1036,7 +1048,9 @@ export function Chats() {
                       const session = sessions.find(s => s.id === selectedSessionId);
                       if (!session) return null;
                       return (
-                        <div className={`sidebar-session-switcher chats-hero-session-switcher ${sessions.length === 1 ? 'single-session' : ''}`}>
+                        <div
+                          className={`sidebar-session-switcher chats-hero-session-switcher ${sessions.length === 1 ? 'single-session' : ''}`}
+                        >
                           <select
                             value={selectedSessionId}
                             onChange={e => setSelectedSessionId(e.target.value)}
@@ -1055,7 +1069,10 @@ export function Chats() {
                   ) : (
                     <div className="chats-hero-empty-state">
                       <p className="chats-hero-empty-desc">
-                        {t('chats.noSessionsDesc', 'No connected WhatsApp session. Please connect or start a session to use chat.')}
+                        {t(
+                          'chats.noSessionsDesc',
+                          'No connected WhatsApp session. Please connect or start a session to use chat.',
+                        )}
                       </p>
                       <button
                         type="button"
@@ -1071,15 +1088,14 @@ export function Chats() {
                 ) : leftPaneMode === 'lan-mesh' ? (
                   <div className="chats-hero-session-pill">
                     <span className="session-status-dot" />
-                    <span>
-                      Decentralized P2P Mesh Network
-                    </span>
+                    <span>Decentralized P2P Mesh Network</span>
                   </div>
                 ) : (
                   <div className="chats-hero-session-pill">
                     <span className="session-status-dot" />
                     <span>
-                      {allSessions.length} {t('sessions.title', 'Sessions')} ({sessions.length} {t('sessionStatus.ready', 'Ready')})
+                      {allSessions.length} {t('sessions.title', 'Sessions')} ({sessions.length}{' '}
+                      {t('sessionStatus.ready', 'Ready')})
                     </span>
                   </div>
                 )}
@@ -1092,12 +1108,38 @@ export function Chats() {
             {leftPaneMode === 'chats' ? (
               sessions.length === 0 ? (
                 <aside className="chats-sidebar">
-                  <div className="chats-list-empty" style={{ padding: '3rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                  <div
+                    className="chats-list-empty"
+                    style={{
+                      padding: '3rem 1.5rem',
+                      textAlign: 'center',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: '100%',
+                    }}
+                  >
                     <AlertCircle size={40} className="text-warn" style={{ marginBottom: '1rem' }} />
-                    <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: '1.0625rem', fontWeight: 600 }}>
+                    <h4
+                      style={{
+                        color: 'var(--text-primary)',
+                        marginBottom: '0.5rem',
+                        fontSize: '1.0625rem',
+                        fontWeight: 600,
+                      }}
+                    >
                       {t('chats.noSessionsTitle', 'No connected sessions')}
                     </h4>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem', maxWidth: '280px', lineHeight: 1.5 }}>
+                    <p
+                      style={{
+                        color: 'var(--text-muted)',
+                        fontSize: '0.875rem',
+                        marginBottom: '1.5rem',
+                        maxWidth: '280px',
+                        lineHeight: 1.5,
+                      }}
+                    >
                       {t('chats.noSessionsDesc', 'Please connect a WhatsApp session to start using chats.')}
                     </p>
                     <button
@@ -1196,11 +1238,7 @@ export function Chats() {
                   </button>
                   <div className="room-avatar">
                     {activePp.data ? (
-                      <img
-                        src={activePp.data}
-                        alt=""
-                        onError={() => activePp.refetch()}
-                      />
+                      <img src={activePp.data} alt="" onError={() => activePp.refetch()} />
                     ) : (
                       <KindIcon kind={activeChat.kind} />
                     )}

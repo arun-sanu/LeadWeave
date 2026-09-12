@@ -387,7 +387,7 @@
 .webhooks-page .event-item code {
   font-size: 0.8125rem;
   color: var(--primary-text);
-  background: rgba(var(--accent-rgb), 0.10);
+  background: rgba(var(--accent-rgb), 0.1);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   width: fit-content;
@@ -402,13 +402,13 @@
 /* Dark is the only theme — these styles always apply */
 .webhooks-page .event-tag {
   color: var(--success-text);
-  background: rgba(var(--accent-rgb), 0.20);
+  background: rgba(var(--accent-rgb), 0.2);
   border-color: rgba(var(--accent-rgb), 0.35);
 }
 
 .webhooks-page .status-badge.active {
   color: var(--success-text);
-  background: rgba(var(--accent-rgb), 0.20);
+  background: rgba(var(--accent-rgb), 0.2);
 }
 
 .webhooks-page .webhook-url {
@@ -547,7 +547,9 @@
   right: 0;
   bottom: 0;
   background-color: var(--border);
-  transition: background-color var(--duration-slow) var(--ease-out), border-color var(--duration-slow) var(--ease-out);
+  transition:
+    background-color var(--duration-slow) var(--ease-out),
+    border-color var(--duration-slow) var(--ease-out);
   border-radius: 26px;
 }
 
@@ -559,7 +561,9 @@
   left: 3px;
   bottom: 3px;
   background-color: var(--bg-card);
-  transition: background-color var(--duration-slow) var(--ease-out), border-color var(--duration-slow) var(--ease-out);
+  transition:
+    background-color var(--duration-slow) var(--ease-out),
+    border-color var(--duration-slow) var(--ease-out);
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }

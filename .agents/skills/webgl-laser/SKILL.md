@@ -6,6 +6,7 @@ description: Create a fixed full-screen WebGL laser background effect with a thi
 # WebGL Laser
 
 ## Scope
+
 - Apply only to the laser background effect.
 - Use a fixed full-screen canvas behind the DOM.
 - Set `pointer-events: none` on the canvas.
@@ -13,6 +14,7 @@ description: Create a fixed full-screen WebGL laser background effect with a thi
 - Match the halo and smoke to the page's primary or strongest accent color.
 
 ## Visual Target
+
 - Thin vertical beam: crisp white-hot inner core, narrow colored halo.
 - Atmospheric smoke: soft cloudy breakup concentrated around the beam.
 - Dark cinematic field: restrained, brand-colored, and readable behind content.
@@ -23,9 +25,7 @@ description: Create a fixed full-screen WebGL laser background effect with a thi
 
 ```html
 <canvas class="laser-canvas" data-webgl-laser></canvas>
-<main class="page-content">
-  ...
-</main>
+<main class="page-content">...</main>
 ```
 
 ```css
@@ -45,14 +45,19 @@ description: Create a fixed full-screen WebGL laser background effect with a thi
 ```
 
 ## Brand Color
+
 Use the product accent as the source color. The shader keeps the core near white and derives the halo/smoke from this color.
 
 ```js
 function hexToRgb01(hex) {
-  const clean = hex.replace("#", "").trim();
-  const value = clean.length === 3
-    ? clean.split("").map((char) => char + char).join("")
-    : clean;
+  const clean = hex.replace('#', '').trim();
+  const value =
+    clean.length === 3
+      ? clean
+          .split('')
+          .map(char => char + char)
+          .join('')
+      : clean;
 
   return [
     parseInt(value.slice(0, 2), 16) / 255,
@@ -61,12 +66,11 @@ function hexToRgb01(hex) {
   ];
 }
 
-const accent = getComputedStyle(document.documentElement)
-  .getPropertyValue("--brand-accent")
-  .trim() || "#ff4d8d";
+const accent = getComputedStyle(document.documentElement).getPropertyValue('--brand-accent').trim() || '#ff4d8d';
 ```
 
 ## Raw WebGL Setup
+
 Prefer raw WebGL with a full-screen quad unless the active file already uses another renderer.
 
 ```js
@@ -163,6 +167,7 @@ void main() {
 ```
 
 ## Initializer
+
 Keep `u_resolution` synced on resize and animate through `u_time`.
 
 ```js
@@ -172,7 +177,7 @@ function createShader(gl, type, source) {
   gl.compileShader(shader);
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    throw new Error(gl.getShaderInfoLog(shader) || "Shader compile failed");
+    throw new Error(gl.getShaderInfoLog(shader) || 'Shader compile failed');
   }
 
   return shader;
@@ -185,7 +190,7 @@ function createProgram(gl, vertexSource, fragmentSource) {
   gl.linkProgram(program);
 
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    throw new Error(gl.getProgramInfoLog(program) || "Program link failed");
+    throw new Error(gl.getProgramInfoLog(program) || 'Program link failed');
   }
 
   return program;
@@ -194,7 +199,7 @@ function createProgram(gl, vertexSource, fragmentSource) {
 function initWebGLLaser(canvas, options = {}) {
   if (!canvas) return () => {};
 
-  const gl = canvas.getContext("webgl", {
+  const gl = canvas.getContext('webgl', {
     alpha: true,
     antialias: false,
     premultipliedAlpha: false,
@@ -204,28 +209,21 @@ function initWebGLLaser(canvas, options = {}) {
 
   const program = createProgram(gl, laserVertexShader, laserFragmentShader);
   const positionBuffer = gl.createBuffer();
-  const positions = new Float32Array([
-    -1, -1,
-     1, -1,
-    -1,  1,
-    -1,  1,
-     1, -1,
-     1,  1,
-  ]);
+  const positions = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
   gl.useProgram(program);
 
-  const positionLocation = gl.getAttribLocation(program, "a_position");
+  const positionLocation = gl.getAttribLocation(program, 'a_position');
   const uniforms = {
-    resolution: gl.getUniformLocation(program, "u_resolution"),
-    time: gl.getUniformLocation(program, "u_time"),
-    color: gl.getUniformLocation(program, "u_color"),
-    xOffset: gl.getUniformLocation(program, "u_xOffset"),
-    coreWidth: gl.getUniformLocation(program, "u_coreWidth"),
-    glowWidth: gl.getUniformLocation(program, "u_glowWidth"),
-    smokeDensity: gl.getUniformLocation(program, "u_smokeDensity"),
+    resolution: gl.getUniformLocation(program, 'u_resolution'),
+    time: gl.getUniformLocation(program, 'u_time'),
+    color: gl.getUniformLocation(program, 'u_color'),
+    xOffset: gl.getUniformLocation(program, 'u_xOffset'),
+    coreWidth: gl.getUniformLocation(program, 'u_coreWidth'),
+    glowWidth: gl.getUniformLocation(program, 'u_glowWidth'),
+    smokeDensity: gl.getUniformLocation(program, 'u_smokeDensity'),
   };
 
   gl.enableVertexAttribArray(positionLocation);
@@ -234,7 +232,7 @@ function initWebGLLaser(canvas, options = {}) {
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
   const color = options.color || hexToRgb01(accent);
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let width = 1;
   let height = 1;
   let rafId = 0;
@@ -272,17 +270,17 @@ function initWebGLLaser(canvas, options = {}) {
 
   resize();
   render();
-  window.addEventListener("resize", handleResize);
+  window.addEventListener('resize', handleResize);
 
   return () => {
     cancelAnimationFrame(rafId);
-    window.removeEventListener("resize", handleResize);
+    window.removeEventListener('resize', handleResize);
     gl.deleteBuffer(positionBuffer);
     gl.deleteProgram(program);
   };
 }
 
-const cleanupLaser = initWebGLLaser(document.querySelector("[data-webgl-laser]"), {
+const cleanupLaser = initWebGLLaser(document.querySelector('[data-webgl-laser]'), {
   color: hexToRgb01(accent),
   xOffset: 0.0,
   coreWidth: 0.0045,
@@ -293,6 +291,7 @@ const cleanupLaser = initWebGLLaser(document.querySelector("[data-webgl-laser]")
 ```
 
 ## Tuning Knobs
+
 - Beam position: adjust `xOffset`; keep it in aspect-correct centered UV space.
 - Beam thickness: tune `coreWidth` separately from `glowWidth`; keep the core extremely thin.
 - Color: derive `color` from the brand accent, then soften halo and smoke in shader.
@@ -300,6 +299,7 @@ const cleanupLaser = initWebGLLaser(document.querySelector("[data-webgl-laser]")
 - Performance: reduce FBM octaves or cap `maxDpr` before changing the visual structure.
 
 ## Taste Rules
+
 - The hottest beam core stays near white.
 - The halo and fog use the design's primary or strongest accent color.
 - Smoke blooms near the beam and dissipates outward.
@@ -307,6 +307,7 @@ const cleanupLaser = initWebGLLaser(document.querySelector("[data-webgl-laser]")
 - Content readability wins over bloom, haze, or cinematic drama.
 
 ## Avoid
+
 - Hardcoding blue when the design uses another primary color.
 - Making the beam thick enough to read as a glowing bar.
 - Generic full-screen fog that is not concentrated around the beam.

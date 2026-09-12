@@ -100,7 +100,9 @@ function installFetchStub(): void {
 }
 
 function validateCallCount(): number {
-  return fetchCalls.filter(c => c.method === 'POST' && (c.path === '/api/auth/validate' || c.path === '/api/auth/session')).length;
+  return fetchCalls.filter(
+    c => c.method === 'POST' && (c.path === '/api/auth/validate' || c.path === '/api/auth/session'),
+  ).length;
 }
 
 type RTL = typeof import('@testing-library/react');

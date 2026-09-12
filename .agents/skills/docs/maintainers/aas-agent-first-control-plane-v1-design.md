@@ -96,9 +96,7 @@ The public v1 manifest stores desired state, not derived repository observations
     "version": "14.6.0",
     "integrity": "sha256-..."
   },
-  "targets": [
-    { "host": "codex", "scope": "project" }
-  ],
+  "targets": [{ "host": "codex", "scope": "project" }],
   "intent": {
     "goals": ["build", "test", "deploy"]
   },
@@ -107,10 +105,7 @@ The public v1 manifest stores desired state, not derived repository observations
     "requireKnownSource": true,
     "allowManualSetup": false
   },
-  "skills": [
-    { "id": "react-best-practices" },
-    { "id": "playwright-skill" }
-  ]
+  "skills": [{ "id": "react-best-practices" }, { "id": "playwright-skill" }]
 }
 ```
 
@@ -276,28 +271,28 @@ Workbench accepts only size/depth-bounded, user-mediated paste or file upload he
 
 ## Decision log
 
-| Decision | Alternatives considered | Rationale |
-| --- | --- | --- |
-| Stack + CLI + MCP + Workbench | Site-only stack, new installer CLI, MCP wrapper | The stack is durable state; interfaces alone do not create recurring product value. |
-| Agent-first, human-approved | Manual Workbench composition | Users delegate selection; humans need review and control, not 2,000 checkboxes. |
-| Local stdio MCP | Hosted MCP/API, resident daemon | Preserves privacy, works offline, and keeps process isolation simple. |
-| MCP read-only; CLI owns writes | MCP apply/install tools | Preserves an explicit approval boundary and reduces host-agent blast radius. |
-| One npm package and one core | Multiple packages or duplicated logic | Minimizes version skew while preserving later split options. |
-| Hybrid runtime placement | Mandatory project install or global npm install | User-local works across languages; project-local remains available for team pinning. |
-| Minimal manifest | Persist detected profile and prose reasoning | Derived data drifts and causes noisy diffs; approved intent and IDs are durable. |
-| Catalog identity includes integrity | Version string only or immediate lockfile | Binds desired state to verified bytes without adding a second public state file. |
-| Public eligibility rules and two result lanes | Hidden enriched whitelist | Keeps the whole catalog visible and makes incomplete evidence explicit. |
-| Unknown is first-class | Treat unknown as incompatible or infer from prose | Prevents false certainty while allowing policy-controlled caution. |
-| Lexical fixed-point deterministic ranking | Embeddings, remote scoring, model ranking | Reproducible across CLI, MCP, and Workbench with auditable factors. |
-| Separate coverage/evidence measures | Single confidence percentage | Avoids presenting missing metadata as certainty. |
-| Immutable plan and transactional apply | Recompute on apply or direct install | Human approval must bind the exact operation and survive drift/failure safely. |
-| One target/filesystem per mutating plan | Claim whole-plan atomicity across multiple host filesystems | Preserves real crash-atomic semantics; multi-host manifests remain portable through separate approved plans. |
-| Pure Node write-time containment | Native addon or overstated portable `openat` guarantee | Matches the same-user threat boundary and avoids a new native distribution surface while documenting residual TOCTOU risk. |
-| Registry integrity plus internal digest | Digest from same untrusted file alone | Verifies published bytes and catalog consistency while documenting publisher compromise as residual risk. |
-| Valid abstention is `ok: true` | Treat insufficient coverage as error | Clients and metrics must distinguish safe abstention from system failure. |
-| Independent black-box tarball verifier | Repository test suite alone | Prevents checkout-only success and proves the published artifact boundary. |
-| Per-intent 80/90/100 gates | Global average or raw skill-count gate | Prevents strong categories from hiding weak ones and tests correct abstention. |
-| Launch parameters frozen before activation | Leave intent, adapter, benchmark-size, runtime, and Workbench scope open | Product-owner approval fixes the cost and finish line before implementation begins. |
+| Decision                                      | Alternatives considered                                                  | Rationale                                                                                                                  |
+| --------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Stack + CLI + MCP + Workbench                 | Site-only stack, new installer CLI, MCP wrapper                          | The stack is durable state; interfaces alone do not create recurring product value.                                        |
+| Agent-first, human-approved                   | Manual Workbench composition                                             | Users delegate selection; humans need review and control, not 2,000 checkboxes.                                            |
+| Local stdio MCP                               | Hosted MCP/API, resident daemon                                          | Preserves privacy, works offline, and keeps process isolation simple.                                                      |
+| MCP read-only; CLI owns writes                | MCP apply/install tools                                                  | Preserves an explicit approval boundary and reduces host-agent blast radius.                                               |
+| One npm package and one core                  | Multiple packages or duplicated logic                                    | Minimizes version skew while preserving later split options.                                                               |
+| Hybrid runtime placement                      | Mandatory project install or global npm install                          | User-local works across languages; project-local remains available for team pinning.                                       |
+| Minimal manifest                              | Persist detected profile and prose reasoning                             | Derived data drifts and causes noisy diffs; approved intent and IDs are durable.                                           |
+| Catalog identity includes integrity           | Version string only or immediate lockfile                                | Binds desired state to verified bytes without adding a second public state file.                                           |
+| Public eligibility rules and two result lanes | Hidden enriched whitelist                                                | Keeps the whole catalog visible and makes incomplete evidence explicit.                                                    |
+| Unknown is first-class                        | Treat unknown as incompatible or infer from prose                        | Prevents false certainty while allowing policy-controlled caution.                                                         |
+| Lexical fixed-point deterministic ranking     | Embeddings, remote scoring, model ranking                                | Reproducible across CLI, MCP, and Workbench with auditable factors.                                                        |
+| Separate coverage/evidence measures           | Single confidence percentage                                             | Avoids presenting missing metadata as certainty.                                                                           |
+| Immutable plan and transactional apply        | Recompute on apply or direct install                                     | Human approval must bind the exact operation and survive drift/failure safely.                                             |
+| One target/filesystem per mutating plan       | Claim whole-plan atomicity across multiple host filesystems              | Preserves real crash-atomic semantics; multi-host manifests remain portable through separate approved plans.               |
+| Pure Node write-time containment              | Native addon or overstated portable `openat` guarantee                   | Matches the same-user threat boundary and avoids a new native distribution surface while documenting residual TOCTOU risk. |
+| Registry integrity plus internal digest       | Digest from same untrusted file alone                                    | Verifies published bytes and catalog consistency while documenting publisher compromise as residual risk.                  |
+| Valid abstention is `ok: true`                | Treat insufficient coverage as error                                     | Clients and metrics must distinguish safe abstention from system failure.                                                  |
+| Independent black-box tarball verifier        | Repository test suite alone                                              | Prevents checkout-only success and proves the published artifact boundary.                                                 |
+| Per-intent 80/90/100 gates                    | Global average or raw skill-count gate                                   | Prevents strong categories from hiding weak ones and tests correct abstention.                                             |
+| Launch parameters frozen before activation    | Leave intent, adapter, benchmark-size, runtime, and Workbench scope open | Product-owner approval fixes the cost and finish line before implementation begins.                                        |
 
 ## Maintenance ownership
 

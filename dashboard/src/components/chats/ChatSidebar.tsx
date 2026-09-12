@@ -1,7 +1,17 @@
 import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useTranslation } from 'react-i18next';
-import { AlertCircle, Archive, ArchiveRestore, CircleDashed, Loader2, Megaphone, MessageSquare, Plus, Users } from 'lucide-react';
+import {
+  AlertCircle,
+  Archive,
+  ArchiveRestore,
+  CircleDashed,
+  Loader2,
+  Megaphone,
+  MessageSquare,
+  Plus,
+  Users,
+} from 'lucide-react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { Channel, Chat, ContactStatusGroup } from '../../services/api';
 import ChatAvatar from './ChatAvatar';
@@ -22,7 +32,6 @@ interface ChatSidebarProps {
   onSwitchTab: (tab: ChatsTab) => void;
   onComposeStatus: () => void;
   formatChatTime: (timestamp?: number) => string;
-
 
   chatsTab: {
     loading: boolean;
@@ -56,7 +65,6 @@ function ChatSidebar({
   onSwitchTab,
   onComposeStatus,
   formatChatTime,
-
 
   chatsTab,
   channelsTab,
@@ -152,8 +160,6 @@ function ChatSidebar({
   return (
     <aside className="chats-sidebar">
       <div className="sidebar-header-box">
-
-
         {/* Chats / Groups / Channels / Status / Archive tabs */}
         <div className="chats-tabs" role="tablist">
           {(['chats', 'groups', 'channels', 'status', 'archive'] as const).map(tab => {
@@ -174,8 +180,6 @@ function ChatSidebar({
           })}
         </div>
 
-
-
         {/* Compose a new status — only meaningful on the Status tab. */}
         {activeTab === 'status' && (
           <button type="button" className="btn-primary status-compose-trigger" onClick={onComposeStatus}>
@@ -183,8 +187,6 @@ function ChatSidebar({
             {t('chats.status.compose')}
           </button>
         )}
-
-
       </div>
 
       {/* Chat / Group / Archive list */}

@@ -125,9 +125,7 @@ MCP calls do not install or remove skills, update catalogs, edit host configurat
     "frameworks": ["react"],
     "constraints": ["preview only"]
   },
-  "skills": [
-    { "id": "example-skill" }
-  ]
+  "skills": [{ "id": "example-skill" }]
 }
 ```
 
@@ -200,16 +198,16 @@ Direct installs, specialized plugins, bundles, workflows, and the legacy install
 
 ## Current preview status
 
-| Surface | Current status |
-| --- | --- |
-| Published package | Current npm release; AAS Core status is `agent-first-preview` |
-| Catalog search and inspection | Supported preview; local and read-only |
-| Agent-owned composition | Supported preview; Core validates IDs and structure, not semantic suitability |
-| Stack validation and plan preview | Supported preview; no target skill changes |
-| Workbench | Browser-local review of stack and plan artifacts |
-| Selection evidence | Exported and inspected through MCP/CLI contracts; not yet reviewed in Workbench |
-| Apply and recovery | Experimental, explicit opt-in, outside the supported safety claim |
-| Semantic suitability certification | Not provided |
+| Surface                            | Current status                                                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------- |
+| Published package                  | Current npm release; AAS Core status is `agent-first-preview`                   |
+| Catalog search and inspection      | Supported preview; local and read-only                                          |
+| Agent-owned composition            | Supported preview; Core validates IDs and structure, not semantic suitability   |
+| Stack validation and plan preview  | Supported preview; no target skill changes                                      |
+| Workbench                          | Browser-local review of stack and plan artifacts                                |
+| Selection evidence                 | Exported and inspected through MCP/CLI contracts; not yet reviewed in Workbench |
+| Apply and recovery                 | Experimental, explicit opt-in, outside the supported safety claim               |
+| Semantic suitability certification | Not provided                                                                    |
 
 ## Why not just search the skills directory?
 

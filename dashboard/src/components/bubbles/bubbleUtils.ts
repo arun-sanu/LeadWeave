@@ -7,4 +7,3 @@ export function getBubbleDisplayName(chatId: string, name?: string): string {
   }
   return formatPhoneForDisplay(name) || formatPhoneForDisplay(chatId) || name;
 }
-

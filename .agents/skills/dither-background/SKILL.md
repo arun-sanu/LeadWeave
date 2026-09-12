@@ -6,12 +6,14 @@ description: Create a dark monochrome procedural background with enlarged square
 # Dither Background
 
 ## Use When
+
 - A dark interface needs an atmospheric monochrome background layer.
 - The visual should show enlarged square pixels and visible ordered dithering.
 - The design calls for organic waves, cloud-like masses, or procedural depth without colorful gradients.
 - The background should support framed UI, hero content, or data overlays.
 
 ## Visual Target
+
 - Near-black base with charcoal midtones, soft gray buildup, and occasional white highlights.
 - Clearly visible square pixel cells, not tiny film grain.
 - 4x4 Bayer-style dither pattern or equivalent ordered thresholding.
@@ -42,15 +44,11 @@ description: Create a dark monochrome procedural background with enlarged square
 ```
 
 ## Canvas Recipe
+
 Use a real canvas when motion or procedural depth is needed.
 
 ```js
-const BAYER_4X4 = [
-   0,  8,  2, 10,
-  12,  4, 14,  6,
-   3, 11,  1,  9,
-  15,  7, 13,  5,
-].map((value) => (value + 0.5) / 16);
+const BAYER_4X4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(value => (value + 0.5) / 16);
 
 function smoothstep(edge0, edge1, value) {
   const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
@@ -74,12 +72,7 @@ function valueNoise(x, y) {
   const b = noise2(ix + 1, iy);
   const c = noise2(ix, iy + 1);
   const d = noise2(ix + 1, iy + 1);
-  return (
-    a * (1 - ux) * (1 - uy) +
-    b * ux * (1 - uy) +
-    c * (1 - ux) * uy +
-    d * ux * uy
-  );
+  return a * (1 - ux) * (1 - uy) + b * ux * (1 - uy) + c * (1 - ux) * uy + d * ux * uy;
 }
 
 function fbm(x, y) {
@@ -99,10 +92,10 @@ function fbm(x, y) {
 function initDitherBackground(canvas, options = {}) {
   if (!canvas) return () => {};
 
-  const ctx = canvas.getContext("2d", { alpha: false });
+  const ctx = canvas.getContext('2d', { alpha: false });
   if (!ctx) return () => {};
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cell = options.cellSize || 7;
   const maxDpr = options.maxDpr || 1.5;
   let width = 1;
@@ -140,9 +133,7 @@ function initDitherBackground(canvas, options = {}) {
     const vignette = 1 - smoothstep(0.18, 1.15, distance);
     const drift = reduceMotion ? 0 : time * 0.018;
 
-    const wave =
-      Math.sin(nx * 2.8 + ny * 1.2 + drift) * 0.18 +
-      Math.sin(nx * -1.4 + ny * 3.8 - drift * 0.8) * 0.14;
+    const wave = Math.sin(nx * 2.8 + ny * 1.2 + drift) * 0.18 + Math.sin(nx * -1.4 + ny * 3.8 - drift * 0.8) * 0.14;
     const cloud = fbm(nx * 1.35 + drift * 0.16, ny * 1.35 - drift * 0.08);
     const ridge = smoothstep(0.48, 0.92, cloud + wave);
     const offAxisMass = smoothstep(0.98, 0.18, Math.hypot(nx + 0.22, ny - 0.08));
@@ -152,7 +143,7 @@ function initDitherBackground(canvas, options = {}) {
 
   function render(time = 0) {
     const seconds = time * 0.001;
-    ctx.fillStyle = "rgb(3,3,3)";
+    ctx.fillStyle = 'rgb(3,3,3)';
     ctx.fillRect(0, 0, width, height);
 
     for (let y = 0; y < rows; y++) {
@@ -177,24 +168,22 @@ function initDitherBackground(canvas, options = {}) {
 
   resize();
   render();
-  window.addEventListener("resize", handleResize);
+  window.addEventListener('resize', handleResize);
 
   return () => {
     cancelAnimationFrame(rafId);
-    window.removeEventListener("resize", handleResize);
+    window.removeEventListener('resize', handleResize);
   };
 }
 
-const cleanupDither = initDitherBackground(
-  document.querySelector("[data-dither-background]"),
-  {
-    cellSize: 7,
-    maxDpr: 1.5,
-  }
-);
+const cleanupDither = initDitherBackground(document.querySelector('[data-dither-background]'), {
+  cellSize: 7,
+  maxDpr: 1.5,
+});
 ```
 
 ## Tuning Knobs
+
 - Cell size: `5px-10px`; larger cells make the Bayer matrix more legible.
 - Palette: near-black, charcoal, soft gray, rare white highlights only.
 - Shape: tune `wave`, `cloud`, `ridge`, and `offAxisMass` to create broad masses.
@@ -203,12 +192,14 @@ const cleanupDither = initDitherBackground(
 - Performance: increase `cellSize` or cap `maxDpr` before simplifying the field.
 
 ## Composition Notes
+
 - Put the canvas behind the interface with `pointer-events: none`.
 - Use it as atmosphere behind framed UI, hero copy, or data overlays.
 - Keep foreground contrast controlled and typography clean.
 - Let one main bright mass define the composition; avoid even full-screen brightness.
 
 ## Avoid
+
 - Rainbow gradients, colorful noise, or soft blurry blobs without dither structure.
 - Tiny grain or static-like speckle where the square matrix disappears.
 - Bright full-screen white noise that competes with foreground type.
@@ -216,6 +207,7 @@ const cleanupDither = initDitherBackground(
 - Covering the entire viewport with equally bright cells.
 
 ## Quick Checks
+
 - The square Bayer pattern is visible from normal viewing distance.
 - The field forms broad organic waves or cloud masses.
 - The palette stays monochrome and restrained.

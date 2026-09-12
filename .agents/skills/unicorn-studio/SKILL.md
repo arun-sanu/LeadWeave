@@ -6,16 +6,19 @@ description: Use when embedding and customizing Unicorn Studio interactive anima
 # Unicorn Studio — No-code WebGL Scenes (Embed/SDK) Skill
 
 ## When to use
+
 - Designers want custom WebGL visuals without hand-coding shaders/three.js
 - You need “designed” effects layered with text/images/video, with built-in interactivity
 - Site builders: Framer, Webflow, Wix, Figma Sites, etc.
 
 ## What it is
+
 - A scene editor (layers + effects + events) that exports:
   - Embed via Unicorn Studio SDK (small JS library)
   - Or JSON/code export for faster/self-hosted loading (plan-dependent)
 
 ## Key embed patterns
+
 - Load SDK (can be in `<head>` or footer depending on above-the-fold):
   - UMD from jsDelivr (versioned)
   - Call `UnicornStudio.init()` once DOM is ready
@@ -31,10 +34,12 @@ description: Use when embedding and customizing Unicorn Studio interactive anima
     - `data-us-project-src="https://.../scene.json.txt"`
 
 ## Events (authoring-side)
+
 - Appear (entrance), Scroll (progress/velocity), Hover, Mousemove
 - Use events for “feels interactive” without writing JS.
 
 ## Common pitfalls
+
 - Container has no defined dimensions → scene won’t display
   - Ensure the element with `data-us-project` has width/height.
 - Too many scenes on one page → WebGL context limits + memory
@@ -47,11 +52,13 @@ description: Use when embedding and customizing Unicorn Studio interactive anima
 ## Quick recipes
 
 ### 1) Basic embed container
+
 ```html
 <div style="width: 100%; height: 420px" data-us-project="YOUR_PROJECT_ID"></div>
 ```
 
 ### 2) Performance-first embed
+
 ```html
 <div
   style="width: 100%; height: 420px"
@@ -65,6 +72,7 @@ description: Use when embedding and customizing Unicorn Studio interactive anima
 ```
 
 ## What to ask the user
+
 - Target platform: Webflow / Framer / coded site?
 - Is the scene above-the-fold? (affects script placement and lazyload)
 - Mobile support requirement + acceptable quality/FPS

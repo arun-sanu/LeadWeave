@@ -1,19 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
-import {
-  Plus,
-  QrCode,
-  RefreshCw,
-  Trash2,
-  Eye,
-  Loader2,
-  Play,
-  Square,
-  Search,
-  Skull,
-  Unlink,
-} from 'lucide-react';
+import { Plus, QrCode, RefreshCw, Trash2, Eye, Loader2, Play, Square, Search, Skull, Unlink } from 'lucide-react';
 import { sessionApi, type Session, type SessionConfig, type AccountRestriction } from '../../services/api';
 import { queryKeys } from '../../hooks/queries';
 import {
@@ -344,7 +332,9 @@ export function SessionsManager({
             <p className="sessions-hero-subtitle">{t('sessions.subtitle')}</p>
             <div className="sessions-hero-stat-pill">
               <span className="sessions-stat-dot" />
-              <span>{sessions.length} {t('sessions.title', 'Sessions')} Connected</span>
+              <span>
+                {sessions.length} {t('sessions.title', 'Sessions')} Connected
+              </span>
             </div>
           </div>
         </div>
@@ -391,198 +381,199 @@ export function SessionsManager({
           )}
         </div>
 
-        {error && (
-          <div className="sessions-error-banner">
-            {error}
-          </div>
-        )}
+        {error && <div className="sessions-error-banner">{error}</div>}
 
         {/* Grid of obsidian glass session cards */}
         <div className="sessions-obsidian-grid">
-        {filteredSessions.length === 0 ? (
-          <div className="sessions-empty-glass">
-            <QrCode size={48} className="empty-icon" />
-            <h3>{t('sessions.empty.title')}</h3>
-            <p>{t('sessions.empty.description')}</p>
-            {canWrite && (
-              <button className="btn-primary" onClick={() => setShowCreateModal(true)} style={{ marginTop: '1rem' }}>
-                <Plus size={16} />
-                {t('sessions.newSession')}
-              </button>
-            )}
-          </div>
-        ) : (
-          filteredSessions.map(session => {
-            const isCurrentActive = activeSessionId === session.id;
-            return (
-              <div
-                key={session.id}
-                className={`session-glass-card session-card ${session.status} ${isCurrentActive ? 'selected-active-session' : ''}`}
-                onClick={() => onSessionSelect?.(session.id)}
-              >
-                <div className="card-glass-header">
-                  <div className="card-session-title">
-                    <span className={`session-status-led ${session.status}`} />
-                    <h3 title={session.name}>{session.name}</h3>
+          {filteredSessions.length === 0 ? (
+            <div className="sessions-empty-glass">
+              <QrCode size={48} className="empty-icon" />
+              <h3>{t('sessions.empty.title')}</h3>
+              <p>{t('sessions.empty.description')}</p>
+              {canWrite && (
+                <button className="btn-primary" onClick={() => setShowCreateModal(true)} style={{ marginTop: '1rem' }}>
+                  <Plus size={16} />
+                  {t('sessions.newSession')}
+                </button>
+              )}
+            </div>
+          ) : (
+            filteredSessions.map(session => {
+              const isCurrentActive = activeSessionId === session.id;
+              return (
+                <div
+                  key={session.id}
+                  className={`session-glass-card session-card ${session.status} ${isCurrentActive ? 'selected-active-session' : ''}`}
+                  onClick={() => onSessionSelect?.(session.id)}
+                >
+                  <div className="card-glass-header">
+                    <div className="card-session-title">
+                      <span className={`session-status-led ${session.status}`} />
+                      <h3 title={session.name}>{session.name}</h3>
+                    </div>
+                    <span className={`status-tag status-${session.status}`}>{formatStatus(session.status)}</span>
                   </div>
-                  <span className={`status-tag status-${session.status}`}>{formatStatus(session.status)}</span>
-                </div>
 
-                {session.status === 'initializing' || session.status === 'qr_ready' ? (
-                  <div className="card-qr-banner">
-                    <QrCode size={48} className="qr-preview-icon" />
-                    <p>{session.status === 'qr_ready' ? t('sessions.qr.scanToConnect') : t('sessions.qr.preparing')}</p>
-                    <button
-                      type="button"
-                      className="btn-primary btn-sm"
-                      onClick={e => {
-                        e.stopPropagation();
-                        handleShowQR(session.id);
-                      }}
-                      disabled={session.status !== 'qr_ready'}
-                    >
-                      {session.status === 'qr_ready' ? t('sessions.qr.showQr') : t('sessions.qr.loading')}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="card-specs-list">
-                    <div className="spec-row">
-                      <span className="spec-label">{t('sessions.card.phone')}</span>
-                      <span className="spec-value">{session.phone || '—'}</span>
+                  {session.status === 'initializing' || session.status === 'qr_ready' ? (
+                    <div className="card-qr-banner">
+                      <QrCode size={48} className="qr-preview-icon" />
+                      <p>
+                        {session.status === 'qr_ready' ? t('sessions.qr.scanToConnect') : t('sessions.qr.preparing')}
+                      </p>
+                      <button
+                        type="button"
+                        className="btn-primary btn-sm"
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleShowQR(session.id);
+                        }}
+                        disabled={session.status !== 'qr_ready'}
+                      >
+                        {session.status === 'qr_ready' ? t('sessions.qr.showQr') : t('sessions.qr.loading')}
+                      </button>
                     </div>
-                    <div className="spec-row">
-                      <span className="spec-label">{t('sessions.card.sessionId')}</span>
-                      <span className="spec-value">{session.name || session.phone || session.id}</span>
-                    </div>
-                    <div className="spec-row">
-                      <span className="spec-label">{t('sessions.card.lastActive')}</span>
-                      <span className="spec-value">{formatLastActive(session.lastActive)}</span>
-                    </div>
-                    {(session.status === 'failed' || session.status === 'action_required') && session.lastError ? (
-                      <div className="spec-row error-row">
-                        <span className="spec-label">{t('sessions.card.error')}</span>
-                        <span className="spec-value error-text" title={session.lastError}>
-                          {session.lastError}
-                        </span>
+                  ) : (
+                    <div className="card-specs-list">
+                      <div className="spec-row">
+                        <span className="spec-label">{t('sessions.card.phone')}</span>
+                        <span className="spec-value">{session.phone || '—'}</span>
                       </div>
-                    ) : null}
-                    {session.restriction ? (
-                      <div className="spec-row restriction-row">
-                        <span className="spec-label">{t('sessions.card.restriction')}</span>
-                        <span className="spec-value restriction-text" title={restrictionTitle(session.restriction, t)}>
-                          {t(`sessions.restriction.${session.restriction.kind}`)}
-                        </span>
+                      <div className="spec-row">
+                        <span className="spec-label">{t('sessions.card.sessionId')}</span>
+                        <span className="spec-value">{session.name || session.phone || session.id}</span>
                       </div>
-                    ) : null}
-                  </div>
-                )}
+                      <div className="spec-row">
+                        <span className="spec-label">{t('sessions.card.lastActive')}</span>
+                        <span className="spec-value">{formatLastActive(session.lastActive)}</span>
+                      </div>
+                      {(session.status === 'failed' || session.status === 'action_required') && session.lastError ? (
+                        <div className="spec-row error-row">
+                          <span className="spec-label">{t('sessions.card.error')}</span>
+                          <span className="spec-value error-text" title={session.lastError}>
+                            {session.lastError}
+                          </span>
+                        </div>
+                      ) : null}
+                      {session.restriction ? (
+                        <div className="spec-row restriction-row">
+                          <span className="spec-label">{t('sessions.card.restriction')}</span>
+                          <span
+                            className="spec-value restriction-text"
+                            title={restrictionTitle(session.restriction, t)}
+                          >
+                            {t(`sessions.restriction.${session.restriction.kind}`)}
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
+                  )}
 
-                <div className="card-actions-cluster">
-                  <button
-                    type="button"
-                    className="glass-action-btn"
-                    onClick={e => {
-                      e.stopPropagation();
-                      setSelectedSession(session);
-                    }}
-                    title={t('sessions.actions.view')}
-                  >
-                    <Eye size={15} />
-                    <span>{t('sessions.actions.view')}</span>
-                  </button>
-
-                  {canWrite && isSessionStarted(session) ? (
+                  <div className="card-actions-cluster">
                     <button
                       type="button"
                       className="glass-action-btn"
                       onClick={e => {
                         e.stopPropagation();
-                        void handleStop(session.id);
+                        setSelectedSession(session);
                       }}
-                      title={t('sessions.actions.stop')}
+                      title={t('sessions.actions.view')}
                     >
-                      <Square size={15} />
-                      <span>{t('sessions.actions.stop')}</span>
+                      <Eye size={15} />
+                      <span>{t('sessions.actions.view')}</span>
                     </button>
-                  ) : canWrite && (session.status === 'created' || session.status === 'disconnected') ? (
-                    <button
-                      type="button"
-                      className="glass-action-btn primary"
-                      onClick={e => {
-                        e.stopPropagation();
-                        void handleStart(session.id);
-                      }}
-                      title={t('sessions.actions.start')}
-                    >
-                      <Play size={15} />
-                      <span>{t('sessions.actions.start')}</span>
-                    </button>
-                  ) : canWrite ? (
-                    <button
-                      type="button"
-                      className="glass-action-btn primary"
-                      onClick={e => {
-                        e.stopPropagation();
-                        void handleStart(session.id);
-                      }}
-                      title={t('sessions.actions.reconnect')}
-                    >
-                      <RefreshCw size={15} />
-                      <span>{t('sessions.actions.reconnect')}</span>
-                    </button>
-                  ) : null}
 
-                  {canUnlinkSession(session, canWrite) && (
-                    <button
-                      type="button"
-                      className="glass-action-btn danger"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setUnlinkConfirmId(session.id);
-                      }}
-                      title={t('sessions.actions.unlink')}
-                    >
-                      <Unlink size={15} />
-                      <span>{t('sessions.actions.unlink')}</span>
-                    </button>
-                  )}
+                    {canWrite && isSessionStarted(session) ? (
+                      <button
+                        type="button"
+                        className="glass-action-btn"
+                        onClick={e => {
+                          e.stopPropagation();
+                          void handleStop(session.id);
+                        }}
+                        title={t('sessions.actions.stop')}
+                      >
+                        <Square size={15} />
+                        <span>{t('sessions.actions.stop')}</span>
+                      </button>
+                    ) : canWrite && (session.status === 'created' || session.status === 'disconnected') ? (
+                      <button
+                        type="button"
+                        className="glass-action-btn primary"
+                        onClick={e => {
+                          e.stopPropagation();
+                          void handleStart(session.id);
+                        }}
+                        title={t('sessions.actions.start')}
+                      >
+                        <Play size={15} />
+                        <span>{t('sessions.actions.start')}</span>
+                      </button>
+                    ) : canWrite ? (
+                      <button
+                        type="button"
+                        className="glass-action-btn primary"
+                        onClick={e => {
+                          e.stopPropagation();
+                          void handleStart(session.id);
+                        }}
+                        title={t('sessions.actions.reconnect')}
+                      >
+                        <RefreshCw size={15} />
+                        <span>{t('sessions.actions.reconnect')}</span>
+                      </button>
+                    ) : null}
 
-                  {canWrite && (
-                    <button
-                      type="button"
-                      className="glass-action-btn danger"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setDeleteConfirmId(session.id);
-                      }}
-                      title={t('sessions.actions.delete')}
-                      aria-label={t('sessions.actions.delete')}
-                    >
-                      <Trash2 size={15} />
-                      <span>{t('sessions.actions.delete')}</span>
-                    </button>
-                  )}
+                    {canUnlinkSession(session, canWrite) && (
+                      <button
+                        type="button"
+                        className="glass-action-btn danger"
+                        onClick={e => {
+                          e.stopPropagation();
+                          setUnlinkConfirmId(session.id);
+                        }}
+                        title={t('sessions.actions.unlink')}
+                      >
+                        <Unlink size={15} />
+                        <span>{t('sessions.actions.unlink')}</span>
+                      </button>
+                    )}
 
-                  {canForceKillSession(session, canWrite) && (
-                    <button
-                      type="button"
-                      className="glass-action-btn danger"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setKillConfirmId(session.id);
-                      }}
-                      title={t('sessions.actions.killStuck')}
-                      aria-label={t('sessions.actions.killStuck')}
-                    >
-                      <Skull size={15} />
-                      <span>{t('sessions.actions.killStuck')}</span>
-                    </button>
-                  )}
+                    {canWrite && (
+                      <button
+                        type="button"
+                        className="glass-action-btn danger"
+                        onClick={e => {
+                          e.stopPropagation();
+                          setDeleteConfirmId(session.id);
+                        }}
+                        title={t('sessions.actions.delete')}
+                        aria-label={t('sessions.actions.delete')}
+                      >
+                        <Trash2 size={15} />
+                        <span>{t('sessions.actions.delete')}</span>
+                      </button>
+                    )}
+
+                    {canForceKillSession(session, canWrite) && (
+                      <button
+                        type="button"
+                        className="glass-action-btn danger"
+                        onClick={e => {
+                          e.stopPropagation();
+                          setKillConfirmId(session.id);
+                        }}
+                        title={t('sessions.actions.killStuck')}
+                        aria-label={t('sessions.actions.killStuck')}
+                      >
+                        <Skull size={15} />
+                        <span>{t('sessions.actions.killStuck')}</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })
-        )}
+              );
+            })
+          )}
         </div>
       </div>
 
@@ -641,7 +632,10 @@ export function SessionsManager({
           title={
             <span className="modal-title">
               {pairingMode ? t('sessions.pairing.tabPhone') : t('sessions.qr.title')}
-              <span className="session-name" style={{ marginLeft: '6px', color: 'var(--text-secondary, #94a3b8)', fontWeight: 'normal' }}>
+              <span
+                className="session-name"
+                style={{ marginLeft: '6px', color: 'var(--text-secondary, #94a3b8)', fontWeight: 'normal' }}
+              >
                 - {qrData.sessionName}
               </span>
             </span>
@@ -715,7 +709,7 @@ export function SessionsManager({
                       <div className="pairing-code-display">
                         {pairingCode.substring(0, 4)} - {pairingCode.substring(4)}
                       </div>
-                      
+
                       <div style={{ marginTop: '1.5rem' }}>
                         <button className="btn-secondary" onClick={handleChangeNumber} style={{ width: '100%' }}>
                           {t('sessions.pairing.changeNumber')}
@@ -815,7 +809,9 @@ export function SessionsManager({
             </div>
             <div className="detail-item">
               <span className="detail-label">{t('sessions.details.status')}</span>
-              <span className={`status-tag status-${selectedSession.status}`}>{formatStatus(selectedSession.status)}</span>
+              <span className={`status-tag status-${selectedSession.status}`}>
+                {formatStatus(selectedSession.status)}
+              </span>
             </div>
             <div className="detail-item">
               <span className="detail-label">{t('sessions.details.sessionId')}</span>

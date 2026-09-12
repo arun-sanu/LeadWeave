@@ -13,9 +13,9 @@ Keep the content data-driven:
 
 ```js
 const steps = [
-  { id: "brief", number: "01", title: "Set the direction", body: "..." },
-  { id: "build", number: "02", title: "Make the system", body: "..." },
-  { id: "ship", number: "03", title: "Release and learn", body: "..." }
+  { id: 'brief', number: '01', title: 'Set the direction', body: '...' },
+  { id: 'build', number: '02', title: 'Make the system', body: '...' },
+  { id: 'ship', number: '03', title: 'Release and learn', body: '...' },
 ];
 ```
 
@@ -31,9 +31,7 @@ Render it as an ordered list with real headings. The line, dots, media, and acti
 6. Mark a step active when the progress head crosses its center.
 
 ```js
-const progress = Math.min(1, Math.max(0,
-  (viewportAnchor - lineStart) / (lineEnd - lineStart)
-));
+const progress = Math.min(1, Math.max(0, (viewportAnchor - lineStart) / (lineEnd - lineStart)));
 line.style.transform = `scaleY(${progress})`;
 ```
 

@@ -89,4 +89,3 @@ export const sessionApi = {
       body: JSON.stringify({ image, recipients, caption }),
     }),
 };
-

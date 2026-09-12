@@ -16,8 +16,8 @@ On 2-D canvas the tumble is a horizontal scale that crosses zero:
 ```js
 ctx.save();
 ctx.translate(l.x, l.y);
-ctx.rotate(l.roll);              // long axis drifting in-plane
-ctx.scale(Math.cos(l.spin), 1);  // the tumble: cos crosses 0, edge-on
+ctx.rotate(l.roll); // long axis drifting in-plane
+ctx.scale(Math.cos(l.spin), 1); // the tumble: cos crosses 0, edge-on
 ctx.globalAlpha = l.alpha;
 ctx.drawImage(sprite, -w / 2, -h / 2, w, h);
 ctx.restore();
@@ -32,7 +32,7 @@ In 3-D, instance **quads**, never point sprites. A point sprite always faces the
 Drive lateral motion from the same angle as the tumble, ninety degrees out of phase. A leaf slides sideways when it knifes through the air edge-on and stalls when it presents its face flat:
 
 ```js
-l.x += Math.sin(l.spin) * l.slip * dt;   // fastest when cos(spin) ≈ 0
+l.x += Math.sin(l.spin) * l.slip * dt; // fastest when cos(spin) ≈ 0
 l.y += l.fall * dt;
 ```
 
@@ -58,14 +58,19 @@ This decides how many leaves are actually on screen.
 
 **In 2-D**, recycle across the viewport. When a leaf passes the bottom, respawn it above the top at a new random x. Wrap x as well, so wind does not empty one side.
 
-**In 3-D**, recycle *ahead of the camera*, not around it. A band centred on the camera spends nearly all its volume behind and beside the frustum; on a 36° camera, a couple of hundred leaves put barely a dozen in frame. Drop them into a disc hung down the camera's own sight line instead and the same count appears several times over:
+**In 3-D**, recycle _ahead of the camera_, not around it. A band centred on the camera spends nearly all its volume behind and beside the frustum; on a 36° camera, a couple of hundred leaves put barely a dozen in frame. Drop them into a disc hung down the camera's own sight line instead and the same count appears several times over:
 
 ```js
-camera.getWorldDirection(fwd); fwd.y = 0; fwd.normalize();
+camera.getWorldDirection(fwd);
+fwd.y = 0;
+fwd.normalize();
 const cx = camera.position.x + fwd.x * AHEAD;
 const cz = camera.position.z + fwd.z * AHEAD;
-const a = Math.random() * TAU, r = Math.sqrt(Math.random()) * SPREAD;
-l.x = cx + Math.cos(a) * r;  l.z = cz + Math.sin(a) * r;  l.y = camera.position.y + 16;
+const a = Math.random() * TAU,
+  r = Math.sqrt(Math.random()) * SPREAD;
+l.x = cx + Math.cos(a) * r;
+l.z = cz + Math.sin(a) * r;
+l.y = camera.position.y + 16;
 ```
 
 Keep a far wrap as a backstop for a camera that walks out from under its own weather, and put it well outside the fog so nothing is seen to jump.
@@ -80,7 +85,7 @@ On-screen density goes as count ÷ band area. Tighten the band before raising th
 Scale an authored count by viewport area rather than taking it literally, or a figure that reads as a drift on desktop arrives as a blizzard on a phone:
 
 ```js
-const k = clamp(Math.sqrt((W * H) / (1440 * 900)), .5, 1.3);
+const k = clamp(Math.sqrt((W * H) / (1440 * 900)), 0.5, 1.3);
 const n = Math.round(authored * layerShare * k);
 ```
 
@@ -88,13 +93,13 @@ const n = Math.round(authored * layerShare * k);
 
 Use two or three layers, each with its own scale, speed, opacity, and blur:
 
-| layer | scale | fall | opacity | note |
-| --- | --- | --- | --- | --- |
-| far | 0.3–0.5 | slow | 0.22–0.40 | drawn first, may sit behind content |
-| mid | 0.5–0.85 | medium | 0.46–0.78 | the body of the effect |
-| near | 1.05–1.9 | fast | 0.50–0.82 | few, optionally blurred, drawn over content |
+| layer | scale    | fall   | opacity   | note                                        |
+| ----- | -------- | ------ | --------- | ------------------------------------------- |
+| far   | 0.3–0.5  | slow   | 0.22–0.40 | drawn first, may sit behind content         |
+| mid   | 0.5–0.85 | medium | 0.46–0.78 | the body of the effect                      |
+| near  | 1.05–1.9 | fast   | 0.50–0.82 | few, optionally blurred, drawn over content |
 
-Cross the near layer *in front* of the type. That crossing is the depth cue. Use two or three leaves there, not a curtain.
+Cross the near layer _in front_ of the type. That crossing is the depth cue. Use two or three leaves there, not a curtain.
 
 ## Handle colour and light
 

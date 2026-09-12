@@ -8,19 +8,25 @@
   background: #18181b;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.3);
   z-index: 9000;
   display: flex;
   flex-direction: column;
   color: #f4f4f5;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition:
+    border-color 0.15s ease-out,
+    box-shadow 0.15s ease-out;
 }
 
 .floating-notepad-window.pinned {
   border-color: rgba(56, 189, 248, 0.5);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(56, 189, 248, 0.25);
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(56, 189, 248, 0.25);
 }
 
 /* Header Navbar */
@@ -66,7 +72,9 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.12s ease-out, transform 0.12s ease-out;
+  transition:
+    background-color 0.12s ease-out,
+    transform 0.12s ease-out;
 }
 
 .notepad-btn-add:hover {
@@ -87,7 +95,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.12s ease-out, background-color 0.12s ease-out;
+  transition:
+    color 0.12s ease-out,
+    background-color 0.12s ease-out;
 }
 
 .notepad-btn-icon:hover {
@@ -211,7 +221,9 @@
   flex-direction: column;
   gap: 6px;
   position: relative;
-  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+  transition:
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out;
 }
 
 .pastel-sticky-card:hover {
@@ -243,7 +255,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.12s ease-out, background-color 0.12s ease-out;
+  transition:
+    opacity 0.12s ease-out,
+    background-color 0.12s ease-out;
 }
 
 .sticky-action-btn:hover {
@@ -291,7 +305,10 @@
   cursor: pointer;
   padding: 0;
   box-sizing: border-box;
-  transition: transform 0.12s ease-out, border-color 0.12s ease-out, box-shadow 0.12s ease-out;
+  transition:
+    transform 0.12s ease-out,
+    border-color 0.12s ease-out,
+    box-shadow 0.12s ease-out;
 }
 
 .card-color-dot:hover,
@@ -304,7 +321,9 @@
 .mini-swatch-btn.active {
   transform: scale(1.35);
   border: 1.5px solid #ffffff;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4), 0 0 6px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.4),
+    0 0 6px rgba(0, 0, 0, 0.4);
 }
 
 /* Screen Pinned Sticky Note Floating Overlay */
@@ -314,7 +333,9 @@
   z-index: 9500;
   border-radius: 10px;
   padding: 10px 12px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -385,7 +406,9 @@
 /* Drag-over Window Drop Zone Highlight */
 .floating-notepad-window.drag-over {
   border-color: #38bdf8 !important;
-  box-shadow: 0 0 25px rgba(56, 189, 248, 0.45), 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+  box-shadow:
+    0 0 25px rgba(56, 189, 248, 0.45),
+    0 20px 40px rgba(0, 0, 0, 0.6) !important;
 }
 
 /* Notepad Search & Catalog Manager Modal Overlay */
@@ -409,7 +432,9 @@
   background: #18181b;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 14px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   color: #f4f4f5;
@@ -706,4 +731,3 @@
   margin: 0;
   max-width: 360px;
 }
-

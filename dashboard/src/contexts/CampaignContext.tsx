@@ -38,7 +38,9 @@ interface CampaignContextType {
   activeBatches: { sessionId: string; batchId: string }[];
   setActiveBatches: React.Dispatch<React.SetStateAction<{ sessionId: string; batchId: string }[]>>;
   batchStatusMap: Record<string, { status: string; progress: { total: number; sent: number; failed: number } }>;
-  setBatchStatusMap: React.Dispatch<React.SetStateAction<Record<string, { status: string; progress: { total: number; sent: number; failed: number } }>>>;
+  setBatchStatusMap: React.Dispatch<
+    React.SetStateAction<Record<string, { status: string; progress: { total: number; sent: number; failed: number } }>>
+  >;
   isLaunching: boolean;
   setIsLaunching: React.Dispatch<React.SetStateAction<boolean>>;
   isCancelling: boolean;
@@ -54,7 +56,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
   // Composer State
   const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
   const [messageTemplate, setMessageTemplate] = useState(
-    '{Hi|Hello|Hey} {{Name}}! 👋 {Your order #{{OrderNumber}} has been confirmed|We have received your order #{{OrderNumber}}}. Total amount: {{Amount}}. {Thank you for choosing LeadWeave!|Have a wonderful day!}'
+    '{Hi|Hello|Hey} {{Name}}! 👋 {Your order #{{OrderNumber}} has been confirmed|We have received your order #{{OrderNumber}}}. Total amount: {{Amount}}. {Thank you for choosing LeadWeave!|Have a wonderful day!}',
   );
 
   // Timezone Guard & Pacing & Scheduling State
@@ -68,27 +70,43 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
 
   // Active batches
   const [activeBatches, setActiveBatches] = useState<{ sessionId: string; batchId: string }[]>([]);
-  const [batchStatusMap, setBatchStatusMap] = useState<Record<string, { status: string; progress: { total: number; sent: number; failed: number } }>>({});
+  const [batchStatusMap, setBatchStatusMap] = useState<
+    Record<string, { status: string; progress: { total: number; sent: number; failed: number } }>
+  >({});
   const [isLaunching, setIsLaunching] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
   return (
     <CampaignContext.Provider
       value={{
-        campaignName, setCampaignName,
-        selectedSessions, setSelectedSessions,
-        messageTemplate, setMessageTemplate,
-        enforceSafeTimezone, setEnforceSafeTimezone,
-        minDelay, setMinDelay,
-        maxDelay, setMaxDelay,
-        simulateTyping, setSimulateTyping,
-        scheduleType, setScheduleType,
-        scheduleDateTime, setScheduleDateTime,
-        dispatchMode, setDispatchMode,
-        activeBatches, setActiveBatches,
-        batchStatusMap, setBatchStatusMap,
-        isLaunching, setIsLaunching,
-        isCancelling, setIsCancelling,
+        campaignName,
+        setCampaignName,
+        selectedSessions,
+        setSelectedSessions,
+        messageTemplate,
+        setMessageTemplate,
+        enforceSafeTimezone,
+        setEnforceSafeTimezone,
+        minDelay,
+        setMinDelay,
+        maxDelay,
+        setMaxDelay,
+        simulateTyping,
+        setSimulateTyping,
+        scheduleType,
+        setScheduleType,
+        scheduleDateTime,
+        setScheduleDateTime,
+        dispatchMode,
+        setDispatchMode,
+        activeBatches,
+        setActiveBatches,
+        batchStatusMap,
+        setBatchStatusMap,
+        isLaunching,
+        setIsLaunching,
+        isCancelling,
+        setIsCancelling,
       }}
     >
       {children}

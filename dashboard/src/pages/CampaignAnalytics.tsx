@@ -42,16 +42,18 @@ import {
 } from 'lucide-react';
 import './CampaignAnalytics.css';
 
-function EditableCell({ initialValue, onSave }: { initialValue: string, onSave: (val: string) => void }) {
+function EditableCell({ initialValue, onSave }: { initialValue: string; onSave: (val: string) => void }) {
   const [value, setValue] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => { setValue(initialValue); }, [initialValue]);
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
 
   if (!isEditing) {
     return (
-      <div 
-        onClick={() => setIsEditing(true)} 
+      <div
+        onClick={() => setIsEditing(true)}
         style={{ cursor: 'pointer', minHeight: '24px', display: 'flex', alignItems: 'center' }}
         title="Click to edit"
       >
@@ -68,10 +70,19 @@ function EditableCell({ initialValue, onSave }: { initialValue: string, onSave: 
       style={{ padding: '0.25rem 0.5rem', height: '28px', minWidth: '80px', fontSize: '0.8125rem' }}
       value={value}
       onChange={e => setValue(e.target.value)}
-      onBlur={() => { setIsEditing(false); if (value !== initialValue) onSave(value); }}
+      onBlur={() => {
+        setIsEditing(false);
+        if (value !== initialValue) onSave(value);
+      }}
       onKeyDown={e => {
-        if (e.key === 'Enter') { setIsEditing(false); if (value !== initialValue) onSave(value); }
-        if (e.key === 'Escape') { setIsEditing(false); setValue(initialValue); }
+        if (e.key === 'Enter') {
+          setIsEditing(false);
+          if (value !== initialValue) onSave(value);
+        }
+        if (e.key === 'Escape') {
+          setIsEditing(false);
+          setValue(initialValue);
+        }
       }}
     />
   );
@@ -170,13 +181,15 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
 
   const handleCellEdit = async (leadId: string, field: 'name' | string, value: string, isCustom: boolean = false) => {
     // Optimistic update locally
-    setLeads(prev => prev.map(l => {
-      if (l.id !== leadId) return l;
-      if (!isCustom) {
-        return { ...l, name: value };
-      }
-      return { ...l, customVariables: { ...l.customVariables, [field]: value } };
-    }));
+    setLeads(prev =>
+      prev.map(l => {
+        if (l.id !== leadId) return l;
+        if (!isCustom) {
+          return { ...l, name: value };
+        }
+        return { ...l, customVariables: { ...l.customVariables, [field]: value } };
+      }),
+    );
 
     try {
       const data = isCustom ? { customVariables: { [field]: value } } : { name: value };
@@ -217,13 +230,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
 
   // Load Spreadsheet Leads
   const loadLeads = useCallback(
-    async (
-      campaignId: string,
-      filter: string,
-      search: string,
-      pageNum: number,
-      isBackground: boolean = false,
-    ) => {
+    async (campaignId: string, filter: string, search: string, pageNum: number, isBackground: boolean = false) => {
       if (!campaignId) return;
       if (!isBackground) {
         setIsLoadingLeads(true);
@@ -319,7 +326,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
       } else {
         error(res.lead.errorMessage || 'Failed to dispatch message');
       }
-      setLeads(prev => prev.map(l => l.id === leadId ? res.lead : l));
+      setLeads(prev => prev.map(l => (l.id === leadId ? res.lead : l)));
       loadAnalytics(selectedCampaignId);
     } catch (err: unknown) {
       error(getErrorMessage(err, 'Error sending lead'));
@@ -469,7 +476,9 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
       if (!c.companyId) return true;
       return !currentCompany || c.companyId === currentCompany;
     }).length;
-    const previous = campaigns.filter(c => c.status === 'completed' || c.status === 'cancelled' || c.status === 'paused').length;
+    const previous = campaigns.filter(
+      c => c.status === 'completed' || c.status === 'cancelled' || c.status === 'paused',
+    ).length;
 
     return {
       all: campaigns.length,
@@ -504,11 +513,12 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
     // Filter by search query
     if (directorySearch.trim()) {
       const q = directorySearch.toLowerCase().trim();
-      list = list.filter(c =>
-        c.name.toLowerCase().includes(q) ||
-        c.status.toLowerCase().includes(q) ||
-        (c.template && c.template.toLowerCase().includes(q)) ||
-        (c.creatorName && c.creatorName.toLowerCase().includes(q))
+      list = list.filter(
+        c =>
+          c.name.toLowerCase().includes(q) ||
+          c.status.toLowerCase().includes(q) ||
+          (c.template && c.template.toLowerCase().includes(q)) ||
+          (c.creatorName && c.creatorName.toLowerCase().includes(q)),
       );
     }
 
@@ -531,9 +541,8 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
       }
     });
 
-    const avgResponseRate = totalMessagesDispatched > 0
-      ? Math.round((totalReplies / totalMessagesDispatched) * 100)
-      : 0;
+    const avgResponseRate =
+      totalMessagesDispatched > 0 ? Math.round((totalReplies / totalMessagesDispatched) * 100) : 0;
 
     return {
       totalCampaigns,
@@ -559,7 +568,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
       }
       leadsToAdd.push({ phone: singlePhone.trim(), name: singleName.trim() || undefined });
     } else {
-      const lines = bulkInputText.split(/\r?\n/).filter((l) => l.trim().length > 0);
+      const lines = bulkInputText.split(/\r?\n/).filter(l => l.trim().length > 0);
       if (lines.length === 0) {
         error('Please provide at least one phone number or row.');
         return;
@@ -567,7 +576,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
 
       for (const line of lines) {
         const delimiter = line.includes('\t') ? '\t' : ',';
-        const parts = line.split(delimiter).map((p) => p.trim());
+        const parts = line.split(delimiter).map(p => p.trim());
         const phone = parts[0];
         const name = parts[1] || undefined;
         if (phone && phone.replace(/\D/g, '').length >= 7) {
@@ -598,19 +607,24 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
     }
   };
 
-  const currentCampaign = analyticsData?.campaign || campaigns.find((c) => c.id === selectedCampaignId);
-  const stats = analyticsData?.stats || currentCampaign?.stats || (currentCampaign ? {
-    total: ((currentCampaign as Record<string, unknown>).totalLeads as number) ?? 0,
-    sent: ((currentCampaign as Record<string, unknown>).sentCount as number) ?? 0,
-    delivered: ((currentCampaign as Record<string, unknown>).deliveredCount as number) ?? 0,
-    read: ((currentCampaign as Record<string, unknown>).readCount as number) ?? 0,
-    failed: ((currentCampaign as Record<string, unknown>).failedCount as number) ?? 0,
-    pending: 0,
-    replied: 0,
-    deliveryRate: 0,
-    readRate: 0,
-    replyRate: 0,
-  } : undefined);
+  const currentCampaign = analyticsData?.campaign || campaigns.find(c => c.id === selectedCampaignId);
+  const stats =
+    analyticsData?.stats ||
+    currentCampaign?.stats ||
+    (currentCampaign
+      ? {
+          total: ((currentCampaign as Record<string, unknown>).totalLeads as number) ?? 0,
+          sent: ((currentCampaign as Record<string, unknown>).sentCount as number) ?? 0,
+          delivered: ((currentCampaign as Record<string, unknown>).deliveredCount as number) ?? 0,
+          read: ((currentCampaign as Record<string, unknown>).readCount as number) ?? 0,
+          failed: ((currentCampaign as Record<string, unknown>).failedCount as number) ?? 0,
+          pending: 0,
+          replied: 0,
+          deliveryRate: 0,
+          readRate: 0,
+          replyRate: 0,
+        }
+      : undefined);
 
   // Compute status badges
   const getStatusBadge = (status?: string) => {
@@ -636,7 +650,10 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
 
   return (
     <div className="campaign-analytics-container" style={{ maxWidth: '1400px', margin: '0 auto', padding: '1.5rem' }}>
-      <div className="page-header" style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        className="page-header"
+        style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+      >
         <div>
           <h1 className="page-title" style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
             Campaigns Management
@@ -666,10 +683,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
             </button>
           </div>
 
-          <button
-            className="btn btn-primary"
-            onClick={() => window.location.href = '/campaigns/new'}
-          >
+          <button className="btn btn-primary" onClick={() => (window.location.href = '/campaigns/new')}>
             <Plus size={16} />
             <span>Create Campaign</span>
           </button>
@@ -787,7 +801,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                 aria-label="Search campaigns"
                 placeholder="Search campaigns by name, sender..."
                 value={directorySearch}
-                onChange={(e) => setDirectorySearch(e.target.value)}
+                onChange={e => setDirectorySearch(e.target.value)}
               />
             </div>
           </div>
@@ -807,22 +821,23 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                 )}
               </div>
               <h3 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0 }}>
-                No {directoryTab === 'all' ? '' : directoryTab.charAt(0).toUpperCase() + directoryTab.slice(1)} Campaigns Found
+                No {directoryTab === 'all' ? '' : directoryTab.charAt(0).toUpperCase() + directoryTab.slice(1)}{' '}
+                Campaigns Found
               </h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: '440px', margin: 0 }}>
                 {directorySearch
                   ? `No campaigns matched your search "${directorySearch}". Try a different keyword.`
                   : directoryTab === 'live'
-                  ? 'There are currently no running or scheduled broadcast campaigns.'
-                  : directoryTab === 'assigned'
-                  ? 'No campaigns are currently dispatched using your assigned sessions.'
-                  : directoryTab === 'shared'
-                  ? 'No shared campaigns have been created in this workspace.'
-                  : 'Previous or finished campaigns will appear here once executed.'}
+                    ? 'There are currently no running or scheduled broadcast campaigns.'
+                    : directoryTab === 'assigned'
+                      ? 'No campaigns are currently dispatched using your assigned sessions.'
+                      : directoryTab === 'shared'
+                        ? 'No shared campaigns have been created in this workspace.'
+                        : 'Previous or finished campaigns will appear here once executed.'}
               </p>
               <button
                 className="btn btn-primary btn-sm"
-                onClick={() => window.location.href = '/campaigns/new'}
+                onClick={() => (window.location.href = '/campaigns/new')}
                 style={{ marginTop: '0.5rem' }}
               >
                 <Plus size={14} />
@@ -831,7 +846,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
             </div>
           ) : (
             <div className="campaign-grid">
-              {filteredCampaigns.map((camp) => {
+              {filteredCampaigns.map(camp => {
                 const total = camp.stats?.total || 0;
                 const sent = camp.stats?.sent || 0;
                 const pct = total > 0 ? Math.min(100, Math.round((sent / total) * 100)) : 0;
@@ -844,11 +859,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                         <div>
                           <h3 className="campaign-card-title">{camp.name}</h3>
                           <div className="campaign-card-meta">
-                            {camp.creatorName && (
-                              <span className="meta-chip">
-                                👤 {camp.creatorName}
-                              </span>
-                            )}
+                            {camp.creatorName && <span className="meta-chip">👤 {camp.creatorName}</span>}
                             <span className="meta-chip">
                               <Calendar size={12} />
                               {new Date(camp.createdAt).toLocaleDateString()}
@@ -863,11 +874,33 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                           {getStatusBadge(camp.status)}
                           {camp.dispatchMode === 'manual' ? (
-                            <span style={{ fontSize: '0.625rem', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: 4, background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)', textTransform: 'uppercase' }}>
+                            <span
+                              style={{
+                                fontSize: '0.625rem',
+                                fontWeight: 700,
+                                padding: '0.15rem 0.4rem',
+                                borderRadius: 4,
+                                background: 'rgba(56, 189, 248, 0.15)',
+                                color: '#38bdf8',
+                                border: '1px solid rgba(56, 189, 248, 0.3)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
                               Manual
                             </span>
                           ) : (
-                            <span style={{ fontSize: '0.625rem', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: 4, background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', border: '1px solid rgba(34, 197, 94, 0.3)', textTransform: 'uppercase' }}>
+                            <span
+                              style={{
+                                fontSize: '0.625rem',
+                                fontWeight: 700,
+                                padding: '0.15rem 0.4rem',
+                                borderRadius: 4,
+                                background: 'rgba(34, 197, 94, 0.15)',
+                                color: '#22c55e',
+                                border: '1px solid rgba(34, 197, 94, 0.3)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
                               Auto
                             </span>
                           )}
@@ -877,7 +910,9 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                       {/* Progress Track */}
                       <div className="campaign-progress-box" style={{ marginTop: '1rem' }}>
                         <div className="progress-label-row">
-                          <span>Progress: {sent} / {total} Leads</span>
+                          <span>
+                            Progress: {sent} / {total} Leads
+                          </span>
                           <strong style={{ color: pct === 100 ? '#10b981' : '#3b82f6' }}>{pct}%</strong>
                         </div>
                         <div className="progress-track-bg">
@@ -899,11 +934,15 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                           <span className="card-kpi-lbl">Delivered</span>
                         </div>
                         <div className="card-kpi-item">
-                          <span className="card-kpi-num" style={{ color: '#eab308' }}>{camp.stats?.replied ?? 0}</span>
+                          <span className="card-kpi-num" style={{ color: '#eab308' }}>
+                            {camp.stats?.replied ?? 0}
+                          </span>
                           <span className="card-kpi-lbl">Replies</span>
                         </div>
                         <div className="card-kpi-item">
-                          <span className="card-kpi-num" style={{ color: '#eab308' }}>{camp.stats?.responseRate ?? 0}%</span>
+                          <span className="card-kpi-num" style={{ color: '#eab308' }}>
+                            {camp.stats?.responseRate ?? 0}%
+                          </span>
                           <span className="card-kpi-lbl">Rate</span>
                         </div>
                       </div>
@@ -915,7 +954,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                         {isLive ? (
                           <button
                             className="btn btn-secondary btn-sm"
-                            onClick={(e) => handlePauseCampaignById(camp.id, e)}
+                            onClick={e => handlePauseCampaignById(camp.id, e)}
                             title="Pause Campaign"
                           >
                             <Pause size={13} />
@@ -923,7 +962,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                         ) : (
                           <button
                             className="btn btn-secondary btn-sm"
-                            onClick={(e) => handleStartCampaignById(camp.id, e)}
+                            onClick={e => handleStartCampaignById(camp.id, e)}
                             title={camp.status === 'paused' ? 'Resume Campaign' : 'Launch Campaign'}
                             disabled={camp.status === 'completed'}
                           >
@@ -934,7 +973,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                         {['draft', 'scheduled', 'paused'].includes(camp.status) && (
                           <button
                             className="btn btn-secondary btn-sm"
-                            onClick={(e) => handleOpenEditModal(camp, e)}
+                            onClick={e => handleOpenEditModal(camp, e)}
                             title="Edit Campaign Settings"
                           >
                             <Pencil size={13} />
@@ -947,7 +986,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                           className="btn btn-ghost btn-sm"
                           title="Export CSV"
                           download
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={e => e.stopPropagation()}
                         >
                           <Download size={13} />
                         </a>
@@ -987,642 +1026,657 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
               <span>Back to Campaigns Hub</span>
             </button>
             <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-              Viewing Campaign: <strong style={{ color: 'var(--text-primary)' }}>{currentCampaign?.name || 'Selected Campaign'}</strong>
+              Viewing Campaign:{' '}
+              <strong style={{ color: 'var(--text-primary)' }}>{currentCampaign?.name || 'Selected Campaign'}</strong>
             </span>
           </div>
 
-      {/* 1. TOP TOOLBAR & CAMPAIGN CONTROLS */}
-      <div className="analytics-toolbar">
-        <div className="analytics-campaign-select-wrap">
-          <FileSpreadsheet size={20} className="text-primary" />
-          <select
-            className="campaign-dropdown"
-            aria-label="Select campaign"
-            value={selectedCampaignId}
-            onChange={(e) => setSelectedCampaignId(e.target.value)}
-          >
-            {campaigns.length === 0 ? (
-              <option value="">No campaigns available</option>
-            ) : (
-              campaigns.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.status.toUpperCase()})
-                </option>
-              ))
-            )}
-          </select>
-          {getStatusBadge(currentCampaign?.status)}
-          {currentCampaign?.dispatchMode === 'manual' ? (
-            <span
-              style={{
-                fontSize: '0.6875rem',
-                fontWeight: 700,
-                padding: '0.2rem 0.5rem',
-                borderRadius: 4,
-                background: 'rgba(56, 189, 248, 0.15)',
-                color: '#38bdf8',
-                border: '1px solid rgba(56, 189, 248, 0.3)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-              }}
-              title="Manual Mode: Messages dispatched 1-by-1 directly from spreadsheet"
-            >
-              Manual (1-by-1)
-            </span>
-          ) : (
-            <span
-              style={{
-                fontSize: '0.6875rem',
-                fontWeight: 700,
-                padding: '0.2rem 0.5rem',
-                borderRadius: 4,
-                background: 'rgba(34, 197, 94, 0.15)',
-                color: '#22c55e',
-                border: '1px solid rgba(34, 197, 94, 0.3)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-              }}
-              title="Automated Mode: Continuous background pacing with anti-ban delays"
-            >
-              Automated
-            </span>
-          )}
-        </div>
+          {/* 1. TOP TOOLBAR & CAMPAIGN CONTROLS */}
+          <div className="analytics-toolbar">
+            <div className="analytics-campaign-select-wrap">
+              <FileSpreadsheet size={20} className="text-primary" />
+              <select
+                className="campaign-dropdown"
+                aria-label="Select campaign"
+                value={selectedCampaignId}
+                onChange={e => setSelectedCampaignId(e.target.value)}
+              >
+                {campaigns.length === 0 ? (
+                  <option value="">No campaigns available</option>
+                ) : (
+                  campaigns.map(c => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.status.toUpperCase()})
+                    </option>
+                  ))
+                )}
+              </select>
+              {getStatusBadge(currentCampaign?.status)}
+              {currentCampaign?.dispatchMode === 'manual' ? (
+                <span
+                  style={{
+                    fontSize: '0.6875rem',
+                    fontWeight: 700,
+                    padding: '0.2rem 0.5rem',
+                    borderRadius: 4,
+                    background: 'rgba(56, 189, 248, 0.15)',
+                    color: '#38bdf8',
+                    border: '1px solid rgba(56, 189, 248, 0.3)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                  }}
+                  title="Manual Mode: Messages dispatched 1-by-1 directly from spreadsheet"
+                >
+                  Manual (1-by-1)
+                </span>
+              ) : (
+                <span
+                  style={{
+                    fontSize: '0.6875rem',
+                    fontWeight: 700,
+                    padding: '0.2rem 0.5rem',
+                    borderRadius: 4,
+                    background: 'rgba(34, 197, 94, 0.15)',
+                    color: '#22c55e',
+                    border: '1px solid rgba(34, 197, 94, 0.3)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                  }}
+                  title="Automated Mode: Continuous background pacing with anti-ban delays"
+                >
+                  Automated
+                </span>
+              )}
+            </div>
 
-        <div className="analytics-actions-group">
-          <button
-            className="btn btn-sm btn-primary"
-            onClick={handleSendNextLead}
-            disabled={!selectedCampaignId || isSendingNext || (stats?.pending === 0)}
-            title="Send next pending lead 1-by-1 from queue"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              background: currentCampaign?.dispatchMode === 'manual' 
-                ? 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)' 
-                : undefined,
-              borderColor: currentCampaign?.dispatchMode === 'manual' ? '#38bdf8' : undefined,
-            }}
-          >
-            {isSendingNext ? (
-              <Loader2 size={15} className="animate-spin" />
-            ) : (
-              <Send size={15} />
-            )}
-            <span>Send Next (1-by-1)</span>
-          </button>
+            <div className="analytics-actions-group">
+              <button
+                className="btn btn-sm btn-primary"
+                onClick={handleSendNextLead}
+                disabled={!selectedCampaignId || isSendingNext || stats?.pending === 0}
+                title="Send next pending lead 1-by-1 from queue"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  background:
+                    currentCampaign?.dispatchMode === 'manual'
+                      ? 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)'
+                      : undefined,
+                  borderColor: currentCampaign?.dispatchMode === 'manual' ? '#38bdf8' : undefined,
+                }}
+              >
+                {isSendingNext ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
+                <span>Send Next (1-by-1)</span>
+              </button>
 
-          {currentCampaign?.status === 'running' ? (
-            <button className="btn btn-secondary btn-sm" onClick={handlePauseCampaign} title="Pause Campaign">
-              <Pause size={15} />
-            </button>
-          ) : (
-            <button
-              className="btn btn-primary btn-sm"
-              onClick={handleStartCampaign}
-              disabled={!selectedCampaignId || (currentCampaign?.status === 'completed' && stats?.pending === 0)}
-              title={currentCampaign?.status === 'paused' ? 'Resume Campaign' : 'Launch Campaign'}
-            >
-              <Play size={15} />
-            </button>
-          )}
+              {currentCampaign?.status === 'running' ? (
+                <button className="btn btn-secondary btn-sm" onClick={handlePauseCampaign} title="Pause Campaign">
+                  <Pause size={15} />
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={handleStartCampaign}
+                  disabled={!selectedCampaignId || (currentCampaign?.status === 'completed' && stats?.pending === 0)}
+                  title={currentCampaign?.status === 'paused' ? 'Resume Campaign' : 'Launch Campaign'}
+                >
+                  <Play size={15} />
+                </button>
+              )}
 
-          {currentCampaign?.status === 'running' && (
-            <button className="btn btn-secondary btn-sm" onClick={handleCancelCampaign} title="Stop Campaign">
-              <Square size={15} />
-              <span>Cancel</span>
-            </button>
-          )}
+              {currentCampaign?.status === 'running' && (
+                <button className="btn btn-secondary btn-sm" onClick={handleCancelCampaign} title="Stop Campaign">
+                  <Square size={15} />
+                  <span>Cancel</span>
+                </button>
+              )}
 
-          {currentCampaign && ['draft', 'scheduled', 'paused'].includes(currentCampaign.status) && (
-            <button
-              className="btn btn-secondary btn-sm"
-              onClick={() => handleOpenEditModal(currentCampaign)}
-              title="Edit Campaign Settings"
-            >
-              <Pencil size={15} />
-              <span>Edit</span>
-            </button>
-          )}
+              {currentCampaign && ['draft', 'scheduled', 'paused'].includes(currentCampaign.status) && (
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => handleOpenEditModal(currentCampaign)}
+                  title="Edit Campaign Settings"
+                >
+                  <Pencil size={15} />
+                  <span>Edit</span>
+                </button>
+              )}
 
-          <button
-            className="btn btn-secondary btn-sm"
-            onClick={() => setShowAddModal(true)}
-            disabled={!selectedCampaignId}
-            title="Dynamically Add More Numbers"
-          >
-            <UserPlus size={15} />
-            <span>Add Numbers</span>
-          </button>
+              <button
+                className="btn btn-secondary btn-sm"
+                onClick={() => setShowAddModal(true)}
+                disabled={!selectedCampaignId}
+                title="Dynamically Add More Numbers"
+              >
+                <UserPlus size={15} />
+                <span>Add Numbers</span>
+              </button>
 
-          <a
-            href={selectedCampaignId ? campaignApi.getExportUrl(selectedCampaignId) : '#'}
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary btn-sm"
-            download
-            style={{ textDecoration: 'none' }}
-          >
-            <Download size={15} />
-            <span>Export CSV</span>
-          </a>
+              <a
+                href={selectedCampaignId ? campaignApi.getExportUrl(selectedCampaignId) : '#'}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-secondary btn-sm"
+                download
+                style={{ textDecoration: 'none' }}
+              >
+                <Download size={15} />
+                <span>Export CSV</span>
+              </a>
 
-          <button
-            className={`btn btn-sm ${autoRefresh ? 'btn-secondary' : 'btn-ghost'}`}
-            onClick={() => setAutoRefresh(!autoRefresh)}
-            title={autoRefresh ? 'Live Auto-Refresh ON (6s)' : 'Live Auto-Refresh OFF'}
-          >
-            <RefreshCw size={15} className={autoRefresh && currentCampaign?.status === 'running' ? 'animate-spin' : ''} />
-            <span>{autoRefresh ? 'Live (6s)' : 'Manual'}</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 2. HERO KPI SUMMARY RIBBON */}
-      <div className="kpi-ribbon">
-        <div className="kpi-card">
-          <div className="kpi-icon primary">
-            <MessageSquare size={20} />
-          </div>
-          <div className="kpi-info">
-            <span className="kpi-value">{stats?.total ?? 0}</span>
-            <span className="kpi-label">Total Targeted</span>
-            <span className="kpi-sub">{stats?.pending ?? 0} Pending</span>
-          </div>
-        </div>
-
-        <div className="kpi-card">
-          <div className="kpi-icon indigo">
-            <Send size={20} />
-          </div>
-          <div className="kpi-info">
-            <span className="kpi-value">{stats?.sent ?? 0}</span>
-            <span className="kpi-label">Dispatched</span>
-            <span className="kpi-sub">Outbound Sent</span>
-          </div>
-        </div>
-
-        <div className="kpi-card">
-          <div className="kpi-icon success">
-            <CheckCheck size={20} />
-          </div>
-          <div className="kpi-info">
-            <span className="kpi-value">{stats?.delivered ?? 0}</span>
-            <span className="kpi-label">Delivered</span>
-            <span className="kpi-sub">Double Check</span>
-          </div>
-        </div>
-
-        <div className="kpi-card">
-          <div className="kpi-icon purple">
-            <Eye size={20} />
-          </div>
-          <div className="kpi-info">
-            <span className="kpi-value">{stats?.read ?? 0}</span>
-            <span className="kpi-label">Read / Seen</span>
-            <span className="kpi-sub">Blue Check</span>
-          </div>
-        </div>
-
-        <div className="kpi-card">
-          <div className="kpi-icon amber">
-            <TrendingUp size={20} />
-          </div>
-          <div className="kpi-info">
-            <span className="kpi-value" style={{ color: '#eab308' }}>
-              {stats?.replied ?? 0}
-            </span>
-            <span className="kpi-label">Replies Received</span>
-            <span className="kpi-sub">{stats?.responseRate ?? 0}% Rate</span>
-          </div>
-        </div>
-
-        <div className="kpi-card">
-          <div className="kpi-icon red">
-            <AlertCircle size={20} />
-          </div>
-          <div className="kpi-info">
-            <span className="kpi-value">{stats?.optOut ?? 0}</span>
-            <span className="kpi-label">Opt-Outs (STOP)</span>
-            <span className="kpi-sub">{stats?.failed ?? 0} Failed / Invalid</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. VISUAL ANALYTICS & CHARTS */}
-      <div className="analytics-charts-grid">
-        {/* FUNNEL BAR CHART */}
-        <div className="analytics-card">
-          <div className="analytics-card-header">
-            <h3 className="analytics-card-title">
-              <BarChart3 size={18} className="text-primary" />
-              <span>Conversion Funnel & Drop-Off</span>
-            </h3>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              Response Rate: <strong>{stats?.responseRate ?? 0}%</strong>
-            </span>
+              <button
+                className={`btn btn-sm ${autoRefresh ? 'btn-secondary' : 'btn-ghost'}`}
+                onClick={() => setAutoRefresh(!autoRefresh)}
+                title={autoRefresh ? 'Live Auto-Refresh ON (6s)' : 'Live Auto-Refresh OFF'}
+              >
+                <RefreshCw
+                  size={15}
+                  className={autoRefresh && currentCampaign?.status === 'running' ? 'animate-spin' : ''}
+                />
+                <span>{autoRefresh ? 'Live (6s)' : 'Manual'}</span>
+              </button>
+            </div>
           </div>
 
-          <div className="funnel-container">
-            {(analyticsData?.funnel || []).map((step: { stage: string; count: number; percent: number }) => {
-              let fillClass = 'target';
-              if (step.stage === 'Dispatched') fillClass = 'sent';
-              if (step.stage === 'Delivered') fillClass = 'delivered';
-              if (step.stage === 'Read') fillClass = 'read';
-              if (step.stage === 'Replied') fillClass = 'replied';
+          {/* 2. HERO KPI SUMMARY RIBBON */}
+          <div className="kpi-ribbon">
+            <div className="kpi-card">
+              <div className="kpi-icon primary">
+                <MessageSquare size={20} />
+              </div>
+              <div className="kpi-info">
+                <span className="kpi-value">{stats?.total ?? 0}</span>
+                <span className="kpi-label">Total Targeted</span>
+                <span className="kpi-sub">{stats?.pending ?? 0} Pending</span>
+              </div>
+            </div>
 
-              return (
-                <div key={step.stage} className="funnel-row">
-                  <div className="funnel-labels">
-                    <span>{step.stage}</span>
-                    <span>
-                      {step.count} ({step.percent}%)
-                    </span>
+            <div className="kpi-card">
+              <div className="kpi-icon indigo">
+                <Send size={20} />
+              </div>
+              <div className="kpi-info">
+                <span className="kpi-value">{stats?.sent ?? 0}</span>
+                <span className="kpi-label">Dispatched</span>
+                <span className="kpi-sub">Outbound Sent</span>
+              </div>
+            </div>
+
+            <div className="kpi-card">
+              <div className="kpi-icon success">
+                <CheckCheck size={20} />
+              </div>
+              <div className="kpi-info">
+                <span className="kpi-value">{stats?.delivered ?? 0}</span>
+                <span className="kpi-label">Delivered</span>
+                <span className="kpi-sub">Double Check</span>
+              </div>
+            </div>
+
+            <div className="kpi-card">
+              <div className="kpi-icon purple">
+                <Eye size={20} />
+              </div>
+              <div className="kpi-info">
+                <span className="kpi-value">{stats?.read ?? 0}</span>
+                <span className="kpi-label">Read / Seen</span>
+                <span className="kpi-sub">Blue Check</span>
+              </div>
+            </div>
+
+            <div className="kpi-card">
+              <div className="kpi-icon amber">
+                <TrendingUp size={20} />
+              </div>
+              <div className="kpi-info">
+                <span className="kpi-value" style={{ color: '#eab308' }}>
+                  {stats?.replied ?? 0}
+                </span>
+                <span className="kpi-label">Replies Received</span>
+                <span className="kpi-sub">{stats?.responseRate ?? 0}% Rate</span>
+              </div>
+            </div>
+
+            <div className="kpi-card">
+              <div className="kpi-icon red">
+                <AlertCircle size={20} />
+              </div>
+              <div className="kpi-info">
+                <span className="kpi-value">{stats?.optOut ?? 0}</span>
+                <span className="kpi-label">Opt-Outs (STOP)</span>
+                <span className="kpi-sub">{stats?.failed ?? 0} Failed / Invalid</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. VISUAL ANALYTICS & CHARTS */}
+          <div className="analytics-charts-grid">
+            {/* FUNNEL BAR CHART */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <h3 className="analytics-card-title">
+                  <BarChart3 size={18} className="text-primary" />
+                  <span>Conversion Funnel & Drop-Off</span>
+                </h3>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Response Rate: <strong>{stats?.responseRate ?? 0}%</strong>
+                </span>
+              </div>
+
+              <div className="funnel-container">
+                {(analyticsData?.funnel || []).map((step: { stage: string; count: number; percent: number }) => {
+                  let fillClass = 'target';
+                  if (step.stage === 'Dispatched') fillClass = 'sent';
+                  if (step.stage === 'Delivered') fillClass = 'delivered';
+                  if (step.stage === 'Read') fillClass = 'read';
+                  if (step.stage === 'Replied') fillClass = 'replied';
+
+                  return (
+                    <div key={step.stage} className="funnel-row">
+                      <div className="funnel-labels">
+                        <span>{step.stage}</span>
+                        <span>
+                          {step.count} ({step.percent}%)
+                        </span>
+                      </div>
+                      <div className="funnel-track">
+                        <div
+                          className={`funnel-fill ${fillClass}`}
+                          style={{ width: `${Math.max(4, Math.min(100, step.percent))}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* HOURLY RESPONSES TIMELINE */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <h3 className="analytics-card-title">
+                  <Clock size={18} className="text-primary" />
+                  <span>Responses & Opt-Outs Over Time</span>
+                </h3>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  {analyticsData?.timeline?.length || 0} active hour slots
+                </span>
+              </div>
+
+              <div className="timeline-svg-wrap">
+                {!analyticsData?.timeline || analyticsData.timeline.length === 0 ? (
+                  <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                    <Clock size={28} style={{ opacity: 0.3, marginBottom: '0.5rem', display: 'inline-block' }} />
+                    <p>No incoming replies recorded yet. Once recipients respond, trends appear here.</p>
                   </div>
-                  <div className="funnel-track">
-                    <div
-                      className={`funnel-fill ${fillClass}`}
-                      style={{ width: `${Math.max(4, Math.min(100, step.percent))}%` }}
+                ) : (
+                  <svg width="100%" height="150" viewBox="0 0 400 150" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="repliesGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#eab308" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#eab308" stopOpacity="0.0" />
+                      </linearGradient>
+                    </defs>
+                    {/* Render bars for each time slot */}
+                    {(analyticsData?.timeline || []).map(
+                      (item: Record<string, unknown>, idx: number, arr: Array<Record<string, unknown>>) => {
+                        const replies = Number(item.replies ?? item.sent ?? 0) || 0;
+                        const optOuts = Number(item.optOuts ?? item.failed ?? 0) || 0;
+                        const key = String(item.time || item.timestamp || `slot-${idx}`);
+                        const maxCount = Math.max(
+                          ...arr.map(
+                            (x: Record<string, unknown>) =>
+                              (Number(x.replies ?? x.sent ?? 0) || 0) + (Number(x.optOuts ?? x.failed ?? 0) || 0),
+                          ),
+                          1,
+                        );
+                        const barWidth = Math.max(8, 380 / (arr.length || 1) - 4);
+                        const x = 10 + idx * (380 / (arr.length || 1));
+                        const hReplies = (replies / maxCount) * 110;
+                        const hOpt = (optOuts / maxCount) * 110;
+
+                        return (
+                          <g key={key}>
+                            <rect
+                              x={x}
+                              y={140 - hReplies}
+                              width={barWidth}
+                              height={hReplies}
+                              fill="#eab308"
+                              rx="3"
+                              opacity="0.85"
+                            >
+                              <title>{`${key}: ${replies} replies`}</title>
+                            </rect>
+                            {optOuts > 0 && (
+                              <rect
+                                x={x}
+                                y={140 - hReplies - hOpt}
+                                width={barWidth}
+                                height={hOpt}
+                                fill="#ef4444"
+                                rx="3"
+                              >
+                                <title>{`${key}: ${optOuts} opt-outs`}</title>
+                              </rect>
+                            )}
+                          </g>
+                        );
+                      },
+                    )}
+                  </svg>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* 4. SPREADSHEET CRM DATA TABLE WITH FILTERS */}
+          <div className="spreadsheet-card">
+            <div className="spreadsheet-header-bar">
+              <div className="filter-pills-bar">
+                {['ALL', 'PENDING', 'SENT', 'DELIVERED', 'READ', 'REPLIED', 'OPT_OUT', 'FAILED'].map(pill => (
+                  <button
+                    key={pill}
+                    className={`filter-pill ${statusFilter === pill ? 'active' : ''}`}
+                    onClick={() => {
+                      setStatusFilter(pill);
+                      setPage(1);
+                    }}
+                  >
+                    {pill}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <button
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => {
+                    const colName = window.prompt('Enter new custom column name (e.g. Category, Notes):');
+                    if (colName && colName.trim()) {
+                      const newCol = colName.trim();
+                      if (!customColumns.includes(newCol)) {
+                        setCustomColumns(prev => [...prev, newCol]);
+                      }
+                    }
+                  }}
+                >
+                  <Plus size={14} />
+                  <span>Add Column</span>
+                </button>
+                <div className="search-input-wrap">
+                  <Search size={14} className="search-icon-pos" />
+                  <input
+                    type="text"
+                    className="search-input"
+                    aria-label="Search recipients"
+                    placeholder="Search phone, name, replies..."
+                    value={searchQuery}
+                    onChange={e => {
+                      setSearchQuery(e.target.value);
+                      setPage(1);
+                    }}
+                  />
+                </div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Total: <strong>{leadsTotal}</strong>
+                </span>
+              </div>
+            </div>
+
+            <div className="spreadsheet-table-container">
+              <table className="spreadsheet-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: '40px' }}>#</th>
+                    <th>Phone Number</th>
+                    <th>Name</th>
+                    {customColumns.map(col => (
+                      <th key={col}>{col}</th>
+                    ))}
+                    <th>Status</th>
+                    <th>Action</th>
+                    <th>Sent At</th>
+                    <th>Response / Reply</th>
+                    <th>Last Updated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {isLoadingLeads ? (
+                    <tr>
+                      <td
+                        colSpan={8 + customColumns.length}
+                        style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}
+                      >
+                        <Loader2
+                          size={24}
+                          className="animate-spin"
+                          style={{ display: 'inline-block', marginBottom: '0.5rem' }}
+                        />
+                        <p>Loading spreadsheet records...</p>
+                      </td>
+                    </tr>
+                  ) : leads.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={8 + customColumns.length}
+                        style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}
+                      >
+                        No recipient records match the selected filter.
+                      </td>
+                    </tr>
+                  ) : (
+                    leads.map((lead, idx) => (
+                      <tr key={lead.id}>
+                        <td style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{(page - 1) * 50 + idx + 1}</td>
+                        <td style={{ fontWeight: 600 }}>
+                          +{String(lead.phone || lead.phoneNumber || '').replace(/^\+/, '')}
+                        </td>
+                        <td>
+                          <EditableCell
+                            initialValue={lead.name || ''}
+                            onSave={val => handleCellEdit(lead.id, 'name', val, false)}
+                          />
+                        </td>
+                        {customColumns.map(col => (
+                          <td key={col}>
+                            <EditableCell
+                              initialValue={lead.customVariables?.[col] || ''}
+                              onSave={val => handleCellEdit(lead.id, col, val, true)}
+                            />
+                          </td>
+                        ))}
+                        <td>{getLeadStatusBadge(lead.status)}</td>
+                        <td>
+                          {lead.status === 'PENDING' || lead.status === 'FAILED' ? (
+                            <button
+                              className="btn btn-sm btn-primary"
+                              onClick={() => handleSendSingleLead(lead.id)}
+                              disabled={sendingLeadId === lead.id || isSendingNext}
+                              title={
+                                lead.status === 'FAILED'
+                                  ? 'Retry sending message to this lead'
+                                  : 'Send message 1-by-1 to this lead'
+                              }
+                              style={{
+                                padding: '0.2rem 0.55rem',
+                                fontSize: '0.75rem',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.35rem',
+                                borderRadius: 4,
+                              }}
+                            >
+                              {sendingLeadId === lead.id ? (
+                                <Loader2 size={12} className="animate-spin" />
+                              ) : (
+                                <Send size={12} />
+                              )}
+                              <span>{lead.status === 'FAILED' ? 'Retry' : 'Send'}</span>
+                            </button>
+                          ) : (
+                            <span
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
+                                fontSize: '0.75rem',
+                                color: 'var(--text-muted)',
+                              }}
+                              title="Message dispatched"
+                            >
+                              <CheckCheck size={14} style={{ color: '#22c55e' }} />
+                              <span>Sent</span>
+                            </span>
+                          )}
+                        </td>
+                        <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                          {lead.sentAt ? new Date(lead.sentAt).toLocaleTimeString() : '—'}
+                        </td>
+                        <td>
+                          {lead.firstReplySnippet ? (
+                            <div
+                              className="reply-snippet-box"
+                              onClick={() => setSelectedLeadForReply(lead)}
+                              title="Click to view full reply"
+                            >
+                              💬 {lead.firstReplySnippet}
+                            </div>
+                          ) : lead.errorMessage ? (
+                            <span style={{ color: '#ef4444', fontSize: '0.8125rem' }}>{lead.errorMessage}</span>
+                          ) : (
+                            <span style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>—</span>
+                          )}
+                        </td>
+                        <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                          {new Date(lead.updatedAt).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* 5. ADD MORE NUMBERS MODAL */}
+          <Modal title="Add Numbers to Campaign" onClose={() => setShowAddModal(false)} open={showAddModal}>
+            <form onSubmit={handleAddLeadsSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button
+                  type="button"
+                  className={`btn btn-sm ${addMode === 'bulk' ? 'btn-primary' : 'btn-secondary'}`}
+                  onClick={() => setAddMode('bulk')}
+                >
+                  Paste Spreadsheet / CSV
+                </button>
+                <button
+                  type="button"
+                  className={`btn btn-sm ${addMode === 'single' ? 'btn-primary' : 'btn-secondary'}`}
+                  onClick={() => setAddMode('single')}
+                >
+                  Single Number
+                </button>
+              </div>
+
+              {addMode === 'bulk' ? (
+                <div>
+                  <label className="label">Paste Numbers & Names (One per line e.g. +123456789, John)</label>
+                  <textarea
+                    className="textarea"
+                    rows={6}
+                    placeholder={`+1234567890\tAlice\n+9876543210\tBob`}
+                    value={bulkInputText}
+                    onChange={e => setBulkInputText(e.target.value)}
+                  />
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div>
+                    <label className="label">Phone Number *</label>
+                    <input
+                      type="text"
+                      className="input"
+                      placeholder="+1234567890"
+                      value={singlePhone}
+                      onChange={e => setSinglePhone(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Name</label>
+                    <input
+                      type="text"
+                      className="input"
+                      placeholder="Contact Name"
+                      value={singleName}
+                      onChange={e => setSingleName(e.target.value)}
                     />
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* HOURLY RESPONSES TIMELINE */}
-        <div className="analytics-card">
-          <div className="analytics-card-header">
-            <h3 className="analytics-card-title">
-              <Clock size={18} className="text-primary" />
-              <span>Responses & Opt-Outs Over Time</span>
-            </h3>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              {analyticsData?.timeline?.length || 0} active hour slots
-            </span>
-          </div>
-
-          <div className="timeline-svg-wrap">
-            {!analyticsData?.timeline || analyticsData.timeline.length === 0 ? (
-              <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                <Clock size={28} style={{ opacity: 0.3, marginBottom: '0.5rem', display: 'inline-block' }} />
-                <p>No incoming replies recorded yet. Once recipients respond, trends appear here.</p>
-              </div>
-            ) : (
-              <svg width="100%" height="150" viewBox="0 0 400 150" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="repliesGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#eab308" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#eab308" stopOpacity="0.0" />
-                  </linearGradient>
-                </defs>
-                {/* Render bars for each time slot */}
-                {(analyticsData?.timeline || []).map((item: Record<string, unknown>, idx: number, arr: Array<Record<string, unknown>>) => {
-                  const replies = Number(item.replies ?? item.sent ?? 0) || 0;
-                  const optOuts = Number(item.optOuts ?? item.failed ?? 0) || 0;
-                  const key = String(item.time || item.timestamp || `slot-${idx}`);
-                  const maxCount = Math.max(...arr.map((x: Record<string, unknown>) => (Number(x.replies ?? x.sent ?? 0) || 0) + (Number(x.optOuts ?? x.failed ?? 0) || 0)), 1);
-                  const barWidth = Math.max(8, 380 / (arr.length || 1) - 4);
-                  const x = 10 + idx * (380 / (arr.length || 1));
-                  const hReplies = (replies / maxCount) * 110;
-                  const hOpt = (optOuts / maxCount) * 110;
-
-                  return (
-                    <g key={key}>
-                      <rect
-                        x={x}
-                        y={140 - hReplies}
-                        width={barWidth}
-                        height={hReplies}
-                        fill="#eab308"
-                        rx="3"
-                        opacity="0.85"
-                      >
-                        <title>{`${key}: ${replies} replies`}</title>
-                      </rect>
-                      {optOuts > 0 && (
-                        <rect
-                          x={x}
-                          y={140 - hReplies - hOpt}
-                          width={barWidth}
-                          height={hOpt}
-                          fill="#ef4444"
-                          rx="3"
-                        >
-                          <title>{`${key}: ${optOuts} opt-outs`}</title>
-                        </rect>
-                      )}
-                    </g>
-                  );
-                })}
-              </svg>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* 4. SPREADSHEET CRM DATA TABLE WITH FILTERS */}
-      <div className="spreadsheet-card">
-        <div className="spreadsheet-header-bar">
-          <div className="filter-pills-bar">
-            {['ALL', 'PENDING', 'SENT', 'DELIVERED', 'READ', 'REPLIED', 'OPT_OUT', 'FAILED'].map((pill) => (
-              <button
-                key={pill}
-                className={`filter-pill ${statusFilter === pill ? 'active' : ''}`}
-                onClick={() => {
-                  setStatusFilter(pill);
-                  setPage(1);
-                }}
-              >
-                {pill}
-              </button>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <button 
-              className="btn btn-sm btn-secondary" 
-              onClick={() => {
-                const colName = window.prompt('Enter new custom column name (e.g. Category, Notes):');
-                if (colName && colName.trim()) {
-                  const newCol = colName.trim();
-                  if (!customColumns.includes(newCol)) {
-                    setCustomColumns(prev => [...prev, newCol]);
-                  }
-                }
-              }}
-            >
-              <Plus size={14} /> 
-              <span>Add Column</span>
-            </button>
-            <div className="search-input-wrap">
-              <Search size={14} className="search-icon-pos" />
-              <input
-                type="text"
-                className="search-input"
-                aria-label="Search recipients"
-                placeholder="Search phone, name, replies..."
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setPage(1);
-                }}
-              />
-            </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              Total: <strong>{leadsTotal}</strong>
-            </span>
-          </div>
-        </div>
-
-        <div className="spreadsheet-table-container">
-          <table className="spreadsheet-table">
-            <thead>
-              <tr>
-                <th style={{ width: '40px' }}>#</th>
-                <th>Phone Number</th>
-                <th>Name</th>
-                {customColumns.map(col => (
-                  <th key={col}>{col}</th>
-                ))}
-                <th>Status</th>
-                <th>Action</th>
-                <th>Sent At</th>
-                <th>Response / Reply</th>
-                <th>Last Updated</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoadingLeads ? (
-                <tr>
-                  <td colSpan={8 + customColumns.length} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
-                    <Loader2 size={24} className="animate-spin" style={{ display: 'inline-block', marginBottom: '0.5rem' }} />
-                    <p>Loading spreadsheet records...</p>
-                  </td>
-                </tr>
-              ) : leads.length === 0 ? (
-                <tr>
-                  <td colSpan={8 + customColumns.length} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
-                    No recipient records match the selected filter.
-                  </td>
-                </tr>
-              ) : (
-                leads.map((lead, idx) => (
-                  <tr key={lead.id}>
-                    <td style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                      {(page - 1) * 50 + idx + 1}
-                    </td>
-                    <td style={{ fontWeight: 600 }}>
-                      +{String(lead.phone || lead.phoneNumber || '').replace(/^\+/, '')}
-                    </td>
-                    <td>
-                      <EditableCell 
-                        initialValue={lead.name || ''} 
-                        onSave={(val) => handleCellEdit(lead.id, 'name', val, false)} 
-                      />
-                    </td>
-                    {customColumns.map(col => (
-                      <td key={col}>
-                        <EditableCell 
-                          initialValue={lead.customVariables?.[col] || ''} 
-                          onSave={(val) => handleCellEdit(lead.id, col, val, true)} 
-                        />
-                      </td>
-                    ))}
-                    <td>{getLeadStatusBadge(lead.status)}</td>
-                    <td>
-                      {lead.status === 'PENDING' || lead.status === 'FAILED' ? (
-                        <button
-                          className="btn btn-sm btn-primary"
-                          onClick={() => handleSendSingleLead(lead.id)}
-                          disabled={sendingLeadId === lead.id || isSendingNext}
-                          title={lead.status === 'FAILED' ? 'Retry sending message to this lead' : 'Send message 1-by-1 to this lead'}
-                          style={{
-                            padding: '0.2rem 0.55rem',
-                            fontSize: '0.75rem',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
-                            borderRadius: 4,
-                          }}
-                        >
-                          {sendingLeadId === lead.id ? (
-                            <Loader2 size={12} className="animate-spin" />
-                          ) : (
-                            <Send size={12} />
-                          )}
-                          <span>{lead.status === 'FAILED' ? 'Retry' : 'Send'}</span>
-                        </button>
-                      ) : (
-                        <span
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.3rem',
-                            fontSize: '0.75rem',
-                            color: 'var(--text-muted)',
-                          }}
-                          title="Message dispatched"
-                        >
-                          <CheckCheck size={14} style={{ color: '#22c55e' }} />
-                          <span>Sent</span>
-                        </span>
-                      )}
-                    </td>
-                    <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                      {lead.sentAt ? new Date(lead.sentAt).toLocaleTimeString() : '—'}
-                    </td>
-                    <td>
-                      {lead.firstReplySnippet ? (
-                        <div
-                          className="reply-snippet-box"
-                          onClick={() => setSelectedLeadForReply(lead)}
-                          title="Click to view full reply"
-                        >
-                          💬 {lead.firstReplySnippet}
-                        </div>
-                      ) : lead.errorMessage ? (
-                        <span style={{ color: '#ef4444', fontSize: '0.8125rem' }}>{lead.errorMessage}</span>
-                      ) : (
-                        <span style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>—</span>
-                      )}
-                    </td>
-                    <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                      {new Date(lead.updatedAt).toLocaleDateString()}
-                    </td>
-                  </tr>
-                ))
               )}
-            </tbody>
-          </table>
-        </div>
-      </div>
 
-      {/* 5. ADD MORE NUMBERS MODAL */}
-      <Modal
-        title="Add Numbers to Campaign"
-        onClose={() => setShowAddModal(false)}
-        open={showAddModal}
-      >
-        <form onSubmit={handleAddLeadsSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button
-              type="button"
-              className={`btn btn-sm ${addMode === 'bulk' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setAddMode('bulk')}
-            >
-              Paste Spreadsheet / CSV
-            </button>
-            <button
-              type="button"
-              className={`btn btn-sm ${addMode === 'single' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setAddMode('single')}
-            >
-              Single Number
-            </button>
-          </div>
-
-          {addMode === 'bulk' ? (
-            <div>
-              <label className="label">Paste Numbers & Names (One per line e.g. +123456789, John)</label>
-              <textarea
-                className="textarea"
-                rows={6}
-                placeholder={`+1234567890\tAlice\n+9876543210\tBob`}
-                value={bulkInputText}
-                onChange={(e) => setBulkInputText(e.target.value)}
-              />
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <div>
-                <label className="label">Phone Number *</label>
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="+1234567890"
-                  value={singlePhone}
-                  onChange={(e) => setSinglePhone(e.target.value)}
-                />
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <button type="button" className="btn btn-secondary" onClick={() => setShowAddModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary" disabled={isAddingLeads}>
+                  {isAddingLeads ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
+                  <span>Add Recipients</span>
+                </button>
               </div>
-              <div>
-                <label className="label">Name</label>
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="Contact Name"
-                  value={singleName}
-                  onChange={(e) => setSingleName(e.target.value)}
-                />
+            </form>
+          </Modal>
+
+          {/* 6. REPLY PREVIEW MODAL */}
+          <Modal
+            title={`Reply from +${selectedLeadForReply?.phoneNumber || ''}`}
+            onClose={() => setSelectedLeadForReply(null)}
+            open={!!selectedLeadForReply}
+          >
+            {selectedLeadForReply && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                    Contact
+                  </span>
+                  <p style={{ fontWeight: 600 }}>
+                    {selectedLeadForReply.name || 'Unnamed'} (+{selectedLeadForReply.phoneNumber})
+                  </p>
+                </div>
+
+                <div>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                    Received Message
+                  </span>
+                  <div
+                    style={{
+                      background: 'var(--bg-input)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '8px',
+                      padding: '1rem',
+                      marginTop: '0.35rem',
+                      fontSize: '0.9375rem',
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    {selectedLeadForReply.firstReplySnippet}
+                  </div>
+                </div>
+
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                  Replied at:{' '}
+                  {selectedLeadForReply.repliedAt ? new Date(selectedLeadForReply.repliedAt).toLocaleString() : '—'}
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                  <button type="button" className="btn btn-secondary" onClick={() => setSelectedLeadForReply(null)}>
+                    Close
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem' }}>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={() => setShowAddModal(false)}
-            >
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary" disabled={isAddingLeads}>
-              {isAddingLeads ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
-              <span>Add Recipients</span>
-            </button>
-          </div>
-        </form>
-      </Modal>
-
-      {/* 6. REPLY PREVIEW MODAL */}
-      <Modal
-        title={`Reply from +${selectedLeadForReply?.phoneNumber || ''}`}
-        onClose={() => setSelectedLeadForReply(null)}
-        open={!!selectedLeadForReply}
-      >
-        {selectedLeadForReply && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Contact</span>
-              <p style={{ fontWeight: 600 }}>{selectedLeadForReply.name || 'Unnamed'} (+{selectedLeadForReply.phoneNumber})</p>
-            </div>
-
-            <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Received Message</span>
-              <div
-                style={{
-                  background: 'var(--bg-input)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '8px',
-                  padding: '1rem',
-                  marginTop: '0.35rem',
-                  fontSize: '0.9375rem',
-                  whiteSpace: 'pre-wrap',
-                }}
-              >
-                {selectedLeadForReply.firstReplySnippet}
-              </div>
-            </div>
-
-            <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-              Replied at: {selectedLeadForReply.repliedAt ? new Date(selectedLeadForReply.repliedAt).toLocaleString() : '—'}
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => setSelectedLeadForReply(null)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
-      </Modal>
-
+            )}
+          </Modal>
         </div>
       )}
 
@@ -1664,7 +1718,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                   className="minimal-input"
                   required
                   value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
+                  onChange={e => setEditName(e.target.value)}
                   placeholder="e.g. Q4 Black Friday Promo"
                 />
               </div>
@@ -1674,12 +1728,12 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                   <label htmlFor="edit-campaign-template">Message Template</label>
                   <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
                     <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Insert Tag:</span>
-                    {['{{Name}}', '{{phone}}', '{Hi|Hello|Hey}'].map((tag) => (
+                    {['{{Name}}', '{{phone}}', '{Hi|Hello|Hey}'].map(tag => (
                       <button
                         key={tag}
                         type="button"
                         className="minimal-tag-chip"
-                        onClick={() => setEditTemplate((prev) => prev + (prev && !prev.endsWith(' ') ? ' ' : '') + tag)}
+                        onClick={() => setEditTemplate(prev => prev + (prev && !prev.endsWith(' ') ? ' ' : '') + tag)}
                       >
                         {tag}
                       </button>
@@ -1691,7 +1745,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                   className="minimal-input minimal-textarea"
                   rows={5}
                   value={editTemplate}
-                  onChange={(e) => setEditTemplate(e.target.value)}
+                  onChange={e => setEditTemplate(e.target.value)}
                   placeholder="Enter message text with {Spintax|Variants} and {{Variable}} tags..."
                 />
               </div>
@@ -1704,7 +1758,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                   className="minimal-input"
                   placeholder="https://example.com/image.png"
                   value={editMediaUrl}
-                  onChange={(e) => setEditMediaUrl(e.target.value)}
+                  onChange={e => setEditMediaUrl(e.target.value)}
                 />
               </div>
             </>
@@ -1718,23 +1772,24 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                       No connected WhatsApp sessions available
                     </span>
                   ) : (
-                    allSessions.map((session) => {
+                    allSessions.map(session => {
                       const isChecked = editSessions.includes(session.id);
                       return (
                         <label key={session.id} className="minimal-sender-item">
                           <input
                             type="checkbox"
                             checked={isChecked}
-                            onChange={(e) => {
+                            onChange={e => {
                               if (e.target.checked) {
-                                setEditSessions((prev) => [...prev, session.id]);
+                                setEditSessions(prev => [...prev, session.id]);
                               } else {
-                                setEditSessions((prev) => prev.filter((id) => id !== session.id));
+                                setEditSessions(prev => prev.filter(id => id !== session.id));
                               }
                             }}
                           />
                           <span>
-                            <strong>{session.name || session.id}</strong> ({session.phone || session.status || 'Connected'})
+                            <strong>{session.name || session.id}</strong> (
+                            {session.phone || session.status || 'Connected'})
                           </span>
                         </label>
                       );
@@ -1750,7 +1805,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                   type="datetime-local"
                   className="minimal-input"
                   value={editScheduledAt}
-                  onChange={(e) => setEditScheduledAt(e.target.value)}
+                  onChange={e => setEditScheduledAt(e.target.value)}
                 />
               </div>
 
@@ -1812,7 +1867,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                       min={1}
                       max={60}
                       value={editMinDelay}
-                      onChange={(e) => setEditMinDelay(Number(e.target.value))}
+                      onChange={e => setEditMinDelay(Number(e.target.value))}
                     />
                     <span>to</span>
                     <input
@@ -1822,16 +1877,25 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                       min={1}
                       max={120}
                       value={editMaxDelay}
-                      onChange={(e) => setEditMaxDelay(Number(e.target.value))}
+                      onChange={e => setEditMaxDelay(Number(e.target.value))}
                     />
                     <span>sec</span>
                   </div>
 
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', cursor: 'pointer', fontSize: '0.8125rem', color: '#e2e8f0' }}>
+                  <label
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.45rem',
+                      cursor: 'pointer',
+                      fontSize: '0.8125rem',
+                      color: '#e2e8f0',
+                    }}
+                  >
                     <input
                       type="checkbox"
                       checked={editSimulateTyping}
-                      onChange={(e) => setEditSimulateTyping(e.target.checked)}
+                      onChange={e => setEditSimulateTyping(e.target.checked)}
                     />
                     <span>Simulate typing</span>
                   </label>
@@ -1841,11 +1905,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
           )}
 
           <div className="minimal-footer">
-            <button
-              type="button"
-              className="btn-minimal-cancel"
-              onClick={() => setShowEditModal(false)}
-            >
+            <button type="button" className="btn-minimal-cancel" onClick={() => setShowEditModal(false)}>
               Cancel
             </button>
             <button type="submit" className="btn-minimal-save" disabled={isSavingEdit}>

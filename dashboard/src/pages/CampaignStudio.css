@@ -1,18 +1,18 @@
 /* Campaign Studio Comprehensive Dark-Mode Design System */
 
 .campaign-studio-layout {
-  --studio-bg-card:        rgba(42, 48, 60, 0.75);
-  --studio-border:         var(--border);
-  --studio-border-hover:   rgba(var(--accent-rgb), 0.30);
-  --studio-emerald:        var(--accent);
-  --studio-emerald-dark:   var(--accent-hover);
-  --studio-gradient-bg:    var(--accent);
+  --studio-bg-card: rgba(42, 48, 60, 0.75);
+  --studio-border: var(--border);
+  --studio-border-hover: rgba(var(--accent-rgb), 0.3);
+  --studio-emerald: var(--accent);
+  --studio-emerald-dark: var(--accent-hover);
+  --studio-gradient-bg: var(--accent);
   --studio-gradient-hover: var(--accent-hover);
-  --studio-emerald-glow:   rgba(var(--accent-rgb), 0.35);
-  --studio-bg-input:       var(--color-surface);
-  --studio-text-main:      var(--text-primary);
-  --studio-text-sub:       var(--text-secondary);
-  --studio-text-muted:     var(--text-muted);
+  --studio-emerald-glow: rgba(var(--accent-rgb), 0.35);
+  --studio-bg-input: var(--color-surface);
+  --studio-text-main: var(--text-primary);
+  --studio-text-sub: var(--text-secondary);
+  --studio-text-muted: var(--text-muted);
 }
 
 /* Glassmorphic Card Container */
@@ -24,7 +24,9 @@
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .campaign-studio-layout .studio-card-container:hover {
@@ -60,7 +62,7 @@
 .campaign-studio-layout button.btn-primary {
   background: var(--studio-gradient-bg) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(var(--accent-rgb), 0.40) !important;
+  border: 1px solid rgba(var(--accent-rgb), 0.4) !important;
   box-shadow: 0 4px 14px var(--studio-emerald-glow) !important;
   transition: all 0.2s ease !important;
 }
@@ -68,7 +70,7 @@
 .campaign-studio-layout .btn-primary:hover:not(:disabled),
 .campaign-studio-layout button.btn-primary:hover:not(:disabled) {
   background: var(--studio-gradient-hover) !important;
-  box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.50) !important;
+  box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.5) !important;
   transform: translateY(-1px);
 }
 
@@ -105,13 +107,13 @@
 .campaign-studio-layout .variable-chip-btn.spintax-chip {
   color: #a7f3d0;
   background: var(--studio-gradient-bg);
-  border: 1px solid rgba(var(--accent-rgb), 0.40);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
   box-shadow: 0 2px 8px var(--studio-emerald-glow);
 }
 
 .campaign-studio-layout .variable-chip-btn.spintax-chip:hover {
   background: var(--studio-gradient-hover);
-  border-color: #5B944D;
+  border-color: #5b944d;
 }
 
 /* Authentic WhatsApp Phone Preview Mockup */
@@ -181,7 +183,7 @@
 .campaign-studio-layout .whatsapp-out-bubble {
   align-self: flex-end;
   background: #005c4b;
-  border: 1px solid rgba(var(--accent-rgb), 0.30);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
   color: #e9edef;
   padding: 0.65rem 0.85rem;
   border-radius: 8px 0px 8px 8px;
@@ -362,7 +364,7 @@
   font-weight: 700;
   color: #ffffff;
   background: var(--studio-gradient-bg);
-  border: 1px solid rgba(var(--accent-rgb), 0.40);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
   border-radius: 8px;
   cursor: pointer;
   box-shadow: 0 6px 20px var(--studio-emerald-glow);
@@ -371,7 +373,7 @@
 
 .campaign-studio-layout .launch-cta-btn:hover:not(:disabled) {
   background: var(--studio-gradient-hover);
-  box-shadow: 0 8px 25px rgba(var(--accent-rgb), 0.50);
+  box-shadow: 0 8px 25px rgba(var(--accent-rgb), 0.5);
   transform: translateY(-1px);
 }
 

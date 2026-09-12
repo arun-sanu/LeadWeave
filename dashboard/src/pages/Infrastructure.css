@@ -56,7 +56,7 @@
 
 .infrastructure-page .header-left svg {
   color: var(--primary);
-  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.40));
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.4));
 }
 
 .infrastructure-page .card-header h2 {
@@ -79,8 +79,8 @@
 .infrastructure-page .status-indicator.connected {
   background: var(--accent-soft);
   color: var(--success-text);
-  border-color: rgba(var(--accent-rgb), 0.30);
-  box-shadow: 0 0 12px -2px rgba(var(--accent-rgb), 0.30);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  box-shadow: 0 0 12px -2px rgba(var(--accent-rgb), 0.3);
 }
 
 .infrastructure-page .status-indicator.disconnected {
@@ -127,7 +127,9 @@
 .infrastructure-page .radio-option.selected {
   border-color: var(--primary);
   background: linear-gradient(135deg, var(--accent-soft) 0%, rgba(var(--accent-rgb), 0.03) 100%);
-  box-shadow: 0 4px 20px -4px rgba(var(--accent-rgb), 0.25), var(--rim-top);
+  box-shadow:
+    0 4px 20px -4px rgba(var(--accent-rgb), 0.25),
+    var(--rim-top);
 }
 
 .infrastructure-page .radio-option input {

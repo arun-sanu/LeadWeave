@@ -103,7 +103,9 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
       const q = searchQuery.toLowerCase();
       const matchTitle = evt.title.toLowerCase().includes(q);
       const matchSource = (evt.source || '').toLowerCase().includes(q);
-      const matchDetails = JSON.stringify(evt.details || '').toLowerCase().includes(q);
+      const matchDetails = JSON.stringify(evt.details || '')
+        .toLowerCase()
+        .includes(q);
       if (!matchTitle && !matchSource && !matchDetails) return false;
     }
     return true;
@@ -133,10 +135,7 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      toast.success(
-        'Diagnostic Report Saved',
-        `Exported ${filteredEvents.length} telemetry & log events as .txt`
-      );
+      toast.success('Diagnostic Report Saved', `Exported ${filteredEvents.length} telemetry & log events as .txt`);
     } catch {
       toast.error('Export Failed', 'Could not create text report');
     }
@@ -149,7 +148,7 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
       setDailySnapshots([...updated]);
       toast.success(
         '24h Snapshot Archived',
-        `Saved ${snap.filename} to local DB storage (${(snap.sizeBytes / 1024).toFixed(1)} KB) with 91-day FIFO retention.`
+        `Saved ${snap.filename} to local DB storage (${(snap.sizeBytes / 1024).toFixed(1)} KB) with 91-day FIFO retention.`,
       );
     } catch {
       toast.error('Snapshot Failed', 'Unable to archive daily logs');
@@ -228,12 +227,7 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
               <span>Sync</span>
             </button>
 
-            <button
-              type="button"
-              className="glass-btn"
-              onClick={handleClear}
-              title="Clear captured live events"
-            >
+            <button type="button" className="glass-btn" onClick={handleClear} title="Clear captured live events">
               <Trash2 size={13} />
               <span>Clear</span>
             </button>
@@ -277,18 +271,14 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
             <span className="hud-label">
               <Gauge size={12} /> First Contentful Paint
             </span>
-            <span className="hud-value accent-amber">
-              {stats.fcp ? `${Math.round(stats.fcp)} ms` : '420 ms'}
-            </span>
+            <span className="hud-value accent-amber">{stats.fcp ? `${Math.round(stats.fcp)} ms` : '420 ms'}</span>
           </div>
 
           <div className="hud-stat-box">
             <span className="hud-label">
               <Clock size={12} /> Page Load Timing
             </span>
-            <span className="hud-value">
-              {stats.loadTime ? `${Math.round(stats.loadTime)} ms` : '850 ms'}
-            </span>
+            <span className="hud-value">{stats.loadTime ? `${Math.round(stats.loadTime)} ms` : '850 ms'}</span>
           </div>
 
           <div className="hud-stat-box">
@@ -304,7 +294,9 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
             <span className="hud-label">
               <AlertTriangle size={12} /> Logged Exceptions
             </span>
-            <span className={`hud-value ${stats.totalErrors && stats.totalErrors > 0 ? 'accent-rose' : 'accent-emerald'}`}>
+            <span
+              className={`hud-value ${stats.totalErrors && stats.totalErrors > 0 ? 'accent-rose' : 'accent-emerald'}`}
+            >
               {stats.totalErrors || 0}
             </span>
           </div>
@@ -416,31 +408,23 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
                     </span>
 
                     <div>
-                      <span className={`log-badge-severity sev-${evt.severity}`}>
-                        {evt.severity}
-                      </span>
+                      <span className={`log-badge-severity sev-${evt.severity}`}>{evt.severity}</span>
                     </div>
 
                     <div>
-                      <span className="log-badge-cat">
-                        {evt.category}
-                      </span>
+                      <span className="log-badge-cat">{evt.category}</span>
                     </div>
 
                     <div className="log-title-content">
                       {evt.title}
                       {evt.route && (
-                        <span style={{ color: '#64748b', fontSize: '0.625rem', marginLeft: 8 }}>
-                          [{evt.route}]
-                        </span>
+                        <span style={{ color: '#64748b', fontSize: '0.625rem', marginLeft: 8 }}>[{evt.route}]</span>
                       )}
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       {evt.durationMs !== undefined && (
-                        <span className="log-duration-pill">
-                          {Math.round(evt.durationMs)}ms
-                        </span>
+                        <span className="log-duration-pill">{Math.round(evt.durationMs)}ms</span>
                       )}
                       {hasDetails && (
                         <span style={{ color: '#64748b' }}>
@@ -451,9 +435,7 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
 
                     {isExpanded && evt.details && (
                       <div className="log-details-collapsible">
-                        {typeof evt.details === 'string'
-                          ? evt.details
-                          : JSON.stringify(evt.details, null, 2)}
+                        {typeof evt.details === 'string' ? evt.details : JSON.stringify(evt.details, null, 2)}
                       </div>
                     )}
                   </div>
@@ -465,8 +447,9 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
           <div className="glass-logs-body" style={{ padding: '1.5rem 1.75rem' }}>
             <div style={{ marginBottom: '1rem', color: '#94a3b8', fontSize: '0.8125rem' }}>
               <p style={{ margin: 0 }}>
-                Every 24 hours, system logs and diagnostics are automatically packaged into timestamped text files and saved into local database storage.
-                A strict <strong>91-day rolling retention policy</strong> deletes records older than 91 days 1-by-1 (FIFO) to maintain optimal local database performance.
+                Every 24 hours, system logs and diagnostics are automatically packaged into timestamped text files and
+                saved into local database storage. A strict <strong>91-day rolling retention policy</strong> deletes
+                records older than 91 days 1-by-1 (FIFO) to maintain optimal local database performance.
               </p>
             </div>
 
@@ -474,11 +457,7 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
               <div className="empty-logs-placeholder">
                 <FolderArchive size={40} strokeWidth={1} />
                 <p>No 24-hour log snapshots saved yet in local DB storage.</p>
-                <button
-                  type="button"
-                  className="glass-btn primary-emerald"
-                  onClick={handleSaveDailySnapshot}
-                >
+                <button type="button" className="glass-btn primary-emerald" onClick={handleSaveDailySnapshot}>
                   <Save size={14} /> Generate First 24h Snapshot (.txt)
                 </button>
               </div>
@@ -507,7 +486,11 @@ export function StorageLogsViewerModal({ isOpen, onClose }: StorageLogsViewerMod
                       <button
                         type="button"
                         className="daily-download-btn"
-                        style={{ color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)' }}
+                        style={{
+                          color: '#f87171',
+                          borderColor: 'rgba(239, 68, 68, 0.3)',
+                          background: 'rgba(239, 68, 68, 0.1)',
+                        }}
                         onClick={async () => {
                           await telemetryService.deleteSnapshot(snap.id);
                           const updated = await telemetryService.getDailySnapshots();

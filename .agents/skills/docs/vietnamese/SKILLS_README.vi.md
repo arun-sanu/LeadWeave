@@ -30,9 +30,11 @@ skills/
 ## Cách sử dụng Kỹ năng
 
 ### Bước 1: Đảm bảo kỹ năng đã được thiết lập
+
 Theo mặc định, installer đặt kỹ năng vào `~/.agents/skills/`. Bạn cũng có thể dùng cờ theo công cụ như `--claude`, `--gemini`, `--codex`, `--cursor`, `--kiro`, `--antigravity`, `--agy`, hoặc `--path <dir>`.
 
 ### Bước 2: Kích hoạt kỹ năng trong cuộc trò chuyện với AI
+
 Sử dụng biểu tượng `@` theo sau bởi tên kỹ năng:
 
 ```
@@ -46,6 +48,7 @@ hoặc
 ```
 
 ### Bước 3: AI trở thành chuyên gia
+
 AI tải kiến thức của kỹ năng đó và giúp bạn với chuyên môn đặc thù!
 
 ---
@@ -53,16 +56,19 @@ AI tải kiến thức của kỹ năng đó và giúp bạn với chuyên môn 
 ## Tìm kiếm Kỹ năng
 
 ### Cách 1: Duyệt thư mục này
+
 ```bash
 ls skills/
 ```
 
 ### Cách 2: Tìm kiếm theo từ khóa
+
 ```bash
 ls skills/ | grep "từ khóa"
 ```
 
 ### Cách 3: Kiểm tra README chính
+
 Xem [README chính](README.vi.md) và [CATALOG.md](../../CATALOG.md) để biết danh sách đầy đủ tất cả 1,936+ kỹ năng được tổ chức theo danh mục.
 
 ---
@@ -70,16 +76,19 @@ Xem [README chính](README.vi.md) và [CATALOG.md](../../CATALOG.md) để biế
 ## 💡 Các Kỹ năng Phổ biến để Thử nghiệm
 
 **Cho người mới bắt đầu:**
+
 - `@brainstorming` - Thiết kế trước khi code
 - `@systematic-debugging` - Sửa lỗi một cách có phương pháp
 - `@git-pushing` - Commit với thông báo tốt
 
 **Cho lập trình viên:**
+
 - `@test-driven-development` - Viết test trước
 - `@react-best-practices` - Các mẫu React hiện đại
 - `@senior-fullstack` - Phát triển Full-stack
 
 **Cho bảo mật:**
+
 - `@ethical-hacking-methodology` - Cơ bản về bảo mật
 - `@burp-suite-testing` - Kiểm thử bảo mật ứng dụng web
 
@@ -88,6 +97,7 @@ Xem [README chính](README.vi.md) và [CATALOG.md](../../CATALOG.md) để biế
 ## Tạo Kỹ năng Riêng của Bạn
 
 Muốn tạo một kỹ năng mới? Hãy xem:
+
 1. [CONTRIBUTING.vi.md](CONTRIBUTING.vi.md) - Cách đóng góp
 2. [docs/vietnamese/SKILL_ANATOMY.vi.md](SKILL_ANATOMY.vi.md) - Hướng dẫn cấu trúc kỹ năng
 3. `@skill-creator` - Sử dụng kỹ năng này để tạo kỹ năng mới!

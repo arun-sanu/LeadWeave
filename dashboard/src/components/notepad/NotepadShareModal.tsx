@@ -10,15 +10,10 @@ interface NotepadShareModalProps {
   onClose: () => void;
 }
 
-export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
-  type,
-  title,
-  content,
-  onClose,
-}) => {
+export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({ type, title, content, onClose }) => {
   const lanMesh = useLanMeshContext();
   const [activeTab, setActiveTab] = useState<'lan' | 'chat'>('lan');
-  
+
   // WhatsApp Chat states
   const [phoneNumber, setPhoneNumber] = useState('');
   const [sessionId, setSessionId] = useState('');
@@ -37,7 +32,9 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
       try {
         const list = await sessionApi.list();
         if (Array.isArray(list) && list.length > 0) {
-          setSessions(list.map((s: { id: string; sessionName?: string }) => ({ id: s.id, name: s.sessionName || s.id })));
+          setSessions(
+            list.map((s: { id: string; sessionName?: string }) => ({ id: s.id, name: s.sessionName || s.id })),
+          );
           setSessionId(list[0].id);
         }
       } catch {
@@ -46,9 +43,8 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
     }
   };
 
-  const formattedShareText = type === 'note'
-    ? `📝 *${title || 'Notepad'}*\n${content || ''}`
-    : `📌 *Sticky Note*\n${content || ''}`;
+  const formattedShareText =
+    type === 'note' ? `📝 *${title || 'Notepad'}*\n${content || ''}` : `📌 *Sticky Note*\n${content || ''}`;
 
   // LAN Share Handler
   const handleShareToLan = () => {
@@ -120,9 +116,7 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
         <div className="notepad-search-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Share2 size={18} color="#38bdf8" />
-            <span style={{ fontWeight: 600, fontSize: '15px' }}>
-              Share {type === 'note' ? 'Note' : 'Sticky Note'}
-            </span>
+            <span style={{ fontWeight: 600, fontSize: '15px' }}>Share {type === 'note' ? 'Note' : 'Sticky Note'}</span>
           </div>
           <button className="notepad-modal-close" onClick={onClose} aria-label="Close modal">
             <X size={18} />
@@ -195,7 +189,8 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
           {activeTab === 'lan' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div style={{ fontSize: '12px', color: '#a1a1aa' }}>
-                Broadcast this {type === 'note' ? 'note' : 'sticky note'} directly to active peer members on your LAN Network.
+                Broadcast this {type === 'note' ? 'note' : 'sticky note'} directly to active peer members on your LAN
+                Network.
                 {lanMesh?.peers ? ` (${lanMesh.peers.length} LAN peer(s) active)` : ''}
               </div>
 
@@ -239,7 +234,9 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
                     style={{ width: '100%', padding: '6px' }}
                   >
                     {sessions.map(s => (
-                      <option key={s.id} value={s.id}>{s.name}</option>
+                      <option key={s.id} value={s.id}>
+                        {s.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -253,7 +250,12 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
                   placeholder="e.g. 15551234567 or chat_id"
                   value={phoneNumber}
                   onChange={e => setPhoneNumber(e.target.value)}
-                  style={{ background: '#27272a', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '6px', padding: '6px 10px' }}
+                  style={{
+                    background: '#27272a',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    borderRadius: '6px',
+                    padding: '6px 10px',
+                  }}
                 />
               </div>
 

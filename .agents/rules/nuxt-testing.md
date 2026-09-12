@@ -1,10 +1,10 @@
 ---
 paths:
-  - "**/nuxt.config.*"
-  - "**/server/**/*.ts"
-  - "**/pages/**"
-  - "**/layouts/**"
-  - "**/middleware/**"
+  - '**/nuxt.config.*'
+  - '**/server/**/*.ts'
+  - '**/pages/**'
+  - '**/layouts/**'
+  - '**/middleware/**'
 ---
 
 # Nuxt Testing

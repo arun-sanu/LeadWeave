@@ -18,9 +18,7 @@ Make reading progress visible without replacing real text, breaking inline marku
 Preferred structure:
 
 ```html
-<p class="reveal" data-reveal>
-  Motion should <em>explain</em> the next state, not decorate it.
-</p>
+<p class="reveal" data-reveal>Motion should <em>explain</em> the next state, not decorate it.</p>
 ```
 
 Avoid line-based splitting. Browser line wraps must remain free to change with container width, language, zoom, and font loading.
@@ -32,7 +30,7 @@ Use section progress as the single source of truth:
 ```js
 const reveal = Math.min(1, Math.max(0, progress));
 const local = Math.min(1, Math.max(0, reveal * wordCount - index));
-word.style.setProperty("--word-progress", local);
+word.style.setProperty('--word-progress', local);
 ```
 
 Interpolate hidden opacity, blur, and vertical offset from `--word-progress`. Keep the visible state identical to normal typography.

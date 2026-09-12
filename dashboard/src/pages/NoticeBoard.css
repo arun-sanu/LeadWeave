@@ -173,7 +173,7 @@
 }
 
 .noticeboard-container .calendar-day-cell:hover {
-  border-color: rgba(var(--accent-rgb), 0.40);
+  border-color: rgba(var(--accent-rgb), 0.4);
   background: rgba(var(--accent-rgb), 0.04);
 }
 
@@ -421,7 +421,7 @@
 .noticeboard-container .task-btn.whatsapp {
   background: rgba(var(--accent-rgb), 0.15);
   color: var(--accent);
-  border-color: rgba(var(--accent-rgb), 0.30);
+  border-color: rgba(var(--accent-rgb), 0.3);
 }
 
 .noticeboard-container .task-btn.whatsapp:hover {

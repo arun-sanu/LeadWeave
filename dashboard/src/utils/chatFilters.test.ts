@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { filterChats, filterGroupChats, filterArchivedChats, filterChannels, groupStatusesByContact } from './chatFilters.ts';
+import {
+  filterChats,
+  filterGroupChats,
+  filterArchivedChats,
+  filterChannels,
+  groupStatusesByContact,
+} from './chatFilters.ts';
 
 const chat = (id: string, name?: string, kind?: string, isGroup?: boolean, archived?: boolean) => ({
   id,

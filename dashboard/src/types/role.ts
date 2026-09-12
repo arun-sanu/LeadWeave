@@ -1,14 +1,6 @@
 // Role types for Multi-Tenant SaaS RBAC
 export type UserRole =
-  | 'developer'
-  | 'superadmin'
-  | 'support'
-  | 'companyadmin'
-  | 'hr'
-  | 'user'
-  | 'admin'
-  | 'operator'
-  | 'viewer';
+  'developer' | 'superadmin' | 'support' | 'companyadmin' | 'hr' | 'user' | 'admin' | 'operator' | 'viewer';
 
 export interface RoleContextType {
   role: UserRole | null;
@@ -27,4 +19,3 @@ export interface RoleContextType {
   isUser: boolean;
   canWrite: boolean;
 }
-

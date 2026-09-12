@@ -90,20 +90,39 @@ export function ChatReminderModal({ open, onClose, activeChat }: ChatReminderMod
       }
       footer={
         <>
-          <button type="button" className="btn-secondary" onClick={onClose} disabled={submitting} style={{ fontSize: '0.8125rem', padding: '0.5rem 0.9rem' }}>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={onClose}
+            disabled={submitting}
+            style={{ fontSize: '0.8125rem', padding: '0.5rem 0.9rem' }}
+          >
             Cancel
           </button>
-          <button type="button" className="btn-primary" onClick={handleSave} disabled={submitting} style={{ fontSize: '0.8125rem', padding: '0.5rem 0.9rem' }}>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleSave}
+            disabled={submitting}
+            style={{ fontSize: '0.8125rem', padding: '0.5rem 0.9rem' }}
+          >
             {submitting ? 'Saving...' : 'Save Reminder'}
           </button>
         </>
       }
     >
       <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-
         {/* Title */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+          <label
+            style={{
+              display: 'block',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: 'var(--text-secondary)',
+              marginBottom: '0.25rem',
+            }}
+          >
             Reminder Title *
           </label>
           <input
@@ -122,7 +141,15 @@ export function ChatReminderModal({ open, onClose, activeChat }: ChatReminderMod
         {/* Date & Time Row */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.625rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: 'var(--text-secondary)',
+                marginBottom: '0.25rem',
+              }}
+            >
               Due Date *
             </label>
             <input
@@ -136,7 +163,15 @@ export function ChatReminderModal({ open, onClose, activeChat }: ChatReminderMod
             />
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: 'var(--text-secondary)',
+                marginBottom: '0.25rem',
+              }}
+            >
               Due Time
             </label>
             <input
@@ -153,7 +188,15 @@ export function ChatReminderModal({ open, onClose, activeChat }: ChatReminderMod
         {/* Type & Priority Row */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.625rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: 'var(--text-secondary)',
+                marginBottom: '0.25rem',
+              }}
+            >
               Action Type
             </label>
             <select
@@ -170,7 +213,15 @@ export function ChatReminderModal({ open, onClose, activeChat }: ChatReminderMod
             </select>
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: 'var(--text-secondary)',
+                marginBottom: '0.25rem',
+              }}
+            >
               Priority
             </label>
             <select
@@ -189,7 +240,15 @@ export function ChatReminderModal({ open, onClose, activeChat }: ChatReminderMod
 
         {/* Notes */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+          <label
+            style={{
+              display: 'block',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: 'var(--text-secondary)',
+              marginBottom: '0.25rem',
+            }}
+          >
             Notes (Optional)
           </label>
           <textarea

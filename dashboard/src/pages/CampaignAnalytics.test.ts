@@ -97,7 +97,13 @@ function installFetchStub(): void {
     fetchCalls.push({ method, path, body });
 
     let responseData: unknown = [];
-    if (path.startsWith('/api/campaigns') && !path.includes('/analytics') && !path.includes('/leads') && !path.includes('/camp-1') && !path.includes('/pause')) {
+    if (
+      path.startsWith('/api/campaigns') &&
+      !path.includes('/analytics') &&
+      !path.includes('/leads') &&
+      !path.includes('/camp-1') &&
+      !path.includes('/pause')
+    ) {
       responseData = { items: CAMPAIGNS, total: CAMPAIGNS.length };
     } else if (path.includes('/analytics')) {
       responseData = ANALYTICS;

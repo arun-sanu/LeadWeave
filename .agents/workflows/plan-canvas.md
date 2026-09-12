@@ -1,6 +1,6 @@
 ---
 description: Open a plan or HTML artifact in the browser Plan Canvas for annotate-and-approve review
-argument-hint: "[path/to/artifact.plan.md | path/to/artifact.html]"
+argument-hint: '[path/to/artifact.plan.md | path/to/artifact.html]'
 ---
 
 # Plan Canvas Command

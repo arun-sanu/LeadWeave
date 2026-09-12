@@ -6,11 +6,13 @@ description: Add vertical container-size guide lines with mini corner squares fo
 # Container Lines
 
 ## Use When
+
 - A page needs subtle vertical guides that reveal the content container width.
 - A hero, section, or product page feels too loose and needs structural tension.
 - The design calls for mini corner squares, measured edges, or quiet technical framing.
 
 ## Rules
+
 1. Draw lines at the left and right edges of the main content container.
 2. Keep lines thin: `1px` with low opacity.
 3. Add mini squares at container corners or section intersections.
@@ -31,6 +33,7 @@ description: Add vertical container-size guide lines with mini corner squares fo
 ```
 
 ## Page Container Lines
+
 Use pseudo-elements on the layout shell.
 
 ```css
@@ -41,7 +44,7 @@ Use pseudo-elements on the layout shell.
 
 .container-lines::before,
 .container-lines::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   bottom: 0;
@@ -61,6 +64,7 @@ Use pseudo-elements on the layout shell.
 ```
 
 ## Corner Squares
+
 Add four small squares to sections that need a precise measured feel.
 
 ```css
@@ -76,10 +80,26 @@ Add four small squares to sections that need a precise measured feel.
   pointer-events: none;
 }
 
-.corner.top-left { top: 0; left: 0; transform: translate(-50%, -50%); }
-.corner.top-right { top: 0; right: 0; transform: translate(50%, -50%); }
-.corner.bottom-left { bottom: 0; left: 0; transform: translate(-50%, 50%); }
-.corner.bottom-right { right: 0; bottom: 0; transform: translate(50%, 50%); }
+.corner.top-left {
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+.corner.top-right {
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
+.corner.bottom-left {
+  bottom: 0;
+  left: 0;
+  transform: translate(-50%, 50%);
+}
+.corner.bottom-right {
+  right: 0;
+  bottom: 0;
+  transform: translate(50%, 50%);
+}
 ```
 
 ```html
@@ -95,6 +115,7 @@ Add four small squares to sections that need a precise measured feel.
 ```
 
 ## Minimal Section Wrapper
+
 Use the same container width as the line positions.
 
 ```css
@@ -105,6 +126,7 @@ Use the same container width as the line positions.
 ```
 
 ## Taste Rules
+
 - Use lines as structure, not decoration. They should organize the page quietly.
 - Do not add lines to every nested component; keep them at page or major-section level.
 - Mini squares should be small and exact, usually `4px` to `8px`.
@@ -112,6 +134,7 @@ Use the same container width as the line positions.
 - Keep container max-width and padding shared between content and guide lines.
 
 ## Quick Checks
+
 - The vertical lines align exactly with the content container edges.
 - Corner squares sit on real container or section corners, not arbitrary positions.
 - Lines remain subtle on light and dark backgrounds.

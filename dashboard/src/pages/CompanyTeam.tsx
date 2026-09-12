@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Users,
-  UserPlus,
-  Trash2,
-  X,
-  Smartphone,
-  MessageSquare,
-  Clock,
-  CheckCircle2,
-} from 'lucide-react';
+import { Users, UserPlus, Trash2, X, Smartphone, MessageSquare, Clock, CheckCircle2 } from 'lucide-react';
 import { saasStore, type SaaSUser } from '../services/saasStore';
 import { sessionApi, type Session } from '../services/api';
 import { useRole } from '../hooks/useRole';
@@ -26,9 +17,8 @@ export function CompanyTeam() {
 
   const companies = saasStore.getCompanies();
   const currentCompanyName = sessionStorage.getItem('leadweave_company_name');
-  const currentCompany = companies.find(
-    c => c.name.toLowerCase() === currentCompanyName?.toLowerCase(),
-  ) || companies[0];
+  const currentCompany =
+    companies.find(c => c.name.toLowerCase() === currentCompanyName?.toLowerCase()) || companies[0];
 
   const [selectedCompanyId, setSelectedCompanyId] = useState(currentCompany?.id || 'cmp-1');
 
@@ -46,13 +36,14 @@ export function CompanyTeam() {
   }, [currentCompany, isSuperAdmin]);
 
   useEffect(() => {
-    sessionApi.list().then(setAvailableSessions).catch(() => {});
+    sessionApi
+      .list()
+      .then(setAvailableSessions)
+      .catch(() => {});
   }, []);
 
   // Filter users by company unless superadmin
-  const visibleUsers = isSuperAdmin
-    ? users
-    : users.filter(u => u.companyId === currentCompany?.id);
+  const visibleUsers = isSuperAdmin ? users : users.filter(u => u.companyId === currentCompany?.id);
 
   const totalAgents = visibleUsers.length;
   const totalSessions = visibleUsers.reduce((acc, u) => acc + (u.activeSessionsCount || 0), 0);
@@ -64,7 +55,7 @@ export function CompanyTeam() {
     if (!name || !username || !email) return;
 
     saasStore.addUser({
-      companyId: isSuperAdmin ? selectedCompanyId : (currentCompany?.id || selectedCompanyId),
+      companyId: isSuperAdmin ? selectedCompanyId : currentCompany?.id || selectedCompanyId,
       name,
       username,
       email,
@@ -158,9 +149,7 @@ export function CompanyTeam() {
               <tr key={u.id}>
                 <td>
                   <div className="user-avatar-cell">
-                    <div className="user-avatar-circle">
-                      {u.name.charAt(0).toUpperCase()}
-                    </div>
+                    <div className="user-avatar-circle">{u.name.charAt(0).toUpperCase()}</div>
                     <div>
                       <div style={{ fontWeight: 700 }}>{u.name}</div>
                       <div style={{ fontSize: 12, color: '#64748b' }}>
@@ -174,7 +163,9 @@ export function CompanyTeam() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <span className="stat-badge">
                       <Smartphone size={14} color="#0284c7" />
-                      {u.role === 'companyadmin' ? 'All Company Lines' : `${u.assignedSessions?.length || 0} Assigned Line(s)`}
+                      {u.role === 'companyadmin'
+                        ? 'All Company Lines'
+                        : `${u.assignedSessions?.length || 0} Assigned Line(s)`}
                     </span>
                     {u.role !== 'companyadmin' && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '2px' }}>
@@ -197,7 +188,14 @@ export function CompanyTeam() {
                               {sess?.name || sessId.slice(0, 8)}
                               <button
                                 type="button"
-                                style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, color: '#ef4444', fontWeight: 'bold' }}
+                                style={{
+                                  border: 'none',
+                                  background: 'transparent',
+                                  cursor: 'pointer',
+                                  padding: 0,
+                                  color: '#ef4444',
+                                  fontWeight: 'bold',
+                                }}
                                 onClick={() => saasStore.unassignSessionFromUser(u.id, sessId)}
                                 title="Remove session assignment"
                               >
@@ -209,7 +207,12 @@ export function CompanyTeam() {
                         {availableSessions.filter(s => !(u.assignedSessions || []).includes(s.id)).length > 0 && (
                           <select
                             aria-label="Assign WhatsApp line"
-                            style={{ fontSize: '11px', padding: '1px 4px', borderRadius: '4px', border: '1px solid #cbd5e1' }}
+                            style={{
+                              fontSize: '11px',
+                              padding: '1px 4px',
+                              borderRadius: '4px',
+                              border: '1px solid #cbd5e1',
+                            }}
                             value=""
                             onChange={e => {
                               if (e.target.value) {
@@ -222,7 +225,8 @@ export function CompanyTeam() {
                               .filter(s => !(u.assignedSessions || []).includes(s.id))
                               .map(s => (
                                 <option key={s.id} value={s.id}>
-                                  {s.name}{s.phone ? ` (${s.phone})` : ''}
+                                  {s.name}
+                                  {s.phone ? ` (${s.phone})` : ''}
                                 </option>
                               ))}
                           </select>
@@ -237,9 +241,7 @@ export function CompanyTeam() {
                   </div>
                 </td>
                 <td>
-                  <span style={{ fontWeight: 700, color: '#16a34a' }}>
-                    {u.responseCount || 0} handled
-                  </span>
+                  <span style={{ fontWeight: 700, color: '#16a34a' }}>{u.responseCount || 0} handled</span>
                 </td>
                 <td>
                   <span className="stat-badge">
@@ -355,11 +357,7 @@ export function CompanyTeam() {
               </div>
 
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn-cancel"
-                  onClick={() => setIsModalOpen(false)}
-                >
+                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>
                   Cancel
                 </button>
                 <button type="submit" className="btn-submit">

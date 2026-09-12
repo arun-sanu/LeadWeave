@@ -36,8 +36,6 @@ export function Profile() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab') as Tab | null;
 
-
-
   const [activeTab, setActiveTabState] = useState<Tab>(() => {
     if (tabParam && validTabs.includes(tabParam)) {
       return tabParam;
@@ -62,7 +60,9 @@ export function Profile() {
 
   // Dynamic User State
   const [userName, setUserName] = useState<string>(() => sessionStorage.getItem('leadweave_user_name') || 'Admin User');
-  const [userEmail, setUserEmail] = useState<string>(() => sessionStorage.getItem('leadweave_user_email') || 'admin@leadweave.local');
+  const [userEmail, setUserEmail] = useState<string>(
+    () => sessionStorage.getItem('leadweave_user_email') || 'admin@leadweave.local',
+  );
   const [companyName] = useState<string>(() => sessionStorage.getItem('leadweave_company_name') || 'Default Workspace');
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(userName);
@@ -92,7 +92,9 @@ export function Profile() {
     async function loadSupabaseUser() {
       if (isSupabaseConfigured && supabase) {
         try {
-          const { data: { user } } = await supabase.auth.getUser();
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
           if (user) {
             const metaName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0];
             if (metaName && metaName !== 'user') {
@@ -137,7 +139,6 @@ export function Profile() {
 
       {/* Main Dual-Column Body */}
       <div className="profile-hud-grid">
-        
         {/* Left Navigation Sidebar */}
         <aside className="profile-hud-sidebar">
           {/* User Identity Card */}
@@ -156,7 +157,11 @@ export function Profile() {
               <h3>{userName}</h3>
               <span className="cyber-chip role-chip">
                 <Shield size={12} />
-                {role === 'admin' ? 'Administrator' : role === 'superadmin' ? 'Superadmin' : (role || 'Viewer').toUpperCase()}
+                {role === 'admin'
+                  ? 'Administrator'
+                  : role === 'superadmin'
+                    ? 'Superadmin'
+                    : (role || 'Viewer').toUpperCase()}
               </span>
               <div className="user-email-text">{userEmail}</div>
             </div>
@@ -248,11 +253,7 @@ export function Profile() {
                           <Edit2 size={13} />
                         </button>
                       ) : null}
-                      <button
-                        className="copy-btn"
-                        onClick={() => handleCopy(userName, 'name')}
-                        title="Copy Name"
-                      >
+                      <button className="copy-btn" onClick={() => handleCopy(userName, 'name')} title="Copy Name">
                         {copiedField === 'name' ? <Check size={13} className="check-icon" /> : <Copy size={13} />}
                       </button>
                     </div>
@@ -267,7 +268,7 @@ export function Profile() {
                           type="text"
                           aria-label="Display Name"
                           value={nameInput}
-                          onChange={(e) => setNameInput(e.target.value)}
+                          onChange={e => setNameInput(e.target.value)}
                           style={{
                             flex: 1,
                             background: 'rgba(15, 23, 42, 0.8)',
@@ -276,10 +277,10 @@ export function Profile() {
                             color: '#fff',
                             padding: '4px 8px',
                             fontSize: '13px',
-                            outline: 'none'
+                            outline: 'none',
                           }}
                           autoFocus
-                          onKeyDown={(e) => {
+                          onKeyDown={e => {
                             if (e.key === 'Enter') handleSaveName();
                             if (e.key === 'Escape') setIsEditingName(false);
                           }}
@@ -295,7 +296,7 @@ export function Profile() {
                             padding: '4px 8px',
                             cursor: 'pointer',
                             display: 'flex',
-                            alignItems: 'center'
+                            alignItems: 'center',
                           }}
                           title="Save"
                         >
@@ -312,7 +313,7 @@ export function Profile() {
                             padding: '4px 8px',
                             cursor: 'pointer',
                             display: 'flex',
-                            alignItems: 'center'
+                            alignItems: 'center',
                           }}
                           title="Cancel"
                         >
@@ -326,11 +327,7 @@ export function Profile() {
                 <div className="cyber-field-card">
                   <div className="field-label-row">
                     <label>Email Address</label>
-                    <button
-                      className="copy-btn"
-                      onClick={() => handleCopy(userEmail, 'email')}
-                      title="Copy Email"
-                    >
+                    <button className="copy-btn" onClick={() => handleCopy(userEmail, 'email')} title="Copy Email">
                       {copiedField === 'email' ? <Check size={13} className="check-icon" /> : <Copy size={13} />}
                     </button>
                   </div>
@@ -447,10 +444,11 @@ export function Profile() {
                     <HeadphonesIcon size={36} className="radar-icon" />
                   </div>
                   <h3>No Active Support Tickets</h3>
-                  <p>All system nodes are operating at optimal parameters. If you encounter service interruptions, initialize a support request below.</p>
-                  <button className="cyber-action-btn">
-                    Create New Ticket
-                  </button>
+                  <p>
+                    All system nodes are operating at optimal parameters. If you encounter service interruptions,
+                    initialize a support request below.
+                  </p>
+                  <button className="cyber-action-btn">Create New Ticket</button>
                 </div>
               </div>
             </div>
@@ -466,7 +464,7 @@ export function Profile() {
               <div className="cyber-panel-body security-pane">
                 <form className="cyber-form" onSubmit={e => e.preventDefault()}>
                   <h3>Change Password</h3>
-                  
+
                   <div className="cyber-field-group">
                     <label>Current Password</label>
                     <div className="cyber-input-wrapper">
@@ -517,7 +515,9 @@ export function Profile() {
                 <div className="cyber-tfa-card">
                   <div className="tfa-content">
                     <h4>Two-Factor Authentication (2FA)</h4>
-                    <p>Requires an additional cryptographic time-based verification token during authentication cycles.</p>
+                    <p>
+                      Requires an additional cryptographic time-based verification token during authentication cycles.
+                    </p>
                   </div>
                   <button
                     type="button"
@@ -533,7 +533,10 @@ export function Profile() {
           )}
 
           {activeTab === 'team' && (
-            <div className="cyber-panel fade-in" style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}>
+            <div
+              className="cyber-panel fade-in"
+              style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}
+            >
               <div className="cyber-panel-body" style={{ padding: 0 }}>
                 <CompanyTeam />
               </div>
@@ -541,7 +544,10 @@ export function Profile() {
           )}
 
           {activeTab === 'webhooks' && (
-            <div className="cyber-panel fade-in" style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}>
+            <div
+              className="cyber-panel fade-in"
+              style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}
+            >
               <div className="cyber-panel-body" style={{ padding: 0 }}>
                 <Webhooks />
               </div>

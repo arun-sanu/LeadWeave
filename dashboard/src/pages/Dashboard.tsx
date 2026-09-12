@@ -24,7 +24,7 @@ function SessionGaugeBlock({ session }: { session: Session }) {
         {session.name}
         <span className={`status-pill ${session.status}`}>{session.status}</span>
       </h3>
-      
+
       <SciFiGauges
         messagesSentToday={stats?.messages?.today ?? 0}
         dailyMessageLimit={5000}
@@ -42,15 +42,15 @@ export function Dashboard() {
   useDocumentTitle(t('dashboard.title'));
   const navigate = useNavigate();
   const { data: sessions = [], isLoading: loadingSessions, error: sessionsError } = useSessionsQuery();
-  
+
   const { data: stats } = useSessionStatsQuery();
   const { data: webhooks = [] } = useWebhooksQuery();
-  
+
   // /stats/overview is ADMIN-only; for a non-admin key it 403s → overview stays undefined and the
   // message cards fall back to '—' without breaking the (un-gated) session cards.
   const { data: statsOverview } = useStatsOverviewQuery();
   const stopMutation = useStopSessionMutation();
-  
+
   const loading = loadingSessions;
   const error =
     sessionsError instanceof Error ? sessionsError.message : sessionsError ? t('dashboard.loadError') : null;
@@ -64,7 +64,9 @@ export function Dashboard() {
     }
   };
 
-  const messagesToday = statsOverview?.messages?.today ? statsOverview.messages.today.sent + statsOverview.messages.today.received : '—';
+  const messagesToday = statsOverview?.messages?.today
+    ? statsOverview.messages.today.sent + statsOverview.messages.today.received
+    : '—';
   const totalMessages = statsOverview?.messages ? statsOverview.messages.sent + statsOverview.messages.received : '—';
 
   const globalStatsCards = [
@@ -179,7 +181,11 @@ export function Dashboard() {
             sessions.map(session => (
               <div key={session.id} className="table-row">
                 <div className="session-info-cell">
-                  <span className="session-name" style={{ fontWeight: 700, color: 'var(--text-primary)' }} title={session.name}>
+                  <span
+                    className="session-name"
+                    style={{ fontWeight: 700, color: 'var(--text-primary)' }}
+                    title={session.name}
+                  >
                     {session.name}
                   </span>
                 </div>

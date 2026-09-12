@@ -33,16 +33,16 @@
 
 Built on a **pluggable architecture**, LeadWeave lets you select database engines (SQLite/PostgreSQL), backup/migration storage backends (Local/S3), and cache layers (disabled/Redis) through configuration rather than application-code changes. Message media itself is returned inline to API and webhook consumers; it is not automatically persisted to the storage backend.
 
-|                               |                                                                                                                                          |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔓 **100% Open Source**       | No licensing fees, no feature locks, full source code access                                                                             |
-| 🏗️ **Pluggable Architecture** | Swap adapters for database, storage, and cache via config                                                                                |
-| 🖥️ **Full Dashboard**         | Modern React UI for session, webhook, and API key management                                                                             |
-| 🔹 **Multi-Session Ready**    | Run multiple WhatsApp sessions concurrently on one instance                                                                              |
-| 🐳 **Docker Native**          | Production-ready with zero configuration                                                                                                 |
+|                               |                                                                                                                                               |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🔓 **100% Open Source**       | No licensing fees, no feature locks, full source code access                                                                                  |
+| 🏗️ **Pluggable Architecture** | Swap adapters for database, storage, and cache via config                                                                                     |
+| 🖥️ **Full Dashboard**         | Modern React UI for session, webhook, and API key management                                                                                  |
+| 🔹 **Multi-Session Ready**    | Run multiple WhatsApp sessions concurrently on one instance                                                                                   |
+| 🐳 **Docker Native**          | Production-ready with zero configuration                                                                                                      |
 | 🧩 **Official Plugins**       | Chatwoot, Typebot & more as sandboxed plugins on the Integration Fabric — [LeadWeave-plugins](https://github.com/arun-sanu/LeadWeave-plugins) |
-| 🔗 **n8n Integration**        | Community nodes for workflow automation                                                                                                  |
-| 🧩 **Community Adapters**     | Third-party integrations (e.g. ioBroker) — see [docs](./docs/23-community-integrations.md)                                               |
+| 🔗 **n8n Integration**        | Community nodes for workflow automation                                                                                                       |
+| 🧩 **Community Adapters**     | Third-party integrations (e.g. ioBroker) — see [docs](./docs/23-community-integrations.md)                                                    |
 
 ---
 

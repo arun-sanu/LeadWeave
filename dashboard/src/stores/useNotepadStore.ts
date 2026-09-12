@@ -63,7 +63,10 @@ export interface NotepadState {
   dismissAlert: (targetId: string, type: 'note' | 'sticky') => void;
 }
 
-export const PASTEL_COLORS: Record<PastelColor, { name: string; bg: string; border: string; text: string; ring: string }> = {
+export const PASTEL_COLORS: Record<
+  PastelColor,
+  { name: string; bg: string; border: string; text: string; ring: string }
+> = {
   yellow: { name: 'Yellow', bg: '#FEF9C3', border: 'rgba(234, 179, 8, 0.35)', text: '#713F12', ring: '#EAB308' },
   green: { name: 'Green', bg: '#DCFCE7', border: 'rgba(34, 197, 94, 0.35)', text: '#14532D', ring: '#22C55E' },
   blue: { name: 'Blue', bg: '#E0F2FE', border: 'rgba(14, 165, 233, 0.35)', text: '#0C4A6E', ring: '#0EA5E9' },
@@ -103,9 +106,9 @@ export const useNotepadStore = create<NotepadState>()(
         const existingCount = get().notes.length;
         const offset = (existingCount % 5) * 32;
         const winWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
-        
+
         const newNoteId = `note-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-        
+
         const newNote: Note = {
           id: newNoteId,
           title: customTitle || '',
@@ -136,53 +139,43 @@ export const useNotepadStore = create<NotepadState>()(
 
       closeNote: (id: string) => {
         set(state => ({
-          notes: state.notes.map(n => n.id === id ? { ...n, isOpen: false } : n),
+          notes: state.notes.map(n => (n.id === id ? { ...n, isOpen: false } : n)),
         }));
       },
 
       openNote: (id: string) => {
         set(state => ({
-          notes: state.notes.map(n => n.id === id ? { ...n, isOpen: true } : n),
+          notes: state.notes.map(n => (n.id === id ? { ...n, isOpen: true } : n)),
         }));
       },
 
       updateNoteTitle: (id: string, title: string) => {
         set(state => ({
-          notes: state.notes.map(n =>
-            n.id === id ? { ...n, title, updatedAt: new Date().toISOString() } : n
-          ),
+          notes: state.notes.map(n => (n.id === id ? { ...n, title, updatedAt: new Date().toISOString() } : n)),
         }));
       },
 
       updateNoteContent: (id: string, content: string) => {
         set(state => ({
-          notes: state.notes.map(n =>
-            n.id === id ? { ...n, content, updatedAt: new Date().toISOString() } : n
-          ),
+          notes: state.notes.map(n => (n.id === id ? { ...n, content, updatedAt: new Date().toISOString() } : n)),
         }));
       },
 
       togglePinNote: (id: string) => {
         set(state => ({
-          notes: state.notes.map(n =>
-            n.id === id ? { ...n, isPinned: !n.isPinned } : n
-          ),
+          notes: state.notes.map(n => (n.id === id ? { ...n, isPinned: !n.isPinned } : n)),
         }));
       },
 
       setNotePosition: (id: string, pos: { x: number; y: number }) => {
         set(state => ({
-          notes: state.notes.map(n =>
-            n.id === id ? { ...n, position: pos } : n
-          ),
+          notes: state.notes.map(n => (n.id === id ? { ...n, position: pos } : n)),
         }));
       },
 
       setNoteAlert: (id: string, alertAt: string | undefined) => {
         set(state => ({
-          notes: state.notes.map(n =>
-            n.id === id ? { ...n, alertAt, isAlertTriggered: false } : n
-          ),
+          notes: state.notes.map(n => (n.id === id ? { ...n, alertAt, isAlertTriggered: false } : n)),
         }));
       },
 
@@ -199,9 +192,7 @@ export const useNotepadStore = create<NotepadState>()(
 
         set(state => ({
           notes: state.notes.map(n =>
-            n.id === noteId
-              ? { ...n, stickyNotes: [...n.stickyNotes, newSticky], updatedAt: now }
-              : n
+            n.id === noteId ? { ...n, stickyNotes: [...n.stickyNotes, newSticky], updatedAt: now } : n,
           ),
         }));
       },
@@ -212,12 +203,10 @@ export const useNotepadStore = create<NotepadState>()(
             n.id === noteId
               ? {
                   ...n,
-                  stickyNotes: n.stickyNotes.map(s =>
-                    s.id === stickyId ? { ...s, ...updates } : s
-                  ),
+                  stickyNotes: n.stickyNotes.map(s => (s.id === stickyId ? { ...s, ...updates } : s)),
                   updatedAt: new Date().toISOString(),
                 }
-              : n
+              : n,
           ),
         }));
       },
@@ -231,7 +220,7 @@ export const useNotepadStore = create<NotepadState>()(
                   stickyNotes: n.stickyNotes.filter(s => s.id !== stickyId),
                   updatedAt: new Date().toISOString(),
                 }
-              : n
+              : n,
           ),
         }));
       },
@@ -248,7 +237,10 @@ export const useNotepadStore = create<NotepadState>()(
                 const winWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
                 const winHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
                 const defaultPos = nextPinned
-                  ? { x: Math.min(winWidth - 260, Math.max(20, Math.random() * 300 + 100)), y: Math.min(winHeight - 260, Math.max(100, Math.random() * 200 + 100)) }
+                  ? {
+                      x: Math.min(winWidth - 260, Math.max(20, Math.random() * 300 + 100)),
+                      y: Math.min(winHeight - 260, Math.max(100, Math.random() * 200 + 100)),
+                    }
                   : s.position;
                 return {
                   ...s,
@@ -265,9 +257,7 @@ export const useNotepadStore = create<NotepadState>()(
         set(state => ({
           notes: state.notes.map(n => ({
             ...n,
-            stickyNotes: n.stickyNotes.map(s =>
-              s.id === stickyId ? { ...s, position } : s
-            ),
+            stickyNotes: n.stickyNotes.map(s => (s.id === stickyId ? { ...s, position } : s)),
           })),
         }));
       },
@@ -301,7 +291,7 @@ export const useNotepadStore = create<NotepadState>()(
         if (anyOpen) {
           // Close all notes that aren't pinned
           set(s => ({
-            notes: s.notes.map(n => n.isPinned ? n : { ...n, isOpen: false })
+            notes: s.notes.map(n => (n.isPinned ? n : { ...n, isOpen: false })),
           }));
         } else {
           // If no notes exist, create one. Otherwise open all.
@@ -309,7 +299,7 @@ export const useNotepadStore = create<NotepadState>()(
             get().createNote();
           } else {
             set(s => ({
-              notes: s.notes.map(n => ({ ...n, isOpen: true }))
+              notes: s.notes.map(n => ({ ...n, isOpen: true })),
             }));
           }
         }
@@ -329,7 +319,7 @@ export const useNotepadStore = create<NotepadState>()(
               return {
                 ...n,
                 stickyNotes: n.stickyNotes.map(s =>
-                  s.id === targetId ? { ...s, alertAt: newAlertTime, isAlertTriggered: false } : s
+                  s.id === targetId ? { ...s, alertAt: newAlertTime, isAlertTriggered: false } : s,
                 ),
               };
             }
@@ -348,7 +338,7 @@ export const useNotepadStore = create<NotepadState>()(
               return {
                 ...n,
                 stickyNotes: n.stickyNotes.map(s =>
-                  s.id === targetId ? { ...s, alertAt: undefined, isAlertTriggered: false } : s
+                  s.id === targetId ? { ...s, alertAt: undefined, isAlertTriggered: false } : s,
                 ),
               };
             }
@@ -362,6 +352,6 @@ export const useNotepadStore = create<NotepadState>()(
       partialize: state => ({
         notes: state.notes,
       }),
-    }
-  )
+    },
+  ),
 );

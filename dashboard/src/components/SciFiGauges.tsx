@@ -34,7 +34,7 @@ export function SciFiGauges({
   // Safe percentages
   const pctMsg = Math.min(100, Math.max(0, (messagesSentToday / Math.max(1, dailyMessageLimit)) * 100)) || 0;
   const pctAud = Math.min(100, Math.max(0, (usersReachedToday / Math.max(1, dailyUserLimit)) * 100)) || 0;
-  
+
   // Rate or Cooldown percentage
   let pctRate = Math.min(100, Math.max(0, (currentMsgsPerMin / Math.max(1, maxMessagesPerMinute)) * 100)) || 0;
   if (isRateLocked && totalLockDuration > 0) {
@@ -53,7 +53,7 @@ export function SciFiGauges({
   const cy = size / 2;
   const strokeWidth = 10;
   const gap = 3;
-  
+
   const radius1 = 58; // Outer
   const radius2 = radius1 - strokeWidth - gap; // Middle
   const radius3 = radius2 - strokeWidth - gap; // Inner
@@ -82,24 +82,27 @@ export function SciFiGauges({
       const val = i * 5; // 0, 5, 10 ... 100
       const angle = -Math.PI / 2 + (val / 100) * 2 * Math.PI;
       const isMajor = val % 10 === 0;
-      
+
       const tickOuter = radiusOuter;
       const tickInner = radiusOuter - (isMajor ? 4 : 2);
-      
-      let tickColor = "rgba(255, 255, 255, 0.3)";
-      
+
+      let tickColor = 'rgba(255, 255, 255, 0.3)';
+
       if (val >= 80) {
-        tickColor = "rgba(239, 68, 68, 0.7)"; // Tailwind red-500
+        tickColor = 'rgba(239, 68, 68, 0.7)'; // Tailwind red-500
       } else if (val >= 60) {
-        tickColor = "rgba(245, 158, 11, 0.7)"; // Tailwind amber-500
+        tickColor = 'rgba(245, 158, 11, 0.7)'; // Tailwind amber-500
       }
 
       return (
         <g key={val}>
-          <line 
-            x1={cx + tickInner * Math.cos(angle)} y1={cy + tickInner * Math.sin(angle)}
-            x2={cx + tickOuter * Math.cos(angle)} y2={cy + tickOuter * Math.sin(angle)}
-            stroke={tickColor} strokeWidth={isMajor ? 2 : 1} 
+          <line
+            x1={cx + tickInner * Math.cos(angle)}
+            y1={cy + tickInner * Math.sin(angle)}
+            x2={cx + tickOuter * Math.cos(angle)}
+            y2={cy + tickOuter * Math.sin(angle)}
+            stroke={tickColor}
+            strokeWidth={isMajor ? 2 : 1}
           />
         </g>
       );
@@ -108,13 +111,13 @@ export function SciFiGauges({
 
   const timelineBars = useMemo(() => {
     return Array.from({ length: 24 }).map((_, i) => (
-      <div 
-        key={i} 
-        className="ar-time-bar" 
-        style={{ 
+      <div
+        key={i}
+        className="ar-time-bar"
+        style={{
           height: i % 6 === 0 ? '12px' : '6px',
-          background: i > 12 && i < 18 ? color3 : (i > 6 && i < 12 ? color2 : 'rgba(255,255,255,0.2)') 
-        }} 
+          background: i > 12 && i < 18 ? color3 : i > 6 && i < 12 ? color2 : 'rgba(255,255,255,0.2)',
+        }}
       />
     ));
   }, [color2, color3]);
@@ -145,10 +148,39 @@ export function SciFiGauges({
             </defs>
 
             {/* Background Tracks */}
-            <circle cx={cx} cy={cy} r={radiusOuter} fill="none" stroke="rgba(255, 255, 255, 0.03)" strokeWidth="1" strokeDasharray="4 4" />
-            <circle cx={cx} cy={cy} r={radius1} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth={strokeWidth} />
-            <circle cx={cx} cy={cy} r={radius2} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth={strokeWidth} />
-            <circle cx={cx} cy={cy} r={radius3} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth={strokeWidth} />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={radiusOuter}
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.03)"
+              strokeWidth="1"
+              strokeDasharray="4 4"
+            />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={radius1}
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.05)"
+              strokeWidth={strokeWidth}
+            />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={radius2}
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.05)"
+              strokeWidth={strokeWidth}
+            />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={radius3}
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.05)"
+              strokeWidth={strokeWidth}
+            />
 
             {/* Outer Ring Speedometer Scale */}
             {outerRingTicks}
@@ -156,21 +188,39 @@ export function SciFiGauges({
             {/* Active Rings (rotated -90deg so they start at 12 o'clock) */}
             <g transform={`rotate(-90 ${cx} ${cy})`}>
               <circle
-                cx={cx} cy={cy} r={radius1} fill="none"
-                stroke="url(#grad1)" strokeWidth={strokeWidth} strokeLinecap="round"
-                strokeDasharray={circ1} strokeDashoffset={offset1}
+                cx={cx}
+                cy={cy}
+                r={radius1}
+                fill="none"
+                stroke="url(#grad1)"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeDasharray={circ1}
+                strokeDashoffset={offset1}
                 className="ar-animated-ring"
               />
               <circle
-                cx={cx} cy={cy} r={radius2} fill="none"
-                stroke="url(#grad2)" strokeWidth={strokeWidth} strokeLinecap="round"
-                strokeDasharray={circ2} strokeDashoffset={offset2}
+                cx={cx}
+                cy={cy}
+                r={radius2}
+                fill="none"
+                stroke="url(#grad2)"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeDasharray={circ2}
+                strokeDashoffset={offset2}
                 className="ar-animated-ring"
               />
               <circle
-                cx={cx} cy={cy} r={radius3} fill="none"
-                stroke="url(#grad3)" strokeWidth={strokeWidth} strokeLinecap="round"
-                strokeDasharray={circ3} strokeDashoffset={offset3}
+                cx={cx}
+                cy={cy}
+                r={radius3}
+                fill="none"
+                stroke="url(#grad3)"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeDasharray={circ3}
+                strokeDashoffset={offset3}
                 className="ar-animated-ring"
               />
             </g>
@@ -182,9 +232,7 @@ export function SciFiGauges({
 
         {/* Timeline dots graphic at bottom (decorative) */}
         <div className="ar-timeline">
-          <div className="ar-timeline-bars">
-            {timelineBars}
-          </div>
+          <div className="ar-timeline-bars">{timelineBars}</div>
           <div className="ar-timeline-labels">
             <span>12</span>
             <span>6</span>
@@ -196,7 +244,6 @@ export function SciFiGauges({
 
       {/* RIGHT PANEL - STAT CARDS */}
       <div className="ar-right-panel">
-        
         {/* Card 1: Messages */}
         <div className="ar-stat-card">
           <div className="ar-stat-header">
@@ -242,8 +289,12 @@ export function SciFiGauges({
           <div className="ar-stat-value-group">
             {isRateLocked ? (
               <>
-                <span className="ar-stat-value" style={{ color: color3 }}>{lockCountdown}</span>
-                <span className="ar-stat-unit" style={{ color: color3 }}>sec</span>
+                <span className="ar-stat-value" style={{ color: color3 }}>
+                  {lockCountdown}
+                </span>
+                <span className="ar-stat-unit" style={{ color: color3 }}>
+                  sec
+                </span>
               </>
             ) : (
               <>
@@ -253,7 +304,6 @@ export function SciFiGauges({
             )}
           </div>
         </div>
-
       </div>
     </div>
   );

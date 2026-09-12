@@ -65,7 +65,10 @@ export function TemplateManager() {
   const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
 
   const sessionIds = useMemo(() => sessions.map(s => s.id), [sessions]);
-  const { data: accountTemplates = [], isLoading: loadingAccount } = useAccountTemplatesQuery(sessionIds, selectedSessionId === 'all');
+  const { data: accountTemplates = [], isLoading: loadingAccount } = useAccountTemplatesQuery(
+    sessionIds,
+    selectedSessionId === 'all',
+  );
   const { data: singleTemplates = [], isLoading: loadingSingle } = useTemplatesQuery(
     selectedSessionId,
     selectedSessionId !== 'all' && !!selectedSessionId,
@@ -119,9 +122,8 @@ export function TemplateManager() {
 
   const handleSave = async () => {
     if (!form.name.trim() || !form.body.trim()) return;
-    const targetSessions = (selectedSessionId === 'all' || !selectedSessionId)
-      ? sessions
-      : sessions.filter(s => s.id === selectedSessionId);
+    const targetSessions =
+      selectedSessionId === 'all' || !selectedSessionId ? sessions : sessions.filter(s => s.id === selectedSessionId);
 
     if (targetSessions.length === 0) return;
 
@@ -160,15 +162,12 @@ export function TemplateManager() {
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
-    const targetSessions = (selectedSessionId === 'all' || !selectedSessionId)
-      ? sessions
-      : sessions.filter(s => s.id === selectedSessionId);
+    const targetSessions =
+      selectedSessionId === 'all' || !selectedSessionId ? sessions : sessions.filter(s => s.id === selectedSessionId);
 
     try {
       await Promise.allSettled(
-        targetSessions.map(s =>
-          deleteMutation.mutateAsync({ sessionId: s.id, id: deleteTarget.id }),
-        ),
+        targetSessions.map(s => deleteMutation.mutateAsync({ sessionId: s.id, id: deleteTarget.id })),
       );
       toast.success(t('templates.toasts.deleted'));
       if (editingTemplate?.id === deleteTarget.id) resetForm();
@@ -198,7 +197,10 @@ export function TemplateManager() {
 
   return (
     <div className="templates-page">
-      <div className="cyber-panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        className="cyber-panel-header"
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+      >
         <div>
           <h2>{t('templates.title')}</h2>
           <p>{t('templates.subtitle')}</p>
@@ -211,13 +213,20 @@ export function TemplateManager() {
             setSelectedSessionId(event.target.value);
             resetForm();
           }}
-          style={{ background: 'rgba(15, 23, 42, 0.8)', color: '#fff', border: '1px solid #334155', borderRadius: '6px', padding: '6px 12px' }}
+          style={{
+            background: 'rgba(15, 23, 42, 0.8)',
+            color: '#fff',
+            border: '1px solid #334155',
+            borderRadius: '6px',
+            padding: '6px 12px',
+          }}
         >
           {sessions.length === 0 && <option value="">{t('templates.noSessions')}</option>}
           {sessions.length > 0 && <option value="all">All Account Sessions (Universal Templates)</option>}
           {sessions.map(session => (
             <option key={session.id} value={session.id}>
-              {session.name}{session.phone ? ` (${session.phone})` : ''}
+              {session.name}
+              {session.phone ? ` (${session.phone})` : ''}
             </option>
           ))}
         </select>
@@ -296,15 +305,15 @@ export function TemplateManager() {
           <section className="template-workspace-area">
             <div className="template-editor-header">
               <div className="template-view-toggle">
-                <button 
-                  className={viewMode === 'edit' ? 'active' : ''} 
+                <button
+                  className={viewMode === 'edit' ? 'active' : ''}
                   onClick={() => setViewMode('edit')}
                   type="button"
                 >
                   {t('common.edit', 'Edit')}
                 </button>
-                <button 
-                  className={viewMode === 'preview' ? 'active' : ''} 
+                <button
+                  className={viewMode === 'preview' ? 'active' : ''}
                   onClick={() => setViewMode('preview')}
                   type="button"
                 >
@@ -336,103 +345,101 @@ export function TemplateManager() {
             </div>
 
             {viewMode === 'edit' ? (
-            <div className="template-form">
-              <div className="form-group">
-                <label htmlFor="tpl-1">{t('common.name')}</label>
-                <input
-                  id="tpl-1"
-                  value={form.name}
-                  onChange={event => setForm({ ...form, name: event.target.value })}
-                  placeholder={t('templates.namePlaceholder')}
-                  disabled={!canWrite}
-                />
-              </div>
-
-              <div className="template-message-fields">
+              <div className="template-form">
                 <div className="form-group">
-                  <label htmlFor="tpl-2">{t('templates.header')}</label>
+                  <label htmlFor="tpl-1">{t('common.name')}</label>
                   <input
-                    id="tpl-2"
-                    value={form.header}
-                    onChange={event => setForm({ ...form, header: event.target.value })}
-                    placeholder={t('templates.headerPlaceholder')}
+                    id="tpl-1"
+                    value={form.name}
+                    onChange={event => setForm({ ...form, name: event.target.value })}
+                    placeholder={t('templates.namePlaceholder')}
                     disabled={!canWrite}
                   />
                 </div>
 
-                <div className="form-group body-field">
-                  <label htmlFor="tpl-3">{t('templates.body')}</label>
-                  <textarea
-                    id="tpl-3"
-                    value={form.body}
-                    onChange={event => setForm({ ...form, body: event.target.value })}
-                    placeholder={t('templates.bodyPlaceholder')}
-                    rows={10}
-                    disabled={!canWrite}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="tpl-4">{t('templates.footer')}</label>
-                  <input
-                    id="tpl-4"
-                    value={form.footer}
-                    onChange={event => setForm({ ...form, footer: event.target.value })}
-                    placeholder={t('templates.footerPlaceholder')}
-                    disabled={!canWrite}
-                  />
-                </div>
-              </div>
-
-              <div className="template-editor-actions">
-                <button className="btn-secondary" onClick={resetForm} disabled={isSaving} type="button">
-                  {t('common.cancel')}
-                </button>
-                <button
-                  className="btn-primary"
-                  onClick={handleSave}
-                  disabled={!canWrite || isSaving || !selectedSessionId || !form.name.trim() || !form.body.trim()}
-                  type="button"
-                >
-                  {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Plus size={18} />}
-                  {canWrite
-                    ? t(editingTemplate ? 'templates.saveChanges' : 'templates.createTemplate')
-                    : t('templates.viewOnly')}
-                </button>
-              </div>
-            </div>
-            ) : (
-            <div className="template-preview-container">
-              <div className="template-preview-header">
-                <h2>{t('templates.previewTitle')}</h2>
-                <span>{placeholders.length}</span>
-              </div>
-              <div className="template-preview-message">
-                <pre>{preview || t('templates.previewEmpty')}</pre>
-              </div>
-              <div className="template-variable-panel">
-                {placeholders.length > 0 ? (
-                  <div className="placeholder-list">
-                    {placeholders.map(key => (
-                      <label key={key}>
-                        <span>{`{{${key}}}`}</span>
-                        <input
-                          value={previewValues[key] || ''}
-                          onChange={event => setPreviewValues({ ...previewValues, [key]: event.target.value })}
-                          placeholder={t('templates.previewValuePlaceholder')}
-                        />
-                      </label>
-                    ))}
+                <div className="template-message-fields">
+                  <div className="form-group">
+                    <label htmlFor="tpl-2">{t('templates.header')}</label>
+                    <input
+                      id="tpl-2"
+                      value={form.header}
+                      onChange={event => setForm({ ...form, header: event.target.value })}
+                      placeholder={t('templates.headerPlaceholder')}
+                      disabled={!canWrite}
+                    />
                   </div>
-                ) : (
-                  <p className="template-muted">{t('templates.noPlaceholders')}</p>
-                )}
+
+                  <div className="form-group body-field">
+                    <label htmlFor="tpl-3">{t('templates.body')}</label>
+                    <textarea
+                      id="tpl-3"
+                      value={form.body}
+                      onChange={event => setForm({ ...form, body: event.target.value })}
+                      placeholder={t('templates.bodyPlaceholder')}
+                      rows={10}
+                      disabled={!canWrite}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="tpl-4">{t('templates.footer')}</label>
+                    <input
+                      id="tpl-4"
+                      value={form.footer}
+                      onChange={event => setForm({ ...form, footer: event.target.value })}
+                      placeholder={t('templates.footerPlaceholder')}
+                      disabled={!canWrite}
+                    />
+                  </div>
+                </div>
+
+                <div className="template-editor-actions">
+                  <button className="btn-secondary" onClick={resetForm} disabled={isSaving} type="button">
+                    {t('common.cancel')}
+                  </button>
+                  <button
+                    className="btn-primary"
+                    onClick={handleSave}
+                    disabled={!canWrite || isSaving || !selectedSessionId || !form.name.trim() || !form.body.trim()}
+                    type="button"
+                  >
+                    {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Plus size={18} />}
+                    {canWrite
+                      ? t(editingTemplate ? 'templates.saveChanges' : 'templates.createTemplate')
+                      : t('templates.viewOnly')}
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="template-preview-container">
+                <div className="template-preview-header">
+                  <h2>{t('templates.previewTitle')}</h2>
+                  <span>{placeholders.length}</span>
+                </div>
+                <div className="template-preview-message">
+                  <pre>{preview || t('templates.previewEmpty')}</pre>
+                </div>
+                <div className="template-variable-panel">
+                  {placeholders.length > 0 ? (
+                    <div className="placeholder-list">
+                      {placeholders.map(key => (
+                        <label key={key}>
+                          <span>{`{{${key}}}`}</span>
+                          <input
+                            value={previewValues[key] || ''}
+                            onChange={event => setPreviewValues({ ...previewValues, [key]: event.target.value })}
+                            placeholder={t('templates.previewValuePlaceholder')}
+                          />
+                        </label>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="template-muted">{t('templates.noPlaceholders')}</p>
+                  )}
+                </div>
+              </div>
             )}
           </section>
-
-
         </div>
       )}
 

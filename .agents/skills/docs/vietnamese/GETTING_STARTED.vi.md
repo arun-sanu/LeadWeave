@@ -32,11 +32,11 @@ Bạn cũng có thể dùng cờ theo công cụ, ví dụ `--claude`, `--gemini
 
 Tìm gói kỹ năng phù hợp với vị trí của bạn (xem [BUNDLES.md](BUNDLES.vi.md)):
 
-| Vai trò               | Tên Gói kỹ năng | Bên trong có những gì?                            |
-| :-------------------- | :-------------- | :------------------------------------------------ |
-| **Web Developer**     | `Web Wizard`    | React Patterns, Tailwind mastery, Frontend Design |
-| **Security Engineer** | `Hacker Pack`   | OWASP, Metasploit, Pentest Methodology            |
-| **Manager / PM**      | `Product Pack`  | Brainstorming, Planning, SEO, Strategy            |
+| Vai trò               | Tên Gói kỹ năng | Bên trong có những gì?                                   |
+| :-------------------- | :-------------- | :------------------------------------------------------- |
+| **Web Developer**     | `Web Wizard`    | React Patterns, Tailwind mastery, Frontend Design        |
+| **Security Engineer** | `Hacker Pack`   | OWASP, Metasploit, Pentest Methodology                   |
+| **Manager / PM**      | `Product Pack`  | Brainstorming, Planning, SEO, Strategy                   |
 | **Cơ bản cho tất cả** | `Essentials`    | Clean Code, Planning, Validation (Những thứ cơ bản nhất) |
 
 ---
@@ -67,18 +67,18 @@ Sau khi cài đặt, bạn chỉ cần trò chuyện với AI một cách tự n
 
 ## 🔌 Các công cụ được hỗ trợ
 
-| Công cụ          | Trạng thái      | Đường dẫn         |
-| :--------------- | :-------------- | :---------------- |
-| **Claude Code**  | ✅ Hỗ trợ đầy đủ | `.claude/skills/` hoặc Claude plugin marketplace |
-| **Gemini CLI**   | ✅ Hỗ trợ đầy đủ | `.gemini/skills/` |
-| **Codex CLI**    | ✅ Hỗ trợ đầy đủ | `.codex/skills/` |
-| **Kiro CLI / IDE** | ✅ Hỗ trợ đầy đủ | `~/.kiro/skills/` hoặc `.kiro/skills/` |
-| **Antigravity**  | ✅ Hỗ trợ gốc   | `~/.agents/skills/` hoặc `.agent/skills/` |
-| **Antigravity CLI (`agy`)** | ✅ Hỗ trợ đầy đủ | `~/.gemini/antigravity-cli/skills/` |
-| **Cursor**       | ✅ Hỗ trợ gốc   | `.cursor/skills/` |
-| **OpenCode**     | ✅ Hỗ trợ đầy đủ | `.agents/skills/` |
-| **AdaL CLI**     | ✅ Hỗ trợ đầy đủ | `.adal/skills/` |
-| **Copilot**      | 🧪 Hỗ trợ preview qua `gh skill` | Dùng GitHub CLI với đường dẫn skill chính xác |
+| Công cụ                     | Trạng thái                       | Đường dẫn                                        |
+| :-------------------------- | :------------------------------- | :----------------------------------------------- |
+| **Claude Code**             | ✅ Hỗ trợ đầy đủ                 | `.claude/skills/` hoặc Claude plugin marketplace |
+| **Gemini CLI**              | ✅ Hỗ trợ đầy đủ                 | `.gemini/skills/`                                |
+| **Codex CLI**               | ✅ Hỗ trợ đầy đủ                 | `.codex/skills/`                                 |
+| **Kiro CLI / IDE**          | ✅ Hỗ trợ đầy đủ                 | `~/.kiro/skills/` hoặc `.kiro/skills/`           |
+| **Antigravity**             | ✅ Hỗ trợ gốc                    | `~/.agents/skills/` hoặc `.agent/skills/`        |
+| **Antigravity CLI (`agy`)** | ✅ Hỗ trợ đầy đủ                 | `~/.gemini/antigravity-cli/skills/`              |
+| **Cursor**                  | ✅ Hỗ trợ gốc                    | `.cursor/skills/`                                |
+| **OpenCode**                | ✅ Hỗ trợ đầy đủ                 | `.agents/skills/`                                |
+| **AdaL CLI**                | ✅ Hỗ trợ đầy đủ                 | `.adal/skills/`                                  |
+| **Copilot**                 | 🧪 Hỗ trợ preview qua `gh skill` | Dùng GitHub CLI với đường dẫn skill chính xác    |
 
 > **GitHub Copilot (preview):** `gh skill` hiện vẫn ở trạng thái preview. Vì repository lớn này có cả bản canonical và bản mirror trong plugin, hãy dùng đường dẫn chính xác để tránh nhầm lẫn; chỉ dùng `--all` khi bạn thực sự muốn cài mọi bản được phát hiện:
 >

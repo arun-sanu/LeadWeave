@@ -33,17 +33,16 @@ Merge by material, not by part. Six buildings drawn in 11–18 draw calls is the
 
 ## Roofs are a function of position along the eave
 
-The whole character of an East Asian roof — flat near the ridge, steepening, then curling up at the corners — comes from one function that maps *(panel, position across, position down)* to a point:
+The whole character of an East Asian roof — flat near the ridge, steepening, then curling up at the corners — comes from one function that maps _(panel, position across, position down)_ to a point:
 
 ```js
 function roofPoint(o, p, u, t) {
   const tc = Math.min(1, t);
-  const g = 1 - Math.pow(1 - tc, o.pow);              // the sag of the slope
-  const corner = Math.pow(Math.abs(u), 2.0);          // 0 mid-eave, 1 at hips
+  const g = 1 - Math.pow(1 - tc, o.pow); // the sag of the slope
+  const corner = Math.pow(Math.abs(u), 2.0); // 0 mid-eave, 1 at hips
   const flare = 1 + o.flare * corner * Math.pow(tc, 3.2);
-  const y = o.yT - (o.yT - o.yE) * g
-          + o.lift * corner * Math.pow(tc, 2.6);      // corners lift
-  return [ /* lerp inner edge → outer edge × flare */ ];
+  const y = o.yT - (o.yT - o.yE) * g + o.lift * corner * Math.pow(tc, 2.6); // corners lift
+  return [/* lerp inner edge → outer edge × flare */];
 }
 ```
 
@@ -67,7 +66,7 @@ Then every storey is the same outline at a smaller scale, and the silhouette is 
 
 ## Size detail to the surface it sits on
 
-The most common modelling mistake is not the geometry, it is the proportion. A doorway sized for a face that turns out to be a third as wide spills onto the returns and reads as noise. Measure the face first, then size the door, the colonnettes and the pediment as fractions of it — and check that the pediment finishes *under* the cornice rather than through it.
+The most common modelling mistake is not the geometry, it is the proportion. A doorway sized for a face that turns out to be a third as wide spills onto the returns and reads as noise. Measure the face first, then size the door, the colonnettes and the pediment as fractions of it — and check that the pediment finishes _under_ the cornice rather than through it.
 
 ## The build animation is one clipping plane
 
@@ -88,7 +87,11 @@ A clipped shell is hollow, so add a cap mesh at the plane's height, scaled to th
 **The cap has to match the plan it is capping.** A square cap dropped into an octagonal tower leaves four wedges open to the sky. Let each style declare the plan of its own section — four sides through a hall, eight through a drum, sixteen through a dome — and rebuild the cap geometry as the plane passes from one into the next:
 
 ```js
-caps: [[0, 4.74, 2.56], [4.74, 5.42, 2.02, 8], [5.42, 6.46, 1.86, 16]]
+caps: [
+  [0, 4.74, 2.56],
+  [4.74, 5.42, 2.02, 8],
+  [5.42, 6.46, 1.86, 16],
+];
 //      y0    y1   radius  sides
 ```
 
@@ -101,10 +104,21 @@ It ignores the clip, so it always stands one step ahead of the finished work. Th
 **`BoxGeometry` gives every face UVs of 0..1 regardless of size.** A three-metre pole and a fifteen-centimetre brace therefore get the same grain, and both read as plastic. Rewrite the UVs in world units before upload:
 
 ```js
-const dims = [[sz,sy],[sz,sy],[sx,sz],[sx,sz],[sx,sy],[sx,sy]];
+const dims = [
+  [sz, sy],
+  [sz, sy],
+  [sx, sz],
+  [sx, sz],
+  [sx, sy],
+  [sx, sy],
+];
 for (let f = 0; f < 6; f++) {
-  const du = dims[f][0], dv = dims[f][1], swap = dv > du;
-  for (let i = 0; i < 4; i++) { /* scale by real size, offset randomly */ }
+  const du = dims[f][0],
+    dv = dims[f][1],
+    swap = dv > du;
+  for (let i = 0; i < 4; i++) {
+    /* scale by real size, offset randomly */
+  }
 }
 ```
 

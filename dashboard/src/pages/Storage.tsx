@@ -155,8 +155,6 @@ export function Storage() {
     }
   };
 
-
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -206,10 +204,7 @@ export function Storage() {
 
   const loadStorageData = useCallback(async () => {
     try {
-      const [statusRes, filesRes] = await Promise.allSettled([
-        infraApi.getStatus(),
-        storageApi.getFileCount(),
-      ]);
+      const [statusRes, filesRes] = await Promise.allSettled([infraApi.getStatus(), storageApi.getFileCount()]);
 
       if (statusRes.status === 'fulfilled') {
         setInfraStatus(statusRes.value);
@@ -260,7 +255,13 @@ export function Storage() {
 
       if (type.includes('image') || name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.webp')) {
         category = 'image';
-      } else if (type.includes('sheet') || type.includes('excel') || type.includes('csv') || name.endsWith('.xlsx') || name.endsWith('.csv')) {
+      } else if (
+        type.includes('sheet') ||
+        type.includes('excel') ||
+        type.includes('csv') ||
+        name.endsWith('.xlsx') ||
+        name.endsWith('.csv')
+      ) {
         category = 'spreadsheet';
       } else if (type.includes('audio') || name.endsWith('.mp3') || name.endsWith('.ogg') || name.endsWith('.wav')) {
         category = 'audio';
@@ -322,12 +323,12 @@ export function Storage() {
       const res = await storageApi.exportStorage();
       toast.success(
         t('storage.exportSuccess', 'Storage Archive Created'),
-        `${res.message || 'File archive created'}: ${res.download}`
+        `${res.message || 'File archive created'}: ${res.download}`,
       );
     } catch (err) {
       toast.error(
         t('storage.exportFailed', 'Export Failed'),
-        err instanceof Error ? err.message : 'Unable to create export archive'
+        err instanceof Error ? err.message : 'Unable to create export archive',
       );
     } finally {
       setExporting(false);
@@ -408,31 +409,24 @@ export function Storage() {
               <HardDrive size={24} className="text-emerald" />
             </div>
             <div>
-              <h1 className="storage-title">
-                {t('storage.headerTitle', 'Storage & File Explorer')}
-              </h1>
+              <h1 className="storage-title">{t('storage.headerTitle', 'Storage & File Explorer')}</h1>
               <p className="storage-subtitle">
-                {t('storage.headerSubtitle', 'Manage your documents, spreadsheet leads, media attachments, and data allocations')}
+                {t(
+                  'storage.headerSubtitle',
+                  'Manage your documents, spreadsheet leads, media attachments, and data allocations',
+                )}
               </p>
             </div>
           </div>
         </div>
 
         <div className="storage-header-actions">
-          <button
-            type="button"
-            className="storage-action-btn secondary"
-            onClick={() => setAddDataModalOpen(true)}
-          >
+          <button type="button" className="storage-action-btn secondary" onClick={() => setAddDataModalOpen(true)}>
             <Plus size={15} />
             <span>Add Data Record</span>
           </button>
 
-          <button
-            type="button"
-            className="storage-action-btn primary"
-            onClick={() => setUploadModalOpen(true)}
-          >
+          <button type="button" className="storage-action-btn primary" onClick={() => setUploadModalOpen(true)}>
             <Upload size={15} />
             <span>Upload Files & Documents</span>
           </button>
@@ -462,7 +456,9 @@ export function Storage() {
             </div>
             <span className="storage-engine-pill">
               <Server size={13} />
-              <span>{isS3 ? `Cloud S3 (${infraStatus?.storage?.bucket || 'leadweave'})` : 'Local High-Speed Storage'}</span>
+              <span>
+                {isS3 ? `Cloud S3 (${infraStatus?.storage?.bucket || 'leadweave'})` : 'Local High-Speed Storage'}
+              </span>
             </span>
           </div>
 
@@ -572,7 +568,12 @@ export function Storage() {
             <span className="mini-label">Browser Client Cache</span>
           </div>
           <div className="mini-card-footer">
-            <button type="button" className="inline-clean-btn" onClick={handleClearClientCache} disabled={cleaningClient}>
+            <button
+              type="button"
+              className="inline-clean-btn"
+              onClick={handleClearClientCache}
+              disabled={cleaningClient}
+            >
               <Trash2 size={12} /> {cleaningClient ? 'Cleaning...' : 'Clear Cache'}
             </button>
           </div>
@@ -642,9 +643,7 @@ export function Storage() {
               <FolderArchive size={18} className="text-emerald" />
               Files & Documents Repository ({filteredFiles.length})
             </h3>
-            <p className="section-desc">
-              Uploaded files and synced attachments stored in your workspace.
-            </p>
+            <p className="section-desc">Uploaded files and synced attachments stored in your workspace.</p>
           </div>
           <div className="file-category-count-badge">
             <span>{formatBytes(filteredFiles.reduce((acc, f) => acc + f.sizeBytes, 0))}</span>
@@ -678,18 +677,14 @@ export function Storage() {
                   <tr key={file.id}>
                     <td>
                       <div className="file-name-cell">
-                        <div className="file-type-icon-box">
-                          {getFileCategoryIcon(file.category)}
-                        </div>
+                        <div className="file-type-icon-box">{getFileCategoryIcon(file.category)}</div>
                         <span className="file-name-text" title={file.name}>
                           {file.name}
                         </span>
                       </div>
                     </td>
                     <td>
-                      <span className={`file-category-badge cat-${file.category}`}>
-                        {file.category}
-                      </span>
+                      <span className={`file-category-badge cat-${file.category}`}>{file.category}</span>
                     </td>
                     <td className="mono">{formatBytes(file.sizeBytes)}</td>
                     <td className="text-muted text-sm">
@@ -701,7 +696,11 @@ export function Storage() {
                     </td>
                     <td>
                       <span className="file-source-pill">
-                        {file.source === 'user_upload' ? 'User Upload' : file.source === 'broadcast_sheet' ? 'Broadcast CRM' : 'WhatsApp'}
+                        {file.source === 'user_upload'
+                          ? 'User Upload'
+                          : file.source === 'broadcast_sheet'
+                            ? 'Broadcast CRM'
+                            : 'WhatsApp'}
                       </span>
                     </td>
                     <td style={{ textAlign: 'right' }}>
@@ -763,13 +762,13 @@ export function Storage() {
               </button>
             </div>
             <div className="modal-body">
-              <div
-                className="dropzone-area"
-                onClick={() => fileInputRef.current?.click()}
-              >
+              <div className="dropzone-area" onClick={() => fileInputRef.current?.click()}>
                 <Upload size={32} className="text-emerald dropzone-icon" />
                 <h4>Click or drag files here to upload</h4>
-                <p>Support for PDFs, Excel Spreadsheets (.xlsx, .csv), Images, Voice Notes, and JSON data files up to 50MB</p>
+                <p>
+                  Support for PDFs, Excel Spreadsheets (.xlsx, .csv), Images, Voice Notes, and JSON data files up to
+                  50MB
+                </p>
                 <input
                   type="file"
                   multiple
@@ -816,10 +815,19 @@ export function Storage() {
                 />
               </div>
               <div className="modal-actions">
-                <button type="button" className="storage-action-btn secondary" onClick={() => setAddDataModalOpen(false)}>
+                <button
+                  type="button"
+                  className="storage-action-btn secondary"
+                  onClick={() => setAddDataModalOpen(false)}
+                >
                   Cancel
                 </button>
-                <button type="button" className="storage-action-btn primary" onClick={handleCreateDataRecord} disabled={!newDataTitle.trim()}>
+                <button
+                  type="button"
+                  className="storage-action-btn primary"
+                  onClick={handleCreateDataRecord}
+                  disabled={!newDataTitle.trim()}
+                >
                   Save Data Record
                 </button>
               </div>
@@ -888,9 +896,19 @@ export function Storage() {
         <div className="storage-card mini-stat-card" style={{ width: '320px' }}>
           <div className="mini-card-top">
             <span className="mini-icon-box bg-amber-dim">
-              {isLogsUnlocked ? <Activity size={18} className="text-amber" /> : <Lock size={18} className="text-amber" />}
+              {isLogsUnlocked ? (
+                <Activity size={18} className="text-amber" />
+              ) : (
+                <Lock size={18} className="text-amber" />
+              )}
             </span>
-            <span className="mini-status-tag status-cyan" style={{ background: isLogsUnlocked ? 'rgba(56, 189, 248, 0.1)' : 'rgba(245, 158, 11, 0.1)', color: isLogsUnlocked ? '#38bdf8' : '#fbbf24' }}>
+            <span
+              className="mini-status-tag status-cyan"
+              style={{
+                background: isLogsUnlocked ? 'rgba(56, 189, 248, 0.1)' : 'rgba(245, 158, 11, 0.1)',
+                color: isLogsUnlocked ? '#38bdf8' : '#fbbf24',
+              }}
+            >
               {isLogsUnlocked ? <ShieldCheck size={12} /> : <Lock size={12} />} {isLogsUnlocked ? 'Unlocked' : 'Locked'}
             </span>
           </div>
@@ -899,7 +917,12 @@ export function Storage() {
             <span className="mini-label">System Diagnostics</span>
           </div>
           <div className="mini-card-footer">
-            <button type="button" className="inline-clean-btn" onClick={handleOpenLogs} style={{ color: isLogsUnlocked ? '#38bdf8' : '#fbbf24' }}>
+            <button
+              type="button"
+              className="inline-clean-btn"
+              onClick={handleOpenLogs}
+              style={{ color: isLogsUnlocked ? '#38bdf8' : '#fbbf24' }}
+            >
               {isLogsUnlocked ? 'View Console →' : 'Unlock 🔒'}
             </button>
           </div>
@@ -916,10 +939,7 @@ export function Storage() {
         }}
       />
 
-      <StorageLogsViewerModal
-        isOpen={logsViewerModalOpen}
-        onClose={() => setLogsViewerModalOpen(false)}
-      />
+      <StorageLogsViewerModal isOpen={logsViewerModalOpen} onClose={() => setLogsViewerModalOpen(false)} />
     </div>
   );
 }

@@ -1,11 +1,12 @@
 ---
 paths:
-  - "**/*.rb"
-  - "**/*.rake"
-  - "**/Gemfile"
-  - "**/Gemfile.lock"
-  - "**/config/routes.rb"
+  - '**/*.rb'
+  - '**/*.rake'
+  - '**/Gemfile'
+  - '**/Gemfile.lock'
+  - '**/config/routes.rb'
 ---
+
 # Ruby Hooks
 
 > This file extends [common/hooks.md](common-hooks.md) with Ruby and Rails specific content.

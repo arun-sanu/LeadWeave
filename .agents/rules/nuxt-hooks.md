@@ -1,9 +1,9 @@
 ---
 paths:
-  - "**/nuxt.config.*"
-  - "**/app.config.*"
-  - "**/server/**/*.ts"
-  - "**/*.vue"
+  - '**/nuxt.config.*'
+  - '**/app.config.*'
+  - '**/server/**/*.ts'
+  - '**/*.vue'
 ---
 
 # Nuxt Hooks

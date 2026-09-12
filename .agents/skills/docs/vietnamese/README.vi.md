@@ -43,17 +43,17 @@ Repository này tập hợp những khả năng tốt nhất từ khắp cộng 
 
 Repository được tổ chức thành các lĩnh vực chuyên biệt để biến AI của bạn thành một chuyên gia trên toàn bộ vòng đời phát triển phần mềm:
 
-| Danh mục          | Trọng tâm                                                      | Ví dụ kỹ năng                                                                   |
-| :---------------- | :------------------------------------------------------------- | :------------------------------------------------------------------------------ |
-| Kiến trúc         | Thiết kế hệ thống, ADRs, C4 và các mẫu có thể mở rộng          | `architecture`, `c4-context`, `senior-architect`                                |
-| Kinh doanh        | Tăng trưởng, định giá, CRO, SEO và thâm nhập thị trường        | `copywriting`, `pricing-strategy`, `seo-audit`                                  |
-| Dữ liệu & AI      | Ứng dụng LLM, RAG, agents, khả năng quan sát, phân tích        | `rag-engineer`, `prompt-engineer`, `langgraph`                                  |
-| Phát triển        | Làm chủ ngôn ngữ, mẫu thiết kế framework, chất lượng code      | `typescript-expert`, `python-patterns`, `react-patterns`                        |
-| Tổng quát         | Lập kế hoạch, tài liệu, vận hành sản phẩm, viết bài, hướng dẫn | `brainstorming`, `doc-coauthoring`, `writing-plans`                             |
-| Hạ tầng           | DevOps, cloud, serverless, triển khai, CI/CD                   | `docker-expert`, `aws-serverless`, `vercel-deployment`                          |
-| Bảo mật           | AppSec, pentesting, phân tích lỗ hổng, tuân thủ                | `api-security-best-practices`, `sql-injection-testing`, `vulnerability-scanner` |
-| Kiểm thử          | TDD, thiết kế kiểm thử, sửa lỗi, quy trình QA                  | `test-driven-development`, `testing-patterns`, `test-fixing`                    |
-| Quy trình         | Tự động hóa, điều phối, công việc, agents                      | `workflow-automation`, `inngest`, `trigger-dev`                                 |
+| Danh mục     | Trọng tâm                                                      | Ví dụ kỹ năng                                                                   |
+| :----------- | :------------------------------------------------------------- | :------------------------------------------------------------------------------ |
+| Kiến trúc    | Thiết kế hệ thống, ADRs, C4 và các mẫu có thể mở rộng          | `architecture`, `c4-context`, `senior-architect`                                |
+| Kinh doanh   | Tăng trưởng, định giá, CRO, SEO và thâm nhập thị trường        | `copywriting`, `pricing-strategy`, `seo-audit`                                  |
+| Dữ liệu & AI | Ứng dụng LLM, RAG, agents, khả năng quan sát, phân tích        | `rag-engineer`, `prompt-engineer`, `langgraph`                                  |
+| Phát triển   | Làm chủ ngôn ngữ, mẫu thiết kế framework, chất lượng code      | `typescript-expert`, `python-patterns`, `react-patterns`                        |
+| Tổng quát    | Lập kế hoạch, tài liệu, vận hành sản phẩm, viết bài, hướng dẫn | `brainstorming`, `doc-coauthoring`, `writing-plans`                             |
+| Hạ tầng      | DevOps, cloud, serverless, triển khai, CI/CD                   | `docker-expert`, `aws-serverless`, `vercel-deployment`                          |
+| Bảo mật      | AppSec, pentesting, phân tích lỗ hổng, tuân thủ                | `api-security-best-practices`, `sql-injection-testing`, `vulnerability-scanner` |
+| Kiểm thử     | TDD, thiết kế kiểm thử, sửa lỗi, quy trình QA                  | `test-driven-development`, `testing-patterns`, `test-fixing`                    |
+| Quy trình    | Tự động hóa, điều phối, công việc, agents                      | `workflow-automation`, `inngest`, `trigger-dev`                                 |
 
 ## Bộ sưu tập Tuyển chọn
 

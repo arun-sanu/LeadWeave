@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Plus,
-  Pin,
-  PinOff,
-  Calendar,
-  Search,
-  X,
-  Trash2,
-  Bell,
-  Clock,
-  Palette,
-  Share2,
-} from 'lucide-react';
+import { Plus, Pin, PinOff, Calendar, Search, X, Trash2, Bell, Clock, Palette, Share2 } from 'lucide-react';
 import {
   useNotepadStore,
   PASTEL_COLORS,
@@ -41,28 +29,24 @@ const StickyNoteColorfulIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
 );
 
 export const FloatingNotepad: React.FC = () => {
-  const {
-    notes,
-    isCalendarOpen,
-    setCalendarOpen,
-    isSearchModalOpen,
-    setSearchModalOpen,
-    updateStickyNote,
-  } = useNotepadStore();
+  const { notes, isCalendarOpen, setCalendarOpen, isSearchModalOpen, setSearchModalOpen, updateStickyNote } =
+    useNotepadStore();
 
   // Background Alert Reminder Checker
   useEffect(() => {
     const interval = setInterval(() => {
       const nowMs = Date.now();
 
-      notes.forEach((note) => {
+      notes.forEach(note => {
         if (note.alertAt && new Date(note.alertAt).getTime() <= nowMs && !note.isAlertTriggered) {
           useNotepadStore.setState(s => ({
-            notes: s.notes.map(n => n.id === note.id ? { ...n, isAlertTriggered: true, isOpen: true, isPinned: true } : n)
+            notes: s.notes.map(n =>
+              n.id === note.id ? { ...n, isAlertTriggered: true, isOpen: true, isPinned: true } : n,
+            ),
           }));
         }
 
-        note.stickyNotes.forEach((s) => {
+        note.stickyNotes.forEach(s => {
           if (s.alertAt && new Date(s.alertAt).getTime() <= nowMs && !s.isAlertTriggered) {
             updateStickyNote(note.id, s.id, { isAlertTriggered: true, isPinnedToScreen: true });
           }
@@ -121,14 +105,19 @@ const SingleNotepadWindow: React.FC<SingleNotepadWindowProps> = ({ note, index }
   const [isDragOver, setIsDragOver] = useState(false);
   const [alertMenuOpenNoteId, setAlertMenuOpenNoteId] = useState<string | null>(null);
   const [colorPickerStickyId, setColorPickerStickyId] = useState<string | null>(null);
-  const [shareTarget, setShareTarget] = useState<{ type: 'note' | 'sticky'; title?: string; content: string } | null>(null);
+  const [shareTarget, setShareTarget] = useState<{ type: 'note' | 'sticky'; title?: string; content: string } | null>(
+    null,
+  );
 
   const windowPos = note.position || { x: 100 + index * 30, y: 90 + index * 30 };
   const displayName = getNoteDisplayName(note, index);
 
   // Drag handle logic
   const handlePointerDown = (e: React.PointerEvent) => {
-    if ((e.target as HTMLElement).closest('.notepad-navbar-actions') || (e.target as HTMLElement).tagName === 'BUTTON') {
+    if (
+      (e.target as HTMLElement).closest('.notepad-navbar-actions') ||
+      (e.target as HTMLElement).tagName === 'BUTTON'
+    ) {
       return;
     }
     setIsDragging(true);
@@ -164,17 +153,17 @@ const SingleNotepadWindow: React.FC<SingleNotepadWindowProps> = ({ note, index }
         left: `${windowPos.x}px`,
         top: `${windowPos.y}px`,
       }}
-      onDragOver={(e) => {
+      onDragOver={e => {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
         if (!isDragOver) setIsDragOver(true);
       }}
-      onDragLeave={(e) => {
+      onDragLeave={e => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) {
           setIsDragOver(false);
         }
       }}
-      onDrop={(e) => {
+      onDrop={e => {
         e.preventDefault();
         setIsDragOver(false);
         try {
@@ -203,7 +192,15 @@ const SingleNotepadWindow: React.FC<SingleNotepadWindowProps> = ({ note, index }
             {displayName}
           </span>
           {note.isPinned && (
-            <span style={{ fontSize: '10px', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '1px 6px', borderRadius: '4px' }}>
+            <span
+              style={{
+                fontSize: '10px',
+                background: 'rgba(56, 189, 248, 0.2)',
+                color: '#38bdf8',
+                padding: '1px 6px',
+                borderRadius: '4px',
+              }}
+            >
               Pinned
             </span>
           )}
@@ -221,7 +218,12 @@ const SingleNotepadWindow: React.FC<SingleNotepadWindowProps> = ({ note, index }
           </button>
 
           {/* New Separate Window Button */}
-          <button className="notepad-btn-icon" onClick={() => createNote()} title="Open New Separate Notepad Window" aria-label="New notepad window">
+          <button
+            className="notepad-btn-icon"
+            onClick={() => createNote()}
+            title="Open New Separate Notepad Window"
+            aria-label="New notepad window"
+          >
             <Plus size={16} />
           </button>
 
@@ -273,7 +275,9 @@ const SingleNotepadWindow: React.FC<SingleNotepadWindowProps> = ({ note, index }
         <div className="notepad-alert-banner">
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Bell size={15} color="#facc15" fill="#facc15" />
-            <span>Reminder: <strong>{displayName}</strong></span>
+            <span>
+              Reminder: <strong>{displayName}</strong>
+            </span>
           </div>
           <div className="alert-banner-actions">
             <button className="alert-btn" onClick={() => snoozeAlert(note.id, 'note', 15)}>
@@ -404,7 +408,12 @@ const SingleNotepadWindow: React.FC<SingleNotepadWindowProps> = ({ note, index }
                 onClick={() => addStickyNote(note.id)}
                 title="Add Colorful Sticky Note"
                 aria-label="Add sticky note"
-                style={{ background: 'rgba(254, 249, 195, 0.15)', border: '1px solid rgba(250, 204, 21, 0.35)', padding: '3px 5px', borderRadius: '6px' }}
+                style={{
+                  background: 'rgba(254, 249, 195, 0.15)',
+                  border: '1px solid rgba(250, 204, 21, 0.35)',
+                  padding: '3px 5px',
+                  borderRadius: '6px',
+                }}
               >
                 <StickyNoteColorfulIcon size={18} />
               </button>
@@ -414,7 +423,7 @@ const SingleNotepadWindow: React.FC<SingleNotepadWindowProps> = ({ note, index }
           {/* Grid of Sticky Notes inside note */}
           {note.stickyNotes.length > 0 ? (
             <div className="sticky-notes-grid">
-              {note.stickyNotes.map((sticky) => {
+              {note.stickyNotes.map(sticky => {
                 const colorScheme = PASTEL_COLORS[sticky.color] || PASTEL_COLORS.yellow;
                 const isColorOpen = colorPickerStickyId === sticky.id;
 
@@ -423,8 +432,11 @@ const SingleNotepadWindow: React.FC<SingleNotepadWindowProps> = ({ note, index }
                     key={sticky.id}
                     className="pastel-sticky-card"
                     draggable={true}
-                    onDragStart={(e) => {
-                      e.dataTransfer.setData('text/plain', JSON.stringify({ stickyId: sticky.id, sourceNoteId: note.id }));
+                    onDragStart={e => {
+                      e.dataTransfer.setData(
+                        'text/plain',
+                        JSON.stringify({ stickyId: sticky.id, sourceNoteId: note.id }),
+                      );
                       e.dataTransfer.effectAllowed = 'move';
                     }}
                     style={{

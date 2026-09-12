@@ -29,13 +29,7 @@ npm install thinking-orbs
 The package declares `react` and `react-dom` version 18 or newer as peer dependencies. Import the component and exported types from the package root:
 
 ```tsx
-import {
-  ThinkingOrb,
-  type OrbSize,
-  type OrbState,
-  type OrbTheme,
-  type ThinkingOrbProps,
-} from "thinking-orbs";
+import { ThinkingOrb, type OrbSize, type OrbState, type OrbTheme, type ThinkingOrbProps } from 'thinking-orbs';
 ```
 
 ## Choose the State
@@ -59,17 +53,10 @@ The presets have different dot counts, dot sizes, and speed tuning. They are sep
 ## Basic Usage
 
 ```tsx
-import { ThinkingOrb } from "thinking-orbs";
+import { ThinkingOrb } from 'thinking-orbs';
 
 export function AgentStatus() {
-  return (
-    <ThinkingOrb
-      state="searching"
-      size={20}
-      theme="auto"
-      aria-label="Searching project files…"
-    />
-  );
+  return <ThinkingOrb state="searching" size={20} theme="auto" aria-label="Searching project files…" />;
 }
 ```
 
@@ -80,22 +67,15 @@ All other canvas props pass through, including `className`, `style`, `data-*`, e
 Keep product phases separate from visual states so the mapping stays explicit:
 
 ```tsx
-import { ThinkingOrb, type OrbState } from "thinking-orbs";
+import { ThinkingOrb, type OrbState } from 'thinking-orbs';
 
-type AgentPhase =
-  | "idle"
-  | "retrieving"
-  | "reasoning"
-  | "writing"
-  | "creating"
-  | "done"
-  | "error";
+type AgentPhase = 'idle' | 'retrieving' | 'reasoning' | 'writing' | 'creating' | 'done' | 'error';
 
 const ORB_BY_PHASE: Partial<Record<AgentPhase, OrbState>> = {
-  retrieving: "searching",
-  reasoning: "solving",
-  writing: "composing",
-  creating: "shaping",
+  retrieving: 'searching',
+  reasoning: 'solving',
+  writing: 'composing',
+  creating: 'shaping',
 };
 
 export function AgentActivity({ phase }: { phase: AgentPhase }) {
@@ -159,9 +139,9 @@ The canvas is transparent. Verify contrast against the actual surface rather tha
 The component uses React effects, canvas, `requestAnimationFrame`, media queries, and observers. Keep the package import behind a client boundary in the Next.js App Router:
 
 ```tsx
-"use client";
+'use client';
 
-import { ThinkingOrb } from "thinking-orbs";
+import { ThinkingOrb } from 'thinking-orbs';
 
 export function ThinkingStatus() {
   return <ThinkingOrb state="working" size={20} />;
@@ -188,9 +168,9 @@ Do not rebuild these behaviors in a wrapper. Add product state management and la
 Prefer `<ThinkingOrb>` for product UI. The package also exports its resolved presets and raw frame painters for a custom canvas outside React:
 
 ```ts
-import { MODE_DRAWS, resolvePreset } from "thinking-orbs";
+import { MODE_DRAWS, resolvePreset } from 'thinking-orbs';
 
-const { mode, speed, opts } = resolvePreset("searching", 64);
+const { mode, speed, opts } = resolvePreset('searching', 64);
 const drawFrame = MODE_DRAWS[mode];
 
 drawFrame(

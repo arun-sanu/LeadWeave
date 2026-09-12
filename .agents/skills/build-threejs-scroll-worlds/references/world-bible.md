@@ -53,23 +53,23 @@ Record real constants.
 
 ### Scale and shape
 
-| decision | value | reason |
-| --- | --- | --- |
-| world units | 1 unit = 1 meter | keeps camera, fog, and lights predictable |
-| human reference | 1.7 units | validates architecture and prop scale |
-| bevel language | 0.5–2% of object width | prevents razor edges without toy inflation |
-| curve language | squared architecture, rounded equipment | creates a controlled contrast |
-| detail hierarchy | silhouette / structure / accent | prevents noise-first modeling |
+| decision         | value                                   | reason                                     |
+| ---------------- | --------------------------------------- | ------------------------------------------ |
+| world units      | 1 unit = 1 meter                        | keeps camera, fog, and lights predictable  |
+| human reference  | 1.7 units                               | validates architecture and prop scale      |
+| bevel language   | 0.5–2% of object width                  | prevents razor edges without toy inflation |
+| curve language   | squared architecture, rounded equipment | creates a controlled contrast              |
+| detail hierarchy | silhouette / structure / accent         | prevents noise-first modeling              |
 
 ### Palette
 
-| role | value | use |
-| --- | --- | --- |
-| world dark | `#071014` | sky, deep structure, negative space |
-| structural mid | `#263237` | stone, metal, distant forms |
-| readable light | `#DCE5DD` | DOM type and focal edges |
-| warm practical | `#FF8C47` | lamps, machinery, local warmth |
-| story accent | `#D9362A` | chapter focus and navigation state |
+| role           | value     | use                                 |
+| -------------- | --------- | ----------------------------------- |
+| world dark     | `#071014` | sky, deep structure, negative space |
+| structural mid | `#263237` | stone, metal, distant forms         |
+| readable light | `#DCE5DD` | DOM type and focal edges            |
+| warm practical | `#FF8C47` | lamps, machinery, local warmth      |
+| story accent   | `#D9362A` | chapter focus and navigation state  |
 
 Use role names, not `color1`. Define how palette roles change between chapters. A color arc can move from cold/low saturation to warm/high saturation without changing the material identity of every object.
 
@@ -88,14 +88,14 @@ Record:
 
 Define separate amplitudes and frequencies:
 
-| layer | range | frequency/timing |
-| --- | ---: | ---: |
-| camera damping | 4.5–7.0 | exponential damping constant |
-| pointer parallax | 0.1–0.5° rotation, 0.02–0.12 world units | immediate target, damped render |
-| suspended dust | 0.02–0.12 units/s | seeded, non-synchronized |
-| foliage sway | 1–4° | 0.08–0.25 Hz with spatial phase |
-| word reveal | 40–90 ms per word | one entrance per chapter |
-| foreground retirement | 650–950 ms | opacity + restrained blur |
+| layer                 |                                    range |                frequency/timing |
+| --------------------- | ---------------------------------------: | ------------------------------: |
+| camera damping        |                                  4.5–7.0 |    exponential damping constant |
+| pointer parallax      | 0.1–0.5° rotation, 0.02–0.12 world units | immediate target, damped render |
+| suspended dust        |                        0.02–0.12 units/s |        seeded, non-synchronized |
+| foliage sway          |                                     1–4° | 0.08–0.25 Hz with spatial phase |
+| word reveal           |                        40–90 ms per word |        one entrance per chapter |
+| foreground retirement |                               650–950 ms |       opacity + restrained blur |
 
 If the art direction needs faster or quieter motion, change the table and keep the relationships.
 
@@ -103,21 +103,21 @@ If the art direction needs faster or quieter motion, change the table and keep t
 
 Use one row per authored state.
 
-| field | requirement |
-| --- | --- |
-| `id` | stable slug for anchors, URLs, debugging, and analytics |
-| `beat` | what the visitor understands here |
-| `landmark` | the dominant spatial subject |
-| `change` | how this frame differs from the previous one beyond copy |
-| `scrollWeight` | relative dwell in viewport heights |
-| `camera` | position, target, FOV, responsive override |
-| `occlusion` | doorway, fog bank, foreground, darkness, or terrain used at the seam |
-| `worldState` | light, fog, grade, particles, material/animation weights |
-| `focus` | visible and interactable named objects |
-| `copy` | eyebrow, heading, body, proof, action |
-| `foreground` | optional fixed alpha or camera-relative near-plane elements |
-| `assets` | required asset group and prefetch point |
-| `fallback` | poster or meaningful still frame |
+| field          | requirement                                                          |
+| -------------- | -------------------------------------------------------------------- |
+| `id`           | stable slug for anchors, URLs, debugging, and analytics              |
+| `beat`         | what the visitor understands here                                    |
+| `landmark`     | the dominant spatial subject                                         |
+| `change`       | how this frame differs from the previous one beyond copy             |
+| `scrollWeight` | relative dwell in viewport heights                                   |
+| `camera`       | position, target, FOV, responsive override                           |
+| `occlusion`    | doorway, fog bank, foreground, darkness, or terrain used at the seam |
+| `worldState`   | light, fog, grade, particles, material/animation weights             |
+| `focus`        | visible and interactable named objects                               |
+| `copy`         | eyebrow, heading, body, proof, action                                |
+| `foreground`   | optional fixed alpha or camera-relative near-plane elements          |
+| `assets`       | required asset group and prefetch point                              |
+| `fallback`     | poster or meaningful still frame                                     |
 
 Example:
 
@@ -148,10 +148,10 @@ Reject a chapter when its landmark, change, and camera composition cannot be nam
 
 Record endpoints before curves:
 
-| chapter | position | target | FOV | roll | near/far | mobile override | failure risk |
-| --- | --- | --- | ---: | ---: | --- | --- | --- |
-| threshold | `[0,3.8,13.5]` | `[0,2.4,-8]` | 38 | 0° | `.1 / 180` | pull back 22% | roof crop |
-| archive | `[-4,2.5,-2]` | `[1,3,-14]` | 44 | -0.4° | `.1 / 180` | target +1.2y | wall collision |
+| chapter   | position       | target       | FOV |  roll | near/far   | mobile override | failure risk   |
+| --------- | -------------- | ------------ | --: | ----: | ---------- | --------------- | -------------- |
+| threshold | `[0,3.8,13.5]` | `[0,2.4,-8]` |  38 |    0° | `.1 / 180` | pull back 22%   | roof crop      |
+| archive   | `[-4,2.5,-2]`  | `[1,3,-14]`  |  44 | -0.4° | `.1 / 180` | target +1.2y    | wall collision |
 
 For every segment inspect:
 
@@ -170,12 +170,12 @@ Use a debug route that draws the path, target curve, frustums, chapter labels, a
 
 Give every material family a causal surface story.
 
-| material | base/normal/rough/AO | scale | response | variation | budget |
-| --- | --- | --- | --- | --- | --- |
-| basalt | 1K atlas + normal + rough + AO | 1.5 m repeat | rough `.72–.9` | damp lower edge, chipped decals | shared 4 maps |
-| painted steel | trim sheet + normal + rough | 0.5 m trim | metal `1`, rough `.28–.55` | exposed-edge wear only | shared 2K set |
-| paper lantern | base + alpha + emissive | unique UV | rough `.65`, emissive `1.8` | warm hue ±4% | 512 atlas |
-| foliage | base/alpha + normal | card atlas | alphaTest `.35–.55` | 3 hue clusters | 1K atlas |
+| material      | base/normal/rough/AO           | scale        | response                    | variation                       | budget        |
+| ------------- | ------------------------------ | ------------ | --------------------------- | ------------------------------- | ------------- |
+| basalt        | 1K atlas + normal + rough + AO | 1.5 m repeat | rough `.72–.9`              | damp lower edge, chipped decals | shared 4 maps |
+| painted steel | trim sheet + normal + rough    | 0.5 m trim   | metal `1`, rough `.28–.55`  | exposed-edge wear only          | shared 2K set |
+| paper lantern | base + alpha + emissive        | unique UV    | rough `.65`, emissive `1.8` | warm hue ±4%                    | 512 atlas     |
+| foliage       | base/alpha + normal            | card atlas   | alphaTest `.35–.55`         | 3 hue clusters                  | 1K atlas      |
 
 ### Color-space contract
 
@@ -208,12 +208,12 @@ Look for swimming UVs, inconsistent texel density, inverted normals, black AO fr
 
 ## 7. Lighting and atmosphere ledger
 
-| system | chapters | intensity/range | shadow | purpose | fallback |
-| --- | --- | --- | --- | --- | --- |
-| sun/key | all | `2.2 → 0.8` | one 2048 map desktop, 1024 mobile | readable form direction | baked directional gradient |
-| environment | all | `0.35–0.55` | none | material reflections/fill | hemisphere light |
-| reactor core | 3–4 | emissive `2.4`, point `22`, range `9` | no | focal warmth | emissive + glow sprite |
-| fog | all | density `.012–.026` | n/a | depth separation and seam cover | background grade |
+| system       | chapters | intensity/range                       | shadow                            | purpose                         | fallback                   |
+| ------------ | -------- | ------------------------------------- | --------------------------------- | ------------------------------- | -------------------------- |
+| sun/key      | all      | `2.2 → 0.8`                           | one 2048 map desktop, 1024 mobile | readable form direction         | baked directional gradient |
+| environment  | all      | `0.35–0.55`                           | none                              | material reflections/fill       | hemisphere light           |
+| reactor core | 3–4      | emissive `2.4`, point `22`, range `9` | no                                | focal warmth                    | emissive + glow sprite     |
+| fog          | all      | density `.012–.026`                   | n/a                               | depth separation and seam cover | background grade           |
 
 Rules:
 
@@ -225,10 +225,10 @@ Rules:
 
 ## 8. Interaction matrix
 
-| id | object | available chapters | hover/focus | activate | keyboard/DOM proxy | exit/recovery |
-| --- | --- | --- | --- | --- | --- | --- |
-| inspect-core | core | 2.65–3.55 | rim +12%, label in | mixer clip + detail panel | `button[aria-controls=core-panel]` | close panel, restore orbit weight |
-| lantern-note | lantern-left | 0.2–1.2 | warm light `.4→.7` | reveal note | real button after chapter heading | fades when chapter leaves |
+| id           | object       | available chapters | hover/focus        | activate                  | keyboard/DOM proxy                 | exit/recovery                     |
+| ------------ | ------------ | ------------------ | ------------------ | ------------------------- | ---------------------------------- | --------------------------------- |
+| inspect-core | core         | 2.65–3.55          | rim +12%, label in | mixer clip + detail panel | `button[aria-controls=core-panel]` | close panel, restore orbit weight |
+| lantern-note | lantern-left | 0.2–1.2            | warm light `.4→.7` | reveal note               | real button after chapter heading  | fades when chapter leaves         |
 
 Define for every interactive:
 
@@ -245,11 +245,11 @@ Avoid interaction without feedback. A cursor change alone is not enough in a dar
 
 ## 9. Asset and loading ledger
 
-| group | files | compressed size | memory estimate | required by | prefetch at | fallback |
-| --- | --- | ---: | ---: | --- | --- | --- |
-| critical-shell | sky, terrain, first landmark, 1K atlas | 4.2 MB | 48 MB | chapter 0 | page load | hero poster |
-| archive | archive GLB, trim sheet, decals | 6.8 MB | 82 MB | chapter 1 | progress 0.35 | chapter still |
-| reactor | reactor GLB, emissive atlas, steam | 8.1 MB | 96 MB | chapter 3 | progress 1.7 | chapter still |
+| group          | files                                  | compressed size | memory estimate | required by | prefetch at   | fallback      |
+| -------------- | -------------------------------------- | --------------: | --------------: | ----------- | ------------- | ------------- |
+| critical-shell | sky, terrain, first landmark, 1K atlas |          4.2 MB |           48 MB | chapter 0   | page load     | hero poster   |
+| archive        | archive GLB, trim sheet, decals        |          6.8 MB |           82 MB | chapter 1   | progress 0.35 | chapter still |
+| reactor        | reactor GLB, emissive atlas, steam     |          8.1 MB |           96 MB | chapter 3   | progress 1.7  | chapter still |
 
 Account for decoded texture memory, not only compressed transfer:
 

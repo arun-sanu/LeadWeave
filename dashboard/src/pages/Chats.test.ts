@@ -545,4 +545,3 @@ test('pressing Escape key closes the translucent glass popup room', async () => 
   // Popup overlay is dismissed
   assert.equal(container.querySelector('.chats-glass-popup-overlay'), null, 'glass popup should be closed on ESC');
 });
-

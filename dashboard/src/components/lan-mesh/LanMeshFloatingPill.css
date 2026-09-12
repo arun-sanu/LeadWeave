@@ -31,14 +31,14 @@
   background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
-  box-shadow: 
+  box-shadow:
     0 10px 30px -5px rgba(0, 0, 0, 0.5),
     0 4px 12px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(16px) saturate(160%);
   -webkit-backdrop-filter: blur(16px) saturate(160%);
   cursor: pointer;
-  transition: 
+  transition:
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.2s ease,
     background-color 0.2s ease,
@@ -50,7 +50,7 @@
   transform: translateY(2px) scale(1.02);
   background: rgba(22, 33, 58, 0.94);
   border-color: rgba(16, 185, 129, 0.4);
-  box-shadow: 
+  box-shadow:
     0 16px 36px -4px rgba(0, 0, 0, 0.6),
     0 0 20px rgba(16, 185, 129, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -123,7 +123,8 @@
     transform: scale(0.8);
     opacity: 0.9;
   }
-  75%, 100% {
+  75%,
+  100% {
     transform: scale(2.4);
     opacity: 0;
   }
@@ -160,8 +161,14 @@
 }
 
 @keyframes lanBadgePop {
-  0% { transform: scale(0.6); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .lan-pill-chat-icon {
@@ -169,7 +176,9 @@
   align-items: center;
   color: var(--text-muted);
   margin-left: 2px;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 .lan-docked-pill:hover .lan-pill-chat-icon {
@@ -190,14 +199,16 @@
   background: rgba(15, 23, 42, 0.94);
   border: 1px solid rgba(16, 185, 129, 0.35);
   border-radius: 14px;
-  box-shadow: 
+  box-shadow:
     0 12px 36px rgba(0, 0, 0, 0.6),
     0 0 20px rgba(16, 185, 129, 0.2);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   cursor: pointer;
   animation: lanToastSlideDown 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .lan-incoming-toast:hover {
@@ -301,7 +312,7 @@
   background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 20px;
-  box-shadow: 
+  box-shadow:
     0 24px 50px -10px rgba(0, 0, 0, 0.7),
     0 10px 20px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -496,7 +507,9 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
 }
 
 .lan-join-btn:hover {

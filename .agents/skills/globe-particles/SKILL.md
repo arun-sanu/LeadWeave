@@ -6,12 +6,14 @@ description: Create a globe-like 3D particle visualization with a dense luminous
 # Globe Particles
 
 ## Scope
+
 - Apply only to a globe-like 3D particle visualization.
 - Do not change full page layout, copy, or unrelated motion systems.
 - Use for planetary, orbital, infrastructure, or synthesized data-globe effects.
 - Keep the core neutral or white-hot and derive ring/glow accents from the design's primary color.
 
 ## Visual Target
+
 - Dense spherical core of luminous points.
 - Thinner outer orbital ring or flattened disc around the sphere.
 - Clear globe silhouette with tilt, depth, and layered particle density.
@@ -44,6 +46,7 @@ description: Create a globe-like 3D particle visualization with a dense luminous
 ```
 
 ## Particle Shader
+
 Use circular shader points so particles stay crisp and luminous.
 
 ```js
@@ -102,18 +105,22 @@ void main() {
 ## Three.js Recipe
 
 ```js
-import * as THREE from "three";
+import * as THREE from 'three';
 
 function hexToRgb01(hex) {
-  const clean = hex.replace("#", "").trim();
-  const value = clean.length === 3
-    ? clean.split("").map((char) => char + char).join("")
-    : clean;
+  const clean = hex.replace('#', '').trim();
+  const value =
+    clean.length === 3
+      ? clean
+          .split('')
+          .map(char => char + char)
+          .join('')
+      : clean;
 
   return new THREE.Color(
     parseInt(value.slice(0, 2), 16) / 255,
     parseInt(value.slice(2, 4), 16) / 255,
-    parseInt(value.slice(4, 6), 16) / 255
+    parseInt(value.slice(4, 6), 16) / 255,
   );
 }
 
@@ -158,9 +165,9 @@ function buildGlobeParticleGeometry(options = {}) {
   }
 
   const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute("a_size", new THREE.BufferAttribute(sizes, 1));
-  geometry.setAttribute("a_layer", new THREE.BufferAttribute(layers, 1));
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('a_size', new THREE.BufferAttribute(sizes, 1));
+  geometry.setAttribute('a_layer', new THREE.BufferAttribute(layers, 1));
   return geometry;
 }
 
@@ -182,7 +189,7 @@ function initGlobeParticles(canvas, options = {}) {
 
   const accent = options.accentColor
     ? new THREE.Color(options.accentColor)
-    : hexToRgb01(getComputedStyle(document.documentElement).getPropertyValue("--brand-accent").trim() || "#8b5cf6");
+    : hexToRgb01(getComputedStyle(document.documentElement).getPropertyValue('--brand-accent').trim() || '#8b5cf6');
 
   const geometry = buildGlobeParticleGeometry(options);
   const material = new THREE.ShaderMaterial({
@@ -204,7 +211,7 @@ function initGlobeParticles(canvas, options = {}) {
   particles.rotation.z = options.tiltZ ?? 0.22;
   scene.add(particles);
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const pointer = new THREE.Vector2(0, 0);
   let rafId = 0;
 
@@ -246,23 +253,23 @@ function initGlobeParticles(canvas, options = {}) {
 
   resize();
   render();
-  window.addEventListener("resize", handleResize);
-  window.addEventListener("pointermove", handlePointerMove);
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('pointermove', handlePointerMove);
 
   return () => {
     cancelAnimationFrame(rafId);
-    window.removeEventListener("resize", handleResize);
-    window.removeEventListener("pointermove", handlePointerMove);
+    window.removeEventListener('resize', handleResize);
+    window.removeEventListener('pointermove', handlePointerMove);
     geometry.dispose();
     material.dispose();
     renderer.dispose();
   };
 }
 
-const cleanupGlobe = initGlobeParticles(document.querySelector("[data-globe-particles]"), {
+const cleanupGlobe = initGlobeParticles(document.querySelector('[data-globe-particles]'), {
   sphereCount: 2600,
   ringCount: 1300,
-  accentColor: "#8b5cf6",
+  accentColor: '#8b5cf6',
   radius: 1.35,
   ringRadius: 2.05,
   rotationSpeed: 0.12,
@@ -271,6 +278,7 @@ const cleanupGlobe = initGlobeParticles(document.querySelector("[data-globe-part
 ```
 
 ## Tuning Knobs
+
 - Density: tune `sphereCount` and `ringCount` separately.
 - Scale: tune `radius`, `ringRadius`, `ringThickness`, and `cameraDistance`.
 - Color: keep `coreColor` neutral; derive `accentColor` from the brand primary.
@@ -279,6 +287,7 @@ const cleanupGlobe = initGlobeParticles(document.querySelector("[data-globe-part
 - Performance: lower particle counts or cap `maxDpr` before changing the visual structure.
 
 ## Taste Rules
+
 - The silhouette must read as a globe, not a loose starfield.
 - The ring should feel orbital and tilted, not like a flat decorative underline.
 - Use restrained glow; let density and depth create the premium feel.
@@ -286,6 +295,7 @@ const cleanupGlobe = initGlobeParticles(document.querySelector("[data-globe-part
 - Put the globe over a dark background or inside a dark atmospheric shell.
 
 ## Avoid
+
 - Generic starfield noise with no spherical structure.
 - Oversized particles or bloom that destroys the globe silhouette.
 - Hardcoded accent colors when the design has a clear primary color.
@@ -293,6 +303,7 @@ const cleanupGlobe = initGlobeParticles(document.querySelector("[data-globe-part
 - Dense fog that turns the object into a blurry blob.
 
 ## Quick Checks
+
 - Sphere and ring are distinct particle populations.
 - Core reads mostly neutral or white-hot.
 - Accent color appears on ring, highlights, or glow.

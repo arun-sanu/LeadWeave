@@ -1,12 +1,13 @@
 ---
 paths:
-  - "**/*.rb"
-  - "**/*.rake"
-  - "**/Gemfile"
-  - "**/test/**/*.rb"
-  - "**/spec/**/*.rb"
-  - "**/config/routes.rb"
+  - '**/*.rb'
+  - '**/*.rake'
+  - '**/Gemfile'
+  - '**/test/**/*.rb'
+  - '**/spec/**/*.rb'
+  - '**/config/routes.rb'
 ---
+
 # Ruby Testing
 
 > This file extends [common/testing.md](common-testing.md) with Ruby and Rails specific content.

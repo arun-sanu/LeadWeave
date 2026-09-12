@@ -141,7 +141,7 @@ function ChatComposer({
     { id: 1, title: 'Greeting', text: 'Hello! How can I help you today?' },
     { id: 2, title: 'Follow-up', text: 'Just checking in to see if you have any questions.' },
     { id: 3, title: 'Thank you', text: 'Thank you for your business. Let us know if you need anything else.' },
-    { id: 4, title: 'Out of Office', text: 'I am currently out of the office and will reply as soon as possible.' }
+    { id: 4, title: 'Out of Office', text: 'I am currently out of the office and will reply as soon as possible.' },
   ];
 
   // 5. Handle file selection & base64 conversion
@@ -330,8 +330,6 @@ function ChatComposer({
         </div>
       )}
 
-
-
       {/* Replying preview banner */}
       {replyingTo && (
         <div className="replying-preview-banner">
@@ -365,9 +363,9 @@ function ChatComposer({
             </div>
             <div className="chats-template-picker-list">
               {messageTemplates.map(template => (
-                <button 
-                  key={template.id} 
-                  type="button" 
+                <button
+                  key={template.id}
+                  type="button"
                   className="chats-template-item"
                   onClick={() => handleTemplateClick(template.text)}
                 >
@@ -382,9 +380,15 @@ function ChatComposer({
         {/* Emoji Picker panel */}
         {showEmojiPicker && (
           <div className="chats-emoji-picker" ref={emojiPickerRef}>
-            <Suspense fallback={<div className="chats-emoji-loading"><Loader2 className="animate-spin" size={24} /></div>}>
-              <EmojiPicker 
-                onEmojiClick={(emojiData) => handleEmojiClick(emojiData.emoji)}
+            <Suspense
+              fallback={
+                <div className="chats-emoji-loading">
+                  <Loader2 className="animate-spin" size={24} />
+                </div>
+              }
+            >
+              <EmojiPicker
+                onEmojiClick={emojiData => handleEmojiClick(emojiData.emoji)}
                 theme={Theme.DARK}
                 emojiStyle={EmojiStyle.FACEBOOK}
                 lazyLoadEmojis={false}
@@ -433,7 +437,7 @@ function ChatComposer({
           >
             <Smile size={20} />
           </button>
-          
+
           <button
             type="button"
             ref={templateButtonRef}
@@ -447,7 +451,7 @@ function ChatComposer({
           >
             <FileText size={20} />
           </button>
-          
+
           <button
             type="button"
             onClick={() => setShowReminderModal(true)}

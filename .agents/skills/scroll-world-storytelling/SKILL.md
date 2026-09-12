@@ -1,6 +1,6 @@
 ---
 name: scroll-world-storytelling
-description: "Turn an article, case study, brand narrative, product journey, or long-form story into a cinematic scroll-driven landing page using one of three renderers: scrubbed video, a real-time Three.js world, or semantic HTML/SVG data and typography. Use when the user asks for a scroll world, fly-through landing page, article-to-website transformation, animated planet, data scrollytelling, video-scrubbed page, connected visual journey, or story-led alternative to ordinary stacked sections."
+description: 'Turn an article, case study, brand narrative, product journey, or long-form story into a cinematic scroll-driven landing page using one of three renderers: scrubbed video, a real-time Three.js world, or semantic HTML/SVG data and typography. Use when the user asks for a scroll world, fly-through landing page, article-to-website transformation, animated planet, data scrollytelling, video-scrubbed page, connected visual journey, or story-led alternative to ordinary stacked sections.'
 ---
 
 # Scroll World Storytelling
@@ -67,17 +67,17 @@ Reduce the source to 5–7 beats:
 
 Create a beat ledger before code:
 
-| Field | Constraint |
-| --- | --- |
-| id | short stable slug |
-| scene | what exists in the visual world |
-| eyebrow | 2–4 words |
-| headline | 3–8 words |
-| body | one sentence, ideally under 24 words |
-| evidence | exact source fact or asset |
-| motion | one clear verb phrase |
-| scroll weight | 0.7–1.8 viewport heights |
-| CTA | final beat only unless required earlier |
+| Field         | Constraint                              |
+| ------------- | --------------------------------------- |
+| id            | short stable slug                       |
+| scene         | what exists in the visual world         |
+| eyebrow       | 2–4 words                               |
+| headline      | 3–8 words                               |
+| body          | one sentence, ideally under 24 words    |
+| evidence      | exact source fact or asset              |
+| motion        | one clear verb phrase                   |
+| scroll weight | 0.7–1.8 viewport heights                |
+| CTA           | final beat only unless required earlier |
 
 Combine repeated arguments. Do not turn every paragraph into a scene.
 
@@ -98,11 +98,11 @@ For generated media, reuse the style preamble byte-for-byte in every asset promp
 
 ## Choose one mode
 
-| Choose | Best for | Strength | Main cost |
-| --- | --- | --- | --- |
-| Video scrub | cinematic realism, places, products, pre-rendered camera moves | exact art direction and photographic finish | heavier assets and seek tuning |
-| Three.js world | planets, objects, maps, systems, spatial interaction | real-time depth and responsive camera control | WebGL performance and fallback work |
-| HTML / data / type | reports, launches, metrics, editorial stories | accessible, crisp, lightweight, content-first | less photographic spectacle |
+| Choose             | Best for                                                       | Strength                                      | Main cost                           |
+| ------------------ | -------------------------------------------------------------- | --------------------------------------------- | ----------------------------------- |
+| Video scrub        | cinematic realism, places, products, pre-rendered camera moves | exact art direction and photographic finish   | heavier assets and seek tuning      |
+| Three.js world     | planets, objects, maps, systems, spatial interaction           | real-time depth and responsive camera control | WebGL performance and fallback work |
+| HTML / data / type | reports, launches, metrics, editorial stories                  | accessible, crisp, lightweight, content-first | less photographic spectacle         |
 
 If the story is primarily proof and numbers, prefer HTML/data. If the central metaphor is spatial and interactive, prefer Three.js. If cinematic imagery is the idea, prefer video.
 
@@ -129,12 +129,12 @@ Do not promise seamless connectors unless the model accepts the required start f
 
 ### Encode for scrubbing
 
-~~~bash
+```bash
 ffmpeg -i source.mp4 -an \
   -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p \
   -g 8 -keyint_min 8 -sc_threshold 0 \
   -movflags +faststart output.mp4
-~~~
+```
 
 - Use one codec and encode profile across every clip.
 - Strip audio unless the experience explicitly includes it.
@@ -180,22 +180,22 @@ This mode should not secretly become Canvas or WebGL. Its advantage is native la
 
 Keep content separate from renderer code:
 
-~~~js
+```js
 const story = {
-  title: "The journey",
-  cta: { label: "Begin", href: "#begin" },
+  title: 'The journey',
+  cta: { label: 'Begin', href: '#begin' },
   sections: [
     {
-      id: "hook",
-      eyebrow: "01 / Premise",
-      title: "A destination, not a route.",
-      body: "Define arrival clearly and let the system find the path.",
+      id: 'hook',
+      eyebrow: '01 / Premise',
+      title: 'A destination, not a route.',
+      body: 'Define arrival clearly and let the system find the path.',
       evidence: null,
-      scroll: 1.4
-    }
-  ]
+      scroll: 1.4,
+    },
+  ],
 };
-~~~
+```
 
 Every runtime needs:
 

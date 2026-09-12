@@ -1,15 +1,16 @@
 ---
 paths:
-  - "**/*.css"
-  - "**/*.scss"
-  - "**/*.sass"
-  - "**/*.less"
-  - "**/*.html"
-  - "**/*.tsx"
-  - "**/*.jsx"
-  - "**/*.vue"
-  - "**/*.svelte"
+  - '**/*.css'
+  - '**/*.scss'
+  - '**/*.sass'
+  - '**/*.less'
+  - '**/*.html'
+  - '**/*.tsx'
+  - '**/*.jsx'
+  - '**/*.vue'
+  - '**/*.svelte'
 ---
+
 > This file extends [common/coding-style.md](common-coding-style.md) with web-specific frontend content.
 
 # Web Coding Style
@@ -69,12 +70,14 @@ Define design tokens as variables. Do not hardcode palette, typography, or spaci
 ## Animation-Only Properties
 
 Prefer compositor-friendly motion:
+
 - `transform`
 - `opacity`
 - `clip-path`
 - `filter` (sparingly)
 
 Avoid animating layout-bound properties:
+
 - `width`
 - `height`
 - `top`

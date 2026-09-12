@@ -23,7 +23,7 @@ export function RoleProvider({ children, initialRole = null }: RoleProviderProps
   }, []);
 
   const isRealDev = realRole === 'developer';
-  const effectiveRole = (isRealDev && simulatedRole) ? simulatedRole : realRole;
+  const effectiveRole = isRealDev && simulatedRole ? simulatedRole : realRole;
 
   const isDeveloper = effectiveRole === 'developer';
   const isSuperAdmin = effectiveRole === 'superadmin' || isDeveloper;
@@ -55,4 +55,3 @@ export function RoleProvider({ children, initialRole = null }: RoleProviderProps
 
   return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;
 }
-

@@ -80,7 +80,8 @@ export function Infrastructure() {
       const storageSwitch =
         !!infraStatus &&
         (configForm.storageConfig.type !== infraStatus.storage?.type ||
-          (configForm.storageConfig.type === 's3' && configForm.storageConfig.builtIn !== infraStatus.storage?.builtIn));
+          (configForm.storageConfig.type === 's3' &&
+            configForm.storageConfig.builtIn !== infraStatus.storage?.builtIn));
       restartFlow.open({ profiles, dbSwitch, storageSwitch });
     },
   });

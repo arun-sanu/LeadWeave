@@ -37,7 +37,9 @@ export const NotepadCalendarModal: React.FC<NotepadCalendarModalProps> = ({ onCl
         allReminders.push({
           id: s.id,
           type: 'sticky',
-          title: s.content ? (s.content.substring(0, 25) + (s.content.length > 25 ? '...' : '')) : `Sticky Note (${s.color})`,
+          title: s.content
+            ? s.content.substring(0, 25) + (s.content.length > 25 ? '...' : '')
+            : `Sticky Note (${s.color})`,
           alertAt: s.alertAt,
           noteId: n.id,
           stickyId: s.id,
@@ -57,7 +59,7 @@ export const NotepadCalendarModal: React.FC<NotepadCalendarModalProps> = ({ onCl
     })
     .sort((a, b) => new Date(a.alertAt).getTime() - new Date(b.alertAt).getTime());
 
-  const handleRemoveReminder = (r: typeof allReminders[0]) => {
+  const handleRemoveReminder = (r: (typeof allReminders)[0]) => {
     if (r.type === 'note') {
       setNoteAlert(r.noteId, undefined);
     } else if (r.stickyId) {
@@ -130,7 +132,14 @@ export const NotepadCalendarModal: React.FC<NotepadCalendarModalProps> = ({ onCl
         </div>
 
         {/* Filter Controls */}
-        <div style={{ padding: '12px 20px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', gap: '8px' }}>
+        <div
+          style={{
+            padding: '12px 20px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+            display: 'flex',
+            gap: '8px',
+          }}
+        >
           {(['all', 'upcoming', 'past'] as const).map(f => (
             <button
               key={f}
@@ -153,10 +162,24 @@ export const NotepadCalendarModal: React.FC<NotepadCalendarModalProps> = ({ onCl
         </div>
 
         {/* List of Scheduled Reminders */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div
+          style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '16px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+          }}
+        >
           {sortedReminders.length === 0 ? (
             <div style={{ padding: '30px 0', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
-              <Bell size={28} color="#facc15" fill="#facc15" style={{ margin: '0 auto 8px auto', display: 'block', opacity: 0.85 }} />
+              <Bell
+                size={28}
+                color="#facc15"
+                fill="#facc15"
+                style={{ margin: '0 auto 8px auto', display: 'block', opacity: 0.85 }}
+              />
               No scheduled reminders found.
             </div>
           ) : (
@@ -193,7 +216,15 @@ export const NotepadCalendarModal: React.FC<NotepadCalendarModalProps> = ({ onCl
                       <span style={{ fontSize: '13px', fontWeight: 600, color: '#f8fafc' }}>{r.title}</span>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: isPast ? '#ef4444' : '#34d399' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontSize: '11px',
+                        color: isPast ? '#ef4444' : '#34d399',
+                      }}
+                    >
                       <Clock size={12} />
                       <span>{formatNoteDate(r.alertAt)}</span>
                       {isPast && <span style={{ fontWeight: 700 }}>(Past Due)</span>}
@@ -223,4 +254,3 @@ export const NotepadCalendarModal: React.FC<NotepadCalendarModalProps> = ({ onCl
     </div>
   );
 };
-

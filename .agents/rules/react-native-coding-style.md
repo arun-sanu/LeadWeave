@@ -1,8 +1,9 @@
 ---
 paths:
-  - "**/*.ts"
-  - "**/*.tsx"
+  - '**/*.ts'
+  - '**/*.tsx'
 ---
+
 # React Native / Expo Coding Style
 
 > This file extends [common/coding-style.md](common-coding-style.md) with React Native / Expo specific content.
@@ -16,9 +17,9 @@ paths:
 
 ```tsx
 interface AvatarProps {
-  uri: string
-  size?: number
-  onPress?: () => void
+  uri: string;
+  size?: number;
+  onPress?: () => void;
 }
 
 export function Avatar({ uri, size = 40, onPress }: AvatarProps) {
@@ -26,7 +27,7 @@ export function Avatar({ uri, size = 40, onPress }: AvatarProps) {
     <Pressable onPress={onPress}>
       <Image source={{ uri }} style={{ width: size, height: size, borderRadius: size / 2 }} />
     </Pressable>
-  )
+  );
 }
 ```
 

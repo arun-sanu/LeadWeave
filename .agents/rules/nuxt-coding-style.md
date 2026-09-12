@@ -1,11 +1,11 @@
 ---
 paths:
-  - "**/nuxt.config.*"
-  - "**/app.config.*"
-  - "**/app.vue"
-  - "**/pages/**"
-  - "**/layouts/**"
-  - "**/middleware/**"
+  - '**/nuxt.config.*'
+  - '**/app.config.*'
+  - '**/app.vue'
+  - '**/pages/**'
+  - '**/layouts/**'
+  - '**/middleware/**'
 ---
 
 # Nuxt Coding Style

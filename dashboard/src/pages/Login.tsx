@@ -14,11 +14,9 @@ interface LoginProps {
 
 export function Login({ onLogin }: LoginProps) {
   const { t } = useTranslation();
-  const [authMode, setAuthMode] = useState<'supabase' | 'apiKey'>(
-    isSupabaseConfigured ? 'supabase' : 'apiKey'
-  );
+  const [authMode, setAuthMode] = useState<'supabase' | 'apiKey'>(isSupabaseConfigured ? 'supabase' : 'apiKey');
   const [supabaseStatus, setSupabaseStatus] = useState<SupabaseConnectionStatus>(
-    isSupabaseConfigured ? 'checking' : 'disconnected'
+    isSupabaseConfigured ? 'checking' : 'disconnected',
   );
   const [step, setStep] = useState<1 | 2>(1);
   const [apiKey, setApiKey] = useState('');
@@ -40,7 +38,12 @@ export function Login({ onLogin }: LoginProps) {
     setSupabaseStatus('checking');
     try {
       const { error: pingError } = await supabase.from('companies').select('id', { count: 'exact', head: true });
-      if (pingError && (pingError.message.includes('fetch') || pingError.message.includes('network') || pingError.message.includes('Failed to fetch'))) {
+      if (
+        pingError &&
+        (pingError.message.includes('fetch') ||
+          pingError.message.includes('network') ||
+          pingError.message.includes('Failed to fetch'))
+      ) {
         setSupabaseStatus('error');
       } else {
         setSupabaseStatus('connected');
@@ -203,15 +206,17 @@ export function Login({ onLogin }: LoginProps) {
           supabaseStatus === 'connected'
             ? 'AuthLink: Connected (Click to re-test)'
             : supabaseStatus === 'checking'
-            ? 'AuthLink: Checking connectivity...'
-            : supabaseStatus === 'error'
-            ? 'AuthLink: Offline or Unreachable (Click to retry)'
-            : 'AuthLink: Not configured'
+              ? 'AuthLink: Checking connectivity...'
+              : supabaseStatus === 'error'
+                ? 'AuthLink: Offline or Unreachable (Click to retry)'
+                : 'AuthLink: Not configured'
         }
         aria-label={`AuthLink status: ${supabaseStatus}`}
       >
         <span className={`status-dot ${supabaseStatus}`} />
-        <span role="status" aria-live="polite" className="sr-only">Server status: {supabaseStatus}</span>
+        <span role="status" aria-live="polite" className="sr-only">
+          Server status: {supabaseStatus}
+        </span>
         <svg className="supabase-badge-icon" viewBox="0 0 24 24" width="13" height="13" fill="none">
           <path
             d="M21.362 9.354H12V.312a.312.312 0 0 0-.543-.21L.343 12.378a.312.312 0 0 0 .221.534H12v9.042a.312.312 0 0 0 .543.21l11.114-12.276a.312.312 0 0 0-.221-.534z"
@@ -222,10 +227,10 @@ export function Login({ onLogin }: LoginProps) {
           {supabaseStatus === 'connected'
             ? 'AuthLink'
             : supabaseStatus === 'checking'
-            ? 'Checking...'
-            : supabaseStatus === 'error'
-            ? 'Offline'
-            : 'Unconfigured'}
+              ? 'Checking...'
+              : supabaseStatus === 'error'
+                ? 'Offline'
+                : 'Unconfigured'}
         </span>
       </button>
 
@@ -274,7 +279,7 @@ export function Login({ onLogin }: LoginProps) {
                       id="apiKey"
                       type={showKey ? 'text' : 'password'}
                       value={apiKey}
-                      onChange={(e) => {
+                      onChange={e => {
                         setApiKey(e.target.value);
                         setError('');
                       }}
@@ -312,11 +317,7 @@ export function Login({ onLogin }: LoginProps) {
                 ) : (
                   <div />
                 )}
-                <button
-                  type="submit"
-                  className="google-btn-primary"
-                  disabled={isLoading}
-                >
+                <button type="submit" className="google-btn-primary" disabled={isLoading}>
                   {isLoading ? t('login.connecting') || 'Connecting...' : t('login.connect') || 'Next'}
                 </button>
               </div>
@@ -334,7 +335,7 @@ export function Login({ onLogin }: LoginProps) {
                       id="companyName"
                       type="text"
                       value={companyName}
-                      onChange={(e) => {
+                      onChange={e => {
                         setCompanyName(e.target.value);
                         setError('');
                       }}
@@ -351,11 +352,7 @@ export function Login({ onLogin }: LoginProps) {
 
               <div className="google-actions-row">
                 <div />
-                <button
-                  type="submit"
-                  className="google-btn-primary"
-                  disabled={isLoading}
-                >
+                <button type="submit" className="google-btn-primary" disabled={isLoading}>
                   {isLoading ? 'Verifying...' : 'Next'}
                 </button>
               </div>
@@ -373,7 +370,7 @@ export function Login({ onLogin }: LoginProps) {
                       id="fullName"
                       type="text"
                       value={fullName}
-                      onChange={(e) => {
+                      onChange={e => {
                         setFullName(e.target.value);
                         setError('');
                       }}
@@ -394,7 +391,7 @@ export function Login({ onLogin }: LoginProps) {
                       id="password"
                       type={showPassword ? 'text' : 'password'}
                       value={password}
-                      onChange={(e) => {
+                      onChange={e => {
                         setPassword(e.target.value);
                         setError('');
                       }}
@@ -441,11 +438,7 @@ export function Login({ onLogin }: LoginProps) {
                     Switch company
                   </button>
                 )}
-                <button
-                  type="submit"
-                  className="google-btn-primary"
-                  disabled={isLoading}
-                >
+                <button type="submit" className="google-btn-primary" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign in'}
                 </button>
               </div>

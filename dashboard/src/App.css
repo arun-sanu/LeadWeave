@@ -9,272 +9,264 @@
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      COLOR — CANVASES & SURFACES
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --color-canvas:          #1E222A;   /* Base app background */
-  --color-surface:         #0F121A;   /* Cards, panels (canonical surface token) */
-  --color-surface-2:       #151822;   /* Elevated surfaces */
-  --color-overlay:         #151822;   /* Modals, popovers, dropdowns */
-  --color-depth:           #0F1115;   /* Drop shadow channel / deepest bg */
+  --color-canvas: #1e222a; /* Base app background */
+  --color-surface: #0f121a; /* Cards, panels (canonical surface token) */
+  --color-surface-2: #151822; /* Elevated surfaces */
+  --color-overlay: #151822; /* Modals, popovers, dropdowns */
+  --color-depth: #0f1115; /* Drop shadow channel / deepest bg */
 
   /* Consolidated Canonical Surface & Elevation Tokens */
-  --bg-surface:            #0f121a;
-  --bg-elevated:           #151822;
-  --bg-white:              var(--bg-surface);
-  --bg-card:               var(--bg-surface);
-  --bg-secondary:          var(--bg-elevated);
-  --color-bg-secondary:    var(--bg-elevated);
-  --bg-surface-elevated:   var(--bg-elevated);
+  --bg-surface: #0f121a;
+  --bg-elevated: #151822;
+  --bg-white: var(--bg-surface);
+  --bg-card: var(--bg-surface);
+  --bg-secondary: var(--bg-elevated);
+  --color-bg-secondary: var(--bg-elevated);
+  --bg-surface-elevated: var(--bg-elevated);
 
   /* Backward-compat canvas/hover aliases */
-  --bg-light:              var(--color-canvas);
-  --bg-base:               var(--color-canvas);
-  --bg-hover:              rgba(62, 72, 86, 0.5);
-  --bg-glass:              rgba(15, 18, 26, 0.72);
+  --bg-light: var(--color-canvas);
+  --bg-base: var(--color-canvas);
+  --bg-hover: rgba(62, 72, 86, 0.5);
+  --bg-glass: rgba(15, 18, 26, 0.72);
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      COLOR — ACCENT (Lime) & RGB TRIPLETS
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --accent:                #76C043;
-  --accent-hover:          #8CD848;
-  --accent-soft:           rgba(118, 192, 67, 0.12);
-  --accent-glow:           0 0 20px -3px rgba(118, 192, 67, 0.35);
+  --accent: #76c043;
+  --accent-hover: #8cd848;
+  --accent-soft: rgba(118, 192, 67, 0.12);
+  --accent-glow: 0 0 20px -3px rgba(118, 192, 67, 0.35);
 
-  --primary:               var(--accent);
-  --primary-text:          var(--accent);
-  --primary-hover:         #1da851;
-  --primary-soft:          var(--accent-soft);
-  --primary-glow:          var(--accent-glow);
+  --primary: var(--accent);
+  --primary-text: var(--accent);
+  --primary-hover: #1da851;
+  --primary-soft: var(--accent-soft);
+  --primary-glow: var(--accent-glow);
 
   /* Explicit RGB Triplets for Alpha Composition */
-  --primary-rgb:           37, 211, 102;
-  --accent-rgb:            118, 192, 67;
-  --error-rgb:             239, 68, 68;
-  --success-rgb:           34, 197, 94;
-  --warning-rgb:           245, 158, 11;
-  --info-rgb:              56, 189, 248;
+  --primary-rgb: 37, 211, 102;
+  --accent-rgb: 118, 192, 67;
+  --error-rgb: 239, 68, 68;
+  --success-rgb: 34, 197, 94;
+  --warning-rgb: 245, 158, 11;
+  --info-rgb: 56, 189, 248;
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      COGNITIVE ERGONOMICS — CONTRAST SCALE
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --text-heading:          #F4F5F8;   /* ~13.8:1 */
-  --text-body:             #E2E5EA;   /* ~11.4:1 */
-  --text-ui:               #CDD1D9;   /* ~8.9:1 */
-  --text-caption:          #A0AAB8;
+  --text-heading: #f4f5f8; /* ~13.8:1 */
+  --text-body: #e2e5ea; /* ~11.4:1 */
+  --text-ui: #cdd1d9; /* ~8.9:1 */
+  --text-caption: #a0aab8;
 
-  --text-primary:          var(--text-heading);
-  --text-secondary:        var(--text-caption);
-  --text-muted:            #7B8595;
+  --text-primary: var(--text-heading);
+  --text-secondary: var(--text-caption);
+  --text-muted: #7b8595;
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      COLOR — BORDERS
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --divider:               #3E4856;
-  --border:                #3E4856;
-  --border-color:          #3E4856;
-  --border-strong:         #7B8595;
-  --border-subtle:         rgba(62, 72, 86, 0.5);
-  --border-light:          rgba(62, 72, 86, 0.5);
-  --border-glass:          rgba(62, 72, 86, 0.5);
+  --divider: #3e4856;
+  --border: #3e4856;
+  --border-color: #3e4856;
+  --border-strong: #7b8595;
+  --border-subtle: rgba(62, 72, 86, 0.5);
+  --border-light: rgba(62, 72, 86, 0.5);
+  --border-glass: rgba(62, 72, 86, 0.5);
 
   /* Input-specific */
-  --input-border:          #7B8595;
-  --input-border-focus:    var(--accent);
-  --input-glow:            rgba(118, 192, 67, 0.20);
-  --input-border-error:    #EF4444;
+  --input-border: #7b8595;
+  --input-border-focus: var(--accent);
+  --input-glow: rgba(118, 192, 67, 0.2);
+  --input-border-error: #ef4444;
 
   /* Rim highlights */
-  --rim-top:               inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-  --rim-glow:              inset 0 1px 1px 0 rgba(255, 255, 255, 0.07);
+  --rim-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  --rim-glow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.07);
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      COLOR — SEMANTIC & STATUS BADGES
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --error:                 #EF4444;
-  --error-hover:           #b91c1c;
-  --error-text:            #F87171;
+  --error: #ef4444;
+  --error-hover: #b91c1c;
+  --error-text: #f87171;
 
-  --success:               #22C55E;
-  --success-text:          #4ADE80;
+  --success: #22c55e;
+  --success-text: #4ade80;
 
-  --warning:               #F59E0B;
-  --warning-text:          #FBBF24;
+  --warning: #f59e0b;
+  --warning-text: #fbbf24;
 
-  --info:                  #38BDF8;
-  --info-text:             #7DD3FC;
+  --info: #38bdf8;
+  --info-text: #7dd3fc;
 
   /* Dark-mode calibrated Status Badge Tokens */
-  --status-sent:           #3B82F6;
-  --status-sent-rgb:       59, 130, 246;
-  --status-delivered:      #06B6D4;
-  --status-delivered-rgb:  6, 182, 212;
-  --status-read:           #22C55E;
-  --status-read-rgb:       var(--success-rgb);
-  --status-replied:        #EAB308;
-  --status-replied-rgb:    var(--warning-rgb);
-  --status-optout:         #EF4444;
-  --status-optout-rgb:     var(--error-rgb);
-  --status-failed:         #F43F5E;
-  --status-failed-rgb:     244, 63, 94;
-  --status-pending:        var(--text-muted);
+  --status-sent: #3b82f6;
+  --status-sent-rgb: 59, 130, 246;
+  --status-delivered: #06b6d4;
+  --status-delivered-rgb: 6, 182, 212;
+  --status-read: #22c55e;
+  --status-read-rgb: var(--success-rgb);
+  --status-replied: #eab308;
+  --status-replied-rgb: var(--warning-rgb);
+  --status-optout: #ef4444;
+  --status-optout-rgb: var(--error-rgb);
+  --status-failed: #f43f5e;
+  --status-failed-rgb: 244, 63, 94;
+  --status-pending: var(--text-muted);
 
-  --badge-success-bg:      rgba(34, 197, 94, 0.12);
-  --badge-success-text:    #4ade80;
-  --badge-warning-bg:      rgba(245, 158, 11, 0.12);
-  --badge-warning-text:    #fbbf24;
-  --badge-error-bg:        rgba(239, 68, 68, 0.12);
-  --badge-error-text:      #f87171;
+  --badge-success-bg: rgba(34, 197, 94, 0.12);
+  --badge-success-text: #4ade80;
+  --badge-warning-bg: rgba(245, 158, 11, 0.12);
+  --badge-warning-text: #fbbf24;
+  --badge-error-bg: rgba(239, 68, 68, 0.12);
+  --badge-error-text: #f87171;
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      COLOR — ROLE ACCENTS & GAUGES
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --accent-admin:          #FFB703;
-  --accent-admin-warm:     #FF672C;
-  --accent-link:           #2563eb;
-  --role-admin:            #FF672C;
-  --role-admin-glow:       rgba(255, 103, 44, 0.5);
-  --gauge-bg:              rgba(var(--color-depth, 15, 17, 21), 0.6);
-  --card-gradient:         linear-gradient(180deg, #131722 0%, #0d1017 100%);
+  --accent-admin: #ffb703;
+  --accent-admin-warm: #ff672c;
+  --accent-link: #2563eb;
+  --role-admin: #ff672c;
+  --role-admin-glow: rgba(255, 103, 44, 0.5);
+  --gauge-bg: rgba(var(--color-depth, 15, 17, 21), 0.6);
+  --card-gradient: linear-gradient(180deg, #131722 0%, #0d1017 100%);
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      SHADOWS (built on --color-depth #0F1115)
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --shadow-sm:
-    0 2px 4px 0 rgba(15, 17, 21, 0.6),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  --shadow-sm: 0 2px 4px 0 rgba(15, 17, 21, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
   --shadow-md:
-    0 10px 25px -5px rgba(15, 17, 21, 0.75),
-    0 4px 10px -2px rgba(15, 17, 21, 0.5),
+    0 10px 25px -5px rgba(15, 17, 21, 0.75), 0 4px 10px -2px rgba(15, 17, 21, 0.5),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
   --shadow-lg:
-    0 20px 40px -10px rgba(15, 17, 21, 0.9),
-    0 8px 16px -4px rgba(15, 17, 21, 0.6),
+    0 20px 40px -10px rgba(15, 17, 21, 0.9), 0 8px 16px -4px rgba(15, 17, 21, 0.6),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
   --shadow-ambient: 0 0 50px -10px rgba(15, 17, 21, 0.95);
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      TYPOGRAPHY SCALE & LETTER SPACING
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --font-sans:
-    'Inter', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Helvetica, Arial, sans-serif;
-  --font-mono:
-    'JetBrains Mono', ui-monospace, SFMono-Regular,
-    Menlo, monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --text-2xs:    0.625rem;   /* 10px - badge digits only */
-  --text-xs:     0.6875rem;  /* 11px - WCAG 2.2 strict floor */
-  --text-sm:     0.8125rem;  /* 13px */
-  --text-base:   0.9375rem;  /* 15px */
-  --text-md:     1rem;       /* 16px */
-  --text-lg:     1.25rem;    /* 20px */
-  --text-xl:     1.5rem;     /* 24px */
-  --text-2xl:    1.875rem;   /* 30px */
+  --text-2xs: 0.625rem; /* 10px - badge digits only */
+  --text-xs: 0.6875rem; /* 11px - WCAG 2.2 strict floor */
+  --text-sm: 0.8125rem; /* 13px */
+  --text-base: 0.9375rem; /* 15px */
+  --text-md: 1rem; /* 16px */
+  --text-lg: 1.25rem; /* 20px */
+  --text-xl: 1.5rem; /* 24px */
+  --text-2xl: 1.875rem; /* 30px */
 
-  --fw-regular:    400;
-  --fw-medium:     500;
-  --fw-semibold:   600;
-  --fw-bold:       700;
-  --fw-extrabold:  800;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
 
-  --tracking-tight:   -0.01em;
-  --tracking-normal:  0em;
-  --tracking-wide:    0.05em;
-  --tracking-wider:   0.08em;
-  --tracking-widest:  0.12em;
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.08em;
+  --tracking-widest: 0.12em;
 
-  --leading-tight:    1;
-  --leading-snug:     1.4;
-  --leading-normal:   1.6;
-  --leading-relaxed:  1.8;
+  --leading-tight: 1;
+  --leading-snug: 1.4;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.8;
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      SPACING (4px base)
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --space-1:     0.25rem;    /*  4px */
-  --space-2:     0.5rem;     /*  8px */
-  --space-3:     0.75rem;    /* 12px */
-  --space-4:     1rem;       /* 16px */
-  --space-5:     1.25rem;    /* 20px */
-  --space-6:     1.5rem;     /* 24px */
-  --space-8:     2rem;       /* 32px */
-  --space-10:    2.5rem;     /* 40px */
-  --space-12:    3rem;       /* 48px */
+  --space-1: 0.25rem; /*  4px */
+  --space-2: 0.5rem; /*  8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
 
   /* Backward-compat spacing aliases */
-  --spacing-1:   var(--space-1);
-  --spacing-2:   var(--space-2);
-  --spacing-3:   var(--space-3);
-  --spacing-4:   var(--space-4);
-  --spacing-5:   var(--space-5);
-  --spacing-6:   var(--space-6);
-  --spacing-8:   var(--space-8);
-  --spacing-10:  var(--space-10);
-  --spacing-12:  var(--space-12);
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      BORDER RADIUS
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --radius-xs:    4px;
-  --radius-sm:    6px;
-  --radius-md:    8px;
-  --radius:       8px;         /* Backward-compat alias → radius-md */
-  --radius-lg:    12px;
-  --radius-xl:    16px;
-  --radius-2xl:   20px;
-  --radius-pill:  9999px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius: 8px; /* Backward-compat alias → radius-md */
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-pill: 9999px;
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      MOTION & TRANSITIONS
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --ease-out:     cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out:  cubic-bezier(0.77, 0, 0.175, 1);
-  --ease-spring:  cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  --ease-drawer:  cubic-bezier(0.32, 0.72, 0, 1);
-  --ease-fast:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-fast: cubic-bezier(0.16, 1, 0.3, 1);
 
-  --duration-instant:  80ms;
-  --duration-fast:     150ms;
-  --duration-base:     200ms;
-  --duration-slow:     300ms;
+  --duration-instant: 80ms;
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
 
-  --transition-base:   var(--duration-base) var(--ease-out);
+  --transition-base: var(--duration-base) var(--ease-out);
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      Z-INDEX LAYERS STACK
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --z-base:       1;
-  --z-raised:     10;
-  --z-sticky:     100;
-  --z-dropdown:   200;
-  --z-overlay:    500;
-  --z-modal:      1000;
-  --z-storage:    2000;
-  --z-bubble:     9990;
-  --z-lan-pill:   9998;
-  --z-tooltip:    9998;
-  --z-toast:      9999;
-  --z-max:        10001;
+  --z-base: 1;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-overlay: 500;
+  --z-modal: 1000;
+  --z-storage: 2000;
+  --z-bubble: 9990;
+  --z-lan-pill: 9998;
+  --z-tooltip: 9998;
+  --z-toast: 9999;
+  --z-max: 10001;
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      FOCUS RING & ACCESSIBILITY
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --focus-ring:        2px solid var(--primary);
+  --focus-ring: 2px solid var(--primary);
   --focus-ring-offset: 2px;
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      OPACITY SCALE
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --opacity-ghost:    0.4;
+  --opacity-ghost: 0.4;
   --opacity-disabled: 0.5;
-  --opacity-muted:    0.6;
-  --opacity-subtle:   0.7;
+  --opacity-muted: 0.6;
+  --opacity-subtle: 0.7;
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      CARD SURFACES
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --card-bg:        var(--bg-surface);
-  --card-gradient:  linear-gradient(180deg, #131722 0%, #0d1017 100%);
-  --card-border:    var(--border);
-  --card-radius:    var(--radius-lg);
+  --card-bg: var(--bg-surface);
+  --card-gradient: linear-gradient(180deg, #131722 0%, #0d1017 100%);
+  --card-border: var(--border);
+  --card-radius: var(--radius-lg);
 }
 
 [data-theme='dark'] {
@@ -319,8 +311,8 @@ a:hover {
 
 /* Error banner — shared across pages */
 .error-banner {
-  background: rgba(var(--error-rgb), 0.10);
-  border: 1px solid rgba(var(--error-rgb), 0.30);
+  background: rgba(var(--error-rgb), 0.1);
+  border: 1px solid rgba(var(--error-rgb), 0.3);
   border-radius: var(--radius-md);
   padding: var(--spacing-4);
   margin-bottom: var(--spacing-6);

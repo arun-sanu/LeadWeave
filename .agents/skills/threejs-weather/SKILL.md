@@ -16,9 +16,12 @@ The first version of any rain system puts a world-sized box of particles around 
 Build a small volume and carry it in front of the camera, facing the way the camera faces:
 
 ```js
-const WX_W = 17, WX_D = 50, WX_TOP = 40;         // narrow, deep, tall
+const WX_W = 17,
+  WX_D = 50,
+  WX_TOP = 40; // narrow, deep, tall
 function anchor(o) {
-  const fx = -Math.sin(camAz), fz = -Math.cos(camAz);
+  const fx = -Math.sin(camAz),
+    fz = -Math.cos(camAz);
   o.position.set(cam.position.x + fx * 46, 0, cam.position.z + fz * 46);
   o.rotation.y = camAz;
 }
@@ -34,7 +37,7 @@ This one costs an afternoon. The attribute takes a copy of whatever you hand it,
 const attr = new THREE.Float32BufferAttribute(pos, 3);
 attr.setUsage(THREE.DynamicDrawUsage);
 geo.setAttribute('position', attr);
-return { pts, pos: attr.array, n };              // keep the attribute's array
+return { pts, pos: attr.array, n }; // keep the attribute's array
 ```
 
 Symptom: everything is correct, nothing moves, no error anywhere.
@@ -53,13 +56,13 @@ A storm then costs no more memory than drizzle; it just stops hiding most of the
 
 Do not write a second particle system. Take the rain state and push every dial:
 
-| | rain | storm |
-|---|---|---|
-| drops drawn | 60% of pool | 100% |
-| fall speed | ×1.0 | ×1.42 |
-| slant | 2.4 | scales with speed² |
-| sun | 30% | 14% |
-| fog far | ×0.52 | ×0.38 |
+|             | rain        | storm              |
+| ----------- | ----------- | ------------------ |
+| drops drawn | 60% of pool | 100%               |
+| fall speed  | ×1.0        | ×1.42              |
+| slant       | 2.4         | scales with speed² |
+| sun         | 30%         | 14%                |
+| fog far     | ×0.52       | ×0.38              |
 
 Slant should grow faster than speed — `slant = base * v * v` — because that is what sells wind rather than "rain, but quicker".
 
@@ -75,23 +78,24 @@ One strike is several flashes — a leader and two or three return strokes — e
 
 ```js
 function strike() {
-  const near = Math.random();                    // 0 distant … 1 close
+  const near = Math.random(); // 0 distant … 1 close
   const s = 0.42 + near * 0.58;
   pulses = [{ t: 0, a: s }];
   let tt = 0;
-  for (let i = 0, n = 1 + (Math.random() * 2.6 | 0); i < n; i++) {
+  for (let i = 0, n = 1 + ((Math.random() * 2.6) | 0); i < n; i++) {
     tt += 0.05 + Math.random() * 0.14;
-    pulses.push({ t: tt, a: s * (0.30 + Math.random() * 0.65) });
+    pulses.push({ t: tt, a: s * (0.3 + Math.random() * 0.65) });
   }
-  setTimeout(() => sfx(near > 0.5 ? 'thunder_near' : 'thunder_far',
-                      { gain: 0.30 + near * 0.60 }),
-             (0.32 + (1 - near) * 2.7) * 1000);  // sound arrives late
+  setTimeout(
+    () => sfx(near > 0.5 ? 'thunder_near' : 'thunder_far', { gain: 0.3 + near * 0.6 }),
+    (0.32 + (1 - near) * 2.7) * 1000,
+  ); // sound arrives late
 }
 function step(dt) {
   let v = 0;
   for (const p of pulses) if (age >= p.t) v += p.a * Math.exp(-(age - p.t) / 0.085);
   bolt.intensity = v * 3.2;
-  skyMat.color.setScalar(1 + v * 0.80);          // multiplies the sky map
+  skyMat.color.setScalar(1 + v * 0.8); // multiplies the sky map
   flashEl.style.opacity = (v * 0.15).toFixed(3);
 }
 ```
@@ -138,14 +142,17 @@ Relighting the scene is not free, and blizzard strength and snow depth drift con
 
 ```js
 const look = blizK + snowPack;
-if (Math.abs(look - lastLook) > 0.006) { lastLook = look; refreshLook(); }
+if (Math.abs(look - lastLook) > 0.006) {
+  lastLook = look;
+  refreshLook();
+}
 ```
 
 That fires a few times a second instead of sixty, and nothing on screen can tell.
 
 ## Wet ground
 
-Three cheap things, in order of payoff: drop roughness and add a little metalness so the ground catches the sky; add flat translucent puddle decals in the hollows; then instance a splash ring sprite with a short life, spawned in proportion to rain intensity. The splashes are what make it read as *falling* rain rather than a rain texture.
+Three cheap things, in order of payoff: drop roughness and add a little metalness so the ground catches the sky; add flat translucent puddle decals in the hollows; then instance a splash ring sprite with a short life, spawned in proportion to rain intensity. The splashes are what make it read as _falling_ rain rather than a rain texture.
 
 ## Ambience that loops with no seam
 

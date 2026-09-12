@@ -1,8 +1,9 @@
 ---
 paths:
-  - "**/*.ts"
-  - "**/*.tsx"
+  - '**/*.ts'
+  - '**/*.tsx'
 ---
+
 # React Native / Expo Security
 
 > This file extends [common/security.md](common-security.md) with React Native / Expo specific content.

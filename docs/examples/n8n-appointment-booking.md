@@ -34,9 +34,9 @@ The workflow is intentionally generic. The availability source can be Google Cal
 
 Use the **LeadWeave Trigger** node.
 
-| Field   | Value                         |
-| ------- | ----------------------------- |
-| Event   | `message.received`            |
+| Field   | Value                            |
+| ------- | -------------------------------- |
+| Event   | `message.received`               |
 | Session | Your connected LeadWeave session |
 
 The incoming message body is available at:

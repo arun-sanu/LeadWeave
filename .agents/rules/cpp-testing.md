@@ -1,13 +1,14 @@
 ---
 paths:
-  - "**/*.cpp"
-  - "**/*.hpp"
-  - "**/*.cc"
-  - "**/*.hh"
-  - "**/*.cxx"
-  - "**/*.h"
-  - "**/CMakeLists.txt"
+  - '**/*.cpp'
+  - '**/*.hpp'
+  - '**/*.cc'
+  - '**/*.hh'
+  - '**/*.cxx'
+  - '**/*.h'
+  - '**/CMakeLists.txt'
 ---
+
 # C++ Testing
 
 > This file extends [common/testing.md](common-testing.md) with C++ specific content.

@@ -66,11 +66,11 @@ If `merge:batch` cannot prove the immutable PR tuple, required checks, branch pr
 
 ## Summary
 
-| Goal                         | Action                                                                 |
-|-----------------------------|------------------------------------------------------------------------|
-| Give contributors credit   | Use `merge:batch` so GitHub records the protected squash merge.       |
-| PR has conflicts           | Resolve on the PR branch, then run `merge:batch`.                     |
-| Never                      | Push an integration directly to `main`, use a raw merge, or close the PR after copying its work. |
+| Goal                     | Action                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------ |
+| Give contributors credit | Use `merge:batch` so GitHub records the protected squash merge.                                  |
+| PR has conflicts         | Resolve on the PR branch, then run `merge:batch`.                                                |
+| Never                    | Push an integration directly to `main`, use a raw merge, or close the PR after copying its work. |
 
 ## References
 

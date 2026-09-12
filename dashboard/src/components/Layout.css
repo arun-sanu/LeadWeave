@@ -10,7 +10,7 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-right: none;
-  box-shadow: 4px 0 24px -4px rgba(var(--color-depth, 15,17,21), 0.5);
+  box-shadow: 4px 0 24px -4px rgba(var(--color-depth, 15, 17, 21), 0.5);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -36,7 +36,9 @@
   background: transparent;
   border: none;
   padding: 0;
-  transition: transform var(--duration-base) var(--ease-fast), filter var(--duration-base) var(--ease-out);
+  transition:
+    transform var(--duration-base) var(--ease-fast),
+    filter var(--duration-base) var(--ease-out);
 }
 
 .sidebar-brand-link:hover {
@@ -112,8 +114,14 @@
 }
 
 @keyframes badgePopIn {
-  from { transform: scale(0.4); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .nav-item:hover {
@@ -127,15 +135,13 @@
 }
 
 .nav-item.active {
-  background: linear-gradient(
-    135deg,
-    rgba(var(--accent-rgb), 0.22) 0%,
-    rgba(var(--accent-rgb), 0.07) 100%
-  );
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.22) 0%, rgba(var(--accent-rgb), 0.07) 100%);
   color: var(--text-primary);
   font-weight: var(--fw-semibold);
   border: 1px solid rgba(var(--accent-rgb), 0.35);
-  box-shadow: 0 4px 14px -2px rgba(var(--accent-rgb), 0.25), var(--rim-top);
+  box-shadow:
+    0 4px 14px -2px rgba(var(--accent-rgb), 0.25),
+    var(--rim-top);
 }
 
 .nav-item.active svg {
@@ -147,7 +153,9 @@
   background: linear-gradient(135deg, rgba(255, 183, 3, 0.15) 0%, rgba(255, 103, 44, 0.05) 100%);
   color: #ffffff;
   border: 1px solid rgba(255, 103, 44, 0.35);
-  box-shadow: 0 4px 14px -2px rgba(255, 103, 44, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 4px 14px -2px rgba(255, 103, 44, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
 .sidebar.superadmin-theme .nav-item.active svg {
@@ -173,7 +181,9 @@
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
-  box-shadow: var(--shadow-lg), 0 0 0 1px var(--border);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 0 1px var(--border);
   transition:
     opacity var(--duration-fast) var(--ease-out),
     transform var(--duration-fast) var(--ease-out),

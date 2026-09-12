@@ -1,6 +1,6 @@
 ---
 title: Jetski/Cortex + Gemini Integration Guide
-description: "Use agentic-awesome-skills with Jetski/Cortex without hitting context-window overflow with 2,098+ skills."
+description: 'Use agentic-awesome-skills with Jetski/Cortex without hitting context-window overflow with 2,098+ skills.'
 ---
 
 # Jetski/Cortex + Gemini: safe integration with 2,098+ skills
@@ -33,7 +33,7 @@ With 2,098+ skills, this approach fills the context window before user messages 
 
 Core principles:
 
-- **Stable manifest**: use the canonical root `skills_index.json` to know *which* skills exist without loading full text.
+- **Stable manifest**: use the canonical root `skills_index.json` to know _which_ skills exist without loading full text.
 - **Compatibility mirror**: treat `data/skills_index.json` as an exact mirror of the canonical manifest.
 - **Lazy loading**: read `SKILL.md` **only** for skills actually invoked in a conversation (for example, when `@skill-id` appears).
 - **Explicit limits**: enforce a maximum number of skills/tokens loaded per turn, with clear fallbacks.
@@ -107,7 +107,7 @@ type SkillMeta = {
 
 ```ts
 function loadSkillIndex(indexPath: string): Map<string, SkillMeta> {
-  const raw = fs.readFileSync(indexPath, "utf8");
+  const raw = fs.readFileSync(indexPath, 'utf8');
   const arr = JSON.parse(raw) as SkillMeta[];
   const map = new Map<string, SkillMeta>();
   for (const meta of arr) {
@@ -125,7 +125,7 @@ const SKILL_ID_REGEX = /@([a-zA-Z0-9-_./]+)/g;
 function resolveSkillsFromMessages(
   messages: { role: string; content: string }[],
   index: Map<string, SkillMeta>,
-  maxSkills: number
+  maxSkills: number,
 ): SkillMeta[] {
   const found = new Set<string>();
 
@@ -153,15 +153,12 @@ function resolveSkillsFromMessages(
 ### 4.4. Lazy loading `SKILL.md` files
 
 ```ts
-async function loadSkillBodies(
-  skillsRoot: string,
-  metas: SkillMeta[]
-): Promise<string[]> {
+async function loadSkillBodies(skillsRoot: string, metas: SkillMeta[]): Promise<string[]> {
   const bodies: string[] = [];
 
   for (const meta of metas) {
-    const fullPath = path.join(skillsRoot, meta.path, "SKILL.md");
-    const text = await fs.promises.readFile(fullPath, "utf8");
+    const fullPath = path.join(skillsRoot, meta.path, 'SKILL.md');
+    const text = await fs.promises.readFile(fullPath, 'utf8');
     bodies.push(text);
   }
 
@@ -175,37 +172,26 @@ Pseudocode for the pre-processing phase before `TrajectoryChatConverter`:
 
 ```ts
 async function buildModelMessages(
-  baseSystemMessages: { role: "system"; content: string }[],
-  trajectory: { role: "user" | "assistant" | "system"; content: string }[],
+  baseSystemMessages: { role: 'system'; content: string }[],
+  trajectory: { role: 'user' | 'assistant' | 'system'; content: string }[],
   skillIndex: Map<string, SkillMeta>,
   skillsRoot: string,
   maxSkillsPerTurn: number,
-  overflowBehavior: "truncate" | "error" = "truncate"
+  overflowBehavior: 'truncate' | 'error' = 'truncate',
 ): Promise<{ role: string; content: string }[]> {
-  const referencedSkills = resolveSkillsFromMessages(
-    trajectory,
-    skillIndex,
-    Number.MAX_SAFE_INTEGER
-  );
-  if (
-    overflowBehavior === "error" &&
-    referencedSkills.length > maxSkillsPerTurn
-  ) {
+  const referencedSkills = resolveSkillsFromMessages(trajectory, skillIndex, Number.MAX_SAFE_INTEGER);
+  if (overflowBehavior === 'error' && referencedSkills.length > maxSkillsPerTurn) {
     throw new Error(
-      `Too many skills requested in a single turn. Reduce @skill-id usage to ${maxSkillsPerTurn} or fewer.`
+      `Too many skills requested in a single turn. Reduce @skill-id usage to ${maxSkillsPerTurn} or fewer.`,
     );
   }
 
-  const selectedMetas = resolveSkillsFromMessages(
-    trajectory,
-    skillIndex,
-    maxSkillsPerTurn
-  );
+  const selectedMetas = resolveSkillsFromMessages(trajectory, skillIndex, maxSkillsPerTurn);
 
   const skillBodies = await loadSkillBodies(skillsRoot, selectedMetas);
 
-  const skillMessages = skillBodies.map((body) => ({
-    role: "system" as const,
+  const skillMessages = skillBodies.map(body => ({
+    role: 'system' as const,
     content: body,
   }));
 

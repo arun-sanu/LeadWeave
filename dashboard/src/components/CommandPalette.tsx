@@ -46,20 +46,118 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   const items: PaletteItem[] = useMemo(
     () => [
       { id: 'nav-dashboard', title: 'Dashboard Overview', category: 'Navigation', icon: LayoutDashboard, to: '/' },
-      { id: 'nav-chats', title: 'WhatsApp Live Chats', category: 'Navigation', icon: MessageSquare, to: '/chats?tab=chats', keywords: ['messages', 'inbox'] },
-      { id: 'nav-sessions', title: 'Sessions & Device Pairing', category: 'Navigation', icon: Smartphone, to: '/chats?tab=sessions', keywords: ['qr', 'connect', 'phone', 'instances'] },
-      { id: 'nav-campaigns', title: 'Broadcast & Campaign Studio', category: 'Navigation', icon: FileSpreadsheet, to: '/campaigns', keywords: ['excel', 'bulk', 'outreach'] },
-      { id: 'nav-noticeboard', title: 'Notice Board & Calendar', category: 'Navigation', icon: CalendarClock, to: '/notice-board', keywords: ['agenda', 'tasks', 'reminders', 'callback'] },
-      { id: 'nav-templates', title: 'Message Templates', category: 'Navigation', icon: ClipboardList, to: '/templates', keywords: ['saved messages', 'snippets'] },
-      { id: 'nav-webhooks', title: 'Webhooks & Integrations', category: 'Navigation', icon: Webhook, to: '/profile?tab=webhooks', keywords: ['api', 'events'] },
-      { id: 'nav-plugins', title: 'Plugins & Engine Store', category: 'Navigation', icon: Puzzle, to: '/plugins', keywords: ['addons', 'wwebjs', 'baileys'] },
-      { id: 'nav-storage', title: 'Storage & Data Allocation', category: 'Navigation', icon: HardDrive, to: '/storage', keywords: ['disk', 'files', 'media', 'database', 'sqlite', 's3', 'cache', 'quota'] },
-      { id: 'nav-infra', title: 'Infrastructure & Database Status', category: 'Navigation', icon: Server, to: '/infrastructure', keywords: ['redis', 'postgres', 'backup'] },
-      { id: 'nav-tester', title: 'Message Tester & Simulator', category: 'Navigation', icon: Send, to: '/message-tester', keywords: ['sandbox', 'test send'] },
-      { id: 'nav-logs', title: 'System Logs & Telemetry', category: 'Navigation', icon: FileText, to: '/logs', keywords: ['debug', 'audit'] },
-      { id: 'nav-profile', title: 'My Profile & Account', category: 'Navigation', icon: User, to: '/profile', keywords: ['settings', 'password'] },
-      { id: 'nav-team', title: 'Team & Global Users', category: 'Navigation', icon: Users, to: '/profile?tab=team', keywords: ['members', 'roles'] },
-      { id: 'nav-companies', title: 'Companies & Multi-Tenancy', category: 'Navigation', icon: Building2, to: '/companies', keywords: ['tenants', 'clients'] },
+      {
+        id: 'nav-chats',
+        title: 'WhatsApp Live Chats',
+        category: 'Navigation',
+        icon: MessageSquare,
+        to: '/chats?tab=chats',
+        keywords: ['messages', 'inbox'],
+      },
+      {
+        id: 'nav-sessions',
+        title: 'Sessions & Device Pairing',
+        category: 'Navigation',
+        icon: Smartphone,
+        to: '/chats?tab=sessions',
+        keywords: ['qr', 'connect', 'phone', 'instances'],
+      },
+      {
+        id: 'nav-campaigns',
+        title: 'Broadcast & Campaign Studio',
+        category: 'Navigation',
+        icon: FileSpreadsheet,
+        to: '/campaigns',
+        keywords: ['excel', 'bulk', 'outreach'],
+      },
+      {
+        id: 'nav-noticeboard',
+        title: 'Notice Board & Calendar',
+        category: 'Navigation',
+        icon: CalendarClock,
+        to: '/notice-board',
+        keywords: ['agenda', 'tasks', 'reminders', 'callback'],
+      },
+      {
+        id: 'nav-templates',
+        title: 'Message Templates',
+        category: 'Navigation',
+        icon: ClipboardList,
+        to: '/templates',
+        keywords: ['saved messages', 'snippets'],
+      },
+      {
+        id: 'nav-webhooks',
+        title: 'Webhooks & Integrations',
+        category: 'Navigation',
+        icon: Webhook,
+        to: '/profile?tab=webhooks',
+        keywords: ['api', 'events'],
+      },
+      {
+        id: 'nav-plugins',
+        title: 'Plugins & Engine Store',
+        category: 'Navigation',
+        icon: Puzzle,
+        to: '/plugins',
+        keywords: ['addons', 'wwebjs', 'baileys'],
+      },
+      {
+        id: 'nav-storage',
+        title: 'Storage & Data Allocation',
+        category: 'Navigation',
+        icon: HardDrive,
+        to: '/storage',
+        keywords: ['disk', 'files', 'media', 'database', 'sqlite', 's3', 'cache', 'quota'],
+      },
+      {
+        id: 'nav-infra',
+        title: 'Infrastructure & Database Status',
+        category: 'Navigation',
+        icon: Server,
+        to: '/infrastructure',
+        keywords: ['redis', 'postgres', 'backup'],
+      },
+      {
+        id: 'nav-tester',
+        title: 'Message Tester & Simulator',
+        category: 'Navigation',
+        icon: Send,
+        to: '/message-tester',
+        keywords: ['sandbox', 'test send'],
+      },
+      {
+        id: 'nav-logs',
+        title: 'System Logs & Telemetry',
+        category: 'Navigation',
+        icon: FileText,
+        to: '/logs',
+        keywords: ['debug', 'audit'],
+      },
+      {
+        id: 'nav-profile',
+        title: 'My Profile & Account',
+        category: 'Navigation',
+        icon: User,
+        to: '/profile',
+        keywords: ['settings', 'password'],
+      },
+      {
+        id: 'nav-team',
+        title: 'Team & Global Users',
+        category: 'Navigation',
+        icon: Users,
+        to: '/profile?tab=team',
+        keywords: ['members', 'roles'],
+      },
+      {
+        id: 'nav-companies',
+        title: 'Companies & Multi-Tenancy',
+        category: 'Navigation',
+        icon: Building2,
+        to: '/companies',
+        keywords: ['tenants', 'clients'],
+      },
     ],
     [],
   );
@@ -168,8 +266,15 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
 
         <div className="command-palette-footer">
           <div className="command-palette-footer-shortcuts">
-            <span><span className="command-palette-kbd">↑</span> <span className="command-palette-kbd">↓</span> to navigate</span>
-            <span><span className="command-palette-kbd"><CornerDownLeft size={10} style={{ display: 'inline' }} /></span> to select</span>
+            <span>
+              <span className="command-palette-kbd">↑</span> <span className="command-palette-kbd">↓</span> to navigate
+            </span>
+            <span>
+              <span className="command-palette-kbd">
+                <CornerDownLeft size={10} style={{ display: 'inline' }} />
+              </span>{' '}
+              to select
+            </span>
           </div>
           <span>LeadWeave Quick Navigator</span>
         </div>

@@ -6,11 +6,13 @@ description: Use when adding a lightweight interactive globe with cobe (canvas s
 # cobe.js — Lightweight WebGL Globe Skill
 
 ## When to use
+
 - A “spinning globe” / location markers in hero or about pages
 - You want a small, focused globe lib (not full three.js)
 - Decorative + interactive (markers, rotation) with minimal setup
 
 ## Key APIs/patterns
+
 - Core:
   - `import createGlobe from "cobe"`
   - `const globe = createGlobe(canvas, { ...options, onRender(state) { ... } })`
@@ -25,6 +27,7 @@ description: Use when adding a lightweight interactive globe with cobe (canvas s
   - `globe.destroy()` removes instance
 
 ## Common pitfalls
+
 - Canvas sizing mismatch
   - Set CSS size AND set canvas `width/height` scaled for DPR.
 - Not updating on resize
@@ -33,10 +36,11 @@ description: Use when adding a lightweight interactive globe with cobe (canvas s
   - Clamp DPR to 1–2.
 
 ## Quick recipe: responsive globe with markers
-```js
-import createGlobe from "cobe";
 
-const canvas = document.getElementById("cobe");
+```js
+import createGlobe from 'cobe';
+
+const canvas = document.getElementById('cobe');
 let phi = 0;
 
 function setup() {
@@ -60,7 +64,7 @@ function setup() {
     glowColor: [1, 1, 1],
     markerColor: [0.8, 0.5, 1],
     markers: [{ location: [1.3521, 103.8198], size: 0.08 }],
-    onRender: (state) => {
+    onRender: state => {
       state.phi = phi;
       phi += 0.01;
     },
@@ -70,13 +74,14 @@ function setup() {
 }
 
 let globe = setup();
-window.addEventListener("resize", () => {
+window.addEventListener('resize', () => {
   globe.destroy();
   globe = setup();
 });
 ```
 
 ## What to ask the user
+
 - Globe size and placement (hero, section, card)?
 - Marker locations + colors (brand-aligned)?
 - Interaction needs (drag to rotate vs. ambient spin)?

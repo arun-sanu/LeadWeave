@@ -110,17 +110,21 @@ Return the five to eight highest-impact findings by default. Group repeated inst
 
 ```md
 ## Verdict
+
 One concise paragraph about the dominant problems and what should be removed first.
 
 ## Checked scope
+
 - Artifact, screen, state, and viewport actually inspected
 
 ## Findings
-| Priority | Class | Pattern | Evidence | Harm | Remove or fix |
-|---|---|---|---|---|---|
-| P1 | Slop pattern | Repeated ornamental containers | Feature area uses the same layered card treatment for unrelated content | Flattens hierarchy and adds noise | Remove outer shells; retain grouping only where it communicates interaction |
+
+| Priority | Class        | Pattern                        | Evidence                                                                | Harm                              | Remove or fix                                                               |
+| -------- | ------------ | ------------------------------ | ----------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------- |
+| P1       | Slop pattern | Repeated ornamental containers | Feature area uses the same layered card treatment for unrelated content | Flattens hierarchy and adds noise | Remove outer shells; retain grouping only where it communicates interaction |
 
 ## Unknowns
+
 - Important states or behavior that could not be verified
 ```
 

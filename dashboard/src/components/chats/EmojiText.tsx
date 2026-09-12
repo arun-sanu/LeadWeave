@@ -19,13 +19,7 @@ const META_EMOJI_OPTIONS = {
  */
 export function EmojiText({ text, className }: EmojiTextProps) {
   if (!text) return null;
-  return (
-    <Twemoji
-      text={text}
-      className={className}
-      options={META_EMOJI_OPTIONS}
-    />
-  );
+  return <Twemoji text={text} className={className} options={META_EMOJI_OPTIONS} />;
 }
 
 export default EmojiText;

@@ -6,11 +6,13 @@ description: Create masked staggered word reveals on scroll with GSAP ScrollTrig
 # Masked Reveal
 
 ## Use When
+
 - A headline or short text block needs a premium reveal on scroll.
 - Words should rise through an invisible mask with a staggered sequence.
 - The project already uses GSAP or needs ScrollTrigger-based motion.
 
 ## Motion Defaults
+
 - Trigger: start when the text top reaches `82%` of the viewport.
 - Duration: `0.7s` to `0.9s`.
 - Stagger: `0.025s` to `0.045s` per word.
@@ -21,9 +23,7 @@ description: Create masked staggered word reveals on scroll with GSAP ScrollTrig
 ## HTML
 
 ```html
-<h1 class="masked-reveal" data-masked-reveal>
-  Design systems that feel alive from the first scroll.
-</h1>
+<h1 class="masked-reveal" data-masked-reveal>Design systems that feel alive from the first scroll.</h1>
 ```
 
 ## CSS Mask
@@ -65,43 +65,44 @@ html.js .masked-reveal.is-split {
 ```
 
 ## GSAP ScrollTrigger
+
 This helper avoids the paid SplitText plugin and keeps spaces intact.
 
 ```js
-document.documentElement.classList.add("js");
+document.documentElement.classList.add('js');
 gsap.registerPlugin(ScrollTrigger);
 
 function escapeHTML(value) {
   return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function splitMaskedReveal(element) {
-  if (element.dataset.maskedRevealReady === "true") return;
+  if (element.dataset.maskedRevealReady === 'true') return;
 
   const text = element.textContent.trim();
-  element.setAttribute("aria-label", text);
+  element.setAttribute('aria-label', text);
   element.innerHTML = text
     .split(/(\s+)/)
-    .map((part) => {
+    .map(part => {
       if (!part.trim()) return part;
       return `<span class="word-mask" aria-hidden="true"><span class="word">${escapeHTML(part)}</span></span>`;
     })
-    .join("");
-  element.dataset.maskedRevealReady = "true";
-  element.classList.add("is-split");
+    .join('');
+  element.dataset.maskedRevealReady = 'true';
+  element.classList.add('is-split');
 }
 
-function initMaskedReveals(selector = "[data-masked-reveal]") {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+function initMaskedReveals(selector = '[data-masked-reveal]') {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  document.querySelectorAll(selector).forEach((element) => {
+  document.querySelectorAll(selector).forEach(element => {
     splitMaskedReveal(element);
-    const words = element.querySelectorAll(".word");
+    const words = element.querySelectorAll('.word');
 
     gsap.set(element, { autoAlpha: 1 });
     gsap.fromTo(
@@ -110,14 +111,14 @@ function initMaskedReveals(selector = "[data-masked-reveal]") {
       {
         yPercent: 0,
         duration: 0.8,
-        ease: "power3.out",
+        ease: 'power3.out',
         stagger: 0.035,
         scrollTrigger: {
           trigger: element,
-          start: "top 82%",
+          start: 'top 82%',
           once: true,
         },
-      }
+      },
     );
   });
 }
@@ -130,7 +131,7 @@ initMaskedReveals();
 ```js
 useLayoutEffect(() => {
   const ctx = gsap.context(() => {
-    initMaskedReveals("[data-masked-reveal]");
+    initMaskedReveals('[data-masked-reveal]');
   }, rootRef);
 
   return () => ctx.revert();
@@ -138,6 +139,7 @@ useLayoutEffect(() => {
 ```
 
 ## Taste Rules
+
 - Use on short headlines, labels, and section intros; avoid long paragraphs.
 - Keep the vertical offset clean. Do not combine with blur unless the style explicitly calls for it.
 - Stagger by word, not letter, for a calmer editorial feel.
@@ -146,6 +148,7 @@ useLayoutEffect(() => {
 - Do not split text that contains links, buttons, or meaningful inline markup.
 
 ## Quick Checks
+
 - Text is hidden before GSAP initializes, then becomes visible with `autoAlpha: 1`.
 - Screen readers get the original full text through `aria-label`.
 - Spaces between words are preserved.

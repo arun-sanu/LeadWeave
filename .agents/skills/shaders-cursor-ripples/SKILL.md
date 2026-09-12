@@ -57,23 +57,23 @@ For React, copy and adapt [assets/react/cursor-ripple-shader.tsx](assets/react/c
 Mount the shader only after the browser confirms WebGPU and motion is allowed:
 
 ```tsx
-const CursorRippleShader = lazy(() => import("./cursor-ripple-shader"));
+const CursorRippleShader = lazy(() => import('./cursor-ripple-shader'));
 
 const [shaderEnabled, setShaderEnabled] = useState(false);
 const [shaderReady, setShaderReady] = useState(false);
 
 useEffect(() => {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const sync = () => {
-    const enabled = "gpu" in navigator && !reduceMotion.matches;
+    const enabled = 'gpu' in navigator && !reduceMotion.matches;
     setShaderEnabled(enabled);
     if (!enabled) setShaderReady(false);
   };
 
   sync();
-  reduceMotion.addEventListener("change", sync);
-  return () => reduceMotion.removeEventListener("change", sync);
+  reduceMotion.addEventListener('change', sync);
+  return () => reduceMotion.removeEventListener('change', sync);
 }, []);
 ```
 
@@ -81,21 +81,11 @@ Keep the semantic image in the wrapper, then overlay the lazy shader:
 
 ```tsx
 <figure className="cursor-ripple-media">
-  <img
-    className="cursor-ripple-media__fallback"
-    src={imageUrl}
-    alt={meaningfulAlt}
-    width={width}
-    height={height}
-  />
+  <img className="cursor-ripple-media__fallback" src={imageUrl} alt={meaningfulAlt} width={width} height={height} />
 
   {shaderEnabled ? (
     <Suspense fallback={null}>
-      <CursorRippleShader
-        imageUrl={imageUrl}
-        ready={shaderReady}
-        onReady={() => setShaderReady(true)}
-      />
+      <CursorRippleShader imageUrl={imageUrl} ready={shaderReady} onReady={() => setShaderReady(true)} />
     </Suspense>
   ) : null}
 </figure>

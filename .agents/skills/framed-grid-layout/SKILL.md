@@ -6,11 +6,13 @@ description: Create minimal framed grid layouts with thin visible boundary lines
 # Framed Grid Layout
 
 ## Use When
+
 - A page needs a clean technical structure with visible section boundaries.
 - Content should feel precise, organized, editorial, or system-like.
 - The design calls for thin guide borders, L-shaped corner brackets, and consistent framed boxes.
 
 ## Layout Rules
+
 1. Define the parent grid first; make every section snap to the same columns and rows.
 2. Use one border color, one corner bracket color, and one spacing scale across the page.
 3. Keep frames rectangular and precise. Avoid floating cards, soft blobs, and uneven margins.
@@ -20,6 +22,7 @@ description: Create minimal framed grid layouts with thin visible boundary lines
 7. Separate sections with consistent gaps, not random whitespace.
 
 ## Base Tokens
+
 Use neutral colors and tune contrast per theme.
 
 ```css
@@ -36,19 +39,14 @@ Use neutral colors and tune contrast per theme.
 ```
 
 ## Parent Grid
+
 Use the parent grid to enforce vertical and horizontal alignment.
 
 ```css
 .framed-grid {
   min-height: 100vh;
   padding: var(--fg-gap);
-  background:
-    repeating-linear-gradient(
-      135deg,
-      transparent 0 11px,
-      var(--fg-texture) 11px 12px
-    ),
-    var(--fg-bg);
+  background: repeating-linear-gradient(135deg, transparent 0 11px, var(--fg-texture) 11px 12px), var(--fg-bg);
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--fg-gap);
@@ -60,6 +58,7 @@ Use the parent grid to enforce vertical and horizontal alignment.
 ```
 
 ## Framed Section
+
 Each section gets the same box model, line weight, and padding.
 
 ```css
@@ -77,6 +76,7 @@ Each section gets the same box model, line weight, and padding.
 ```
 
 ## L-Shaped Corner Brackets
+
 Use background layers so brackets stay crisp without extra markup.
 
 ```css
@@ -95,13 +95,22 @@ Use background layers so brackets stay crisp without extra markup.
 ```
 
 ## Section Spans
+
 Prefer explicit grid spans over ad hoc widths.
 
 ```css
-.span-12 { grid-column: span 12; }
-.span-8 { grid-column: span 8; }
-.span-6 { grid-column: span 6; }
-.span-4 { grid-column: span 4; }
+.span-12 {
+  grid-column: span 12;
+}
+.span-8 {
+  grid-column: span 8;
+}
+.span-6 {
+  grid-column: span 6;
+}
+.span-4 {
+  grid-column: span 4;
+}
 
 @media (max-width: 760px) {
   .framed-grid {
@@ -130,6 +139,7 @@ Prefer explicit grid spans over ad hoc widths.
 ```
 
 ## Taste Rules
+
 - Keep frames aligned to the parent grid even when content inside varies.
 - Use square or lightly rounded corners only if the product style requires it.
 - Do not mix different border weights in adjacent frames.
@@ -138,6 +148,7 @@ Prefer explicit grid spans over ad hoc widths.
 - Repeat corner bracket size consistently across all major sections.
 
 ## Quick Checks
+
 - Section edges line up vertically and horizontally.
 - Every frame uses the same border, padding, and corner bracket scale.
 - Gaps between frames are consistent on desktop and mobile.

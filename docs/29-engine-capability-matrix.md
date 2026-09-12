@@ -205,16 +205,16 @@ session runs; ⚠️ depends on the session engine; ❌ 501 on both.
 ### 29.4.1 Session & connection
 
 | Method               | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
-| -------------------- | ------------------- | ---------------- | ----------- |
-| `initialize`         | ✅                  | ✅🔧⁴            | ✅          |
-| `disconnect`         | ✅                  | ✅               | ✅          |
-| `logout`             | ✅                  | ✅               | ✅          |
-| `destroy`            | ✅                  | ✅               | ✅          |
-| `forceDestroy`       | ✅                  | ✅               | ✅          |
-| `getQRCode`          | ✅                  | ✅               | ✅          |
-| `requestPairingCode` | ✅                  | ✅               | ✅          |
-| `getStatus`          | ✅                  | ✅               | ✅          |
-| `probeLiveness`      | ✅ local            | ✅ round trip    | ⚙️ internal |
+| -------------------- | ------------------- | ---------------- | -------------- |
+| `initialize`         | ✅                  | ✅🔧⁴            | ✅             |
+| `disconnect`         | ✅                  | ✅               | ✅             |
+| `logout`             | ✅                  | ✅               | ✅             |
+| `destroy`            | ✅                  | ✅               | ✅             |
+| `forceDestroy`       | ✅                  | ✅               | ✅             |
+| `getQRCode`          | ✅                  | ✅               | ✅             |
+| `requestPairingCode` | ✅                  | ✅               | ✅             |
+| `getStatus`          | ✅                  | ✅               | ✅             |
+| `probeLiveness`      | ✅ local            | ✅ round trip    | ⚙️ internal    |
 
 `probeLiveness` is the one optional member of `IWhatsAppEngine`, and the two adapters answer it to
 different depths — which is what the optional marker exists to allow. wwjs races a real
@@ -225,7 +225,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.2 Sending messages
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | --------------------- | ------------------- | ---------------- | --------------- |
 | `sendTextMessage`     | ✅                  | ✅🔧³            | ✅              |
 | `sendImageMessage`    | ✅                  | ✅               | ✅              |
@@ -245,51 +245,51 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.3 Message management
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
-| --------------------- | ------------------- | ---------------- | ------------ |
-| `editMessage`         | ✅                  | ✅               | ✅           |
-| `deleteMessage`       | ✅                  | ✅               | ✅           |
-| `reactToMessage`      | ✅                  | ✅               | ✅           |
-| `starMessage`         | ✅                  | ✅               | ✅           |
-| `pinMessage`          | ✅                  | ✅               | ✅           |
-| `unpinMessage`        | ✅                  | ✅               | ✅           |
-| `getMessageReactions` | ❌ lib              | ✅               | ⚠️ wwjs only |
-| `votePoll`            | ❌ lib              | ✅               | ⚠️ wwjs only |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
+| --------------------- | ------------------- | ---------------- | -------------- |
+| `editMessage`         | ✅                  | ✅               | ✅             |
+| `deleteMessage`       | ✅                  | ✅               | ✅             |
+| `reactToMessage`      | ✅                  | ✅               | ✅             |
+| `starMessage`         | ✅                  | ✅               | ✅             |
+| `pinMessage`          | ✅                  | ✅               | ✅             |
+| `unpinMessage`        | ✅                  | ✅               | ✅             |
+| `getMessageReactions` | ❌ lib              | ✅               | ⚠️ wwjs only   |
+| `votePoll`            | ❌ lib              | ✅               | ⚠️ wwjs only   |
 
 ### 29.4.4 Chats
 
-| Method              | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
-| ------------------- | ------------------- | ---------------- | ------------ |
-| `getChats`          | ✅                  | ✅               | ✅           |
-| `getChatHistory`    | ❌ lib              | ✅               | ⚠️ wwjs only |
-| `archiveChat`       | ✅                  | ✅               | ✅           |
-| `clearChatMessages` | ✅                  | ✅               | ✅           |
-| `deleteChat`        | ✅                  | ✅               | ✅           |
-| `markUnread`        | ✅                  | ✅               | ✅           |
-| `muteChat`          | ✅                  | ✅               | ✅           |
-| `pinChat`           | ✅                  | ✅               | ✅           |
+| Method              | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
+| ------------------- | ------------------- | ---------------- | -------------- |
+| `getChats`          | ✅                  | ✅               | ✅             |
+| `getChatHistory`    | ❌ lib              | ✅               | ⚠️ wwjs only   |
+| `archiveChat`       | ✅                  | ✅               | ✅             |
+| `clearChatMessages` | ✅                  | ✅               | ✅             |
+| `deleteChat`        | ✅                  | ✅               | ✅             |
+| `markUnread`        | ✅                  | ✅               | ✅             |
+| `muteChat`          | ✅                  | ✅               | ✅             |
+| `pinChat`           | ✅                  | ✅               | ✅             |
 
 ### 29.4.5 Contacts
 
 | Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
-| --------------------- | ------------------- | ---------------- | ----------- |
-| `getContacts`         | ✅                  | ✅               | ✅          |
-| `getContactById`      | ✅                  | ✅               | ✅          |
-| `upsertContact`       | ✅                  | ✅               | ✅          |
-| `deleteContact`       | ✅                  | ✅               | ✅          |
-| `blockContact`        | ✅                  | ✅               | ✅          |
-| `unblockContact`      | ✅                  | ✅               | ✅          |
-| `getBlockedContacts`  | ✅                  | ✅               | ✅          |
-| `checkNumberExists`   | ✅                  | ✅               | ✅          |
-| `getNumberId`         | ✅                  | ✅               | ✅          |
-| `getPhoneNumber`      | ✅                  | ✅               | ✅          |
-| `getPushName`         | ✅                  | ✅               | ✅          |
-| `resolveContactPhone` | ✅                  | ✅               | ✅          |
-| `getProfilePicture`   | ✅                  | ✅               | ✅          |
+| --------------------- | ------------------- | ---------------- | -------------- |
+| `getContacts`         | ✅                  | ✅               | ✅             |
+| `getContactById`      | ✅                  | ✅               | ✅             |
+| `upsertContact`       | ✅                  | ✅               | ✅             |
+| `deleteContact`       | ✅                  | ✅               | ✅             |
+| `blockContact`        | ✅                  | ✅               | ✅             |
+| `unblockContact`      | ✅                  | ✅               | ✅             |
+| `getBlockedContacts`  | ✅                  | ✅               | ✅             |
+| `checkNumberExists`   | ✅                  | ✅               | ✅             |
+| `getNumberId`         | ✅                  | ✅               | ✅             |
+| `getPhoneNumber`      | ✅                  | ✅               | ✅             |
+| `getPushName`         | ✅                  | ✅               | ✅             |
+| `resolveContactPhone` | ✅                  | ✅               | ✅             |
+| `getProfilePicture`   | ✅                  | ✅               | ✅             |
 
 ### 29.4.6 Groups
 
-| Method                           | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
+| Method                           | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | -------------------------------- | ------------------- | ---------------- | --------------- |
 | `createGroup`                    | ✅                  | ❌               | ✅              |
 | `getGroups`                      | ✅                  | ✅               | ✅              |
@@ -317,7 +317,7 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.7 Channels
 
-| Method                     | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
+| Method                     | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | -------------------------- | ------------------- | ---------------- | --------------- |
 | `createChannel`            | ✅🔧⁶               | ✅               | ✅              |
 | `deleteChannel`            | ✅                  | ✅               | ✅              |
@@ -332,15 +332,15 @@ socket is caught by the transport instead. No REST route: the session watchdog p
 
 ### 29.4.8 Status / stories
 
-| Method               | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
-| -------------------- | ------------------- | ---------------- | ------------ |
-| `postTextStatus`     | ✅                  | ✅🔧²            | ✅           |
-| `postImageStatus`    | ✅                  | ✅🔧²            | ✅           |
-| `postVideoStatus`    | ✅                  | ✅🔧²            | ✅           |
-| `postVoiceStatus`    | ✅                  | ✅🔧²            | ✅           |
-| `deleteStatus`       | ✅                  | ✅               | ✅           |
-| `getContactStatus`   | ❌ lib              | ✅               | ✅ (store) ‡ |
-| `getContactStatuses` | ❌ lib              | ✅               | ✅ (store) ‡ |
+| Method               | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
+| -------------------- | ------------------- | ---------------- | -------------- |
+| `postTextStatus`     | ✅                  | ✅🔧²            | ✅             |
+| `postImageStatus`    | ✅                  | ✅🔧²            | ✅             |
+| `postVideoStatus`    | ✅                  | ✅🔧²            | ✅             |
+| `postVoiceStatus`    | ✅                  | ✅🔧²            | ✅             |
+| `deleteStatus`       | ✅                  | ✅               | ✅             |
+| `getContactStatus`   | ❌ lib              | ✅               | ✅ (store) ‡   |
+| `getContactStatuses` | ❌ lib              | ✅               | ✅ (store) ‡   |
 
 ‡ Status **reads** are served from `StatusStoreService` (fed by inbound status ingestion on both
 engines), not by calling the engine — so the REST API is engine-neutral here even though the
@@ -349,7 +349,7 @@ answers 501.
 
 ### 29.4.9 Labels (WA Business)
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | --------------------- | ------------------- | ---------------- | --------------- |
 | `getLabels`           | ❌ lib              | ✅               | ⚠️ wwjs only    |
 | `getLabelById`        | ❌ lib              | ✅               | ⚠️ wwjs only    |
@@ -362,7 +362,7 @@ answers 501.
 
 ### 29.4.10 Catalog & products (WA Business)
 
-| Method        | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
+| Method        | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | ------------- | ------------------- | ---------------- | --------------- |
 | `getCatalog`  | ✅                  | ❌ lib           | ⚠️ baileys only |
 | `getProducts` | ✅                  | ❌ lib           | ⚠️ baileys only |
@@ -371,16 +371,16 @@ answers 501.
 ### 29.4.11 Own profile & presence
 
 | Method                 | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST |
-| ---------------------- | ------------------- | ---------------- | ----------- |
-| `setProfileName`       | ✅                  | ✅               | ✅          |
-| `setProfilePicture`    | ✅                  | ✅               | ✅          |
-| `deleteProfilePicture` | ✅                  | ✅               | ✅          |
-| `setProfileStatus`     | ✅                  | ✅               | ✅          |
-| `setOnlinePresence`    | ✅                  | ✅               | ✅          |
+| ---------------------- | ------------------- | ---------------- | -------------- |
+| `setProfileName`       | ✅                  | ✅               | ✅             |
+| `setProfilePicture`    | ✅                  | ✅               | ✅             |
+| `deleteProfilePicture` | ✅                  | ✅               | ✅             |
+| `setProfileStatus`     | ✅                  | ✅               | ✅             |
+| `setOnlinePresence`    | ✅                  | ✅               | ✅             |
 
 ### 29.4.12 Presence & calls
 
-| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST     |
+| Method                | Baileys adapter 🔧⁵ | wwjs adapter 🔧¹ | LeadWeave REST  |
 | --------------------- | ------------------- | ---------------- | --------------- |
 | `subscribeToPresence` | ✅                  | ❌ lib           | ⚠️ baileys only |
 | `rejectCall`          | ✅                  | ✅               | ✅              |
@@ -419,7 +419,7 @@ Exposure column values:
 
 **Messaging & media** (19)
 
-| Library method                 | LeadWeave exposure                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Library method                 | LeadWeave exposure                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `getMediaHost`                 | 🔩 plumbing                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `readMessages`                 | ✅ `sendSeen`                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -443,7 +443,7 @@ Exposure column values:
 
 **Groups** (19)
 
-| Library method                   | LeadWeave exposure                                                                         |
+| Library method                   | LeadWeave exposure                                                                      |
 | -------------------------------- | --------------------------------------------------------------------------------------- |
 | `groupAcceptInvite`              | ✅ `joinGroupViaInviteCode`                                                             |
 | `groupAcceptInviteV4`            | ❌ **not exposed**                                                                      |
@@ -468,7 +468,7 @@ Exposure column values:
 **Communities** (23) — the largest single gap: an entire WhatsApp feature area (groups-of-groups)
 with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API at all.
 
-| Library method                       | LeadWeave exposure    |
+| Library method                       | LeadWeave exposure |
 | ------------------------------------ | ------------------ |
 | `communityAcceptInvite`              | ❌ **not exposed** |
 | `communityAcceptInviteV4`            | ❌ **not exposed** |
@@ -496,7 +496,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Newsletters (channels)** (19)
 
-| Library method                | LeadWeave exposure                              |
+| Library method                | LeadWeave exposure                           |
 | ----------------------------- | -------------------------------------------- |
 | `newsletterAdminCount`        | ❌ **not exposed**                           |
 | `newsletterChangeOwner`       | ✅ `transferChannelOwnership`                |
@@ -520,7 +520,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Business & catalog** (12)
 
-| Library method          | LeadWeave exposure                                                                                    |
+| Library method          | LeadWeave exposure                                                                                 |
 | ----------------------- | -------------------------------------------------------------------------------------------------- |
 | `addOrEditQuickReply`   | ❌ **not exposed**                                                                                 |
 | `fetchMessageHistory`   | ❌ **not exposed**                                                                                 |
@@ -537,7 +537,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Labels** (6)
 
-| Library method       | LeadWeave exposure                 |
+| Library method       | LeadWeave exposure              |
 | -------------------- | ------------------------------- |
 | `addChatLabel`       | ✅ `addLabelToChat`             |
 | `addLabel`           | ✅ `upsertLabel`, `deleteLabel` |
@@ -548,7 +548,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Privacy & account settings** (13)
 
-| Library method                     | LeadWeave exposure                                                                                                                                                                                      |
+| Library method                     | LeadWeave exposure                                                                                                                                                                                   |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `fetchPrivacySettings`             | ❌ **not exposed** — never called by the adapter; the library reaches it internally from `readMessages` (`sendSeen`), and its raw TypeError on an unanswered query is what forces the deadline bound |
 | `issuePrivacyTokens`               | ❌ **not exposed**                                                                                                                                                                                   |
@@ -566,7 +566,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Queries** (8)
 
-| Library method                 | LeadWeave exposure         |
+| Library method                 | LeadWeave exposure      |
 | ------------------------------ | ----------------------- |
 | `executeUSyncQuery`            | ❌ **not exposed**      |
 | `fetchAccountReachoutTimelock` | ⚙️ internal wiring      |
@@ -579,7 +579,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Profile, contacts & presence** (12)
 
-| Library method           | LeadWeave exposure                                                                                        |
+| Library method           | LeadWeave exposure                                                                                     |
 | ------------------------ | ------------------------------------------------------------------------------------------------------ |
 | `addOrEditContact`       | ✅ `upsertContact`                                                                                     |
 | `createCallLink`         | ✅ `createCallLink`                                                                                    |
@@ -596,7 +596,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Socket, session & plumbing** (21)
 
-| Library method                    | LeadWeave exposure                                                                                                                                                             |
+| Library method                    | LeadWeave exposure                                                                                                                                                          |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `appPatch`                        | 🔩 plumbing                                                                                                                                                                 |
 | `assertSessions`                  | 🔩 plumbing                                                                                                                                                                 |
@@ -624,7 +624,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Session & connection** (16)
 
-| Library method             | LeadWeave exposure                                                                                   |
+| Library method             | LeadWeave exposure                                                                                |
 | -------------------------- | ------------------------------------------------------------------------------------------------- |
 | `cancelPairingCode`        | ❌ **not exposed** — session/transport setting, not a WhatsApp capability                         |
 | `constructor`              | — class plumbing (not a capability)                                                               |
@@ -645,7 +645,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Messages** (8)
 
-| Library method                 | LeadWeave exposure                                                                                                                                                                                                                                                          |
+| Library method                 | LeadWeave exposure                                                                                                                                                                                                                                                       |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `getMessageById`               | ❌ **not exposed**                                                                                                                                                                                                                                                       |
 | `getPinnedMessages`            | ❌ **not exposed**                                                                                                                                                                                                                                                       |
@@ -658,7 +658,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Chats** (9)
 
-| Library method   | LeadWeave exposure                                                                                                                                                                                                                                                                                                                                                                          |
+| Library method   | LeadWeave exposure                                                                                                                                                                                                                                                                                                                                                                       |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `archiveChat`    | ✅ `archiveChat`                                                                                                                                                                                                                                                                                                                                                                         |
 | `getChatById`    | ✅ `muteChannel`, `sendSeen`, `clearChatMessages`, `markUnread`, `deleteChat`, `sendChatState`, `getGroupInfo`, `addParticipants`, `leaveGroup`, `setGroupSubject`, `setGroupDescription`, `getGroupInviteCode`, `revokeGroupInviteCode`, `getChatLabels`, `replyToMessage`, `forwardMessage`, `reactToMessage`, `getMessageReactions`, `getChatHistory`, `deleteMessage`, `editMessage` |
@@ -672,7 +672,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Groups** (7)
 
-| Library method                   | LeadWeave exposure                     |
+| Library method                   | LeadWeave exposure                  |
 | -------------------------------- | ----------------------------------- |
 | `acceptInvite`                   | ✅ `joinGroupViaInviteCode`         |
 | `approveGroupMembershipRequests` | ✅ `approveGroupMembershipRequests` |
@@ -684,7 +684,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Channels** (12)
 
-| Library method             | LeadWeave exposure                                                                                      |
+| Library method             | LeadWeave exposure                                                                                   |
 | -------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `acceptChannelAdminInvite` | ❌ **not exposed**                                                                                   |
 | `createChannel`            | ✅ `createChannel`                                                                                   |
@@ -701,7 +701,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Labels** (5)
 
-| Library method      | LeadWeave exposure                                                                                     |
+| Library method      | LeadWeave exposure                                                                                  |
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | `addOrRemoveLabels` | ✅ `addLabelToChat`, `removeLabelFromChat`                                                          |
 | `getChatLabels`     | ❌ **not exposed** — the adapter reads the chat and calls `Chat.getLabels()`, not the Client method |
@@ -711,7 +711,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Status & broadcasts** (3)
 
-| Library method        | LeadWeave exposure         |
+| Library method        | LeadWeave exposure      |
 | --------------------- | ----------------------- |
 | `getBroadcastById`    | ✅ `getContactStatus`   |
 | `getBroadcasts`       | ✅ `getContactStatuses` |
@@ -719,7 +719,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Contacts & numbers** (11)
 
-| Library method                 | LeadWeave exposure                                       |
+| Library method                 | LeadWeave exposure                                    |
 | ------------------------------ | ----------------------------------------------------- |
 | `deleteAddressbookContact`     | ✅ `deleteContact`                                    |
 | `getBlockedContacts`           | ✅ `getBlockedContacts`                               |
@@ -735,14 +735,14 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Business** (2)
 
-| Library method          | LeadWeave exposure    |
+| Library method          | LeadWeave exposure |
 | ----------------------- | ------------------ |
 | `addOrEditCustomerNote` | ❌ **not exposed** |
 | `getCustomerNote`       | ❌ **not exposed** |
 
 **Profile & presence** (7)
 
-| Library method            | LeadWeave exposure           |
+| Library method            | LeadWeave exposure        |
 | ------------------------- | ------------------------- |
 | `deleteProfilePicture`    | ✅ `deleteProfilePicture` |
 | `getProfilePicUrl`        | ✅ `getProfilePicture`    |
@@ -754,7 +754,7 @@ with zero LeadWeave surface. Baileys-only; whatsapp-web.js has no community API 
 
 **Misc** (1)
 
-| Library method   | LeadWeave exposure     |
+| Library method   | LeadWeave exposure  |
 | ---------------- | ------------------- |
 | `createCallLink` | ✅ `createCallLink` |
 
@@ -785,7 +785,7 @@ LeadWeave consumes events by normalizing them into `EngineEventCallbacks`; anyth
 
 **Baileys (34):**
 
-| Event                       | LeadWeave                                              |     | Event                            | LeadWeave                          |
+| Event                       | LeadWeave                                           |     | Event                            | LeadWeave                       |
 | --------------------------- | --------------------------------------------------- | --- | -------------------------------- | ------------------------------- |
 | `messages.upsert`           | ✅                                                  |     | `chats.lock`                     | ❌                              |
 | `messages.update`           | ✅                                                  |     | `message-capping.update`         | ❌                              |
@@ -807,7 +807,7 @@ LeadWeave consumes events by normalizing them into `EngineEventCallbacks`; anyth
 
 **whatsapp-web.js (31):**
 
-| Event                       | LeadWeave       |     | Event                  | LeadWeave                                                                          |
+| Event                       | LeadWeave    |     | Event                  | LeadWeave                                                                       |
 | --------------------------- | ------------ | --- | ---------------------- | ------------------------------------------------------------------------------- |
 | `message`                   | ✅           |     | `change_battery`       | ❌                                                                              |
 | `message_create`            | ✅           |     | `change_state`         | ❌                                                                              |
@@ -851,21 +851,21 @@ adapter boundary — none silently stubs.
 
 ### 29.6.2 wwjs adapter (13 cells)
 
-| Method                     | Cause | What's missing (evidence)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| -------------------------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `subscribeToChannel`       | gap   | `Client.subscribeToChannel(channelId)` (`Client.js:2542`) takes a channel **id** and resolves a boolean — it cannot satisfy the subscribe-by-invite-code contract alone. Correct wiring is two-step: `getChannelByInviteCode(inviteCode)` (`Client.js:1716`) → `subscribeToChannel(channel.id)`, unverified against a live session (the previous one-step call was a phantom success). The one remaining wwjs adapter-gap.                                                                                                                                                                                                                                                                                                                     |
+| Method                     | Cause | What's missing (evidence)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| -------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `subscribeToChannel`       | gap   | `Client.subscribeToChannel(channelId)` (`Client.js:2542`) takes a channel **id** and resolves a boolean — it cannot satisfy the subscribe-by-invite-code contract alone. Correct wiring is two-step: `getChannelByInviteCode(inviteCode)` (`Client.js:1716`) → `subscribeToChannel(channel.id)`, unverified against a live session (the previous one-step call was a phantom success). The one remaining wwjs adapter-gap.                                                                                                                                                                                                                                                                                                                        |
 | `createGroup`              | lib   | `Client.createGroup` exists and is typed `Promise<CreateGroupResult \| string>`, but its injected evaluate reaches a WhatsApp Web internal that no longer exposes `findImpl` (`Client.js:2325`). Measured live on **two** builds — `2.3000.1044858477-alpha` auto-resolved and `2.3000.1044770897-alpha` pinned — both `TypeError: this.findImpl is not a function`, reaching the caller as a bare 500. Bare and `@c.us`-qualified participant ids fail identically, so the id shape is not the variable; varying the build is what separates this from registry pin drift. `findImpl` is in neither the installed `Client.js` nor any LeadWeave patcher, so it belongs to the page and cannot be patched around. Baileys serves this capability. |
-| `demoteChannelAdmin`       | lib   | `Client.demoteChannelAdmin` exists (`index.d.ts:35`) but its page body calls `window.require('WAWebDemoteNewsletterAdminAction').demoteNewsletterAdmin` (`Client.js:1907-1925`), and a module probe on a live session (Web `2.3000.1044824727-alpha`, unpinned) returned that module resolving with `demoteNewsletterAdmin: undefined`. The sibling path used inside `transferChannelOwnership` (`WAWebNewsletterDemoteAdminJob.demoteNewsletterAdminAction`) is undefined too, so there is nothing to retarget. Baileys serves this capability.                                                                                                                                                                                               |
-| `transferChannelOwnership` | lib   | `Client.transferChannelOwnership` exists (`index.d.ts:375`) and its page function `WAWebChangeNewsletterOwnerAction.changeNewsletterOwnerAction` is present, but on Web `2.3000.1044824727-alpha` it rejects every call **locally** with `contact-not-found-in-newsletter-subscriber-list` — 4-9ms against a 352-531ms known-server baseline measured in the same page, so it never reaches WhatsApp. Unchanged by subscribing the target, promoting it to admin, or restarting the session; the only repopulation path, `WAWebCollections.NewsletterMetadataCollection.update`, is `undefined`. Baileys serves this capability.                                                                                                               |
-| `upsertLabel`              | lib   | 1.34.7 reads labels and assigns them (`getLabels`, `getLabelById`, `getChatLabels`, `getChatsByLabelId`, `addOrRemoveLabels`, `index.d.ts:129-154`) but exposes nothing that creates/edits a label definition.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `deleteLabel`              | lib   | Same as above.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `subscribeToPresence`      | lib   | Only `sendPresenceAvailable`/`sendPresenceUnavailable` (`index.d.ts:230,233`), which publish the _account's own_ presence; no subscribe call and no presence event is emitted.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `getCatalog`               | lib   | No `Client.getCatalog` in `index.d.ts` (0 hits); `Product`/`Order` are inbound-only parsers.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `getProducts`              | lib   | Same as above.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `getProduct`               | lib   | Only page-internal `getProductMetadata` (`Utils.js:1290`), not a public Client fn.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `sendProduct`              | lib   | No outbound product content type.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `sendCatalog`              | lib   | No `Client.sendCatalog` in `index.d.ts` (0 hits).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `setGroupEphemeral`        | lib   | No disappearing-timer setter (0 hits for `ephemeral` in `index.d.ts`); only the create-time `messageTimer` option (`Client.js:2328`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `demoteChannelAdmin`       | lib   | `Client.demoteChannelAdmin` exists (`index.d.ts:35`) but its page body calls `window.require('WAWebDemoteNewsletterAdminAction').demoteNewsletterAdmin` (`Client.js:1907-1925`), and a module probe on a live session (Web `2.3000.1044824727-alpha`, unpinned) returned that module resolving with `demoteNewsletterAdmin: undefined`. The sibling path used inside `transferChannelOwnership` (`WAWebNewsletterDemoteAdminJob.demoteNewsletterAdminAction`) is undefined too, so there is nothing to retarget. Baileys serves this capability.                                                                                                                                                                                                  |
+| `transferChannelOwnership` | lib   | `Client.transferChannelOwnership` exists (`index.d.ts:375`) and its page function `WAWebChangeNewsletterOwnerAction.changeNewsletterOwnerAction` is present, but on Web `2.3000.1044824727-alpha` it rejects every call **locally** with `contact-not-found-in-newsletter-subscriber-list` — 4-9ms against a 352-531ms known-server baseline measured in the same page, so it never reaches WhatsApp. Unchanged by subscribing the target, promoting it to admin, or restarting the session; the only repopulation path, `WAWebCollections.NewsletterMetadataCollection.update`, is `undefined`. Baileys serves this capability.                                                                                                                  |
+| `upsertLabel`              | lib   | 1.34.7 reads labels and assigns them (`getLabels`, `getLabelById`, `getChatLabels`, `getChatsByLabelId`, `addOrRemoveLabels`, `index.d.ts:129-154`) but exposes nothing that creates/edits a label definition.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `deleteLabel`              | lib   | Same as above.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `subscribeToPresence`      | lib   | Only `sendPresenceAvailable`/`sendPresenceUnavailable` (`index.d.ts:230,233`), which publish the _account's own_ presence; no subscribe call and no presence event is emitted.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `getCatalog`               | lib   | No `Client.getCatalog` in `index.d.ts` (0 hits); `Product`/`Order` are inbound-only parsers.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `getProducts`              | lib   | Same as above.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `getProduct`               | lib   | Only page-internal `getProductMetadata` (`Utils.js:1290`), not a public Client fn.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `sendProduct`              | lib   | No outbound product content type.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `sendCatalog`              | lib   | No `Client.sendCatalog` in `index.d.ts` (0 hits).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `setGroupEphemeral`        | lib   | No disappearing-timer setter (0 hits for `ephemeral` in `index.d.ts`); only the create-time `messageTimer` option (`Client.js:2328`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
 ## 29.7 Caveats on supported rows
 

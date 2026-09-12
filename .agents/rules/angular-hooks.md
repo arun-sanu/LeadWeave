@@ -1,12 +1,13 @@
 ---
 paths:
-  - "**/*.component.ts"
-  - "**/*.component.html"
-  - "**/*.service.ts"
-  - "**/*.directive.ts"
-  - "**/*.pipe.ts"
-  - "**/*.spec.ts"
+  - '**/*.component.ts'
+  - '**/*.component.html'
+  - '**/*.service.ts'
+  - '**/*.directive.ts'
+  - '**/*.pipe.ts'
+  - '**/*.spec.ts'
 ---
+
 # Angular Hooks
 
 > This file extends [common/hooks.md](common-hooks.md) with Angular specific content.

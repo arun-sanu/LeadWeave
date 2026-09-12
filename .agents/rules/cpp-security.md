@@ -1,13 +1,14 @@
 ---
 paths:
-  - "**/*.cpp"
-  - "**/*.hpp"
-  - "**/*.cc"
-  - "**/*.hh"
-  - "**/*.cxx"
-  - "**/*.h"
-  - "**/CMakeLists.txt"
+  - '**/*.cpp'
+  - '**/*.hpp'
+  - '**/*.cc'
+  - '**/*.hh'
+  - '**/*.cxx'
+  - '**/*.h'
+  - '**/CMakeLists.txt'
 ---
+
 # C++ Security
 
 > This file extends [common/security.md](common-security.md) with C++ specific content.

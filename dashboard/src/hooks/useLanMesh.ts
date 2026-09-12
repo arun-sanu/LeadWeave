@@ -21,7 +21,7 @@ export function useLanMesh(userName: string) {
   const [peers, setPeers] = useState<LanPeerInfo[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
-  
+
   const socketRef = useRef<Socket | null>(null);
   const webrtcPeersRef = useRef<Map<string, SimplePeer.Instance>>(new Map());
   const myIdRef = useRef<string>('');
@@ -32,14 +32,14 @@ export function useLanMesh(userName: string) {
       trickle: false,
     });
 
-    peer.on('signal', (signalData) => {
+    peer.on('signal', signalData => {
       socketRef.current?.emit('webrtc-signal', {
         targetPeerId,
-        signal: signalData
+        signal: signalData,
       });
     });
 
-    peer.on('data', (data) => {
+    peer.on('data', data => {
       // Receive message from P2P channel
       try {
         const parsedData = JSON.parse(data.toString());
@@ -61,7 +61,7 @@ export function useLanMesh(userName: string) {
   useEffect(() => {
     // Connect to the signaling server
     const socket = io('/lan-mesh', {
-      transports: ['websocket']
+      transports: ['websocket'],
     });
     socketRef.current = socket;
 
@@ -99,15 +99,15 @@ export function useLanMesh(userName: string) {
       }
     });
 
-    socket.on('webrtc-signal', (data: { senderPeerId: string, signal: unknown }) => {
+    socket.on('webrtc-signal', (data: { senderPeerId: string; signal: unknown }) => {
       const { senderPeerId, signal } = data;
       let peer = webrtcPeersRef.current.get(senderPeerId);
-      
+
       if (!peer) {
         // We received an offer from someone else
         peer = initiateWebRtcConnection(senderPeerId, false);
       }
-      
+
       peer.signal(signal);
     });
 
@@ -118,60 +118,65 @@ export function useLanMesh(userName: string) {
     };
   }, [userName]);
 
+  const sendMessage = useCallback(
+    (text: string) => {
+      const msg: ChatMessage = {
+        id: Math.random().toString(36).substring(7),
+        senderId: myIdRef.current,
+        senderName: userName,
+        text,
+        timestamp: Date.now(),
+      };
 
-  const sendMessage = useCallback((text: string) => {
-    const msg: ChatMessage = {
-      id: Math.random().toString(36).substring(7),
-      senderId: myIdRef.current,
-      senderName: userName,
-      text,
-      timestamp: Date.now()
-    };
-    
-    // Optimistic update
-    setMessages(prev => [...prev, msg]);
-    
-    // Broadcast via WebRTC to all connected peers
-    const payload = JSON.stringify(msg);
-    webrtcPeersRef.current.forEach(peer => {
-      if (peer.connected) {
-        peer.send(payload);
-      }
-    });
-  }, [userName]);
+      // Optimistic update
+      setMessages(prev => [...prev, msg]);
 
-  const sendFile = useCallback((file: File) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result) {
-        const msg: ChatMessage = {
-          id: Math.random().toString(36).substring(7),
-          senderId: myIdRef.current,
-          senderName: userName,
-          fileName: file.name,
-          text: `Shared a file: ${file.name}`,
-          timestamp: Date.now()
-        };
-        
-        // Broadcast via WebRTC
-        const payload = JSON.stringify(msg); // Note: SimplePeer can send arraybuffers directly, but for simplicity here we stringify. In a real app we'd chunk array buffers.
-        webrtcPeersRef.current.forEach(peer => {
-          if (peer.connected) {
-            peer.send(payload);
-          }
-        });
-        
-        setMessages(prev => [...prev, msg]);
-      }
-    };
-    reader.readAsArrayBuffer(file);
-  }, [userName]);
+      // Broadcast via WebRTC to all connected peers
+      const payload = JSON.stringify(msg);
+      webrtcPeersRef.current.forEach(peer => {
+        if (peer.connected) {
+          peer.send(payload);
+        }
+      });
+    },
+    [userName],
+  );
+
+  const sendFile = useCallback(
+    (file: File) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          const msg: ChatMessage = {
+            id: Math.random().toString(36).substring(7),
+            senderId: myIdRef.current,
+            senderName: userName,
+            fileName: file.name,
+            text: `Shared a file: ${file.name}`,
+            timestamp: Date.now(),
+          };
+
+          // Broadcast via WebRTC
+          const payload = JSON.stringify(msg); // Note: SimplePeer can send arraybuffers directly, but for simplicity here we stringify. In a real app we'd chunk array buffers.
+          webrtcPeersRef.current.forEach(peer => {
+            if (peer.connected) {
+              peer.send(payload);
+            }
+          });
+
+          setMessages(prev => [...prev, msg]);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    },
+    [userName],
+  );
 
   return {
     peers,
     messages,
     isConnected,
     sendMessage,
-    sendFile
+    sendFile,
   };
 }

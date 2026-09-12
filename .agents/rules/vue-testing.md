@@ -1,6 +1,6 @@
 ---
 paths:
-  - "**/*.vue"
+  - '**/*.vue'
 ---
 
 # Vue Testing
@@ -42,9 +42,9 @@ paths:
 const wrapper = mount(AuctionCard, {
   props: { id: 1 },
   global: { plugins: [createTestingPinia({ createSpy: vi.fn })] },
-})
-await wrapper.find('button').trigger('click')
-expect(wrapper.emitted('bid')).toBeTruthy()
+});
+await wrapper.find('button').trigger('click');
+expect(wrapper.emitted('bid')).toBeTruthy();
 ```
 
 ## Reference

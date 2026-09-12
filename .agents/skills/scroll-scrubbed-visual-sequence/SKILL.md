@@ -15,19 +15,17 @@ Write the visual states before coding:
 const sequence = {
   scrollVh: 280,
   frameCount: 96,
-  fit: "contain",
+  fit: 'contain',
   posterFrame: 0,
   reducedMotionFrame: 95,
-  copyStops: [0, 0.42, 0.78]
+  copyStops: [0, 0.42, 0.78],
 };
 ```
 
 Use one normalized value for every renderer:
 
 ```js
-const progress = Math.min(1, Math.max(0,
-  (viewportTop - sectionTop) / (sectionHeight - viewportHeight)
-));
+const progress = Math.min(1, Math.max(0, (viewportTop - sectionTop) / (sectionHeight - viewportHeight)));
 ```
 
 Never make wheel delta, elapsed time, or autoplay the source of truth. Native scroll position must determine the exact visual state in both directions.
@@ -54,12 +52,12 @@ Use GSAP ScrollTrigger when the project already uses GSAP or needs exact pin, re
 ```js
 ScrollTrigger.create({
   trigger: section,
-  start: "top top",
+  start: 'top top',
   end: () => `+=${innerHeight * 2.8}`,
   pin: stage,
   scrub: true,
   invalidateOnRefresh: true,
-  onUpdate: ({ progress }) => render(progress)
+  onUpdate: ({ progress }) => render(progress),
 });
 ```
 

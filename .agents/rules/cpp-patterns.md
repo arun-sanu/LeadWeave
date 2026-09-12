@@ -1,13 +1,14 @@
 ---
 paths:
-  - "**/*.cpp"
-  - "**/*.hpp"
-  - "**/*.cc"
-  - "**/*.hh"
-  - "**/*.cxx"
-  - "**/*.h"
-  - "**/CMakeLists.txt"
+  - '**/*.cpp'
+  - '**/*.hpp'
+  - '**/*.cc'
+  - '**/*.hh'
+  - '**/*.cxx'
+  - '**/*.h'
+  - '**/CMakeLists.txt'
 ---
+
 # C++ Patterns
 
 > This file extends [common/patterns.md](common-patterns.md) with C++ specific content.

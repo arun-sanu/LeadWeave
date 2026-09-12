@@ -80,7 +80,7 @@ Mỗi kỹ năng đều cần cấu trúc cơ bản này. **Hãy sao chép mẫu
 ```markdown
 ---
 name: my-awesome-skill
-description: "Mô tả ngắn gọn về chức năng của skill này"
+description: 'Mô tả ngắn gọn về chức năng của skill này'
 risk: safe
 source: community
 date_added: 2026-06-25
@@ -151,7 +151,7 @@ Tiết kiệm thời gian! Hãy sao chép bản mẫu này:
 ```markdown
 ---
 name: your-skill-name
-description: "Mô tả trong một câu về chức năng của skill và khi nào cần dùng"
+description: 'Mô tả trong một câu về chức năng của skill và khi nào cần dùng'
 risk: safe
 source: community
 date_added: 2026-06-25

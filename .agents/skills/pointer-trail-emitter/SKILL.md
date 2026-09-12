@@ -7,7 +7,7 @@ description: Build a cursor trail whose spacing stays constant at any hand speed
 
 Build the emitter yourself when the trail's density has to respond to how fast the hand is moving.
 
-Reach for `add-shader-cursor-trail` or `shaders-cursor-ripples` when you want the packaged WebGPU looks from the Shaders library. Reach for `reveal-hover-effect` when the cursor exposes a second image through a mask. Reach for `ambient-section-particles` when motes fill a section and the pointer only disturbs them. Reach for this when the pointer *lays* them.
+Reach for `add-shader-cursor-trail` or `shaders-cursor-ripples` when you want the packaged WebGPU looks from the Shaders library. Reach for `reveal-hover-effect` when the cursor exposes a second image through a mask. Reach for `ambient-section-particles` when motes fill a section and the pointer only disturbs them. Reach for this when the pointer _lays_ them.
 
 The bundled demo keeps the stage intentionally neutral. A plain dark field makes spacing, scatter, and coast easy to judge without a background image competing with the trail. The wisps are dependency-free Vanilla JavaScript rendered through the Canvas 2D API; CSS styles the interface only. There are no shaders, WebGL, or Three.js. Keep the live canvas separate from the interface so the emitter stays testable rather than baked into a composition.
 
@@ -37,14 +37,15 @@ Cap the loop. A window blur, a tab restore, or a teleporting pointer can hand yo
 Spawning every mote of a frame at the pointer's current position clumps them at one end of the segment. A flick then reads as a blob with a gap behind it. Lay each at its own distance along the segment:
 
 ```js
-const t = moved > 1e-6 ? Math.min(1, guard * STEP / moved) : 0;
+const t = moved > 1e-6 ? Math.min(1, (guard * STEP) / moved) : 0;
 spawn(E.lx + dx * t, E.ly + dy * t, ang);
 ```
 
 ## Take the ring-buffer slot before advancing it
 
 ```js
-const i = E.i; E.i = (i + 1) % N;   // correct
+const i = E.i;
+E.i = (i + 1) % N; // correct
 ```
 
 Advancing first writes the position into the next slot and the life into this one, so **every mote appears where the previous one started.** Dense trails hide it; sparse ones show it on every spawn. Symptom to recognise: motes that look one step behind the cursor and pop rather than fade in.
@@ -64,8 +65,9 @@ A rigidly pinned emitter makes a fast flick look like the trail is welded to the
 For an in-scene 3-D trail, parent the points to the **camera** and work in camera space. Map the pointer through the frustum's own half-height:
 
 ```js
-const hh = Math.tan(camera.fov * Math.PI / 360) * D;
-const x = nx * hh * camera.aspect, y = ny * hh;
+const hh = Math.tan((camera.fov * Math.PI) / 360) * D;
+const x = nx * hh * camera.aspect,
+  y = ny * hh;
 ```
 
 Unprojecting to a world plane instead pins the trail to the set: the moment the rig drifts or parallaxes, the trail swims across the screen rather than staying under the hand.
@@ -100,22 +102,22 @@ Distance emission means a stationary pointer travels nothing and therefore emits
 
 Tuned on a trail hanging 3.4 units from a 36° camera, on a plane ≈2.2 units tall. Scale the spatial values by your own plane extent.
 
-| parameter | value | note |
-| --- | --- | --- |
-| emission step | 0.030 units | distance between spawns |
-| spawns per frame cap | 14 | the teleport guard |
-| emitter damping | `damp(…, 16, dt)` | the lag behind the pointer |
-| scatter | ±0.30 units | ≈13% of the plane height |
-| depth jitter | ±0.45 units | breaks the flat sheet |
-| life | 1.45–2.75 s | idle motes 2.1–3.4 s |
-| launch velocity | −0.09 along travel, ±0.19 lateral | against the direction of motion |
-| coast damping | `1 − 0.5 * dt` | halved from 1.1; see above |
-| buoyancy | +0.022 · dt | |
-| curl | `sin(t·1.3 + φ)·0.17`, `cos(t·1.1 + 1.7φ)·0.14` | per-mote phase φ |
-| size | 0.018–0.050, ×(1 + 0.55u) | a mote softens, it does not swell |
-| opacity | in over u 0–0.12, out over 0.22–1, ×0.9 | |
-| count | 190 desktop, 90 on a low tier | |
-| idle emission | every 0.42 s | |
+| parameter            | value                                           | note                              |
+| -------------------- | ----------------------------------------------- | --------------------------------- |
+| emission step        | 0.030 units                                     | distance between spawns           |
+| spawns per frame cap | 14                                              | the teleport guard                |
+| emitter damping      | `damp(…, 16, dt)`                               | the lag behind the pointer        |
+| scatter              | ±0.30 units                                     | ≈13% of the plane height          |
+| depth jitter         | ±0.45 units                                     | breaks the flat sheet             |
+| life                 | 1.45–2.75 s                                     | idle motes 2.1–3.4 s              |
+| launch velocity      | −0.09 along travel, ±0.19 lateral               | against the direction of motion   |
+| coast damping        | `1 − 0.5 * dt`                                  | halved from 1.1; see above        |
+| buoyancy             | +0.022 · dt                                     |                                   |
+| curl                 | `sin(t·1.3 + φ)·0.17`, `cos(t·1.1 + 1.7φ)·0.14` | per-mote phase φ                  |
+| size                 | 0.018–0.050, ×(1 + 0.55u)                       | a mote softens, it does not swell |
+| opacity              | in over u 0–0.12, out over 0.22–1, ×0.9         |                                   |
+| count                | 190 desktop, 90 on a low tier                   |                                   |
+| idle emission        | every 0.42 s                                    |                                   |
 
 ## Do not move it to a DOM overlay to raise its z-index
 
@@ -129,7 +131,7 @@ If the layer is genuinely required, port it as a pure translation and diff the f
 
 The per-mote update is free. A CPU profile of a 190-mote trail showed the update at **0.00% of samples** — below the profiler's sampling floor. The cost is entirely additive fill, so the levers are sprite size and count, in that order.
 
-Measure before reporting a regression. A frame-time comparison on this trail once showed a 20–30% p90 rise that turned out to be noise: three runs of *identical* code gave 226 / 374 / 243 ms. Run it more than once before you believe it.
+Measure before reporting a regression. A frame-time comparison on this trail once showed a 20–30% p90 rise that turned out to be noise: three runs of _identical_ code gave 226 / 374 / 243 ms. Run it more than once before you believe it.
 
 ## Lifecycle and reduced motion
 

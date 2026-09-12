@@ -318,7 +318,8 @@ export function Webhooks() {
             <option value="">{t('webhooks.selectSession')}</option>
             {sessions.map(s => (
               <option key={s.id} value={s.id}>
-                {s.name}{s.phone ? ` (${s.phone})` : ''}
+                {s.name}
+                {s.phone ? ` (${s.phone})` : ''}
               </option>
             ))}
           </select>

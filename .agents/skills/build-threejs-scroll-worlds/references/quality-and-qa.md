@@ -21,9 +21,9 @@ Use this reference after the graybox route works and again before delivery. A bu
 
 Create one row per chapter and viewport:
 
-| chapter | 1440×900 | 768×1024 | 390×844 | reverse seam | interaction | fallback | performance |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| threshold | screenshot | screenshot | screenshot | pass/fail | pass/fail | pass/fail | ms/calls/triangles |
+| chapter   | 1440×900   | 768×1024   | 390×844    | reverse seam | interaction | fallback  | performance        |
+| --------- | ---------- | ---------- | ---------- | ------------ | ----------- | --------- | ------------------ |
+| threshold | screenshot | screenshot | screenshot | pass/fail    | pass/fail   | pass/fail | ms/calls/triangles |
 
 Capture representative evidence from the live renderer, not a design mockup. Mark untested devices or paths as unknown.
 

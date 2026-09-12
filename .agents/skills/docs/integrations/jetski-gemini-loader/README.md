@@ -48,16 +48,12 @@ Manifest contract references:
 ## Basic usage (pseudo‑code)
 
 ```ts
-import path from "path";
-import {
-  loadSkillIndex,
-  buildModelMessages,
-  Message,
-} from "./loader.mjs";
+import path from 'path';
+import { loadSkillIndex, buildModelMessages, Message } from './loader.mjs';
 
-const REPO_ROOT = "/path/to/agentic-awesome-skills";
+const REPO_ROOT = '/path/to/agentic-awesome-skills';
 const SKILLS_ROOT = REPO_ROOT;
-const INDEX_PATH = path.join(REPO_ROOT, "skills_index.json");
+const INDEX_PATH = path.join(REPO_ROOT, 'skills_index.json');
 
 // 1. Bootstrap once at agent startup (optionally validate `data/skills_index.json` for compatibility hosts).
 const skillIndex = loadSkillIndex(INDEX_PATH);
@@ -66,8 +62,8 @@ const skillIndex = loadSkillIndex(INDEX_PATH);
 async function runTurn(trajectory: Message[]) {
   const baseSystemMessages: Message[] = [
     {
-      role: "system",
-      content: "You are a helpful coding agent.",
+      role: 'system',
+      content: 'You are a helpful coding agent.',
     },
   ];
 
@@ -77,7 +73,7 @@ async function runTurn(trajectory: Message[]) {
     skillIndex,
     skillsRoot: SKILLS_ROOT,
     maxSkillsPerTurn: 8,
-    overflowBehavior: "error",
+    overflowBehavior: 'error',
   });
 
   // 3. Pass `modelMessages` to your Jetski/Cortex + Gemini client

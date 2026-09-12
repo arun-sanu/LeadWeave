@@ -59,7 +59,13 @@ const DEFAULT_PLANS: SaaSPlan[] = [
     priceMonth: 49,
     maxUsers: 3,
     maxSessions: 1,
-    features: ['1 WhatsApp Number', 'Up to 3 Team Agents', 'Floating Bubbles & Quick Chat', 'Local SQLite Storage', 'Basic Templates'],
+    features: [
+      '1 WhatsApp Number',
+      'Up to 3 Team Agents',
+      'Floating Bubbles & Quick Chat',
+      'Local SQLite Storage',
+      'Basic Templates',
+    ],
   },
   {
     id: 'growth',
@@ -68,7 +74,13 @@ const DEFAULT_PLANS: SaaSPlan[] = [
     maxUsers: 5,
     maxSessions: 2,
     isPopular: true,
-    features: ['2 WhatsApp Numbers', 'Up to 5 Team Agents', 'Floating Bubbles & Quick Chat', 'Media Lightbox & Voice Notes', 'Broadcasting Campaigns'],
+    features: [
+      '2 WhatsApp Numbers',
+      'Up to 5 Team Agents',
+      'Floating Bubbles & Quick Chat',
+      'Media Lightbox & Voice Notes',
+      'Broadcasting Campaigns',
+    ],
   },
   {
     id: 'pro',
@@ -76,7 +88,13 @@ const DEFAULT_PLANS: SaaSPlan[] = [
     priceMonth: 199,
     maxUsers: 11,
     maxSessions: 5,
-    features: ['5 WhatsApp Numbers', 'Up to 11 Team Agents', 'Multi-Session Routing', 'Priority Rate Limit Shield', 'Full Webhook & API Access'],
+    features: [
+      '5 WhatsApp Numbers',
+      'Up to 11 Team Agents',
+      'Multi-Session Routing',
+      'Priority Rate Limit Shield',
+      'Full Webhook & API Access',
+    ],
   },
   {
     id: 'enterprise',
@@ -84,7 +102,13 @@ const DEFAULT_PLANS: SaaSPlan[] = [
     priceMonth: 499,
     maxUsers: 50,
     maxSessions: 20,
-    features: ['20 WhatsApp Numbers', 'Up to 50 Team Agents', 'Dedicated High-Speed Relay', 'Custom Anti-Ban AI Delays', '24/7 SLA Support'],
+    features: [
+      '20 WhatsApp Numbers',
+      'Up to 50 Team Agents',
+      'Dedicated High-Speed Relay',
+      'Custom Anti-Ban AI Delays',
+      '24/7 SLA Support',
+    ],
   },
 ];
 
@@ -147,7 +171,7 @@ async function syncFromSupabase() {
     const mappedUsers: SaaSUser[] = supabaseProfiles.map(p => {
       const parentCompany = supabaseCompanies.find(c => c.id === p.company_id);
       const name = p.full_name || p.email?.split('@')[0] || 'User';
-      const userRole = (p.role === 'superadmin' || p.role === 'companyadmin') ? 'companyadmin' : 'user';
+      const userRole = p.role === 'superadmin' || p.role === 'companyadmin' ? 'companyadmin' : 'user';
       const assigned = Array.isArray(p.assigned_sessions) ? p.assigned_sessions : [];
 
       return {
@@ -266,19 +290,21 @@ export const saasStore = {
       try {
         const { data, error } = await supabase
           .from('companies')
-          .insert([{
-            name: payload.name,
-            login_id: payload.loginId,
-            address: payload.address || null,
-            phone: payload.phone || null,
-            alt_phone: payload.altPhone || null,
-            max_users: payload.maxUsers,
-            max_sessions: payload.maxSessions,
-            max_admins: payload.maxAdmins,
-            max_hr: payload.maxHr,
-            monthly_price: payload.monthlyPrice,
-            company_email: payload.companyEmail || null,
-          }])
+          .insert([
+            {
+              name: payload.name,
+              login_id: payload.loginId,
+              address: payload.address || null,
+              phone: payload.phone || null,
+              alt_phone: payload.altPhone || null,
+              max_users: payload.maxUsers,
+              max_sessions: payload.maxSessions,
+              max_admins: payload.maxAdmins,
+              max_hr: payload.maxHr,
+              monthly_price: payload.monthlyPrice,
+              company_email: payload.companyEmail || null,
+            },
+          ])
           .select('id, name, created_at')
           .maybeSingle();
 
@@ -347,12 +373,11 @@ export const saasStore = {
     usersState = [newAdminUser, ...usersState];
     saveStored(STORAGE_KEY_COMPANIES, companiesState);
     saveStored(STORAGE_KEY_USERS, usersState);
-    
+
     // Refresh to reload state from Supabase
     await syncFromSupabase();
     return newCompany;
   },
-
 
   toggleCompanyStatus: (companyId: string) => {
     companiesState = companiesState.map(c => {
@@ -376,7 +401,7 @@ export const saasStore = {
     usersState = usersState.filter(u => u.companyId !== companyId);
     saveStored(STORAGE_KEY_COMPANIES, companiesState);
     saveStored(STORAGE_KEY_USERS, usersState);
-    
+
     // Refresh to reload state from Supabase
     await syncFromSupabase();
   },
@@ -438,7 +463,7 @@ export const saasStore = {
 
     saveStored(STORAGE_KEY_COMPANIES, companiesState);
     saveStored(STORAGE_KEY_USERS, usersState);
-    
+
     // Refresh to reload state from Supabase
     await syncFromSupabase();
     return newUser;
@@ -455,15 +480,13 @@ export const saasStore = {
     const target = usersState.find(u => u.id === userId);
     if (target) {
       companiesState = companiesState.map(c =>
-        c.id === target.companyId
-          ? { ...c, activeUsersCount: Math.max(0, c.activeUsersCount - 1) }
-          : c,
+        c.id === target.companyId ? { ...c, activeUsersCount: Math.max(0, c.activeUsersCount - 1) } : c,
       );
       saveStored(STORAGE_KEY_COMPANIES, companiesState);
     }
     usersState = usersState.filter(u => u.id !== userId);
     saveStored(STORAGE_KEY_USERS, usersState);
-    
+
     // Refresh to reload state from Supabase
     await syncFromSupabase();
   },

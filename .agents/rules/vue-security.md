@@ -1,6 +1,6 @@
 ---
 paths:
-  - "**/*.vue"
+  - '**/*.vue'
 ---
 
 # Vue Security

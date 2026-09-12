@@ -1,14 +1,15 @@
 ---
 paths:
-  - "**/*.component.ts"
-  - "**/*.component.html"
-  - "**/*.service.ts"
-  - "**/*.directive.ts"
-  - "**/*.pipe.ts"
-  - "**/*.guard.ts"
-  - "**/*.resolver.ts"
-  - "**/*.module.ts"
+  - '**/*.component.ts'
+  - '**/*.component.html'
+  - '**/*.service.ts'
+  - '**/*.directive.ts'
+  - '**/*.pipe.ts'
+  - '**/*.guard.ts'
+  - '**/*.resolver.ts'
+  - '**/*.module.ts'
 ---
+
 # Angular Coding Style
 
 > This file extends [common/coding-style.md](common-coding-style.md) with Angular specific content.
@@ -118,7 +119,9 @@ Use `effect()` only for side effects that must react to signal changes (logging,
 effect(() => console.log('User changed:', this.user()));
 
 // WRONG: Use computed instead
-effect(() => { this.fullName.set(`${this.first()} ${this.last()}`); });
+effect(() => {
+  this.fullName.set(`${this.first()} ${this.last()}`);
+});
 ```
 
 ## Templates
@@ -127,15 +130,13 @@ Use v17+ block syntax. Always provide `track` in `@for`:
 
 ```html
 @for (item of items(); track item.id) {
-  <app-item [item]="item" />
-}
-
-@if (isLoading()) {
-  <app-spinner />
+<app-item [item]="item" />
+} @if (isLoading()) {
+<app-spinner />
 } @else if (error()) {
-  <app-error [message]="error()" />
+<app-error [message]="error()" />
 } @else {
-  <app-content [data]="data()" />
+<app-content [data]="data()" />
 }
 ```
 

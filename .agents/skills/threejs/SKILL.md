@@ -6,11 +6,13 @@ description: Use when building or debugging interactive 3D scenes on the web wit
 # Three.js — WebGL 3D Scenes Skill
 
 ## When to use
+
 - Real 3D: product spins, interactive hero scenes, shaders/material effects, 3D data viz
 - You need full control beyond “background effects”
 - You can budget time for asset pipeline + performance tuning
 
 ## Core mental model
+
 - Create:
   - `Scene` (root graph)
   - `Camera` (Perspective/Orthographic)
@@ -22,6 +24,7 @@ description: Use when building or debugging interactive 3D scenes on the web wit
   - Update time-based animations, controls, mixers, then `renderer.render(scene, camera)`
 
 ## Key APIs/patterns
+
 - Setup:
   - `const renderer = new THREE.WebGLRenderer({ canvas, antialias, alpha })`
   - `renderer.setSize(width, height, false)`
@@ -39,6 +42,7 @@ description: Use when building or debugging interactive 3D scenes on the web wit
   - Remove event listeners; cancel RAF.
 
 ## Common pitfalls
+
 - Not handling resize → stretched/cropped rendering
 - Too high devicePixelRatio → mobile GPU meltdown
 - Leaking WebGL resources (not disposing) → crashes after route changes
@@ -48,10 +52,11 @@ description: Use when building or debugging interactive 3D scenes on the web wit
 ## Quick recipes
 
 ### 1) Minimal spinning cube
-```js
-import * as THREE from "three";
 
-const canvas = document.querySelector("#c");
+```js
+import * as THREE from 'three';
+
+const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 
 const scene = new THREE.Scene();
@@ -76,7 +81,7 @@ function resize() {
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
 }
-window.addEventListener("resize", resize);
+window.addEventListener('resize', resize);
 resize();
 
 function animate(t) {
@@ -88,9 +93,11 @@ requestAnimationFrame(animate);
 ```
 
 ### 2) Respect reduced motion
+
 - If `prefers-reduced-motion: reduce`, render a still frame (no RAF) or slow updates.
 
 ## What to ask the user
+
 - Is this decorative (hero) or functional 3D (product viewer)?
 - Target devices: mobile? older iPhones?
 - Asset format availability (glTF, HDRI, textures) and file size constraints

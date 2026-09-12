@@ -1,8 +1,9 @@
 ---
 paths:
-  - "**/*.ts"
-  - "**/*.tsx"
+  - '**/*.ts'
+  - '**/*.tsx'
 ---
+
 # React Native / Expo Patterns
 
 > This file extends [common/patterns.md](common-patterns.md) with React Native / Expo specific patterns.
@@ -19,20 +20,20 @@ Expo Router is Expo's built-in, file-based router (`app/` directory); React Navi
 
 ```tsx
 // app/user/[id].tsx
-import { useLocalSearchParams, router } from 'expo-router'
-import { z } from 'zod'
+import { useLocalSearchParams, router } from 'expo-router';
+import { z } from 'zod';
 
-const Params = z.object({ id: z.string().uuid() })
+const Params = z.object({ id: z.string().uuid() });
 
 export default function UserScreen() {
   // Use safeParse, not parse: a malformed deep link would otherwise throw
   // during render and crash the screen. Redirect instead of throwing.
-  const parsed = Params.safeParse(useLocalSearchParams())
+  const parsed = Params.safeParse(useLocalSearchParams());
   if (!parsed.success) {
-    router.replace('/not-found')
-    return null
+    router.replace('/not-found');
+    return null;
   }
-  return <UserProfile userId={parsed.data.id} />
+  return <UserProfile userId={parsed.data.id} />;
 }
 ```
 
@@ -40,14 +41,14 @@ export default function UserScreen() {
 
 The rule is to keep these concerns separate and not duplicate server data into client stores. The tools listed are common choices, not requirements — pick what fits your project.
 
-| Concern | Common choices |
-|---------|---------|
-| Server state | a server-cache library (TanStack Query, SWR) |
-| Client/UI state | a lightweight store (Zustand, Jotai) or Context |
-| Navigation/route state | Expo Router params (NOT a global store) |
-| Form state | a form library (e.g. React Hook Form) with schema validation |
-| Secure persistence | `expo-secure-store` |
-| Non-secure persistence | `AsyncStorage` / MMKV |
+| Concern                | Common choices                                               |
+| ---------------------- | ------------------------------------------------------------ |
+| Server state           | a server-cache library (TanStack Query, SWR)                 |
+| Client/UI state        | a lightweight store (Zustand, Jotai) or Context              |
+| Navigation/route state | Expo Router params (NOT a global store)                      |
+| Form state             | a form library (e.g. React Hook Form) with schema validation |
+| Secure persistence     | `expo-secure-store`                                          |
+| Non-secure persistence | `AsyncStorage` / MMKV                                        |
 
 - Derive values instead of storing redundant computed state.
 - Keep global client state minimal; prefer local `useState` until sharing is actually needed.
@@ -67,7 +68,7 @@ function useUser(id: string) {
   return useQuery({
     queryKey: ['user', id],
     queryFn: async () => userSchema.parse(await api.getUser(id)),
-  })
+  });
 }
 ```
 

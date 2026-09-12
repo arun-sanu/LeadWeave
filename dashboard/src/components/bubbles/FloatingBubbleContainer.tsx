@@ -12,9 +12,7 @@ export function FloatingBubbleContainer({ hidden = false }: { hidden?: boolean }
       try {
         const list = await sessionApi.list();
         if (!isMounted) return;
-        const activeSessions = list.filter(
-          (s) => s.status === 'ready'
-        );
+        const activeSessions = list.filter(s => s.status === 'ready');
         setSessions(activeSessions);
       } catch (err) {
         console.error('[FloatingBubbleContainer] Failed to fetch sessions:', err);
@@ -38,7 +36,7 @@ export function FloatingBubbleContainer({ hidden = false }: { hidden?: boolean }
         pointerEvents: 'none',
       }}
     >
-      {sessions.map((session) => (
+      {sessions.map(session => (
         <SessionDock key={session.id} session={session} />
       ))}
     </div>

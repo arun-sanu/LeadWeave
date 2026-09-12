@@ -25,38 +25,33 @@ The package requires React and React DOM 18 or newer. It ships ESM, CommonJS, an
 Prefer the named import:
 
 ```tsx
-import { BorderBeam } from "border-beam";
-import type {
-  BorderBeamProps,
-  BorderBeamSize,
-  BorderBeamTheme,
-  BorderBeamColorVariant,
-} from "border-beam";
+import { BorderBeam } from 'border-beam';
+import type { BorderBeamProps, BorderBeamSize, BorderBeamTheme, BorderBeamColorVariant } from 'border-beam';
 ```
 
 The default component export is also supported:
 
 ```tsx
-import BorderBeam from "border-beam";
+import BorderBeam from 'border-beam';
 ```
 
 In a Next.js App Router project, render it from a client component because it uses React state, effects, observers, and animation frames:
 
 ```tsx
-"use client";
+'use client';
 
-import { BorderBeam } from "border-beam";
+import { BorderBeam } from 'border-beam';
 ```
 
 ## Choose the effect
 
-| `size` | Motion | Best use |
-| --- | --- | --- |
-| `sm` | Compact traveling border | Icon buttons, pills, compact controls |
-| `md` | Full traveling border | Selected cards, current panels, primary active surfaces |
-| `line` | Traveling bottom edge | Search, prompt, input, progress, or command surfaces |
-| `pulse-inner` | Contained breathing glow | Loading cards, processing panels, persistent selected states |
-| `pulse-outside` | Outward breathing halo | One prominent active task or hero control with room to bloom |
+| `size`          | Motion                   | Best use                                                     |
+| --------------- | ------------------------ | ------------------------------------------------------------ |
+| `sm`            | Compact traveling border | Icon buttons, pills, compact controls                        |
+| `md`            | Full traveling border    | Selected cards, current panels, primary active surfaces      |
+| `line`          | Traveling bottom edge    | Search, prompt, input, progress, or command surfaces         |
+| `pulse-inner`   | Contained breathing glow | Loading cards, processing panels, persistent selected states |
+| `pulse-outside` | Outward breathing halo   | One prominent active task or hero control with room to bloom |
 
 Use these defaults by state:
 
@@ -72,15 +67,9 @@ Start with `colorVariant="mono"` for neutral product UI, `ocean` for cool techni
 Keep `BorderBeam` mounted and toggle `active`. Removing it when state becomes false skips the built-in fade-out.
 
 ```tsx
-<BorderBeam
-  size="pulse-inner"
-  colorVariant="ocean"
-  theme="dark"
-  strength={0.65}
-  active={isWorking}
->
+<BorderBeam size="pulse-inner" colorVariant="ocean" theme="dark" strength={0.65} active={isWorking}>
   <section className="task-card" aria-busy={isWorking}>
-    <p>{isWorking ? "Generating layout options…" : "Layout options ready"}</p>
+    <p>{isWorking ? 'Generating layout options…' : 'Layout options ready'}</p>
   </section>
 </BorderBeam>
 ```
@@ -103,7 +92,7 @@ Make the loading state truthful before adding the beam:
 >
   <section className="beam-surface" aria-busy={pending}>
     <span className="status-dot" aria-hidden="true" />
-    <span>{pending ? "Building preview…" : "Preview ready"}</span>
+    <span>{pending ? 'Building preview…' : 'Preview ready'}</span>
   </section>
 </BorderBeam>
 ```
@@ -130,12 +119,7 @@ Use the component state and the semantic state together:
   active={selected && !reduceMotion}
   className="beam-card"
 >
-  <button
-    type="button"
-    className="beam-surface"
-    aria-pressed={selected}
-    onClick={onSelect}
-  >
+  <button type="button" className="beam-surface" aria-pressed={selected} onClick={onSelect}>
     {label}
   </button>
 </BorderBeam>
@@ -163,13 +147,13 @@ const [focused, setFocused] = useState(false);
   active={focused && !reduceMotion}
   className="beam-inline"
   onFocusCapture={() => setFocused(true)}
-  onBlurCapture={(event) => {
+  onBlurCapture={event => {
     const next = event.relatedTarget as Node | null;
     if (!next || !event.currentTarget.contains(next)) setFocused(false);
   }}
 >
   <button className="beam-surface">Run</button>
-</BorderBeam>
+</BorderBeam>;
 ```
 
 Keep the ordinary `:focus-visible` outline. Pointer hover alone should not start a high-intensity beam, and a pressed state should still have immediate scale, fill, or contrast feedback.
@@ -177,45 +161,38 @@ Keep the ordinary `:focus-visible` outline. Pointer hover alone should not start
 When states overlap, resolve them explicitly:
 
 ```tsx
-const beamState =
-  pending ? "loading" :
-  selected ? "selected" :
-  focused ? "focus" :
-  "idle";
+const beamState = pending ? 'loading' : selected ? 'selected' : focused ? 'focus' : 'idle';
 
 const beamProps = {
   loading: {
-    size: "pulse-inner",
-    colorVariant: "ocean",
+    size: 'pulse-inner',
+    colorVariant: 'ocean',
     duration: 2.6,
     strength: 0.65,
   },
   selected: {
-    size: "md",
-    colorVariant: "mono",
+    size: 'md',
+    colorVariant: 'mono',
     duration: 4.2,
     strength: 0.42,
     staticColors: true,
   },
   focus: {
-    size: "sm",
-    colorVariant: "mono",
+    size: 'sm',
+    colorVariant: 'mono',
     duration: 2.4,
     strength: 0.45,
     staticColors: true,
   },
 } as const;
 
-const activeProps = beamState === "idle" ? null : beamProps[beamState];
+const activeProps = beamState === 'idle' ? null : beamProps[beamState];
 
-<BorderBeam
-  {...(activeProps ?? { size: "md" as const })}
-  active={activeProps !== null && !reduceMotion}
->
+<BorderBeam {...(activeProps ?? { size: 'md' as const })} active={activeProps !== null && !reduceMotion}>
   <div className="beam-surface" data-state={beamState}>
     {children}
   </div>
-</BorderBeam>
+</BorderBeam>;
 ```
 
 Use loading above selection, selection above focus, and focus above hover unless the product's state model says otherwise.
@@ -229,11 +206,11 @@ function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => setReduced(media.matches);
     update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
   }, []);
 
   return reduced;
@@ -247,7 +224,7 @@ Provide a static fallback on the child surface:
   border: 1px solid rgb(255 255 255 / 0.12);
 }
 
-[data-state="selected"] {
+[data-state='selected'] {
   border-color: rgb(140 155 255 / 0.7);
   box-shadow: 0 0 0 3px rgb(100 120 255 / 0.12);
 }
@@ -258,7 +235,7 @@ Provide a static fallback on the child surface:
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-state="loading"] {
+  [data-state='loading'] {
     border-color: rgb(100 150 255 / 0.68);
   }
 }
@@ -266,24 +243,24 @@ Provide a static fallback on the child surface:
 
 ## API reference
 
-| Prop | Type | Default | Contract |
-| --- | --- | --- | --- |
-| `children` | `ReactNode` | Required | Content wrapped by one generated `div` |
-| `size` | `"sm" \| "md" \| "line" \| "pulse-outside" \| "pulse-inner"` | `"md"` | Effect family and geometry preset |
-| `colorVariant` | `"colorful" \| "mono" \| "ocean" \| "sunset"` | `"colorful"` | Beam palette |
-| `theme` | `"dark" \| "light" \| "auto"` | `"dark"` | Adapts opacity and color treatment to the background |
-| `strength` | `number` | `1` | Beam-layer opacity; clamped to `0`–`1`; never changes child opacity |
-| `duration` | `number` | `1.96` rotate, `3.1` line, `2.3` pulse | Animation cycle in seconds |
-| `active` | `boolean` | `true` | Starts fade-in or fade-out and controls ongoing motion |
-| `borderRadius` | `number` | Auto-detected | Wrapper radius in pixels |
-| `brightness` | `number` | Per preset, usually `1.3` | Glow brightness multiplier |
-| `saturation` | `number` | Per theme, usually `1.2` on dark | Glow saturation multiplier |
-| `hueRange` | `number` | `30` | Hue-shift range in degrees; `line` is capped at `13` |
-| `staticColors` | `boolean` | `false` | Disables hue shifting, not travel or pulse motion |
-| `className` | `string` | — | Class on the generated wrapper |
-| `style` | `CSSProperties` | — | Inline style on the generated wrapper |
-| `onActivate` | `() => void` | — | Fires when the `0.6s` fade-in completes |
-| `onDeactivate` | `() => void` | — | Fires when the `0.5s` fade-out completes |
+| Prop           | Type                                                         | Default                                | Contract                                                            |
+| -------------- | ------------------------------------------------------------ | -------------------------------------- | ------------------------------------------------------------------- |
+| `children`     | `ReactNode`                                                  | Required                               | Content wrapped by one generated `div`                              |
+| `size`         | `"sm" \| "md" \| "line" \| "pulse-outside" \| "pulse-inner"` | `"md"`                                 | Effect family and geometry preset                                   |
+| `colorVariant` | `"colorful" \| "mono" \| "ocean" \| "sunset"`                | `"colorful"`                           | Beam palette                                                        |
+| `theme`        | `"dark" \| "light" \| "auto"`                                | `"dark"`                               | Adapts opacity and color treatment to the background                |
+| `strength`     | `number`                                                     | `1`                                    | Beam-layer opacity; clamped to `0`–`1`; never changes child opacity |
+| `duration`     | `number`                                                     | `1.96` rotate, `3.1` line, `2.3` pulse | Animation cycle in seconds                                          |
+| `active`       | `boolean`                                                    | `true`                                 | Starts fade-in or fade-out and controls ongoing motion              |
+| `borderRadius` | `number`                                                     | Auto-detected                          | Wrapper radius in pixels                                            |
+| `brightness`   | `number`                                                     | Per preset, usually `1.3`              | Glow brightness multiplier                                          |
+| `saturation`   | `number`                                                     | Per theme, usually `1.2` on dark       | Glow saturation multiplier                                          |
+| `hueRange`     | `number`                                                     | `30`                                   | Hue-shift range in degrees; `line` is capped at `13`                |
+| `staticColors` | `boolean`                                                    | `false`                                | Disables hue shifting, not travel or pulse motion                   |
+| `className`    | `string`                                                     | —                                      | Class on the generated wrapper                                      |
+| `style`        | `CSSProperties`                                              | —                                      | Inline style on the generated wrapper                               |
+| `onActivate`   | `() => void`                                                 | —                                      | Fires when the `0.6s` fade-in completes                             |
+| `onDeactivate` | `() => void`                                                 | —                                      | Fires when the `0.5s` fade-out completes                            |
 
 `mono` always uses static colors, even when `staticColors` is false. A forwarded `ref` points to the wrapper. Other standard `HTMLDivElement` attributes and events are forwarded.
 

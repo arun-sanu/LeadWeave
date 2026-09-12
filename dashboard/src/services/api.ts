@@ -1057,7 +1057,7 @@ export const leadSheetApi = {
       {
         method: 'POST',
         body: JSON.stringify(data),
-      }
+      },
     ),
   getLeads: (params?: { sessionId?: string; limit?: number }) => {
     const query = new URLSearchParams();
@@ -1084,7 +1084,9 @@ export const leadSheetApi = {
     >(`/lead-sheets/leads${queryStr ? `?${queryStr}` : ''}`);
   },
   getAppsScriptTemplate: (sessionId?: string) =>
-    request<{ script: string }>(`/lead-sheets/apps-script-template${sessionId ? `?sessionId=${encodeURIComponent(sessionId)}` : ''}`),
+    request<{ script: string }>(
+      `/lead-sheets/apps-script-template${sessionId ? `?sessionId=${encodeURIComponent(sessionId)}` : ''}`,
+    ),
 };
 
 // =============================================================================
@@ -1580,4 +1582,3 @@ export const campaignApi = {
 
   getExportUrl: (id: string) => `${API_BASE_URL}/campaigns/${id}/export`,
 };
-

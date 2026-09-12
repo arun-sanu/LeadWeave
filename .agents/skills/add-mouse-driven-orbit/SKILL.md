@@ -15,7 +15,7 @@ In the pointer handler, write normalized coordinates only:
 
 ```js
 function recordPointer(event) {
-  if (event.pointerType === "touch") return;
+  if (event.pointerType === 'touch') return;
   target.x = (event.clientX / viewport.width) * 2 - 1;
   target.y = (event.clientY / viewport.height) * 2 - 1;
 }
@@ -51,23 +51,23 @@ Use opposing, unequal layers so the scene pivots rather than translates as one s
 
 ```js
 camera.position.x = -smooth.x * 26;
-camera.position.y =  smooth.y * 16;
+camera.position.y = smooth.y * 16;
 camera.lookAt(camera.position.x * 0.42, camera.position.y * 0.42, 0);
 
 nearGroup.rotation.y = smooth.x * 0.055;
 nearGroup.rotation.x = smooth.y * 0.026;
-farGroup.rotation.y  = smooth.x * 0.030;
+farGroup.rotation.y = smooth.x * 0.03;
 ```
 
 Treat these as the landed values for a scene framed in stage-pixel world units:
 
-| layer | horizontal | vertical | reason |
-| --- | ---: | ---: | --- |
-| camera translation | -26 | +16 | establishes the shallow arc |
-| camera look-at carry | 42% | 42% | keeps the subject near its pinned composition |
-| near object yaw | 0.055 rad | — | exposes surface depth without showing its flank |
-| near object pitch | — | 0.026 rad | prevents the top surface from flattening |
-| far object yaw | 0.030 rad | — | separates planes without matching the foreground |
+| layer                | horizontal |  vertical | reason                                           |
+| -------------------- | ---------: | --------: | ------------------------------------------------ |
+| camera translation   |        -26 |       +16 | establishes the shallow arc                      |
+| camera look-at carry |        42% |       42% | keeps the subject near its pinned composition    |
+| near object yaw      |  0.055 rad |         — | exposes surface depth without showing its flank  |
+| near object pitch    |          — | 0.026 rad | prevents the top surface from flattening         |
+| far object yaw       |  0.030 rad |         — | separates planes without matching the foreground |
 
 Do not rotate everything by the same amount. Equal movement reads as a flat poster following the cursor. Do not aim the camera at the fixed origin while translating it; the subject visibly slides away from the layout.
 

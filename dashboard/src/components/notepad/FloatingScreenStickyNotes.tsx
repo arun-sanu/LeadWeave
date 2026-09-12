@@ -26,20 +26,16 @@ export const FloatingScreenStickyNotes: React.FC = () => {
           key={sticky.id}
           sticky={sticky}
           noteId={noteId}
-          onUpdate={(updates) => updateStickyNote(noteId, sticky.id, updates)}
+          onUpdate={updates => updateStickyNote(noteId, sticky.id, updates)}
           onUnpin={() => togglePinStickyNote(noteId, sticky.id)}
           onDelete={() => deleteStickyNote(noteId, sticky.id)}
-          onUpdatePos={(pos) => updateStickyPosition(sticky.id, pos)}
+          onUpdatePos={pos => updateStickyPosition(sticky.id, pos)}
           onShare={() => setShareStickyContent(sticky.content)}
         />
       ))}
 
       {shareStickyContent !== null && (
-        <NotepadShareModal
-          type="sticky"
-          content={shareStickyContent}
-          onClose={() => setShareStickyContent(null)}
-        />
+        <NotepadShareModal type="sticky" content={shareStickyContent} onClose={() => setShareStickyContent(null)} />
       )}
     </>
   );

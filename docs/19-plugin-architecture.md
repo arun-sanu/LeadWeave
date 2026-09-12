@@ -25,7 +25,7 @@
 | **Per-session config**       | ✅ Implemented | Per-session config overrides shallow-merged over the base config at hook time                                                |
 | **Built-in plugins**         | ✅ Implemented | The two engine adapters (`whatsapp-web.js`, `baileys`) register as in-process built-ins                                      |
 | **Plugin install / catalog** | ✅ Implemented | Install a `.zip` by upload or URL, or from the remote catalog                                                                |
-| **@leadweave/plugin-sdk**       | 🔜 Planned     | NPM package not yet published; plugins implement `IPlugin` directly today                                                    |
+| **@leadweave/plugin-sdk**    | 🔜 Planned     | NPM package not yet published; plugins implement `IPlugin` directly today                                                    |
 
 ---
 

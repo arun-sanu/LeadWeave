@@ -1,9 +1,11 @@
 # Git Upload & Exclusion Security Rules
 
 ## Mandatory Exclusion Rule: Do NOT Upload Secrets & Excluded Files
+
 Never commit sensitive credentials, environments, dependencies, build outputs, session storage, or local test artifacts to Git/GitHub.
 
 ### 🔴 Files to Keep Out (Exclude from Git)
+
 1. **Secret Configuration Files:**
    - `.env`, `.env.local`, `.env.production.local` (Contains live Supabase credentials, JWT secrets, database connection strings, and WhatsApp tokens).
 2. **Dependencies & Virtual Environments:**

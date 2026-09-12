@@ -93,9 +93,7 @@ const MessageBubbleItem = memo(function MessageBubbleItem({
           ? 'callMissed'
           : 'call';
       return (
-        <div className="message-media-omitted">
-          {`${call?.video ? '📹' : '📞'} ${t(`chats.media.${callKey}`)}`}
-        </div>
+        <div className="message-media-omitted">{`${call?.video ? '📹' : '📞'} ${t(`chats.media.${callKey}`)}`}</div>
       );
     }
     if (!mediaInfo) return null;
@@ -165,10 +163,7 @@ const MessageBubbleItem = memo(function MessageBubbleItem({
   const isMasked = msg.type === 'masked';
 
   return (
-    <div
-      className={`message-bubble-wrapper ${isMe ? 'outgoing' : 'incoming'}`}
-      data-wa-message-id={msg.waMessageId}
-    >
+    <div className={`message-bubble-wrapper ${isMe ? 'outgoing' : 'incoming'}`} data-wa-message-id={msg.waMessageId}>
       <div className="message-bubble-container">
         <div
           className={`message-bubble ${isMe ? 'outgoing' : 'incoming'} ${msg.status} ${
@@ -236,12 +231,7 @@ const MessageBubbleItem = memo(function MessageBubbleItem({
 
         {!isRevoked && (
           <div className="message-actions-menu">
-            <button
-              type="button"
-              className="action-btn"
-              onClick={() => onReply(msg)}
-              title={t('chats.actions.reply')}
-            >
+            <button type="button" className="action-btn" onClick={() => onReply(msg)} title={t('chats.actions.reply')}>
               <CornerUpLeft size={14} />
             </button>
 

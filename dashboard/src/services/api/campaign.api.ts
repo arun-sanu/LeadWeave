@@ -99,4 +99,3 @@ export const campaignApi = {
 
   getExportUrl: (id: string) => `${API_BASE_URL}/campaigns/${id}/export`,
 };
-

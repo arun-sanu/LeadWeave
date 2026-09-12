@@ -31,25 +31,29 @@ const DEFAULT_PRESETS: SavedTemplate[] = [
   {
     id: 'preset-order-confirm',
     name: 'Order Confirmation & Tracking',
-    content: '{Hi|Hello|Hey} {{Name}}! 📦 Your order #{{OrderNumber}} has been confirmed. Total amount: {{Amount}}. {Thank you for choosing LeadWeave!|Have a wonderful day!}',
+    content:
+      '{Hi|Hello|Hey} {{Name}}! 📦 Your order #{{OrderNumber}} has been confirmed. Total amount: {{Amount}}. {Thank you for choosing LeadWeave!|Have a wonderful day!}',
     isPreset: true,
   },
   {
     id: 'preset-promo-discount',
     name: 'Special Discount Offer',
-    content: '{Hi|Hey|Hello} {{Name}}, {exclusive deal|special offer} for you today! Get {10%|15%|20%} off on your next purchase. Use coupon code: {{CouponCode}}. Reply YES to claim now!',
+    content:
+      '{Hi|Hey|Hello} {{Name}}, {exclusive deal|special offer} for you today! Get {10%|15%|20%} off on your next purchase. Use coupon code: {{CouponCode}}. Reply YES to claim now!',
     isPreset: true,
   },
   {
     id: 'preset-appointment-rem',
     name: 'Appointment Reminder',
-    content: 'Dear {{Name}}, this is a friendly reminder for your appointment scheduled on {{Date}} at {{Time}}. Please reply 1 to confirm or 2 to reschedule.',
+    content:
+      'Dear {{Name}}, this is a friendly reminder for your appointment scheduled on {{Date}} at {{Time}}. Please reply 1 to confirm or 2 to reschedule.',
     isPreset: true,
   },
   {
     id: 'preset-feedback-req',
     name: 'Service Feedback Request',
-    content: '{Hi|Hello} {{Name}}, how was your recent experience with our service? We would love to hear your feedback!',
+    content:
+      '{Hi|Hello} {{Name}}, how was your recent experience with our service? We would love to hear your feedback!',
     isPreset: true,
   },
 ];
@@ -88,9 +92,7 @@ export function BroadcastTemplates() {
   const filteredSavedTemplates = useMemo(() => {
     const q = templateSearchTerm.trim().toLowerCase();
     if (!q) return allSavedTemplates;
-    return allSavedTemplates.filter(
-      t => t.name.toLowerCase().includes(q) || t.content.toLowerCase().includes(q),
-    );
+    return allSavedTemplates.filter(t => t.name.toLowerCase().includes(q) || t.content.toLowerCase().includes(q));
   }, [allSavedTemplates, templateSearchTerm]);
 
   const handleSaveTemplate = () => {
@@ -177,7 +179,14 @@ export function BroadcastTemplates() {
   }, [messageTemplate, rows, columns, previewRowIndex, spintaxSeed]);
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+        gap: '1.5rem',
+        alignItems: 'start',
+      }}
+    >
       {/* LEFT COLUMN: COMPOSER & CHIPS */}
       <div className="studio-card-container">
         <div className="studio-card-header-row">
@@ -191,24 +200,35 @@ export function BroadcastTemplates() {
             </p>
           </div>
 
-          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: totalSpintaxVariations > 1 ? 'var(--primary)' : '#64748b' }}>
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: totalSpintaxVariations > 1 ? 'var(--primary)' : '#64748b',
+            }}
+          >
             {totalSpintaxVariations > 1 ? `⚡ ${totalSpintaxVariations} variations` : 'Spintax ready'}
           </span>
         </div>
 
         {/* Dynamic Variable Chips */}
         <div style={{ marginBottom: '1.25rem' }}>
-          <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748b', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
+          <label
+            style={{
+              display: 'block',
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              color: '#64748b',
+              marginBottom: '0.5rem',
+              letterSpacing: '0.05em',
+            }}
+          >
             Insert Dynamic Tag:
           </label>
           <div className="variable-chips-container">
             {availableVariables.map(v => (
-              <button
-                key={v}
-                type="button"
-                className="variable-chip-btn"
-                onClick={() => handleInsertVariable(v)}
-              >
+              <button key={v} type="button" className="variable-chip-btn" onClick={() => handleInsertVariable(v)}>
                 <Plus size={12} />
                 <span>{`{{${v}}}`}</span>
               </button>
@@ -256,7 +276,16 @@ export function BroadcastTemplates() {
           />
 
           {/* Template Actions Toolbar */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.4rem', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: '0.4rem',
+              gap: '0.5rem',
+              flexWrap: 'wrap',
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <button
                 type="button"
@@ -311,9 +340,7 @@ export function BroadcastTemplates() {
               </button>
             </div>
 
-            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-              {messageTemplate.length} characters
-            </span>
+            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>{messageTemplate.length} characters</span>
           </div>
         </div>
       </div>
@@ -322,7 +349,16 @@ export function BroadcastTemplates() {
       <div className="studio-card-container" style={{ padding: '1.25rem' }}>
         <div className="studio-card-header-row" style={{ marginBottom: '1rem', paddingBottom: '0.5rem' }}>
           <div>
-            <h3 style={{ fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.05em', margin: 0 }}>
+            <h3
+              style={{
+                fontSize: '0.875rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                color: '#64748b',
+                letterSpacing: '0.05em',
+                margin: 0,
+              }}
+            >
               Live WhatsApp Preview
             </h3>
           </div>
@@ -339,7 +375,17 @@ export function BroadcastTemplates() {
             </button>
 
             {rows.length > 0 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', background: '#0f172a', padding: '2px 6px', borderRadius: 6, border: '1px solid var(--studio-border)' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  background: '#0f172a',
+                  padding: '2px 6px',
+                  borderRadius: 6,
+                  border: '1px solid var(--studio-border)',
+                }}
+              >
                 <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginRight: '4px' }}>
                   {previewRowIndex + 1}/{rows.length}
                 </span>
@@ -368,9 +414,7 @@ export function BroadcastTemplates() {
         <div className="whatsapp-phone-frame">
           <div className="whatsapp-mock-header">
             <div className="whatsapp-avatar-info">
-              <div className="whatsapp-avatar">
-                {rows[previewRowIndex]?.Name?.charAt(0) || 'L'}
-              </div>
+              <div className="whatsapp-avatar">{rows[previewRowIndex]?.Name?.charAt(0) || 'L'}</div>
               <div>
                 <p className="whatsapp-contact-name">
                   {rows[previewRowIndex]?.Name || rows[previewRowIndex]?.phone || 'Lead Contact'}
@@ -435,7 +479,15 @@ export function BroadcastTemplates() {
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0.5rem 0' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.35rem', color: '#e2e8f0' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+                marginBottom: '0.35rem',
+                color: '#e2e8f0',
+              }}
+            >
               Template Name
             </label>
             <input
@@ -464,7 +516,15 @@ export function BroadcastTemplates() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.35rem', color: '#94a3b8' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+                marginBottom: '0.35rem',
+                color: '#94a3b8',
+              }}
+            >
               Template Preview
             </label>
             <div
@@ -516,7 +576,16 @@ export function BroadcastTemplates() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0.5rem 0' }}>
           {/* Search Filter Input */}
           <div style={{ position: 'relative' }}>
-            <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+            <Search
+              size={14}
+              style={{
+                position: 'absolute',
+                left: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: '#64748b',
+              }}
+            />
             <input
               type="text"
               placeholder="Search templates..."
@@ -539,7 +608,9 @@ export function BroadcastTemplates() {
           </div>
 
           {/* List of Templates */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '340px', overflowY: 'auto' }}>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '340px', overflowY: 'auto' }}
+          >
             {filteredSavedTemplates.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '2rem 1rem', color: '#64748b', fontSize: '0.85rem' }}>
                 No templates found.
@@ -559,15 +630,43 @@ export function BroadcastTemplates() {
                     transition: 'all 0.15s ease',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '0.5rem',
+                    }}
+                  >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <span style={{ fontWeight: 700, fontSize: '0.875rem', color: '#f8fafc' }}>{tpl.name}</span>
                       {tpl.isPreset ? (
-                        <span style={{ fontSize: '0.65rem', fontWeight: 700, background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>
+                        <span
+                          style={{
+                            fontSize: '0.65rem',
+                            fontWeight: 700,
+                            background: 'rgba(56, 189, 248, 0.15)',
+                            color: '#38bdf8',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            textTransform: 'uppercase',
+                          }}
+                        >
                           Preset
                         </span>
                       ) : (
-                        <span style={{ fontSize: '0.65rem', fontWeight: 700, background: 'rgba(34, 197, 94, 0.15)', color: '#4ade80', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>
+                        <span
+                          style={{
+                            fontSize: '0.65rem',
+                            fontWeight: 700,
+                            background: 'rgba(34, 197, 94, 0.15)',
+                            color: '#4ade80',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            textTransform: 'uppercase',
+                          }}
+                        >
                           Custom
                         </span>
                       )}
@@ -576,7 +675,12 @@ export function BroadcastTemplates() {
                       <button
                         type="button"
                         className="btn-primary"
-                        style={{ fontSize: '0.75rem', padding: '0.3rem 0.75rem', borderRadius: '6px', cursor: 'pointer' }}
+                        style={{
+                          fontSize: '0.75rem',
+                          padding: '0.3rem 0.75rem',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                        }}
                         onClick={() => {
                           setMessageTemplate(tpl.content);
                           setIsLoadModalOpen(false);
@@ -588,7 +692,15 @@ export function BroadcastTemplates() {
                       {!tpl.isPreset && (
                         <button
                           type="button"
-                          style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: '#ef4444',
+                            cursor: 'pointer',
+                            padding: '4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}
                           title="Delete saved template"
                           onClick={() => handleDeleteSavedTemplate(tpl.id)}
                         >
@@ -597,7 +709,20 @@ export function BroadcastTemplates() {
                       )}
                     </div>
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8', background: 'rgba(0, 0, 0, 0.25)', padding: '0.5rem 0.75rem', borderRadius: '4px', whiteSpace: 'pre-wrap', maxHeight: '65px', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: '1.4' }}>
+                  <div
+                    style={{
+                      fontSize: '0.8rem',
+                      color: '#94a3b8',
+                      background: 'rgba(0, 0, 0, 0.25)',
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '4px',
+                      whiteSpace: 'pre-wrap',
+                      maxHeight: '65px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      lineHeight: '1.4',
+                    }}
+                  >
                     {tpl.content}
                   </div>
                 </div>
@@ -609,4 +734,3 @@ export function BroadcastTemplates() {
     </div>
   );
 }
-

@@ -90,8 +90,8 @@ Because the container can therefore still be coming up when the `data` connectio
 
 When using PostgreSQL, LeadWeave can place its tables and migration ledger in a dedicated schema via the `POSTGRES_SCHEMA` environment variable:
 
-| Setting           | Default  | Description                                                      |
-| ----------------- | -------- | ---------------------------------------------------------------- |
+| Setting           | Default  | Description                                                         |
+| ----------------- | -------- | ------------------------------------------------------------------- |
 | `POSTGRES_SCHEMA` | `public` | PostgreSQL schema for LeadWeave tables and TypeORM migration ledger |
 
 **Use Cases:**
@@ -961,6 +961,7 @@ find $BACKUP_DIR -name "*.dump.gz" -mtime +7 -delete
 ## 5.9 Unified PostgreSQL Architecture & Transactional Outbox Pattern
 
 ### Unified PostgreSQL Topology
+
 In enterprise Kubernetes / cluster environments, LeadWeave supports running a **Unified PostgreSQL Topology** where `api_keys`, `audit_logs`, and domain entities (`sessions`, `messages`, `webhooks`, `campaigns`) reside in a single PostgreSQL instance with schema isolation (`auth`, `audit`, `core`):
 
 ```mermaid
@@ -988,6 +989,7 @@ flowchart TB
 ```
 
 #### Advantages
+
 1. **Atomic Cross-Domain Transactions:** Enables ACID transactions spanning API keys, session assignments, and audit logging.
 2. **Simplified Disaster Recovery:** A single `pg_dump` captures 100% of Gateway configuration, auth, and state with point-in-time recovery (PITR).
 3. **Stateless Replicas:** Kubernetes pods do not require local persistent volumes for `main.sqlite`.

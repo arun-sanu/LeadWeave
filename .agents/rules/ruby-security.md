@@ -1,12 +1,13 @@
 ---
 paths:
-  - "**/*.rb"
-  - "**/*.rake"
-  - "**/Gemfile"
-  - "**/Gemfile.lock"
-  - "**/config/routes.rb"
-  - "**/config/credentials*.yml.enc"
+  - '**/*.rb'
+  - '**/*.rake'
+  - '**/Gemfile'
+  - '**/Gemfile.lock'
+  - '**/config/routes.rb'
+  - '**/config/credentials*.yml.enc'
 ---
+
 # Ruby Security
 
 > This file extends [common/security.md](common-security.md) with Ruby and Rails specific content.

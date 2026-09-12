@@ -8,9 +8,11 @@ description: Use when you need design-first, spec-driven, skimmable prompts for 
 This skill is for **design-first prompting**: turn fuzzy ideas into a tight spec that produces consistent UI.
 
 ## Core principle
+
 **Prompt like a design system, not a wish.**
 
 ## Prompt Structure (copy/paste)
+
 Use this skeleton, then fill the blanks.
 
 ```text
@@ -64,6 +66,7 @@ NEGATIVE PROMPT
 ## Rules that improve consistency
 
 ### 1) Lock one “system”, then iterate with variants
+
 - First output: nail **layout + hierarchy + copy**.
 - Variants: change **ONE variable** at a time:
   - angle / crop
@@ -72,17 +75,22 @@ NEGATIVE PROMPT
   - background tone
 
 ### 2) Treat typography as fragile
+
 If the model keeps misspelling:
+
 - Use **2-pass workflow**:
-  1) Generate without text (reserve a clean text-safe area)
-  2) Typeset in Figma
+  1. Generate without text (reserve a clean text-safe area)
+  2. Typeset in Figma
 
 ### 3) Use “constraints cards”
+
 When you want the model to obey a style:
+
 - Add a small “Constraints” panel with explicit values.
 - It anchors the output like a mini style guide.
 
 Example:
+
 ```text
 Constraints
 FONT  CANELA
@@ -91,11 +99,14 @@ MODE  DARK
 ```
 
 ### 4) Keep a local reference pack
+
 Don’t ask the model to “remember” taste.
+
 - Save references into a gitignored local reference folder, such as `refs/...`
 - Point prompts to the reference style
 
 ## Fast iteration checklist (what to tweak)
+
 - Spacing: margins, leading, baseline rhythm
 - Contrast: background vs text
 - Hierarchy: one hero line, one support line
@@ -103,6 +114,7 @@ Don’t ask the model to “remember” taste.
 - Texture: add grain, remove smoothing
 
 ## Questions to ask (when user is vague)
+
 - What’s the single message of this screen?
 - What’s the hierarchy (H1 / sub / CTA)?
 - Which style lane: minimal editorial vs playful 3D vs glass UI?

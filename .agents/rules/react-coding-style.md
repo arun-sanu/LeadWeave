@@ -1,12 +1,13 @@
 ---
 paths:
-  - "**/*.tsx"
-  - "**/*.jsx"
-  - "**/components/**/*.ts"
-  - "**/components/**/*.js"
-  - "**/hooks/**/*.ts"
-  - "**/hooks/**/*.js"
+  - '**/*.tsx'
+  - '**/*.jsx'
+  - '**/components/**/*.ts'
+  - '**/components/**/*.js'
+  - '**/hooks/**/*.ts'
+  - '**/hooks/**/*.js'
 ---
+
 # React Coding Style
 
 > This file extends [typescript/coding-style.md](typescript-coding-style.md) and [common/coding-style.md](common-coding-style.md) with React specific content.
@@ -57,11 +58,11 @@ export function UserCard({ user, onSelect }: Props) {
 
 ```tsx
 // Prefer
-const greeting = user.isAdmin ? "Welcome, admin" : `Hello ${user.name}`;
+const greeting = user.isAdmin ? 'Welcome, admin' : `Hello ${user.name}`;
 return <h1>{greeting}</h1>;
 
 // Over
-return <h1>{user.isAdmin ? "Welcome, admin" : `Hello ${user.name}`}</h1>;
+return <h1>{user.isAdmin ? 'Welcome, admin' : `Hello ${user.name}`}</h1>;
 ```
 
 ## Server / Client Boundary (Next.js App Router, RSC)

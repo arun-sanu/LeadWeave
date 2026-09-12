@@ -69,30 +69,30 @@ Use 4–8 chapters for most experiences. Store the full contract as data rather 
 ```js
 const chapters = [
   {
-    id: "threshold",
+    id: 'threshold',
     scrollWeight: 1.25,
     copy: {
-      eyebrow: "Chapter 01",
-      title: "Enter the archive",
-      body: "A spatial collection revealed through motion."
+      eyebrow: 'Chapter 01',
+      title: 'Enter the archive',
+      body: 'A spatial collection revealed through motion.',
     },
     camera: {
       position: [0, 3.8, 13.5],
       target: [0, 2.4, -8],
       fov: 38,
-      mobile: { position: [0, 4.8, 18], fov: 46 }
+      mobile: { position: [0, 4.8, 18], fov: 46 },
     },
     world: {
       key: 1.0,
       practicals: 0.35,
       fog: 0.018,
       particles: 0.25,
-      grade: "cold"
+      grade: 'cold',
     },
-    focus: ["gate", "lantern-left"],
-    interactions: ["inspect-gate"],
-    assets: ["gate-shell", "stone-1k", "mist-atlas"]
-  }
+    focus: ['gate', 'lantern-left'],
+    interactions: ['inspect-gate'],
+    assets: ['gate-shell', 'stone-1k', 'mist-atlas'],
+  },
 ];
 ```
 
@@ -142,15 +142,15 @@ Hide unavoidable discontinuities behind occlusion, darkness, dense atmosphere, a
 
 Use a coherent PBR surface stack where it improves the image:
 
-| map | role | common failure |
-| --- | --- | --- |
-| base color | material identity and broad variation | baked highlights fight live lighting |
-| normal | small directional relief | strength too high makes rubber or foil |
-| roughness | controls highlight breakup and age | flat values make every object plastic |
-| AO | contact and crevice grounding | multiplied too heavily makes dirty seams |
-| metalness | separates conductors from dielectrics | gray values everywhere create implausible mud |
-| emissive | practical lights, screens, runes | replaces light but does not illuminate nearby forms |
-| alpha/transmission | foliage, cloth, glass, mist | sorting, overdraw, and depth artifacts |
+| map                | role                                  | common failure                                      |
+| ------------------ | ------------------------------------- | --------------------------------------------------- |
+| base color         | material identity and broad variation | baked highlights fight live lighting                |
+| normal             | small directional relief              | strength too high makes rubber or foil              |
+| roughness          | controls highlight breakup and age    | flat values make every object plastic               |
+| AO                 | contact and crevice grounding         | multiplied too heavily makes dirty seams            |
+| metalness          | separates conductors from dielectrics | gray values everywhere create implausible mud       |
+| emissive           | practical lights, screens, runes      | replaces light but does not illuminate nearby forms |
+| alpha/transmission | foliage, cloth, glass, mist           | sorting, overdraw, and depth artifacts              |
 
 - Set color textures to sRGB and keep normal, roughness, AO, metalness, and data textures linear.
 - Keep texel density consistent within a camera range. Reserve 2K–4K maps for surfaces that genuinely fill the frame; use 512–1K atlases for most props.
@@ -176,10 +176,8 @@ Measure stable section anchors only after fonts and critical media settle. Conve
 Keep separate values:
 
 ```js
-rig.target = progressFromScroll(scrollY);       // exact reproducible story state
-rig.smooth = reduceMotion
-  ? rig.target
-  : damp(rig.smooth, rig.target, 5.2, dt);      // cinematic render state
+rig.target = progressFromScroll(scrollY); // exact reproducible story state
+rig.smooth = reduceMotion ? rig.target : damp(rig.smooth, rig.target, 5.2, dt); // cinematic render state
 ```
 
 Use exact progress for navigation, URLs, accessibility, foreground ownership, and interaction gating. Use smoothed progress for camera and visual interpolation only. The same scroll position must recreate the same state forward, backward, after a fast jump, and after reload.
@@ -253,15 +251,15 @@ Do not hide a 40 MB world behind a decorative percentage. Record the load plan i
 
 Start with these budgets, then profile on the actual target device:
 
-| budget | mobile target | desktop target |
-| --- | ---: | ---: |
-| DPR cap | 1.25–1.5 | 1.5–2 |
-| visible triangles | 150k–300k | 500k–1.2m |
-| draw calls | 50–90 | 90–160 |
-| shadowed lights | 1–2 | 2–4 |
-| simultaneously blended full-screen layers | 2 | 3 |
-| critical initial transfer | 3–6 MB | 5–10 MB |
-| steady frame time | ≤16.7 ms ideal, ≤25 ms fallback | ≤16.7 ms |
+| budget                                    |                   mobile target | desktop target |
+| ----------------------------------------- | ------------------------------: | -------------: |
+| DPR cap                                   |                        1.25–1.5 |          1.5–2 |
+| visible triangles                         |                       150k–300k |      500k–1.2m |
+| draw calls                                |                           50–90 |         90–160 |
+| shadowed lights                           |                             1–2 |            2–4 |
+| simultaneously blended full-screen layers |                               2 |              3 |
+| critical initial transfer                 |                          3–6 MB |        5–10 MB |
+| steady frame time                         | ≤16.7 ms ideal, ≤25 ms fallback |       ≤16.7 ms |
 
 These are starting envelopes, not success claims. Measure CPU, GPU, texture memory, shader compilation, long tasks, and first-interactive frame.
 

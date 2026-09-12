@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { 
-  Network, 
-  Send, 
-  Paperclip, 
-  Maximize2, 
-  ChevronUp, 
-  User, 
-  CheckCircle2, 
+import {
+  Network,
+  Send,
+  Paperclip,
+  Maximize2,
+  ChevronUp,
+  User,
+  CheckCircle2,
   X,
   Sparkles,
-  FileText
+  FileText,
 } from 'lucide-react';
 import { useLanMeshContext, getProfileAssignedName, type ChatMessage } from '../../contexts/LanMeshContext';
 import './LanMeshFloatingPill.css';
@@ -28,7 +28,7 @@ export const LanMeshFloatingPill: React.FC = () => {
     sendMessage,
     sendFile,
     markMessagesRead,
-    clearLatestIncomingMessage
+    clearLatestIncomingMessage,
   } = useLanMeshContext();
 
   const location = useLocation();
@@ -133,14 +133,14 @@ export const LanMeshFloatingPill: React.FC = () => {
   return (
     <div className="lan-floating-wrapper top-right" aria-label="LAN Messenger Floating Hub">
       {/* 1. PERSISTENT LIVE ALL-PAGE DOCKED PILL (TOP RIGHT) */}
-      <div 
+      <div
         className={`lan-docked-pill ${isOpen ? 'active-open' : ''} ${unreadCount > 0 ? 'has-unread' : ''}`}
         onClick={handleToggleDrawer}
         role="button"
         tabIndex={0}
         aria-expanded={isOpen}
         aria-label="Toggle Live LAN Mesh Messenger"
-        onKeyDown={(e) => {
+        onKeyDown={e => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             handleToggleDrawer();
@@ -154,8 +154,6 @@ export const LanMeshFloatingPill: React.FC = () => {
           <Network size={16} className="lan-pill-network-icon" />
         </div>
 
-
-
         {/* Unread badge */}
         {unreadCount > 0 && (
           <div className="lan-pill-unread-badge" title={`${unreadCount} unread message(s)`}>
@@ -166,7 +164,7 @@ export const LanMeshFloatingPill: React.FC = () => {
 
       {/* 2. INCOMING MESSAGE TOAST POPUP (Drops down below the top-right pill) */}
       {incomingToast && !isOpen && (
-        <div 
+        <div
           className="lan-incoming-toast"
           onClick={handleToggleDrawer}
           role="alert"
@@ -184,10 +182,10 @@ export const LanMeshFloatingPill: React.FC = () => {
               {incomingToast.fileName ? `📎 Shared file: ${incomingToast.fileName}` : incomingToast.text}
             </div>
           </div>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="lan-toast-close"
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               setIncomingToast(null);
               clearLatestIncomingMessage();
@@ -220,18 +218,18 @@ export const LanMeshFloatingPill: React.FC = () => {
             </div>
 
             <div className="lan-drawer-actions">
-              <button 
-                type="button" 
-                className="lan-header-btn" 
+              <button
+                type="button"
+                className="lan-header-btn"
                 onClick={handleOpenFullPage}
                 title="Open in full Chats tab"
                 aria-label="Open in full Chats tab"
               >
                 <Maximize2 size={15} />
               </button>
-              <button 
-                type="button" 
-                className="lan-header-btn" 
+              <button
+                type="button"
+                className="lan-header-btn"
                 onClick={() => setIsOpen(false)}
                 title="Minimize pill"
                 aria-label="Minimize pill"
@@ -257,7 +255,7 @@ export const LanMeshFloatingPill: React.FC = () => {
                   className="lan-join-input"
                   placeholder="Your display name"
                   value={joinNameInput}
-                  onChange={(e) => setJoinNameInput(e.target.value)}
+                  onChange={e => setJoinNameInput(e.target.value)}
                   required
                 />
                 <button type="submit" className="lan-join-btn">
@@ -273,7 +271,7 @@ export const LanMeshFloatingPill: React.FC = () => {
                 {peers.length === 0 ? (
                   <span className="lan-peers-empty">Scanning local network...</span>
                 ) : (
-                  peers.map((peer) => (
+                  peers.map(peer => (
                     <div key={peer.peerId} className="lan-peer-chip" title={`Peer ID: ${peer.peerId}`}>
                       <span className="lan-peer-avatar">
                         <User size={12} />
@@ -298,14 +296,9 @@ export const LanMeshFloatingPill: React.FC = () => {
                     const isFirstInGroup = index === 0 || messages[index - 1].senderName !== msg.senderName;
 
                     return (
-                      <div 
-                        key={msg.id || index} 
-                        className={`lan-bubble-row ${isMine ? 'mine' : 'theirs'}`}
-                      >
+                      <div key={msg.id || index} className={`lan-bubble-row ${isMine ? 'mine' : 'theirs'}`}>
                         <div className="lan-bubble">
-                          {isFirstInGroup && !isMine && (
-                            <span className="lan-bubble-sender">{msg.senderName}</span>
-                          )}
+                          {isFirstInGroup && !isMine && <span className="lan-bubble-sender">{msg.senderName}</span>}
                           {msg.fileName ? (
                             <div className="lan-bubble-file">
                               <FileText size={16} />
@@ -327,12 +320,7 @@ export const LanMeshFloatingPill: React.FC = () => {
 
               {/* Message Input Footer */}
               <form onSubmit={handleSend} className="lan-drawer-footer">
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                  onChange={handleFileChange}
-                />
+                <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
                 <button
                   type="button"
                   className="lan-input-icon-btn"
@@ -347,10 +335,10 @@ export const LanMeshFloatingPill: React.FC = () => {
                   className="lan-msg-input"
                   placeholder="Type a LAN message..."
                   value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
+                  onChange={e => setInputText(e.target.value)}
                 />
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="lan-send-btn"
                   disabled={!inputText.trim()}
                   aria-label="Send LAN message"

@@ -1,11 +1,12 @@
 ---
 paths:
-  - "**/*.rb"
-  - "**/*.rake"
-  - "**/Gemfile"
-  - "**/app/**/*.erb"
-  - "**/config/routes.rb"
+  - '**/*.rb'
+  - '**/*.rake'
+  - '**/Gemfile'
+  - '**/app/**/*.erb'
+  - '**/config/routes.rb'
 ---
+
 # Ruby Patterns
 
 > This file extends [common/patterns.md](common-patterns.md) with Ruby and Rails specific content.

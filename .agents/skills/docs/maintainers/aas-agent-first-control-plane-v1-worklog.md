@@ -89,7 +89,7 @@
   Controlled development requires `--experimental-apply` or
   `--experimental-recovery`; successful writes are labelled experimental.
 - Added a packed-product functional runner for `init -> recommend -> validate ->
-  plan -> doctor`, deterministic explanation output, all five local stdio MCP
+plan -> doctor`, deterministic explanation output, all five local stdio MCP
   tools, the skill resource template, read-only project/cache snapshots, legacy
   isolation, and default write guards.
 - Added a six-job Node 22/24 matrix for Linux, macOS, and Windows, plus Workbench

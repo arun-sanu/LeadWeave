@@ -10,7 +10,7 @@ export function BroadcastExcel() {
   useDocumentTitle('Broadcast Data - LeadWeave');
   const { columns, setColumns, rows, setRows, updateCell, deleteRow, deleteColumn } = useSpreadsheetStore();
   const { success } = useToast();
-  
+
   const [newColName, setNewColName] = useState('');
   const [isAddingCol, setIsAddingCol] = useState(false);
   const addColInputRef = useRef<HTMLInputElement>(null);
@@ -18,7 +18,7 @@ export function BroadcastExcel() {
 
   // Column Mapping State
   const [mappingModalOpen, setMappingModalOpen] = useState(false);
-  const [pendingParsedData, setPendingParsedData] = useState<{ headers: string[], data: string[][] } | null>(null);
+  const [pendingParsedData, setPendingParsedData] = useState<{ headers: string[]; data: string[][] } | null>(null);
   const [mappingPhoneIdx, setMappingPhoneIdx] = useState<number>(0);
   const [mappingNameIdx, setMappingNameIdx] = useState<number>(-1);
 
@@ -54,16 +54,21 @@ export function BroadcastExcel() {
     }
 
     const delimiter = pasteData.includes('\t') ? '\t' : ',';
-    const lines = pasteData.trim().split(/\r?\n/).filter(line => line.trim().length > 0);
+    const lines = pasteData
+      .trim()
+      .split(/\r?\n/)
+      .filter(line => line.trim().length > 0);
 
     if (lines.length === 0) return false;
 
     // Detect if first line contains headers or phone data
     const firstLineCols = lines[0].split(delimiter).map(c => c.trim().replace(/^["']|["']$/g, ''));
-    
+
     // Check if first line is headers
-    const looksLikeHeader = firstLineCols.some(c => 
-      ['phone', 'mobile', 'number', 'tel', 'whatsapp', 'name', 'recipient', 'contact'].some(k => c.toLowerCase().includes(k))
+    const looksLikeHeader = firstLineCols.some(c =>
+      ['phone', 'mobile', 'number', 'tel', 'whatsapp', 'name', 'recipient', 'contact'].some(k =>
+        c.toLowerCase().includes(k),
+      ),
     );
 
     let parsedHeaders: string[];
@@ -78,11 +83,11 @@ export function BroadcastExcel() {
     }
 
     // Guess indices
-    const guessedPhoneIdx = parsedHeaders.findIndex(h => 
-      ['phone', 'mobile', 'number', 'tel', 'whatsapp'].some(k => h.toLowerCase().includes(k))
+    const guessedPhoneIdx = parsedHeaders.findIndex(h =>
+      ['phone', 'mobile', 'number', 'tel', 'whatsapp'].some(k => h.toLowerCase().includes(k)),
     );
-    const guessedNameIdx = parsedHeaders.findIndex(h => 
-      ['name', 'recipient', 'contact', 'first name', 'full name'].some(k => h.toLowerCase().includes(k))
+    const guessedNameIdx = parsedHeaders.findIndex(h =>
+      ['name', 'recipient', 'contact', 'first name', 'full name'].some(k => h.toLowerCase().includes(k)),
     );
 
     setMappingPhoneIdx(guessedPhoneIdx >= 0 ? guessedPhoneIdx : 0);
@@ -105,26 +110,28 @@ export function BroadcastExcel() {
     });
 
     const finalCols = mappingNameIdx >= 0 ? ['name', ...customCols] : customCols;
-    
-    const newRows = data.map((line, idx) => {
-      const rowObj: Record<string, string> = { 
-        id: `row_${Date.now()}_${idx}`, 
-        phone: line[mappingPhoneIdx] || '' 
-      };
-      
-      if (mappingNameIdx >= 0) {
-         rowObj['name'] = line[mappingNameIdx] || '';
-      }
 
-      let customColIdx = mappingNameIdx >= 0 ? 1 : 0;
-      line.forEach((cell, i) => {
-        if (i !== mappingPhoneIdx && i !== mappingNameIdx && customColIdx < finalCols.length) {
-          rowObj[finalCols[customColIdx]] = cell;
-          customColIdx++;
+    const newRows = data
+      .map((line, idx) => {
+        const rowObj: Record<string, string> = {
+          id: `row_${Date.now()}_${idx}`,
+          phone: line[mappingPhoneIdx] || '',
+        };
+
+        if (mappingNameIdx >= 0) {
+          rowObj['name'] = line[mappingNameIdx] || '';
         }
-      });
-      return rowObj;
-    }).filter(r => r.phone.length > 0);
+
+        let customColIdx = mappingNameIdx >= 0 ? 1 : 0;
+        line.forEach((cell, i) => {
+          if (i !== mappingPhoneIdx && i !== mappingNameIdx && customColIdx < finalCols.length) {
+            rowObj[finalCols[customColIdx]] = cell;
+            customColIdx++;
+          }
+        });
+        return rowObj;
+      })
+      .filter(r => r.phone.length > 0);
 
     setColumns(finalCols);
     setRows(newRows);
@@ -146,7 +153,7 @@ export function BroadcastExcel() {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (evt) => {
+    reader.onload = evt => {
       const text = evt.target?.result as string;
       if (text) {
         const successParse = processPasteString(text);
@@ -196,7 +203,17 @@ export function BroadcastExcel() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <span style={{ fontSize: '0.75rem', color: 'var(--primary)', background: 'var(--primary-soft)', padding: '0.35rem 0.75rem', borderRadius: 20, border: '1px solid rgba(37, 211, 102, 0.3)', fontWeight: 600 }}>
+          <span
+            style={{
+              fontSize: '0.75rem',
+              color: 'var(--primary)',
+              background: 'var(--primary-soft)',
+              padding: '0.35rem 0.75rem',
+              borderRadius: 20,
+              border: '1px solid rgba(37, 211, 102, 0.3)',
+              fontWeight: 600,
+            }}
+          >
             {rows.length} Contacts ({validContacts} Valid Phone{validContacts !== 1 ? 's' : ''})
           </span>
 
@@ -213,49 +230,93 @@ export function BroadcastExcel() {
                 style={{ width: 140, padding: '0.25rem 0.6rem', fontSize: '0.75rem', background: '#0f172a' }}
                 autoFocus
               />
-              <button className="btn-tool btn-primary" onClick={handleAddColumn} style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}>Add</button>
-              <button className="btn-tool" onClick={() => setIsAddingCol(false)} style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}>Cancel</button>
+              <button
+                className="btn-tool btn-primary"
+                onClick={handleAddColumn}
+                style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}
+              >
+                Add
+              </button>
+              <button
+                className="btn-tool"
+                onClick={() => setIsAddingCol(false)}
+                style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}
+              >
+                Cancel
+              </button>
             </div>
           ) : (
-            <button className="btn-tool" onClick={() => setIsAddingCol(true)} style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', height: '28px' }}>
+            <button
+              className="btn-tool"
+              onClick={() => setIsAddingCol(true)}
+              style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', height: '28px' }}
+            >
               <Plus size={14} />
               <span>Col</span>
             </button>
           )}
 
-          <button className="btn-tool" onClick={() => setRows([...rows, { id: `row_${Date.now()}`, phone: '' }])} style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', height: '28px' }}>
+          <button
+            className="btn-tool"
+            onClick={() => setRows([...rows, { id: `row_${Date.now()}`, phone: '' }])}
+            style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', height: '28px' }}
+          >
             <Plus size={14} />
             <span>Row</span>
           </button>
 
-          <button className="btn-tool" onClick={handlePasteClick} style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', height: '28px', background: 'rgba(255,255,255,0.05)' }}>
+          <button
+            className="btn-tool"
+            onClick={handlePasteClick}
+            style={{
+              padding: '0.25rem 0.6rem',
+              fontSize: '0.75rem',
+              height: '28px',
+              background: 'rgba(255,255,255,0.05)',
+            }}
+          >
             <Clipboard size={14} />
             <span>Paste</span>
           </button>
 
-          <button className="btn-tool btn-primary" onClick={() => document.getElementById('csv-upload-input')?.click()} style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', height: '28px' }}>
+          <button
+            className="btn-tool btn-primary"
+            onClick={() => document.getElementById('csv-upload-input')?.click()}
+            style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', height: '28px' }}
+          >
             <Upload size={14} />
             <span>Upload CSV</span>
           </button>
-          <input 
-             type="file" 
-             id="csv-upload-input" 
-             accept=".csv,.txt,.tsv" 
-             style={{ display: 'none' }} 
-             onChange={handleFileUpload} 
+          <input
+            type="file"
+            id="csv-upload-input"
+            accept=".csv,.txt,.tsv"
+            style={{ display: 'none' }}
+            onChange={handleFileUpload}
           />
         </div>
       </div>
 
-      <div className="spreadsheet-grid-wrapper" ref={tableContainerRef} style={{ maxHeight: '560px', overflowY: 'auto' }}>
+      <div
+        className="spreadsheet-grid-wrapper"
+        ref={tableContainerRef}
+        style={{ maxHeight: '560px', overflowY: 'auto' }}
+      >
         {rows.length === 0 ? (
           <div style={{ padding: '4rem 2rem', textAlign: 'center', background: 'rgba(255,255,255,0.01)' }}>
             <Sparkles size={40} color="#38bdf8" style={{ margin: '0 auto 1rem', opacity: 0.8 }} />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f8fafc', margin: '0 0 0.5rem' }}>No recipients in broadcast table</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f8fafc', margin: '0 0 0.5rem' }}>
+              No recipients in broadcast table
+            </h3>
             <p style={{ fontSize: '0.875rem', color: '#94a3b8', maxWidth: 460, margin: '0 auto 1.5rem' }}>
-              Click anywhere on this page and press <strong>Ctrl+V</strong> to paste data directly from your spreadsheet, or add a row manually.
+              Click anywhere on this page and press <strong>Ctrl+V</strong> to paste data directly from your
+              spreadsheet, or add a row manually.
             </p>
-            <button className="btn-tool btn-primary" onClick={() => setRows([{ id: 'row_1', phone: '' }])} style={{ padding: '0.6rem 1.25rem' }}>
+            <button
+              className="btn-tool btn-primary"
+              onClick={() => setRows([{ id: 'row_1', phone: '' }])}
+              style={{ padding: '0.6rem 1.25rem' }}
+            >
               <Plus size={16} />
               <span>Add First Row</span>
             </button>
@@ -277,7 +338,11 @@ export function BroadcastExcel() {
                   <th key={col} style={{ minWidth: '140px' }}>
                     <div className="spreadsheet-header-cell">
                       <span>{col}</span>
-                      <button className="spreadsheet-header-del-btn" onClick={() => deleteColumn(col)} title={`Delete column ${col}`}>
+                      <button
+                        className="spreadsheet-header-del-btn"
+                        onClick={() => deleteColumn(col)}
+                        title={`Delete column ${col}`}
+                      >
                         <Trash2 size={13} />
                       </button>
                     </div>
@@ -291,7 +356,10 @@ export function BroadcastExcel() {
                 <>
                   {paddingTop > 0 && (
                     <tr>
-                      <td style={{ height: `${paddingTop}px`, padding: 0, border: 'none' }} colSpan={columns.length + 3} />
+                      <td
+                        style={{ height: `${paddingTop}px`, padding: 0, border: 'none' }}
+                        colSpan={columns.length + 3}
+                      />
                     </tr>
                   )}
                   {virtualRows.map(virtualRow => {
@@ -300,7 +368,9 @@ export function BroadcastExcel() {
                     const phoneValid = row.phone.length === 0 || validatePhone(row.phone).isValid;
                     return (
                       <tr key={row.id}>
-                        <td style={{ textAlign: 'center', color: '#64748b', fontSize: '0.75rem', fontWeight: 600 }}>{idx + 1}</td>
+                        <td style={{ textAlign: 'center', color: '#64748b', fontSize: '0.75rem', fontWeight: 600 }}>
+                          {idx + 1}
+                        </td>
                         <td>
                           <input
                             type="text"
@@ -336,7 +406,10 @@ export function BroadcastExcel() {
                   })}
                   {paddingBottom > 0 && (
                     <tr>
-                      <td style={{ height: `${paddingBottom}px`, padding: 0, border: 'none' }} colSpan={columns.length + 3} />
+                      <td
+                        style={{ height: `${paddingBottom}px`, padding: 0, border: 'none' }}
+                        colSpan={columns.length + 3}
+                      />
                     </tr>
                   )}
                 </>
@@ -345,7 +418,9 @@ export function BroadcastExcel() {
                   const phoneValid = row.phone.length === 0 || validatePhone(row.phone).isValid;
                   return (
                     <tr key={row.id}>
-                      <td style={{ textAlign: 'center', color: '#64748b', fontSize: '0.75rem', fontWeight: 600 }}>{idx + 1}</td>
+                      <td style={{ textAlign: 'center', color: '#64748b', fontSize: '0.75rem', fontWeight: 600 }}>
+                        {idx + 1}
+                      </td>
                       <td>
                         <input
                           type="text"
@@ -394,51 +469,89 @@ export function BroadcastExcel() {
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', padding: '0.5rem 0' }}>
             <p style={{ fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.5 }}>
-              We've analyzed your spreadsheet. Please confirm which columns correspond to the required fields. Any remaining columns will be imported as custom variables (e.g., <code>{"{{location}}"}</code>).
+              We've analyzed your spreadsheet. Please confirm which columns correspond to the required fields. Any
+              remaining columns will be imported as custom variables (e.g., <code>{'{{location}}'}</code>).
             </p>
 
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', borderRadius: '8px', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              
+            <div
+              style={{
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid var(--border)',
+                borderRadius: '8px',
+                padding: '1rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+              }}
+            >
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: 'var(--text-primary)',
+                    marginBottom: '0.5rem',
+                  }}
+                >
                   Phone Number Column <span style={{ color: '#ef4444' }}>*</span>
                 </label>
-                <select 
-                  className="form-control" 
+                <select
+                  className="form-control"
                   aria-label="Phone Number Column"
-                  value={mappingPhoneIdx} 
-                  onChange={(e) => setMappingPhoneIdx(Number(e.target.value))}
+                  value={mappingPhoneIdx}
+                  onChange={e => setMappingPhoneIdx(Number(e.target.value))}
                   style={{ width: '100%' }}
                 >
                   {pendingParsedData.headers.map((h, i) => (
-                    <option key={i} value={i} disabled={i === mappingNameIdx}>{h || `Column ${i + 1}`}</option>
+                    <option key={i} value={i} disabled={i === mappingNameIdx}>
+                      {h || `Column ${i + 1}`}
+                    </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: 'var(--text-primary)',
+                    marginBottom: '0.5rem',
+                  }}
+                >
                   Name Column <span style={{ color: '#94a3b8', fontWeight: 400 }}>(Optional)</span>
                 </label>
-                <select 
-                  className="form-control" 
+                <select
+                  className="form-control"
                   aria-label="Name Column"
-                  value={mappingNameIdx} 
-                  onChange={(e) => setMappingNameIdx(Number(e.target.value))}
+                  value={mappingNameIdx}
+                  onChange={e => setMappingNameIdx(Number(e.target.value))}
                   style={{ width: '100%' }}
                 >
                   <option value={-1}>-- None --</option>
                   {pendingParsedData.headers.map((h, i) => (
-                    <option key={i} value={i} disabled={i === mappingPhoneIdx}>{h || `Column ${i + 1}`}</option>
+                    <option key={i} value={i} disabled={i === mappingPhoneIdx}>
+                      {h || `Column ${i + 1}`}
+                    </option>
                   ))}
                 </select>
               </div>
-
             </div>
 
-            <div style={{ background: 'rgba(var(--success-rgb), 0.05)', border: '1px solid rgba(var(--success-rgb), 0.2)', padding: '0.75rem', borderRadius: '6px', marginTop: '0.5rem' }}>
+            <div
+              style={{
+                background: 'rgba(var(--success-rgb), 0.05)',
+                border: '1px solid rgba(var(--success-rgb), 0.2)',
+                padding: '0.75rem',
+                borderRadius: '6px',
+                marginTop: '0.5rem',
+              }}
+            >
               <p style={{ fontSize: '0.8125rem', color: 'var(--success)', margin: 0, fontWeight: 500 }}>
-                {pendingParsedData.headers.filter((_, i) => i !== mappingPhoneIdx && i !== mappingNameIdx).length} additional columns will be imported as custom variables.
+                {pendingParsedData.headers.filter((_, i) => i !== mappingPhoneIdx && i !== mappingNameIdx).length}{' '}
+                additional columns will be imported as custom variables.
               </p>
             </div>
 
@@ -446,7 +559,11 @@ export function BroadcastExcel() {
               <button className="btn-tool" onClick={() => setMappingModalOpen(false)}>
                 Cancel
               </button>
-              <button className="btn-tool btn-primary" onClick={handleConfirmMapping} style={{ padding: '0.5rem 1rem' }}>
+              <button
+                className="btn-tool btn-primary"
+                onClick={handleConfirmMapping}
+                style={{ padding: '0.5rem 1rem' }}
+              >
                 <ArrowRight size={16} />
                 <span>Confirm & Import</span>
               </button>

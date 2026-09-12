@@ -570,27 +570,27 @@ vars are removed. Ships with a migration guide.
 Delivered additively whenever ready, per SemVer (not gated to one version). Prometheus metrics shipped
 in `0.2.2` and the five client SDKs across `0.7.3`–`0.8.19`; the rest remain open.
 
-| Feature                | Priority | Status                                             | Description                     |
-| ---------------------- | -------- | -------------------------------------------------- | ------------------------------- |
+| Feature                | Priority | Status                                               | Description                     |
+| ---------------------- | -------- | ---------------------------------------------------- | ------------------------------- |
 | JavaScript/Node.js SDK | P1       | ✅ Shipped (`@arun-sanu/leadweave`)                  | Official client library         |
 | Python SDK             | P2       | ✅ Shipped (`arun-sanu-leadweave`)                   | Python client library           |
 | PHP SDK                | P2       | ✅ Shipped (`arun-sanu/leadweave`)                   | PHP client library              |
 | Java SDK               | P2       | ✅ Shipped (`com.arun-sanu:leadweave`)               | Java client library             |
 | Go SDK                 | P2       | ✅ Shipped (`github.com/arun-sanu/LeadWeave/sdk/go`) | Go client library               |
-| Postman Collection     | P1       | ◐ cURL collection (doc 07); Postman export TBD     | Ready-to-use API collection     |
-| Docs Site              | P1       | ☐ Open                                             | Documentation website           |
-| Video Tutorials        | P2       | ☐ Open                                             | Getting started video series    |
-| Example Projects       | P1       | ◐ A few under `docs/examples/`                     | Real-world integration examples |
+| Postman Collection     | P1       | ◐ cURL collection (doc 07); Postman export TBD       | Ready-to-use API collection     |
+| Docs Site              | P1       | ☐ Open                                               | Documentation website           |
+| Video Tutorials        | P2       | ☐ Open                                               | Getting started video series    |
+| Example Projects       | P1       | ◐ A few under `docs/examples/`                       | Real-world integration examples |
 
 **Performance & Observability**
 
-| Feature                | Priority | Status                                      | Description                      |
-| ---------------------- | -------- | ------------------------------------------- | -------------------------------- |
+| Feature                | Priority | Status                                         | Description                      |
+| ---------------------- | -------- | ---------------------------------------------- | -------------------------------- |
 | Prometheus Metrics     | P1       | ✅ Shipped (`GET /api/metrics`, `leadweave_*`) | /metrics endpoint for monitoring |
-| Grafana Dashboard      | P2       | ☐ Open                                      | Pre-built monitoring dashboard   |
-| OpenTelemetry Tracing  | P2       | ☐ Open                                      | Distributed tracing support      |
-| Performance Benchmarks | P1       | ☐ Open                                      | Documented performance metrics   |
-| Memory Optimization    | P1       | ☐ Open                                      | Reduced memory per session       |
+| Grafana Dashboard      | P2       | ☐ Open                                         | Pre-built monitoring dashboard   |
+| OpenTelemetry Tracing  | P2       | ☐ Open                                         | Distributed tracing support      |
+| Performance Benchmarks | P1       | ☐ Open                                         | Documented performance metrics   |
+| Memory Optimization    | P1       | ☐ Open                                         | Reduced memory per session       |
 
 ### Integration Fabric — inbound integrations for plugins (in progress)
 

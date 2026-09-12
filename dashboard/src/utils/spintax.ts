@@ -1,6 +1,6 @@
 /**
  * Spintax (Spin Syntax) Parser & Evaluator
- * 
+ *
  * Supports nested Spintax syntax like `{Hello|Hi|Hey} {there|friend|{{Name}}}`.
  * Selects random variants recursively or with a deterministic seed/index.
  */
@@ -11,7 +11,7 @@ const SPINTAX_PATTERN = /\{([^{}]+)\}/g;
  * Resolve spintax patterns in a string.
  * Example:
  *   parseSpintax("{Hi|Hello} {{Name}}!") => "Hello {{Name}}!" or "Hi {{Name}}!"
- * 
+ *
  * Supports nested expressions:
  *   "{Good {morning|day}|Welcome}" => "Good morning" or "Good day" or "Welcome"
  *

@@ -18,8 +18,8 @@ The `date_added` field uses ISO 8601 date format: **YYYY-MM-DD**
 ```yaml
 ---
 name: my-skill-name
-description: "Brief description"
-date_added: "2024-01-15"
+description: 'Brief description'
+date_added: '2024-01-15'
 ---
 ```
 
@@ -32,6 +32,7 @@ python tools/scripts/manage_skill_dates.py list
 ```
 
 Output example:
+
 ```
 📅 Skills with Date Added (example):
 ============================================================
@@ -108,8 +109,8 @@ Add the `date_added` field to your SKILL.md frontmatter:
 ```yaml
 ---
 name: new-awesome-skill
-description: "Does something awesome"
-date_added: "2026-03-06"
+description: 'Does something awesome'
+date_added: '2026-03-06'
 ---
 ```
 
@@ -171,6 +172,7 @@ The `generate_skills_report.py` script produces a JSON report with statistics:
 ```
 
 Use this for:
+
 - Dashboard displays
 - Growth metrics
 - Automated reports
@@ -202,12 +204,14 @@ python tools/scripts/generate_skills_report.py --output reports/skills_report.js
 ### "Invalid date_added format"
 
 Make sure the date is in `YYYY-MM-DD` format:
+
 - ✅ Correct: `2024-01-15`
 - ❌ Wrong: `01/15/2024` or `2024-1-15`
 
 ### Script not found
 
 Make sure you're running from the project root:
+
 ```bash
 cd path/to/agentic-awesome-skills
 python tools/scripts/manage_skill_dates.py list

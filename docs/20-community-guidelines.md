@@ -219,12 +219,12 @@ defects in LeadWeave — routing them correctly upfront saves time for everyone 
 for you, cleaner triage for maintainers). When in doubt, open a Discussion first; it can
 always be promoted to an Issue once a real defect is confirmed.
 
-| Open an **Issue**                                                        | Open a **Discussion**                                                       |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Open an **Issue**                                                           | Open a **Discussion**                                                       |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | Reproducible defect in LeadWeave code with clear steps, expected vs. actual | Setup / configuration help ("my proxy doesn't work, how do I configure X?") |
-| Crash, panic, wrong API response, regression after upgrade               | Provider-specific quirks (webshare, IPRoyal, brightdata, Twilio, etc.)      |
-| Documented behavior contradicted by actual behavior                      | "Is X possible?" / "What's the best way to Y?"                              |
-| Security issue (use `SECURITY.md`, not a public issue)                   | Hosting-platform / network / firewall questions                             |
+| Crash, panic, wrong API response, regression after upgrade                  | Provider-specific quirks (webshare, IPRoyal, brightdata, Twilio, etc.)      |
+| Documented behavior contradicted by actual behavior                         | "Is X possible?" / "What's the best way to Y?"                              |
+| Security issue (use `SECURITY.md`, not a public issue)                      | Hosting-platform / network / firewall questions                             |
 
 **Common gray-zone examples (these go to Discussions, not Issues):**
 
@@ -247,7 +247,7 @@ Blank issues are disabled — GitHub presents the **Bug report** form
 | Field              | Notes                                                                        |
 | ------------------ | ---------------------------------------------------------------------------- |
 | Pre-flight         | Both checkboxes: searched for duplicates, and on the latest released version |
-| LeadWeave version     | e.g. `0.2.1` (shown on the dashboard Login screen) or a commit SHA           |
+| LeadWeave version  | e.g. `0.2.1` (shown on the dashboard Login screen) or a commit SHA           |
 | Deployment         | Docker Compose / Docker (manual run) / Bare metal (npm) / Other              |
 | Database           | SQLite (default) / PostgreSQL                                                |
 | What happened?     | The bug and its impact                                                       |
@@ -276,23 +276,23 @@ not supported on whatsapp-web.js, the default engine.
 
 ### Issue Labels
 
-| Label                 | Description                                                                     |
-| --------------------- | ------------------------------------------------------------------------------- |
-| `bug`                 | Something isn't working                                                         |
-| `enhancement`         | New feature or request                                                          |
-| `documentation`       | Improvements to docs                                                            |
-| `good first issue`    | Good for newcomers                                                              |
-| `help wanted`         | Extra attention needed                                                          |
-| `question`            | Further information requested                                                   |
-| `needs-info`          | Awaiting reporter input to proceed                                              |
+| Label                 | Description                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------- |
+| `bug`                 | Something isn't working                                                            |
+| `enhancement`         | New feature or request                                                             |
+| `documentation`       | Improvements to docs                                                               |
+| `good first issue`    | Good for newcomers                                                                 |
+| `help wanted`         | Extra attention needed                                                             |
+| `question`            | Further information requested                                                      |
+| `needs-info`          | Awaiting reporter input to proceed                                                 |
 | `not-a-bug`           | External/environmental cause (provider, network, hosting); not an LeadWeave defect |
-| `move-to-discussions` | Belongs in GitHub Discussions, not Issues — see §20.3 Issue vs. Discussions     |
-| `invalid`             | This doesn't seem right                                                         |
-| `wontfix`             | This will not be worked on                                                      |
-| `duplicate`           | This issue already exists                                                       |
-| `security`            | Security-related                                                                |
-| `design`              | Architecture / design discussion                                                |
-| `engine:baileys`      | Baileys engine specific                                                         |
+| `move-to-discussions` | Belongs in GitHub Discussions, not Issues — see §20.3 Issue vs. Discussions        |
+| `invalid`             | This doesn't seem right                                                            |
+| `wontfix`             | This will not be worked on                                                         |
+| `duplicate`           | This issue already exists                                                          |
+| `security`            | Security-related                                                                   |
+| `design`              | Architecture / design discussion                                                   |
+| `engine:baileys`      | Baileys engine specific                                                            |
 | `upstream-blocked`    | Blocked on upstream library/WhatsApp behavior; no LeadWeave-side fix               |
 
 ## 20.4 Community Channels

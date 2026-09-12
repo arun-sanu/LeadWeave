@@ -3,31 +3,30 @@
 We believe in giving credit where credit is due.
 If you recognize your work here and it is not properly attributed, please open an Issue.
 
-| Skill / Category            | Original Source                                                            | License        | Notes                         |
-| :-------------------------- | :------------------------------------------------------------------------- | :------------- | :---------------------------- |
-| `cloud-penetration-testing` | [HackTricks](https://book.hacktricks.xyz/)                                 | MIT / CC-BY-SA | Adapted for agentic use.      |
-| `active-directory-attacks`  | [HackTricks](https://book.hacktricks.xyz/)                                 | MIT / CC-BY-SA | Adapted for agentic use.      |
-| `owasp-top-10`              | [OWASP](https://owasp.org/)                                                | CC-BY-SA       | Methodology adapted.          |
-| `burp-suite-testing`        | [PortSwigger](https://portswigger.net/burp)                                | N/A            | Usage guide only (no binary). |
-| `crewai`                    | [CrewAI](https://github.com/joaomdmoura/crewAI)                            | MIT            | Framework guides.             |
-| `hasdata`, `hasdata-cli`    | [HasData CLI](https://github.com/HasData/hasdata-cli)                      | MIT            | Official HasData API and CLI guidance. |
-| `runapi-cli`                | [RunAPI CLI Skill](https://github.com/runapi-ai/cli-skill)                 | Apache-2.0     | Official RunAPI CLI skill for generating AI images, videos, and music/audio, plus other model API jobs. |
-| `weaviate`, `weaviate-cookbooks` | [Weaviate Agent Skills](https://github.com/weaviate/agent-skills)     | BSD-3-Clause   | Official Weaviate vector database operations, RAG cookbooks, and agentic app blueprints. |
-| `pre-release-review`, `drizzle-migration-conflict` | [chaunsin/agent-skills](https://github.com/chaunsin/agent-skills) | Apache-2.0 | Release-readiness and Drizzle Kit migration-conflict workflows. |
-| `frontend-lighthouse`       | [stareezy-1/frontend-architecture-skill](https://github.com/stareezy-1/frontend-architecture-skill) | MIT | Lighthouse CI Core Web Vitals gate adapted for the skill catalog. |
-| `browser-testing-with-devtools` | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)  | MIT            | Chrome DevTools MCP browser verification and security-boundary guidance. |
-| `langgraph`                 | [LangGraph](https://github.com/langchain-ai/langgraph)                     | MIT            | Framework guides.             |
-| `react-patterns`            | [React Docs](https://react.dev/)                                           | CC-BY          | Official patterns.            |
-| **All Official Skills**     | [Anthropic / Google / OpenAI / Microsoft / Supabase / Apify / Vercel Labs] | Proprietary    | Usage encouraged by vendors.  |
+| Skill / Category                                   | Original Source                                                                                     | License        | Notes                                                                                                   |
+| :------------------------------------------------- | :-------------------------------------------------------------------------------------------------- | :------------- | :------------------------------------------------------------------------------------------------------ |
+| `cloud-penetration-testing`                        | [HackTricks](https://book.hacktricks.xyz/)                                                          | MIT / CC-BY-SA | Adapted for agentic use.                                                                                |
+| `active-directory-attacks`                         | [HackTricks](https://book.hacktricks.xyz/)                                                          | MIT / CC-BY-SA | Adapted for agentic use.                                                                                |
+| `owasp-top-10`                                     | [OWASP](https://owasp.org/)                                                                         | CC-BY-SA       | Methodology adapted.                                                                                    |
+| `burp-suite-testing`                               | [PortSwigger](https://portswigger.net/burp)                                                         | N/A            | Usage guide only (no binary).                                                                           |
+| `crewai`                                           | [CrewAI](https://github.com/joaomdmoura/crewAI)                                                     | MIT            | Framework guides.                                                                                       |
+| `hasdata`, `hasdata-cli`                           | [HasData CLI](https://github.com/HasData/hasdata-cli)                                               | MIT            | Official HasData API and CLI guidance.                                                                  |
+| `runapi-cli`                                       | [RunAPI CLI Skill](https://github.com/runapi-ai/cli-skill)                                          | Apache-2.0     | Official RunAPI CLI skill for generating AI images, videos, and music/audio, plus other model API jobs. |
+| `weaviate`, `weaviate-cookbooks`                   | [Weaviate Agent Skills](https://github.com/weaviate/agent-skills)                                   | BSD-3-Clause   | Official Weaviate vector database operations, RAG cookbooks, and agentic app blueprints.                |
+| `pre-release-review`, `drizzle-migration-conflict` | [chaunsin/agent-skills](https://github.com/chaunsin/agent-skills)                                   | Apache-2.0     | Release-readiness and Drizzle Kit migration-conflict workflows.                                         |
+| `frontend-lighthouse`                              | [stareezy-1/frontend-architecture-skill](https://github.com/stareezy-1/frontend-architecture-skill) | MIT            | Lighthouse CI Core Web Vitals gate adapted for the skill catalog.                                       |
+| `browser-testing-with-devtools`                    | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)                               | MIT            | Chrome DevTools MCP browser verification and security-boundary guidance.                                |
+| `langgraph`                                        | [LangGraph](https://github.com/langchain-ai/langgraph)                                              | MIT            | Framework guides.                                                                                       |
+| `react-patterns`                                   | [React Docs](https://react.dev/)                                                                    | CC-BY          | Official patterns.                                                                                      |
+| **All Official Skills**                            | [Anthropic / Google / OpenAI / Microsoft / Supabase / Apify / Vercel Labs]                          | Proprietary    | Usage encouraged by vendors.                                                                            |
 
 ## Skills from zhaoxuya520/reverse-skill
 
 The following 43 security skills were adapted from the [reverse-skill](https://github.com/zhaoxuya520/reverse-skill) cybersecurity routing pack (MIT). The GPLv3 `CTF-Sandbox-Orchestrator` sidecar and runtime bootstrap scripts were intentionally not bundled.
 
-| Skill | Original Source | License | Notes |
-| :---- | :-------------- | :------ | :---- |
-| `api-security`, `apk-reverse`, `attack-chain`, `binary-diff`, `browser-extension-reverse`, `case-review`, `cloud-k8s`, `code-audit`, `database-security`, `diagram-generator`, `digital-forensics`, `docs-generator`, `dotnet-reverse`, `edr-bypass-re`, `email-security`, `firmware-pentest`, `ghidra-reverse`, `go-rust-reverse`, `hardware-security`, `ida-reverse`, `identity-federation`, `js-reverse`, `llm-security`, `macos-reverse`, `malware-analysis`, `mobile-reverse`, `ot-ics`, `patch-diff-exploit`, `pentest-tools`, `protocol-reverse`, `pwn-chain`, `radare2`, `radio-sdr`, `reverse-browser-automation`, `reverse-engineering`, `supply-chain-security`, `thick-client`, `threat-hunting`, `threat-intelligence`, `wifi-wireless`, `windows-ad`, `reverse-engineering/dsl-vm-reverse`, `pentest-tools/src-hunter` | [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skill) | MIT | Reverse engineering, binary analysis, offensive assessment, and threat-intelligence workflows, adapted with English metadata and upstream safety gates. |
-
+| Skill                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Original Source                                                           | License | Notes                                                                                                                                                   |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------ | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `api-security`, `apk-reverse`, `attack-chain`, `binary-diff`, `browser-extension-reverse`, `case-review`, `cloud-k8s`, `code-audit`, `database-security`, `diagram-generator`, `digital-forensics`, `docs-generator`, `dotnet-reverse`, `edr-bypass-re`, `email-security`, `firmware-pentest`, `ghidra-reverse`, `go-rust-reverse`, `hardware-security`, `ida-reverse`, `identity-federation`, `js-reverse`, `llm-security`, `macos-reverse`, `malware-analysis`, `mobile-reverse`, `ot-ics`, `patch-diff-exploit`, `pentest-tools`, `protocol-reverse`, `pwn-chain`, `radare2`, `radio-sdr`, `reverse-browser-automation`, `reverse-engineering`, `supply-chain-security`, `thick-client`, `threat-hunting`, `threat-intelligence`, `wifi-wireless`, `windows-ad`, `reverse-engineering/dsl-vm-reverse`, `pentest-tools/src-hunter` | [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skill) | MIT     | Reverse engineering, binary analysis, offensive assessment, and threat-intelligence workflows, adapted with English metadata and upstream safety gates. |
 
 ## Skills from VoltAgent/awesome-agent-skills
 
@@ -35,16 +34,16 @@ The following skills were added from the curated collection at [VoltAgent/awesom
 
 ### Official Team Skills
 
-| Skill                                                                                        | Original Source                                                           | License    | Notes                              |
-| :------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------ | :--------- | :--------------------------------- |
-| `vercel-deploy-claimable`                                                                    | [Vercel Labs](https://github.com/vercel-labs/agent-skills)                | MIT        | Official Vercel skill              |
-| `design-md`                                                                                  | [Google Labs (Stitch)](https://github.com/google-labs-code/stitch-skills) | Compatible | Google Labs Stitch skills          |
-| `hugging-face-cli`, `hugging-face-community-evals`, `hugging-face-dataset-viewer`, `hugging-face-gradio`, `hugging-face-jobs`, `hugging-face-model-trainer`, `hugging-face-paper-publisher`, `hugging-face-papers`, `hugging-face-trackio`, `hugging-face-vision-trainer`, `transformers-js` | [Hugging Face](https://github.com/huggingface/skills) | Compatible | Official Hugging Face skills |
-| `culture-index`, `fix-review`, `sharp-edges`                                                 | [Trail of Bits](https://github.com/trailofbits/skills)                    | Compatible | Security skills from Trail of Bits |
-| `expo-deployment`, `upgrading-expo`                                                          | [Expo](https://github.com/expo/skills)                                    | Compatible | Official Expo skills               |
-| `commit`, `create-pr`, `find-bugs`, `iterate-pr`                                             | [Sentry](https://github.com/getsentry/skills)                             | Compatible | Sentry dev team skills             |
-| `using-neon`                                                                                 | [Neon](https://github.com/neondatabase/agent-skills)                      | Compatible | Neon Postgres best practices       |
-| `fal-audio`, `fal-generate`, `fal-image-edit`, `fal-platform`, `fal-upscale`, `fal-workflow` | [fal.ai Community](https://github.com/fal-ai-community/skills)            | Compatible | fal.ai AI model skills             |
+| Skill                                                                                                                                                                                                                                                                                        | Original Source                                                           | License    | Notes                              |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------ | :--------- | :--------------------------------- |
+| `vercel-deploy-claimable`                                                                                                                                                                                                                                                                    | [Vercel Labs](https://github.com/vercel-labs/agent-skills)                | MIT        | Official Vercel skill              |
+| `design-md`                                                                                                                                                                                                                                                                                  | [Google Labs (Stitch)](https://github.com/google-labs-code/stitch-skills) | Compatible | Google Labs Stitch skills          |
+| `hugging-face-cli`, `hugging-face-community-evals`, `hugging-face-dataset-viewer`, `hugging-face-gradio`, `hugging-face-jobs`, `hugging-face-model-trainer`, `hugging-face-paper-publisher`, `hugging-face-papers`, `hugging-face-trackio`, `hugging-face-vision-trainer`, `transformers-js` | [Hugging Face](https://github.com/huggingface/skills)                     | Compatible | Official Hugging Face skills       |
+| `culture-index`, `fix-review`, `sharp-edges`                                                                                                                                                                                                                                                 | [Trail of Bits](https://github.com/trailofbits/skills)                    | Compatible | Security skills from Trail of Bits |
+| `expo-deployment`, `upgrading-expo`                                                                                                                                                                                                                                                          | [Expo](https://github.com/expo/skills)                                    | Compatible | Official Expo skills               |
+| `commit`, `create-pr`, `find-bugs`, `iterate-pr`                                                                                                                                                                                                                                             | [Sentry](https://github.com/getsentry/skills)                             | Compatible | Sentry dev team skills             |
+| `using-neon`                                                                                                                                                                                                                                                                                 | [Neon](https://github.com/neondatabase/agent-skills)                      | Compatible | Neon Postgres best practices       |
+| `fal-audio`, `fal-generate`, `fal-image-edit`, `fal-platform`, `fal-upscale`, `fal-workflow`                                                                                                                                                                                                 | [fal.ai Community](https://github.com/fal-ai-community/skills)            | Compatible | fal.ai AI model skills             |
 
 ### Community Skills
 
@@ -99,20 +98,20 @@ The following skills were added from the curated collection at [VoltAgent/awesom
 
 The following skills were added from [Dimillian/Skills](https://github.com/Dimillian/Skills), a curated Codex skills repository focused on Apple platforms, GitHub workflows, refactoring, and performance work.
 
-| Skill / Group | Original Source | License | Notes |
-| :------------ | :-------------- | :------ | :---- |
-| `app-store-changelog`, `github`, `orchestrate-batch-refactor`, `project-skill-audit`, `react-component-performance`, `simplify-code` | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT | Workflow, GitHub, React performance, and code simplification skills. |
-| `ios-debugger-agent`, `macos-menubar-tuist-app`, `macos-spm-app-packaging`, `swift-concurrency-expert` | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT | Apple-platform debugging, packaging, and Swift concurrency guidance. |
-| `swiftui-liquid-glass`, `swiftui-performance-audit`, `swiftui-ui-patterns`, `swiftui-view-refactor` | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT | SwiftUI-specific implementation, performance, and refactoring patterns. |
+| Skill / Group                                                                                                                        | Original Source                                         | License | Notes                                                                   |
+| :----------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------ | :------ | :---------------------------------------------------------------------- |
+| `app-store-changelog`, `github`, `orchestrate-batch-refactor`, `project-skill-audit`, `react-component-performance`, `simplify-code` | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT     | Workflow, GitHub, React performance, and code simplification skills.    |
+| `ios-debugger-agent`, `macos-menubar-tuist-app`, `macos-spm-app-packaging`, `swift-concurrency-expert`                               | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT     | Apple-platform debugging, packaging, and Swift concurrency guidance.    |
+| `swiftui-liquid-glass`, `swiftui-performance-audit`, `swiftui-ui-patterns`, `swiftui-view-refactor`                                  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT     | SwiftUI-specific implementation, performance, and refactoring patterns. |
 
 ## Skills from Leonxlnx/taste-skill
 
 The following skills were added from [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill), a frontend design taste collection focused on premium UI generation, redesign audits, motion, and anti-generic output rules.
 
-| Skill / Group | Original Source | License | Notes |
-| :------------ | :-------------- | :------ | :---- |
+| Skill / Group                                                                                              | Original Source                                                 | License               | Notes                                                                                                   |
+| :--------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- | :-------------------- | :------------------------------------------------------------------------------------------------------ |
 | `design-taste-frontend`, `gpt-taste`, `high-end-visual-design`, `minimalist-ui`, `industrial-brutalist-ui` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | Not declared upstream | Frontend visual design protocols for high-agency, motion-rich, minimalist, and brutalist UI generation. |
-| `redesign-existing-projects`, `stitch-design-taste`, `full-output-enforcement` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | Not declared upstream | Redesign audit workflow, Google Stitch design-system export, and full-output enforcement protocol. |
+| `redesign-existing-projects`, `stitch-design-taste`, `full-output-enforcement`                             | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | Not declared upstream | Redesign audit workflow, Google Stitch design-system export, and full-output enforcement protocol.      |
 
 ---
 
@@ -121,51 +120,58 @@ The following skills were added from [Leonxlnx/taste-skill](https://github.com/L
 The following skills were added during the March 2026 skills update:
 
 ### UI/UX & Frontend
-| Skill | Source | License | Notes |
-|-------|--------|---------|-------|
-| `baseline-ui`, `fixing-accessibility`, `fixing-metadata`, `fixing-motion-performance` | [ibelick/ui-skills](https://github.com/ibelick/ui-skills) | Compatible | UI polish and validation |
-| `expo-ui-swift-ui`, `expo-ui-jetpack-compose`, `expo-tailwind-setup`, `building-native-ui`, `expo-api-routes`, `expo-dev-client`, `expo-cicd-workflows`, `native-data-fetching` | [expo/skills](https://github.com/expo/skills) | MIT | Expo/React Native skills |
-| `swiftui-expert-skill` | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) | Compatible | SwiftUI development |
-| `threejs-fundamentals`, `threejs-geometry`, `threejs-materials`, `threejs-lighting`, `threejs-textures`, `threejs-animation`, `threejs-loaders`, `threejs-shaders`, `threejs-postprocessing`, `threejs-interaction` | [CloudAI-X/threejs-skills](https://github.com/CloudAI-X/threejs-skills) | Compatible | Three.js 3D graphics |
-| `frontend-slides` | [zarazhangrui](https://github.com/zarazhangrui/frontend-slides) | Compatible | HTML presentations |
+
+| Skill                                                                                                                                                                                                               | Source                                                                      | License    | Notes                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------- | ------------------------ |
+| `baseline-ui`, `fixing-accessibility`, `fixing-metadata`, `fixing-motion-performance`                                                                                                                               | [ibelick/ui-skills](https://github.com/ibelick/ui-skills)                   | Compatible | UI polish and validation |
+| `expo-ui-swift-ui`, `expo-ui-jetpack-compose`, `expo-tailwind-setup`, `building-native-ui`, `expo-api-routes`, `expo-dev-client`, `expo-cicd-workflows`, `native-data-fetching`                                     | [expo/skills](https://github.com/expo/skills)                               | MIT        | Expo/React Native skills |
+| `swiftui-expert-skill`                                                                                                                                                                                              | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) | Compatible | SwiftUI development      |
+| `threejs-fundamentals`, `threejs-geometry`, `threejs-materials`, `threejs-lighting`, `threejs-textures`, `threejs-animation`, `threejs-loaders`, `threejs-shaders`, `threejs-postprocessing`, `threejs-interaction` | [CloudAI-X/threejs-skills](https://github.com/CloudAI-X/threejs-skills)     | Compatible | Three.js 3D graphics     |
+| `frontend-slides`                                                                                                                                                                                                   | [zarazhangrui](https://github.com/zarazhangrui/frontend-slides)             | Compatible | HTML presentations       |
 
 ### Automation & Integration
-| Skill | Source | License | Notes |
-|-------|--------|---------|-------|
-| `gmail-automation`, `google-calendar-automation`, `google-docs-automation`, `google-sheets-automation`, `google-drive-automation`, `google-slides-automation` | [sanjay3290/ai-skills](https://github.com/sanjay3290/ai-skills) | Compatible | Google Workspace integration |
-| `n8n-expression-syntax`, `n8n-mcp-tools-expert`, `n8n-workflow-patterns`, `n8n-validation-expert`, `n8n-node-configuration`, `n8n-code-javascript`, `n8n-code-python` | [czlonkowski/n8n-skills](https://github.com/czlonkowski/n8n-skills) | Compatible | n8n workflow automation |
-| `automate-whatsapp` | [gokapso/agent-skills](https://github.com/gokapso/agent-skills) | Compatible | WhatsApp automation |
-| `linear` | [wrsmith108/linear-claude-skill](https://github.com/wrsmith108/linear-claude-skill) | Compatible | Linear project management |
-| `rails-upgrade` | [robzolkos](https://github.com/robzolkos/skill-rails-upgrade) | Compatible | Rails upgrade assistant |
-| `vexor-cli` | [scarletkc/vexor](https://github.com/scarletkc/vexor) | Compatible | Semantic file discovery |
+
+| Skill                                                                                                                                                                 | Source                                                                              | License    | Notes                        |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------- | ---------------------------- |
+| `gmail-automation`, `google-calendar-automation`, `google-docs-automation`, `google-sheets-automation`, `google-drive-automation`, `google-slides-automation`         | [sanjay3290/ai-skills](https://github.com/sanjay3290/ai-skills)                     | Compatible | Google Workspace integration |
+| `n8n-expression-syntax`, `n8n-mcp-tools-expert`, `n8n-workflow-patterns`, `n8n-validation-expert`, `n8n-node-configuration`, `n8n-code-javascript`, `n8n-code-python` | [czlonkowski/n8n-skills](https://github.com/czlonkowski/n8n-skills)                 | Compatible | n8n workflow automation      |
+| `automate-whatsapp`                                                                                                                                                   | [gokapso/agent-skills](https://github.com/gokapso/agent-skills)                     | Compatible | WhatsApp automation          |
+| `linear`                                                                                                                                                              | [wrsmith108/linear-claude-skill](https://github.com/wrsmith108/linear-claude-skill) | Compatible | Linear project management    |
+| `rails-upgrade`                                                                                                                                                       | [robzolkos](https://github.com/robzolkos/skill-rails-upgrade)                       | Compatible | Rails upgrade assistant      |
+| `vexor-cli`                                                                                                                                                           | [scarletkc/vexor](https://github.com/scarletkc/vexor)                               | Compatible | Semantic file discovery      |
 
 ### Machine Learning & Data
-| Skill | Source | License | Notes |
-|-------|--------|---------|-------|
-| `hugging-face-datasets`, `hugging-face-evaluation`, `hugging-face-tool-builder` | [huggingface/skills](https://github.com/huggingface/skills) | Compatible | Hugging Face ecosystem extensions |
-| `numpy`, `pandas`, `scipy`, `matplotlib`, `scikit-learn`, `jupyter-workflow` | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | Compatible | Data science essentials |
-| `biopython`, `scanpy`, `uniprot-database`, `pubmed-database` | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | Compatible | Bioinformatics tools |
+
+| Skill                                                                           | Source                                                                                        | License    | Notes                             |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------- | --------------------------------- |
+| `hugging-face-datasets`, `hugging-face-evaluation`, `hugging-face-tool-builder` | [huggingface/skills](https://github.com/huggingface/skills)                                   | Compatible | Hugging Face ecosystem extensions |
+| `numpy`, `pandas`, `scipy`, `matplotlib`, `scikit-learn`, `jupyter-workflow`    | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | Compatible | Data science essentials           |
+| `biopython`, `scanpy`, `uniprot-database`, `pubmed-database`                    | [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills) | Compatible | Bioinformatics tools              |
 
 ### Security & Auditing
-| Skill | Source | License | Notes |
-|-------|--------|---------|-------|
-| `semgrep-rule-creator`, `semgrep-rule-variant-creator`, `static-analysis`, `variant-analysis` | [trailofbits/skills](https://github.com/trailofbits/skills) | Compatible | Code security analysis |
-| `golang-security-auditor`, `python-security-auditor`, `rust-security-auditor` | [trailofbits/skills](https://github.com/trailofbits/skills) | Compatible | Language-specific security |
-| `burpsuite-project-parser`, `agentic-actions-auditor`, `audit-context-building`, `proof-of-vulnerability`, `yara-authoring` | [trailofbits/skills](https://github.com/trailofbits/skills) | Compatible | Security testing tools |
+
+| Skill                                                                                                                       | Source                                                      | License    | Notes                      |
+| --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---------- | -------------------------- |
+| `semgrep-rule-creator`, `semgrep-rule-variant-creator`, `static-analysis`, `variant-analysis`                               | [trailofbits/skills](https://github.com/trailofbits/skills) | Compatible | Code security analysis     |
+| `golang-security-auditor`, `python-security-auditor`, `rust-security-auditor`                                               | [trailofbits/skills](https://github.com/trailofbits/skills) | Compatible | Language-specific security |
+| `burpsuite-project-parser`, `agentic-actions-auditor`, `audit-context-building`, `proof-of-vulnerability`, `yara-authoring` | [trailofbits/skills](https://github.com/trailofbits/skills) | Compatible | Security testing tools     |
 
 ### Context Engineering & AI
-| Skill | Source | License | Notes |
-|-------|--------|---------|-------|
+
+| Skill                                                                                                                                      | Source                                                                                   | License    | Notes                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- | ---------- | ---------------------------- |
 | `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `multi-agent-patterns`, `filesystem-context` | [muratcankoylan](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering) | Compatible | Context engineering patterns |
 
 ### Health & Wellness
-| Skill | Source | License | Notes |
-|-------|--------|---------|-------|
+
+| Skill                                                      | Source                                                                    | License    | Notes           |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------- | ---------- | --------------- |
 | `sleep-analyzer`, `nutrition-analyzer`, `fitness-analyzer` | [huifer/Claude-Ally-Health](https://github.com/huifer/Claude-Ally-Health) | Compatible | Health tracking |
 
 ### Quality & Verification
-| Skill | Source | License | Notes |
-|-------|--------|---------|-------|
+
+| Skill          | Source                                                              | License    | Notes                    |
+| -------------- | ------------------------------------------------------------------- | ---------- | ------------------------ |
 | `clarity-gate` | [frmoretto/clarity-gate](https://github.com/frmoretto/clarity-gate) | Compatible | RAG quality verification |
 
 **Total: 80+ new skills added**

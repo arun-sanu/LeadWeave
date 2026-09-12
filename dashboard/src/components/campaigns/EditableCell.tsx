@@ -10,8 +10,8 @@ export function EditableCell({ initialValue, onSave }: { initialValue: string; o
 
   if (!isEditing) {
     return (
-      <div 
-        onClick={() => setIsEditing(true)} 
+      <div
+        onClick={() => setIsEditing(true)}
         style={{ cursor: 'pointer', minHeight: '24px', display: 'flex', alignItems: 'center' }}
         title="Click to edit"
       >
@@ -45,4 +45,3 @@ export function EditableCell({ initialValue, onSave }: { initialValue: string; o
     />
   );
 }
-

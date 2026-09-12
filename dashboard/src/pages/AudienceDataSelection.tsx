@@ -8,9 +8,19 @@ export function AudienceDataSelection() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: '1.5rem' }}>
-      
       {/* Minimal Segmented Control */}
-      <div style={{ display: 'flex', gap: '0.25rem', background: 'rgba(255, 255, 255, 0.03)', padding: '0.25rem', borderRadius: '8px', alignSelf: 'flex-start', border: '1px solid var(--studio-border)', marginBottom: '0.5rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '0.25rem',
+          background: 'rgba(255, 255, 255, 0.03)',
+          padding: '0.25rem',
+          borderRadius: '8px',
+          alignSelf: 'flex-start',
+          border: '1px solid var(--studio-border)',
+          marginBottom: '0.5rem',
+        }}
+      >
         <button
           onClick={() => setSource('local')}
           style={{
@@ -25,7 +35,7 @@ export function AudienceDataSelection() {
             transition: 'background-color 150ms var(--ease-out), color 150ms var(--ease-out)',
             color: source === 'local' ? 'var(--success)' : 'var(--text-secondary)',
             fontWeight: source === 'local' ? 600 : 500,
-            fontSize: '0.8125rem'
+            fontSize: '0.8125rem',
           }}
         >
           <Database size={14} />
@@ -46,7 +56,7 @@ export function AudienceDataSelection() {
             transition: 'background-color 150ms var(--ease-out), color 150ms var(--ease-out)',
             color: source === 'google_sheets' ? 'var(--success)' : 'var(--text-secondary)',
             fontWeight: source === 'google_sheets' ? 600 : 500,
-            fontSize: '0.8125rem'
+            fontSize: '0.8125rem',
           }}
         >
           <TableProperties size={14} />

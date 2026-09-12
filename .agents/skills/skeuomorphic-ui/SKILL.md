@@ -6,11 +6,13 @@ description: Create skeuomorphic web UI surfaces with layered gradients, stacked
 # Skeuomorphic UI
 
 ## Use When
+
 - A card, button, switch, dial, input, toolbar, or control should feel tactile.
 - A flat surface needs physical depth without becoming glossy or cartoonish.
 - The design calls for pressed, carved, raised, soft-plastic, soft-metal, or premium hardware-like UI.
 
 ## Surface Recipe
+
 1. Start with a rounded shape and a soft vertical gradient: lighter top, darker bottom.
 2. Add a 1px gradient-border wrapper to simulate a reflective edge.
 3. Stack outer shadows for elevation and inset shadows for carved depth.
@@ -20,6 +22,7 @@ description: Create skeuomorphic web UI surfaces with layered gradients, stacked
 7. Keep transitions smooth and short: `160ms` to `240ms`.
 
 ## Base Tokens
+
 Tune these per brand and theme.
 
 ```css
@@ -36,6 +39,7 @@ Tune these per brand and theme.
 ```
 
 ## Raised Surface
+
 Use for cards, panels, primary buttons, tabs, and control housings.
 
 ```css
@@ -58,7 +62,7 @@ Use for cards, panels, primary buttons, tabs, and control housings.
 }
 
 .sk-surface::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 1px 1px auto;
   height: 35%;
@@ -69,6 +73,7 @@ Use for cards, panels, primary buttons, tabs, and control housings.
 ```
 
 ## Pressed Surface
+
 Use for active buttons, toggled controls, selected tabs, and inset wells.
 
 ```css
@@ -80,11 +85,12 @@ Use for active buttons, toggled controls, selected tabs, and inset wells.
   box-shadow:
     inset 0 4px 10px rgba(31, 41, 55, 0.22),
     inset 0 -1px 0 rgba(255, 255, 255, 0.72),
-    0 4px 10px rgba(31, 41, 55, 0.10);
+    0 4px 10px rgba(31, 41, 55, 0.1);
 }
 ```
 
 ## Embossed Text And Icons
+
 Use for labels inside tactile controls. Keep it subtle.
 
 ```css
@@ -96,13 +102,12 @@ Use for labels inside tactile controls. Keep it subtle.
 }
 
 .sk-icon {
-  filter:
-    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.78))
-    drop-shadow(0 -1px 0 rgba(31, 41, 55, 0.14));
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.78)) drop-shadow(0 -1px 0 rgba(31, 41, 55, 0.14));
 }
 ```
 
 ## Micro Texture
+
 Use micro texture at low opacity. It should be felt, not noticed.
 
 ```css
@@ -110,11 +115,14 @@ Use micro texture at low opacity. It should be felt, not noticed.
   background-image:
     radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.34) 0 1px, transparent 1.5px),
     radial-gradient(circle at 70% 65%, rgba(31, 41, 55, 0.08) 0 1px, transparent 1.5px);
-  background-size: 18px 18px, 22px 22px;
+  background-size:
+    18px 18px,
+    22px 22px;
 }
 ```
 
 ## Taste Rules
+
 - Use one physical material per component: soft plastic, enamel, ceramic, metal, or rubber.
 - Keep depth directional: light from top, shadow below.
 - Avoid pure black shadows; use tinted grays or brand-tinted darks.
@@ -123,6 +131,7 @@ Use micro texture at low opacity. It should be felt, not noticed.
 - Reduce texture on small controls so the UI stays crisp.
 
 ## Quick Checks
+
 - Raised state has a brighter top edge and darker lower edge.
 - Pressed state reverses depth with inset shadows.
 - Rounded corners stay smooth at the actual rendered size.

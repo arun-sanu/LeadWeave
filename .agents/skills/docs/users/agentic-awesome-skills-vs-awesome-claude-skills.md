@@ -11,13 +11,13 @@ For clarity: the repository many people still refer to as `awesome-claude-skills
 
 ## At-a-glance comparison
 
-| Criteria | Agentic Awesome Skills | VoltAgent Awesome Agent Skills |
-| --- | --- | --- |
-| Best for | Complete local catalog access, agent-owned selection, durable desired state, and plan preview | Curated discovery and official/community highlights |
-| Product shape | AAS Core with local MCP, CLI, stack/plan artifacts, Workbench review, and supporting catalog/distribution | Curated awesome-list style collection |
-| Supported tools | Claude Code, Cursor, Codex CLI, Gemini CLI, Antigravity, Kiro, OpenCode, Copilot, more | Claude Code, Codex, Antigravity, Gemini CLI, Cursor, Copilot, OpenCode, Windsurf, more |
-| Onboarding | Installation docs, bundles, workflows, getting-started guides | Curated README and categorized references |
-| Good fit when | You want an agent to inspect a project and choose exact IDs from the full catalog | You want a smaller list to browse and evaluate manually |
+| Criteria        | Agentic Awesome Skills                                                                                    | VoltAgent Awesome Agent Skills                                                         |
+| --------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Best for        | Complete local catalog access, agent-owned selection, durable desired state, and plan preview             | Curated discovery and official/community highlights                                    |
+| Product shape   | AAS Core with local MCP, CLI, stack/plan artifacts, Workbench review, and supporting catalog/distribution | Curated awesome-list style collection                                                  |
+| Supported tools | Claude Code, Cursor, Codex CLI, Gemini CLI, Antigravity, Kiro, OpenCode, Copilot, more                    | Claude Code, Codex, Antigravity, Gemini CLI, Cursor, Copilot, OpenCode, Windsurf, more |
+| Onboarding      | Installation docs, bundles, workflows, getting-started guides                                             | Curated README and categorized references                                              |
+| Good fit when   | You want an agent to inspect a project and choose exact IDs from the full catalog                         | You want a smaller list to browse and evaluate manually                                |
 
 ## Why choose Agentic Awesome Skills
 

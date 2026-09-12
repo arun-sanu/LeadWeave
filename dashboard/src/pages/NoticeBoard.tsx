@@ -42,13 +42,15 @@ export function NoticeBoard() {
   const [tasks, setTasks] = useState<NoticeTask[]>([]);
 
   useEffect(() => {
-    idbGet<NoticeTask[]>(STORAGE_KEY).then(stored => {
-      if (stored && Array.isArray(stored)) {
-        const cleanTasks = stored.filter(t => t.id !== 'task_1' && t.id !== 'task_2');
-        setTasks(cleanTasks);
-        idbSet(STORAGE_KEY, cleanTasks).catch(() => {});
-      }
-    }).catch(() => {});
+    idbGet<NoticeTask[]>(STORAGE_KEY)
+      .then(stored => {
+        if (stored && Array.isArray(stored)) {
+          const cleanTasks = stored.filter(t => t.id !== 'task_1' && t.id !== 'task_2');
+          setTasks(cleanTasks);
+          idbSet(STORAGE_KEY, cleanTasks).catch(() => {});
+        }
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -76,8 +78,18 @@ export function NoticeBoard() {
   const currentMonth = currentDate.getMonth(); // 0-indexed
 
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   const calendarDays = useMemo(() => {
@@ -125,13 +137,15 @@ export function NoticeBoard() {
 
   // Filtered Tasks
   const filteredTasks = useMemo(() => {
-    return tasks.filter(t => {
-      if (filterType === 'today') return t.dueDate === todayStr;
-      if (filterType === 'upcoming') return t.dueDate > todayStr && !t.completed;
-      if (filterType === 'overdue') return t.dueDate < todayStr && !t.completed;
-      if (filterType === 'completed') return t.completed;
-      return true;
-    }).sort((a, b) => (a.dueDate + (a.dueTime || '')).localeCompare(b.dueDate + (b.dueTime || '')));
+    return tasks
+      .filter(t => {
+        if (filterType === 'today') return t.dueDate === todayStr;
+        if (filterType === 'upcoming') return t.dueDate > todayStr && !t.completed;
+        if (filterType === 'overdue') return t.dueDate < todayStr && !t.completed;
+        if (filterType === 'completed') return t.completed;
+        return true;
+      })
+      .sort((a, b) => (a.dueDate + (a.dueTime || '')).localeCompare(b.dueDate + (b.dueTime || '')));
   }, [tasks, filterType, todayStr]);
 
   const tasksByDate = useMemo(() => {
@@ -152,9 +166,7 @@ export function NoticeBoard() {
   };
 
   const handleToggleComplete = (id: string) => {
-    setTasks(prev =>
-      prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t))
-    );
+    setTasks(prev => prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)));
   };
 
   const handleDeleteTask = (id: string) => {
@@ -247,14 +259,26 @@ export function NoticeBoard() {
           <div className="nb-card-header">
             <h2 className="nb-card-title">
               <CalendarIcon size={18} style={{ color: 'var(--primary, #25d366)' }} />
-              <span>{monthNames[currentMonth]} {currentYear}</span>
+              <span>
+                {monthNames[currentMonth]} {currentYear}
+              </span>
             </h2>
 
             <div className="calendar-controls-bar">
-              <button className="cal-control-btn cal-nav-btn" onClick={handlePrevMonth} title="Previous Month" aria-label="Previous Month">
+              <button
+                className="cal-control-btn cal-nav-btn"
+                onClick={handlePrevMonth}
+                title="Previous Month"
+                aria-label="Previous Month"
+              >
                 <ChevronLeft size={16} strokeWidth={2.2} />
               </button>
-              <button className="cal-control-btn cal-nav-btn" onClick={handleNextMonth} title="Next Month" aria-label="Next Month">
+              <button
+                className="cal-control-btn cal-nav-btn"
+                onClick={handleNextMonth}
+                title="Next Month"
+                aria-label="Next Month"
+              >
                 <ChevronRight size={16} strokeWidth={2.2} />
               </button>
             </div>
@@ -262,7 +286,9 @@ export function NoticeBoard() {
 
           <div className="calendar-month-grid">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-              <div key={d} className="calendar-day-header">{d}</div>
+              <div key={d} className="calendar-day-header">
+                {d}
+              </div>
             ))}
 
             {calendarDays.map((day, idx) => {
@@ -292,7 +318,8 @@ export function NoticeBoard() {
                   <div className="cell-tasks-indicators">
                     {dayTasks.slice(0, 2).map(t => (
                       <div key={t.id} className={`cell-task-chip ${t.type}`} title={t.title}>
-                        {t.dueTime ? `${t.dueTime} ` : ''}{t.contactName || t.title}
+                        {t.dueTime ? `${t.dueTime} ` : ''}
+                        {t.contactName || t.title}
                       </div>
                     ))}
                     {dayTasks.length > 2 && (
@@ -396,7 +423,11 @@ export function NoticeBoard() {
                           padding: '2px 6px',
                           borderRadius: 4,
                           textTransform: 'uppercase',
-                          background: isOverdue ? 'rgba(239, 68, 68, 0.2)' : isToday ? 'rgba(37, 211, 102, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                          background: isOverdue
+                            ? 'rgba(239, 68, 68, 0.2)'
+                            : isToday
+                              ? 'rgba(37, 211, 102, 0.2)'
+                              : 'rgba(255, 255, 255, 0.08)',
                           color: isOverdue ? '#ef4444' : isToday ? 'var(--primary, #25d366)' : '#94a3b8',
                         }}
                       >
@@ -440,10 +471,7 @@ export function NoticeBoard() {
                               <MessageSquare size={13} />
                               <span>WhatsApp</span>
                             </a>
-                            <a
-                              href={`tel:${task.contactPhone}`}
-                              className="task-btn call"
-                            >
+                            <a href={`tel:${task.contactPhone}`} className="task-btn call">
                               <Phone size={13} />
                               <span>Call</span>
                             </a>
@@ -469,14 +497,21 @@ export function NoticeBoard() {
 
       {/* New Task / Reminder Modal */}
       {isModalOpen && (
-        <Modal
-          open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          title="Schedule Callback & Task Reminder"
-        >
-          <form onSubmit={handleCreateTask} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0.5rem 0' }}>
+        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} title="Schedule Callback & Task Reminder">
+          <form
+            onSubmit={handleCreateTask}
+            style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0.5rem 0' }}
+          >
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc', marginBottom: '0.35rem' }}>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  color: '#f8fafc',
+                  marginBottom: '0.35rem',
+                }}
+              >
                 Task / Reminder Title *
               </label>
               <input
@@ -493,7 +528,15 @@ export function NoticeBoard() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc', marginBottom: '0.35rem' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: '#f8fafc',
+                    marginBottom: '0.35rem',
+                  }}
+                >
                   Contact Name
                 </label>
                 <input
@@ -507,7 +550,15 @@ export function NoticeBoard() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc', marginBottom: '0.35rem' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: '#f8fafc',
+                    marginBottom: '0.35rem',
+                  }}
+                >
                   Phone / WhatsApp Number
                 </label>
                 <input
@@ -523,7 +574,15 @@ export function NoticeBoard() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc', marginBottom: '0.35rem' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: '#f8fafc',
+                    marginBottom: '0.35rem',
+                  }}
+                >
                   Due Date *
                 </label>
                 <input
@@ -538,7 +597,15 @@ export function NoticeBoard() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc', marginBottom: '0.35rem' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: '#f8fafc',
+                    marginBottom: '0.35rem',
+                  }}
+                >
                   Time
                 </label>
                 <input
@@ -554,7 +621,15 @@ export function NoticeBoard() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc', marginBottom: '0.35rem' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: '#f8fafc',
+                    marginBottom: '0.35rem',
+                  }}
+                >
                   Type
                 </label>
                 <select
@@ -572,7 +647,15 @@ export function NoticeBoard() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc', marginBottom: '0.35rem' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: '#f8fafc',
+                    marginBottom: '0.35rem',
+                  }}
+                >
                   Priority
                 </label>
                 <select
@@ -591,7 +674,15 @@ export function NoticeBoard() {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc', marginBottom: '0.35rem' }}>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  color: '#f8fafc',
+                  marginBottom: '0.35rem',
+                }}
+              >
                 Notes / Conversation Context
               </label>
               <textarea
@@ -605,11 +696,7 @@ export function NoticeBoard() {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem' }}>
-              <button
-                type="button"
-                className="btn-tool"
-                onClick={() => setIsModalOpen(false)}
-              >
+              <button type="button" className="btn-tool" onClick={() => setIsModalOpen(false)}>
                 Cancel
               </button>
               <button

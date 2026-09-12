@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Database,
-  Users,
-  Building2,
-  Smartphone,
-  CreditCard,
-  Activity,
-  ShieldCheck,
-  Zap,
-} from 'lucide-react';
+import { Database, Users, Building2, Smartphone, CreditCard, Activity, ShieldCheck, Zap } from 'lucide-react';
 import { saasStore, type SaaSCompany } from '../services/saasStore';
 import { useSessionsQuery, useSessionStatsQuery } from '../hooks/queries';
 import { PageHeader } from '../components/PageHeader';
@@ -87,8 +78,6 @@ export function ManagementDashboard() {
     },
   ];
 
-
-
   return (
     <div className="dashboard">
       <PageHeader
@@ -131,8 +120,6 @@ export function ManagementDashboard() {
           );
         })}
       </div>
-
-
 
       {/* System Infrastructure Quick Status */}
       <div
@@ -200,4 +187,3 @@ export function ManagementDashboard() {
     </div>
   );
 }
-

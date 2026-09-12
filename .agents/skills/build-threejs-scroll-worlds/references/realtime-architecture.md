@@ -25,18 +25,18 @@ Keep one authoritative configuration:
 
 ```js
 const worldSpec = {
-  units: "meters",
-  initialChapter: "threshold",
+  units: 'meters',
+  initialChapter: 'threshold',
   quality: {
-    mobile: { dpr: 1.35, shadows: 1024, particles: 0.45, post: "lite" },
-    desktop: { dpr: 1.75, shadows: 2048, particles: 1, post: "full" }
+    mobile: { dpr: 1.35, shadows: 1024, particles: 0.45, post: 'lite' },
+    desktop: { dpr: 1.75, shadows: 2048, particles: 1, post: 'full' },
   },
   chapters,
   groups: {
-    critical: ["shell", "threshold"],
-    approach: ["path", "garden"],
-    deep: ["archive", "reactor"]
-  }
+    critical: ['shell', 'threshold'],
+    approach: ['path', 'garden'],
+    deep: ['archive', 'reactor'],
+  },
 };
 ```
 
@@ -62,22 +62,22 @@ Use named groups that match production responsibility:
 
 ```js
 const worldRoot = new THREE.Group();
-worldRoot.name = "world";
+worldRoot.name = 'world';
 
 const environment = new THREE.Group();
-environment.name = "environment";
+environment.name = 'environment';
 
 const landmarks = new THREE.Group();
-landmarks.name = "landmarks";
+landmarks.name = 'landmarks';
 
 const chapterSets = new THREE.Group();
-chapterSets.name = "chapter-sets";
+chapterSets.name = 'chapter-sets';
 
 const interactives = new THREE.Group();
-interactives.name = "interactives";
+interactives.name = 'interactives';
 
 const atmosphere = new THREE.Group();
-atmosphere.name = "atmosphere";
+atmosphere.name = 'atmosphere';
 
 worldRoot.add(environment, landmarks, chapterSets, interactives, atmosphere);
 scene.add(worldRoot);
@@ -86,7 +86,7 @@ scene.add(worldRoot);
 Inside each loaded model, normalize useful names once:
 
 ```js
-gltf.scene.traverse((node) => {
+gltf.scene.traverse(node => {
   node.frustumCulled = true;
   if (node.isMesh) {
     node.castShadow = shouldCast(node.name);
@@ -107,7 +107,7 @@ const renderer = new THREE.WebGLRenderer({
   canvas,
   antialias: quality.antialias,
   alpha: false,
-  powerPreference: "high-performance"
+  powerPreference: 'high-performance',
 });
 
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -148,16 +148,11 @@ If the Three.js version predates `colorSpace`, use the equivalent `encoding` API
 Prefer glTF/GLB with Meshopt or Draco where it materially reduces transfer, and KTX2/Basis for GPU-ready textures.
 
 ```js
-const ktx2 = new KTX2Loader()
-  .setTranscoderPath("/basis/")
-  .detectSupport(renderer);
+const ktx2 = new KTX2Loader().setTranscoderPath('/basis/').detectSupport(renderer);
 
-const draco = new DRACOLoader().setDecoderPath("/draco/");
+const draco = new DRACOLoader().setDecoderPath('/draco/');
 
-const loader = new GLTFLoader()
-  .setKTX2Loader(ktx2)
-  .setDRACOLoader(draco)
-  .setMeshoptDecoder(MeshoptDecoder);
+const loader = new GLTFLoader().setKTX2Loader(ktx2).setDRACOLoader(draco).setMeshoptDecoder(MeshoptDecoder);
 ```
 
 Pin loader versions to the Three.js runtime version. A mismatched loader and core build can fail only on compressed assets, making the problem look like corrupted media.
@@ -169,7 +164,7 @@ class AssetGroup {
   constructor(id, urls) {
     this.id = id;
     this.urls = urls;
-    this.state = "idle";
+    this.state = 'idle';
     this.assets = new Map();
   }
 }
@@ -183,7 +178,7 @@ Decode and compile before reveal:
 await loadGroup(group);
 scene.add(group.root);
 await renderer.compileAsync(scene, camera);
-group.state = "ready";
+group.state = 'ready';
 ```
 
 Where `compileAsync` is unavailable, render a hidden or occluded warm-up frame. Avoid first-use shader compilation during a visible scroll seam.
@@ -244,15 +239,15 @@ Do not add pointer offsets directly to waypoint data.
 const positionCurve = new THREE.CatmullRomCurve3(
   chapters.map(c => new THREE.Vector3(...c.camera.position)),
   false,
-  "centripetal",
-  0.5
+  'centripetal',
+  0.5,
 );
 
 const targetCurve = new THREE.CatmullRomCurve3(
   chapters.map(c => new THREE.Vector3(...c.camera.target)),
   false,
-  "centripetal",
-  0.5
+  'centripetal',
+  0.5,
 );
 ```
 
@@ -286,13 +281,19 @@ Use named state channels:
 
 ```js
 const channels = {
-  key: value => { key.intensity = value; },
-  fog: value => { scene.fog.density = value; },
+  key: value => {
+    key.intensity = value;
+  },
+  fog: value => {
+    scene.fog.density = value;
+  },
   core: value => {
     coreMaterial.emissiveIntensity = value;
     coreGlow.material.opacity = smoothstep(0.2, 1, value);
   },
-  foliage: value => { foliageWindTarget = value; }
+  foliage: value => {
+    foliageWindTarget = value;
+  },
 };
 ```
 
@@ -367,8 +368,8 @@ function setInteractionState(id, next, source) {
   const item = registry.get(id);
   item.state = next;
   item.apply3D(next);
-  item.dom?.toggleAttribute("data-active", next === "active");
-  item.dom?.setAttribute("aria-expanded", String(next === "active"));
+  item.dom?.toggleAttribute('data-active', next === 'active');
+  item.dom?.setAttribute('aria-expanded', String(next === 'active'));
 }
 ```
 
@@ -420,9 +421,9 @@ Choose a tier from hardware and measured frame time, then allow conservative run
 
 ```js
 const tiers = {
-  high:   { dpr: 1.75, shadows: 2048, particles: 1.0, reflections: true, post: "full" },
-  medium: { dpr: 1.35, shadows: 1024, particles: 0.55, reflections: false, post: "lite" },
-  low:    { dpr: 1.0,  shadows: 0,    particles: 0.2, reflections: false, post: "grade" }
+  high: { dpr: 1.75, shadows: 2048, particles: 1.0, reflections: true, post: 'full' },
+  medium: { dpr: 1.35, shadows: 1024, particles: 0.55, reflections: false, post: 'lite' },
+  low: { dpr: 1.0, shadows: 0, particles: 0.2, reflections: false, post: 'grade' },
 };
 ```
 
@@ -435,7 +436,7 @@ Use the cheapest high-impact lever first: DPR, full-resolution post passes, refl
 Pause and resume cleanly:
 
 ```js
-document.addEventListener("visibilitychange", () => {
+document.addEventListener('visibilitychange', () => {
   running = !document.hidden;
   if (running) lastTime = performance.now();
 });
@@ -444,10 +445,10 @@ document.addEventListener("visibilitychange", () => {
 Handle WebGL context loss:
 
 ```js
-canvas.addEventListener("webglcontextlost", (event) => {
+canvas.addEventListener('webglcontextlost', event => {
   event.preventDefault();
   running = false;
-  showFallback("The 3D world paused. Restore or continue with the story below.");
+  showFallback('The 3D world paused. Restore or continue with the story below.');
 });
 ```
 

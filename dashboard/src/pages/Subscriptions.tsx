@@ -5,7 +5,7 @@ import './Subscriptions.css';
 export function Subscriptions() {
   const currentCompany = saasStore.getCompanies()[0]; // Defaulting to the first company for the dashboard
   const allPlans = saasStore.getPlans();
-  const currentPlan = allPlans.find((p) => p.name === currentCompany?.plan) || allPlans[0];
+  const currentPlan = allPlans.find(p => p.name === currentCompany?.plan) || allPlans[0];
 
   if (!currentCompany) {
     return <div className="subscriptions-page">No active agreement found.</div>;
@@ -32,7 +32,7 @@ export function Subscriptions() {
             {currentCompany.status.toUpperCase()}
           </span>
         </div>
-        
+
         <div className="agreement-details">
           <div className="detail-item">
             <span className="detail-label">Active Plan</span>
@@ -54,7 +54,7 @@ export function Subscriptions() {
               </span>
             </div>
           </div>
-          
+
           <div className="usage-stat-box">
             <span className="stat-icon">📱</span>
             <div className="stat-content">

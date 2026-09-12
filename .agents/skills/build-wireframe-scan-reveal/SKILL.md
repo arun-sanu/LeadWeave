@@ -52,15 +52,15 @@ Use additive blending, `transparent: true`, `depthWrite: false`, and a pale vers
 
 Use the landed timing as a starting point:
 
-| parameter | default | failure prevented |
-| --- | ---: | --- |
-| duration | 3.4 s | a fast reveal reads as a flash |
-| radius easing | `1 - (1 - t)^1.35` | linear travel stalls visually near the far corner |
-| solid lag | 520 world units | zero lag makes wire and fill arrive as one wipe |
-| rim width | 135 units | a narrow rim aliases; a wide rim becomes fog |
-| wire trail | 950 units | no trail hides topology before it can be read |
-| wire fade | `smoothstep(.72, 1, t)` | persistent cage competes with the finished surface |
-| radius reach | scene diagonal × 1.3 + 900 | the far corner remains clipped after completion |
+| parameter     |                    default | failure prevented                                  |
+| ------------- | -------------------------: | -------------------------------------------------- |
+| duration      |                      3.4 s | a fast reveal reads as a flash                     |
+| radius easing |         `1 - (1 - t)^1.35` | linear travel stalls visually near the far corner  |
+| solid lag     |            520 world units | zero lag makes wire and fill arrive as one wipe    |
+| rim width     |                  135 units | a narrow rim aliases; a wide rim becomes fog       |
+| wire trail    |                  950 units | no trail hides topology before it can be read      |
+| wire fade     |    `smoothstep(.72, 1, t)` | persistent cage competes with the finished surface |
+| radius reach  | scene diagonal × 1.3 + 900 | the far corner remains clipped after completion    |
 
 Snap the cage on over the first 6% of the timeline, then fade it during the final 28%:
 

@@ -15,15 +15,24 @@ export function BroadcastSettings() {
   const {
     campaignName,
     messageTemplate,
-    selectedSessions, setSelectedSessions,
-    enforceSafeTimezone, setEnforceSafeTimezone,
-    minDelay, setMinDelay,
-    maxDelay, setMaxDelay,
-    simulateTyping, setSimulateTyping,
-    scheduleType, setScheduleType,
-    scheduleDateTime, setScheduleDateTime,
-    dispatchMode, setDispatchMode,
-    isLaunching, setIsLaunching
+    selectedSessions,
+    setSelectedSessions,
+    enforceSafeTimezone,
+    setEnforceSafeTimezone,
+    minDelay,
+    setMinDelay,
+    maxDelay,
+    setMaxDelay,
+    simulateTyping,
+    setSimulateTyping,
+    scheduleType,
+    setScheduleType,
+    scheduleDateTime,
+    setScheduleDateTime,
+    dispatchMode,
+    setDispatchMode,
+    isLaunching,
+    setIsLaunching,
   } = useCampaignContext();
 
   const { data: allSessions = [] } = useSessionsQuery();
@@ -59,8 +68,6 @@ export function BroadcastSettings() {
     return { safeCount, outsideCount };
   }, [rows]);
 
-
-
   const handleLaunchCampaign = async () => {
     if (!campaignName.trim()) {
       error('Campaign name is required.');
@@ -87,7 +94,7 @@ export function BroadcastSettings() {
 
     try {
       const validRows = rows.filter(r => validatePhone(r.phone).isValid);
-      
+
       const payloadLeads = validRows.map(row => {
         const variables: Record<string, string> = {};
         columns.forEach(col => {
@@ -106,7 +113,8 @@ export function BroadcastSettings() {
         name: campaignName.trim(),
         sessionIds: selectedSessions,
         template: messageTemplate,
-        scheduledAt: scheduleType === 'later' && scheduleDateTime ? new Date(scheduleDateTime).toISOString() : undefined,
+        scheduledAt:
+          scheduleType === 'later' && scheduleDateTime ? new Date(scheduleDateTime).toISOString() : undefined,
         pacing: {
           minDelayMs: minDelay * 1000,
           maxDelayMs: maxDelay * 1000,
@@ -120,10 +128,9 @@ export function BroadcastSettings() {
 
       const res = await campaignApi.create(reqBody);
       success(`Successfully created campaign "${res.name}" with ${payloadLeads.length} recipients!`);
-      
+
       // Redirect to analytics view for this campaign
       navigate('/campaigns');
-
     } catch (err: unknown) {
       const errorMsg =
         (err as { response?: { data?: { message?: string } }; message?: string })?.response?.data?.message ||
@@ -134,7 +141,6 @@ export function BroadcastSettings() {
       setIsLaunching(false);
     }
   };
-
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -151,15 +157,37 @@ export function BroadcastSettings() {
             </p>
           </div>
 
-          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--primary)', background: 'var(--primary-soft)', padding: '0.25rem 0.6rem', borderRadius: 12 }}>
+          <span
+            style={{
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              color: 'var(--primary)',
+              background: 'var(--primary-soft)',
+              padding: '0.25rem 0.6rem',
+              borderRadius: 12,
+            }}
+          >
             {selectedSessions.length} Active Sender{selectedSessions.length !== 1 ? 's' : ''}
           </span>
         </div>
 
         {readySessions.length === 0 ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 8, color: '#f87171' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              padding: '1rem',
+              background: 'rgba(239,68,68,0.1)',
+              border: '1px solid rgba(239,68,68,0.2)',
+              borderRadius: 8,
+              color: '#f87171',
+            }}
+          >
             <AlertCircle size={20} />
-            <span style={{ fontSize: '0.875rem' }}>No ready WhatsApp sessions connected. Go to the <strong>Sessions</strong> page to connect a session.</span>
+            <span style={{ fontSize: '0.875rem' }}>
+              No ready WhatsApp sessions connected. Go to the <strong>Sessions</strong> page to connect a session.
+            </span>
           </div>
         ) : (
           <div className="session-card-grid">
@@ -217,7 +245,15 @@ export function BroadcastSettings() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginBottom: '0.4rem', color: '#f8fafc' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: '0.8125rem',
+                  marginBottom: '0.4rem',
+                  color: '#f8fafc',
+                }}
+              >
                 <span>Min Delay Interval</span>
                 <strong>{minDelay} seconds</strong>
               </div>
@@ -233,7 +269,15 @@ export function BroadcastSettings() {
             </div>
 
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginBottom: '0.4rem', color: '#f8fafc' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: '0.8125rem',
+                  marginBottom: '0.4rem',
+                  color: '#f8fafc',
+                }}
+              >
                 <span>Max Delay Interval</span>
                 <strong>{maxDelay} seconds</strong>
               </div>
@@ -249,7 +293,16 @@ export function BroadcastSettings() {
             </div>
           </div>
 
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8125rem', color: '#94a3b8', cursor: 'pointer' }}>
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.6rem',
+              fontSize: '0.8125rem',
+              color: '#94a3b8',
+              cursor: 'pointer',
+            }}
+          >
             <input
               type="checkbox"
               checked={simulateTyping}
@@ -259,7 +312,17 @@ export function BroadcastSettings() {
             <span>Simulate human typing indicator (2–4 seconds) prior to sending each message</span>
           </label>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem', background: '#0f172a', borderRadius: 8, border: '1px solid var(--studio-border)' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0.75rem',
+              background: '#0f172a',
+              borderRadius: 8,
+              border: '1px solid var(--studio-border)',
+            }}
+          >
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span style={{ fontWeight: 600, fontSize: '1rem' }}>
                 {scheduleType === 'now' ? 'Save & Launch Campaign' : 'Save & Schedule Campaign'}
@@ -272,18 +335,30 @@ export function BroadcastSettings() {
 
           {/* Safe Timezone Guard Toggle */}
           <div style={{ borderTop: '1px solid var(--studio-border)', paddingTop: '1rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8125rem', color: '#f8fafc', cursor: 'pointer' }}>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                fontSize: '0.8125rem',
+                color: '#f8fafc',
+                cursor: 'pointer',
+              }}
+            >
               <input
                 type="checkbox"
                 checked={enforceSafeTimezone}
                 onChange={e => setEnforceSafeTimezone(e.target.checked)}
                 style={{ accentColor: 'var(--primary)' }}
               />
-              <span><strong>Safe Timezone Guard:</strong> Restrict dispatch to 8:00 AM – 8:00 PM recipient local time</span>
+              <span>
+                <strong>Safe Timezone Guard:</strong> Restrict dispatch to 8:00 AM – 8:00 PM recipient local time
+              </span>
             </label>
             {enforceSafeTimezone && (
               <p style={{ fontSize: '0.75rem', color: '#64748b', margin: '0.35rem 0 0 1.5rem' }}>
-                ✅ {timezoneStats.safeCount} contacts in daytime window | ⏸️ {timezoneStats.outsideCount} outside window (queued for later)
+                ✅ {timezoneStats.safeCount} contacts in daytime window | ⏸️ {timezoneStats.outsideCount} outside window
+                (queued for later)
               </p>
             )}
           </div>
@@ -315,7 +390,8 @@ export function BroadcastSettings() {
               <strong style={{ fontSize: '0.875rem', color: '#f8fafc' }}>Automated Background Dispatch</strong>
             </div>
             <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0, lineHeight: 1.4 }}>
-              Autonomous paced auto-loop. Automatically iterates through spreadsheet leads with human-mimicking Gaussian delays ({minDelay}–{maxDelay}s), typing presence, and natural batch breathers.
+              Autonomous paced auto-loop. Automatically iterates through spreadsheet leads with human-mimicking Gaussian
+              delays ({minDelay}–{maxDelay}s), typing presence, and natural batch breathers.
             </p>
           </div>
 
@@ -329,7 +405,8 @@ export function BroadcastSettings() {
               <strong style={{ fontSize: '0.875rem', color: '#f8fafc' }}>Manual 1-by-1 Spreadsheet Send</strong>
             </div>
             <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0, lineHeight: 1.4 }}>
-              Interactive spreadsheet CRM control. Review each lead and dispatch messages one-by-one by clicking "Send" on any row or using the "Send Next" step button.
+              Interactive spreadsheet CRM control. Review each lead and dispatch messages one-by-one by clicking "Send"
+              on any row or using the "Send Next" step button.
             </p>
           </div>
         </div>
@@ -343,9 +420,7 @@ export function BroadcastSettings() {
               <Send size={20} className="text-primary" />
               <span>Dispatch Schedule & Execution</span>
             </h2>
-            <p className="studio-card-subtitle">
-              Choose immediate dispatch or schedule for a future date/time.
-            </p>
+            <p className="studio-card-subtitle">Choose immediate dispatch or schedule for a future date/time.</p>
           </div>
         </div>
 
@@ -377,7 +452,13 @@ export function BroadcastSettings() {
               aria-label="Schedule Broadcast Date and Time"
               value={scheduleDateTime}
               onChange={e => setScheduleDateTime(e.target.value)}
-              style={{ background: '#0f172a', color: '#f8fafc', border: '1px solid var(--studio-border)', borderRadius: 8, padding: '0.6rem' }}
+              style={{
+                background: '#0f172a',
+                color: '#f8fafc',
+                border: '1px solid var(--studio-border)',
+                borderRadius: 8,
+                padding: '0.6rem',
+              }}
             />
           )}
 
@@ -400,8 +481,8 @@ export function BroadcastSettings() {
                   {dispatchMode === 'manual'
                     ? `Save & Open Spreadsheet CRM (Manual 1-by-1 Mode · ${validContacts} Contacts)`
                     : scheduleType === 'now'
-                    ? `Save & Launch Automated Campaign (${validContacts} Contacts, ${selectedSessions.length} Sender${selectedSessions.length !== 1 ? 's' : ''})`
-                    : 'Save & Schedule Campaign'}
+                      ? `Save & Launch Automated Campaign (${validContacts} Contacts, ${selectedSessions.length} Sender${selectedSessions.length !== 1 ? 's' : ''})`
+                      : 'Save & Schedule Campaign'}
                 </span>
               </>
             )}

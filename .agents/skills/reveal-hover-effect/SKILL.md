@@ -134,9 +134,9 @@ Run the animation loop only while values are changing. Convert `clientX` and `cl
 
 ```js
 function initRevealHover(element) {
-  const overlay = element.querySelector(".reveal-hover__image--overlay");
-  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const overlay = element.querySelector('.reveal-hover__image--overlay');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   if (!overlay || !finePointer.matches) return () => {};
 
@@ -181,9 +181,9 @@ function initRevealHover(element) {
     state.y += (state.targetY - state.y) * positionEase;
     state.radius += (state.targetRadius - state.radius) * radiusEase;
 
-    element.style.setProperty("--reveal-x", `${state.x.toFixed(2)}px`);
-    element.style.setProperty("--reveal-y", `${state.y.toFixed(2)}px`);
-    element.style.setProperty("--reveal-radius", `${state.radius.toFixed(2)}px`);
+    element.style.setProperty('--reveal-x', `${state.x.toFixed(2)}px`);
+    element.style.setProperty('--reveal-y', `${state.y.toFixed(2)}px`);
+    element.style.setProperty('--reveal-radius', `${state.radius.toFixed(2)}px`);
 
     const unsettled =
       Math.abs(state.targetX - state.x) > 0.1 ||
@@ -193,7 +193,7 @@ function initRevealHover(element) {
     if (unsettled) schedule();
   };
 
-  const onPointerEnter = (event) => {
+  const onPointerEnter = event => {
     state.inside = true;
     updateTarget(event.clientX, event.clientY);
 
@@ -206,7 +206,7 @@ function initRevealHover(element) {
     schedule();
   };
 
-  const onPointerMove = (event) => {
+  const onPointerMove = event => {
     updateTarget(event.clientX, event.clientY);
 
     // A page can load with the pointer already over this element, so the
@@ -238,12 +238,12 @@ function initRevealHover(element) {
     schedule();
   };
 
-  element.addEventListener("pointerenter", onPointerEnter);
-  element.addEventListener("pointermove", onPointerMove);
-  element.addEventListener("pointerleave", hideReveal);
-  element.addEventListener("pointercancel", hideReveal);
-  window.addEventListener("blur", hideReveal);
-  window.addEventListener("scroll", onViewportChange, { passive: true });
+  element.addEventListener('pointerenter', onPointerEnter);
+  element.addEventListener('pointermove', onPointerMove);
+  element.addEventListener('pointerleave', hideReveal);
+  element.addEventListener('pointercancel', hideReveal);
+  window.addEventListener('blur', hideReveal);
+  window.addEventListener('scroll', onViewportChange, { passive: true });
 
   const resizeObserver = new ResizeObserver(onViewportChange);
   resizeObserver.observe(element);
@@ -251,18 +251,16 @@ function initRevealHover(element) {
   return () => {
     if (state.frame) cancelAnimationFrame(state.frame);
     resizeObserver.disconnect();
-    element.removeEventListener("pointerenter", onPointerEnter);
-    element.removeEventListener("pointermove", onPointerMove);
-    element.removeEventListener("pointerleave", hideReveal);
-    element.removeEventListener("pointercancel", hideReveal);
-    window.removeEventListener("blur", hideReveal);
-    window.removeEventListener("scroll", onViewportChange);
+    element.removeEventListener('pointerenter', onPointerEnter);
+    element.removeEventListener('pointermove', onPointerMove);
+    element.removeEventListener('pointerleave', hideReveal);
+    element.removeEventListener('pointercancel', hideReveal);
+    window.removeEventListener('blur', hideReveal);
+    window.removeEventListener('scroll', onViewportChange);
   };
 }
 
-const revealHoverCleanups = Array.from(
-  document.querySelectorAll("[data-reveal-hover]")
-).map(initRevealHover);
+const revealHoverCleanups = Array.from(document.querySelectorAll('[data-reveal-hover]')).map(initRevealHover);
 ```
 
 In React, Vue, or Svelte, initialize after mount and call every returned cleanup during unmount. Do not create a new animation loop on every render.

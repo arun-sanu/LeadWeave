@@ -118,7 +118,7 @@
 }
 
 .plugins-page .plugin-update-chip:hover {
-  background: rgba(var(--accent-rgb), 0.20);
+  background: rgba(var(--accent-rgb), 0.2);
 }
 
 /* Pending-update counter on the Install button, so updates are visible without opening it. */
@@ -375,7 +375,7 @@
   outline: none;
   border-color: var(--primary);
   background: var(--bg-card);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.10);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
 }
 
 /* Nested object — a bordered group of sub-fields. */
@@ -545,7 +545,9 @@
   right: 0;
   bottom: 0;
   background-color: var(--border);
-  transition: background-color var(--duration-slow) var(--ease-out), border-color var(--duration-slow) var(--ease-out);
+  transition:
+    background-color var(--duration-slow) var(--ease-out),
+    border-color var(--duration-slow) var(--ease-out);
   border-radius: 26px;
 }
 
@@ -557,7 +559,9 @@
   left: 3px;
   bottom: 3px;
   background-color: var(--bg-card);
-  transition: background-color var(--duration-slow) var(--ease-out), border-color var(--duration-slow) var(--ease-out);
+  transition:
+    background-color var(--duration-slow) var(--ease-out),
+    border-color var(--duration-slow) var(--ease-out);
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

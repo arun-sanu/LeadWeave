@@ -16,8 +16,8 @@ describe('SessionRouterMiddleware', () => {
     } as any;
 
     mockSessionOwnershipService = {
-      isHeldElsewhere: jest.fn(),
-      heldByOthers: jest.fn(),
+      isHeldByOtherNode: jest.fn(),
+      heldByOtherNodes: jest.fn(),
       nodeId: 'node-a',
     } as any;
 
@@ -47,7 +47,7 @@ describe('SessionRouterMiddleware', () => {
     await middleware(req as Request, res as Response, next);
 
     expect(next).toHaveBeenCalledTimes(1);
-    expect(mockSessionOwnershipService.isHeldElsewhere).not.toHaveBeenCalled();
+    expect(mockSessionOwnershipService.isHeldByOtherNode).not.toHaveBeenCalled();
   });
 
   it('calls next() immediately when engine is hosted locally', async () => {
@@ -59,29 +59,25 @@ describe('SessionRouterMiddleware', () => {
 
     expect(mockEngineRegistry.has).toHaveBeenCalledWith('sess-1');
     expect(next).toHaveBeenCalledTimes(1);
-    expect(mockSessionOwnershipService.isHeldElsewhere).not.toHaveBeenCalled();
+    expect(mockSessionOwnershipService.isHeldByOtherNode).not.toHaveBeenCalled();
   });
 
   it('returns 409 Conflict with node routing headers when session is hosted on peer node', async () => {
     req.params = { sessionId: 'sess-peer' };
     mockEngineRegistry.has.mockReturnValue(false);
-    mockSessionOwnershipService.isHeldElsewhere.mockResolvedValue(true);
+    mockSessionOwnershipService.isHeldByOtherNode.mockResolvedValue(true);
 
-    const heldMap = new Map();
-    heldMap.set('sess-peer', { nodeId: 'node-b', nodeUrl: 'http://pod-b.internal:3000' });
-    mockSessionOwnershipService.heldByOthers.mockResolvedValue(heldMap);
+    mockSessionOwnershipService.heldByOtherNodes.mockResolvedValue(['sess-peer']);
 
     const middleware = createSessionRouterMiddleware(mockEngineRegistry, mockSessionOwnershipService);
     await middleware(req as Request, res as Response, next);
 
-    expect(res.setHeader).toHaveBeenCalledWith('X-Location-Node-Id', 'node-b');
-    expect(res.setHeader).toHaveBeenCalledWith('X-Location-Node-Url', 'http://pod-b.internal:3000');
-    expect(res.status).toHaveBeenCalledWith(409);
+        expect(res.status).toHaveBeenCalledWith(409);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({
         code: 'SESSION_HOSTED_ON_PEER_NODE',
-        nodeId: 'node-b',
-        nodeUrl: 'http://pod-b.internal:3000',
+        nodeId: null,
+        nodeUrl: null,
       }),
     );
     expect(next).not.toHaveBeenCalled();
@@ -90,7 +86,7 @@ describe('SessionRouterMiddleware', () => {
   it('calls next() if session is not held anywhere (idle/unstarted session)', async () => {
     req.params = { sessionId: 'sess-idle' };
     mockEngineRegistry.has.mockReturnValue(false);
-    mockSessionOwnershipService.isHeldElsewhere.mockResolvedValue(false);
+    mockSessionOwnershipService.isHeldByOtherNode.mockResolvedValue(false);
 
     const middleware = createSessionRouterMiddleware(mockEngineRegistry, mockSessionOwnershipService);
     await middleware(req as Request, res as Response, next);

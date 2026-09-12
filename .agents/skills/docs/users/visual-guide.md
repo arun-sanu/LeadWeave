@@ -140,7 +140,7 @@ agentic-awesome-skills/
 
 ## Skill File Anatomy (Visual)
 
-```
+````
 ┌─────────────────────────────────────────────────────────┐
 │ SKILL.md                                                │
 ├─────────────────────────────────────────────────────────┤
@@ -178,13 +178,14 @@ agentic-awesome-skills/
 │  └───────────────────────────────────────────────┘     │
 │                                                         │
 └─────────────────────────────────────────────────────────┘
-```
+````
 
 ---
 
 ## Installation (Visual Steps)
 
 ### Step 1: Install the Repository
+
 ```
 ┌─────────────────────────────────────────┐
 │ Terminal                                │
@@ -199,6 +200,7 @@ agentic-awesome-skills/
 If you want a workspace-style manual install instead, cloning into `.agent/skills/` is still a valid custom path for Antigravity.
 
 ### Step 2: Verify Installation
+
 ```
 ┌─────────────────────────────────────────┐
 │ File Explorer                           │
@@ -212,6 +214,7 @@ If you want a workspace-style manual install instead, cloning into `.agent/skill
 ```
 
 ### Step 3: Use a Skill
+
 ```
 ┌─────────────────────────────────────────┐
 │ AI Assistant Chat                       │
@@ -281,16 +284,19 @@ If you want a workspace-style manual install instead, cloning into `.agent/skill
 ## Finding Skills (Visual Guide)
 
 ### Method 1: Browse by Category
+
 ```
 README.md → Scroll to "Full Skill Registry" → Find category → Pick skill
 ```
 
 ### Method 2: Search by Keyword
+
 ```
 Terminal → ls skills/ | grep "keyword" → See matching skills
 ```
 
 ### Method 3: Use the Index
+
 ```
 Open skills_index.json → Search for keyword → Find skill path
 ```
@@ -508,6 +514,7 @@ Month 1: Regular contributor
 ---
 
 **Visual learner?** This guide should help! Still have questions? Check out:
+
 - [getting-started.md](getting-started.md) - Text-based intro
 - [skill-anatomy.md](../contributors/skill-anatomy.md) - Detailed breakdown
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) - How to contribute

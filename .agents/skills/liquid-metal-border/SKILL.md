@@ -38,7 +38,7 @@ npm install metal-fx
 Import the named React component:
 
 ```tsx
-import { MetalFx } from "metal-fx";
+import { MetalFx } from 'metal-fx';
 ```
 
 Do not import a stylesheet. The package injects its component styles. It supports ESM and CommonJS builds, is SSR-safe, and mounts the WebGL pipeline after hydration. In a Next.js App Router project, render it from a Client Component because the component uses client-side React hooks.
@@ -48,16 +48,11 @@ Do not import a stylesheet. The package injects its component styles. It support
 Start with a restrained border before adding reflections or custom shader geometry:
 
 ```tsx
-import { MetalFx } from "metal-fx";
+import { MetalFx } from 'metal-fx';
 
 export function UpgradeButton() {
   return (
-    <MetalFx
-      variant="button"
-      preset="chromatic"
-      theme="auto"
-      strength={0.85}
-    >
+    <MetalFx variant="button" preset="chromatic" theme="auto" strength={0.85}>
       <button type="button">Upgrade to Pro</button>
     </MetalFx>
   );
@@ -71,33 +66,27 @@ The wrapper measures the child, paints the metal ring on top, and keeps the chil
 Keep one mounted instance and drive its intensity from real component state. Use `aria-pressed`, `aria-selected`, or the native selected-state mechanism so the visual effect is not the only signal.
 
 ```tsx
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { MetalFx } from "metal-fx";
+import { useEffect, useState } from 'react';
+import { MetalFx } from 'metal-fx';
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
     const sync = () => setReduced(query.matches);
 
     sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
   }, []);
 
   return reduced;
 }
 
-export function LiquidMetalToggle({
-  selected,
-  onSelect,
-}: {
-  selected: boolean;
-  onSelect: () => void;
-}) {
+export function LiquidMetalToggle({ selected, onSelect }: { selected: boolean; onSelect: () => void }) {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const reducedMotion = useReducedMotion();
@@ -170,7 +159,7 @@ Use the wrapper as the surface when the child must remain transparent:
   shaderScale={1.45}
   disableGlow
   normalizeHostStyles={false}
-  style={{ background: "#111318" }}
+  style={{ background: '#111318' }}
 >
   <article className="feature-card">
     <h3>Realtime review</h3>
@@ -183,24 +172,24 @@ Keep the article background transparent so it does not cover the ring. Use the c
 
 ## Complete Customization Surface
 
-| Prop | Values and default | Use |
-| --- | --- | --- |
-| `children` | One React host element; required | Preserve the real button, link, chip, card, or icon control. |
-| `variant` | `"button"` default, `"circle"` | Choose a 1 px pill-style baseline at shader scale `1.6`, or a 2 px compact-circle baseline at scale `1.3`. The measured child still controls the rendered size. |
-| `preset` | `"chromatic"` default, `"silver"`, `"gold"` | Choose iridescent rainbow, cool steel, or warm gold. Each includes dark and light tuning. |
-| `theme` | `"auto"` default, `"dark"`, `"light"` | Follow live `prefers-color-scheme` changes or pin the effect to the app theme. SSR starts dark, then resolves on the client. |
-| `strength` | Number `0..1`; default `1` | Scale canvas and glow opacity. Use lower values for idle states and stronger values for active states. |
-| `paused` | Boolean; default `false` | Freeze this instance on its current shader frame while keeping the silhouette visible. |
-| `borderRadius` | Number in CSS pixels; optional | Override the radius. When omitted, read the child's computed radius on resize. |
-| `normalizeHostStyles` | Boolean; default `true` | Remove the child's background, border, outline, and shadow so they do not fight the ring. Set `false` when preserving a custom focus outline or fallback border. |
-| `reflectionTargets` | Array of React element refs; optional | Cast a soft mirrored reflection onto selected neighbouring elements. Dark mode only. |
-| `disableGlow` | Boolean; default `false` | Remove the wandering halo while retaining the shader ring. |
-| `shaderScale` | Number; variant baseline by default | Increase to zoom into larger metal pattern features; decrease to zoom out. |
-| `ringCssPx` | Number; variant baseline by default | Override the visible ring thickness in CSS pixels. |
-| `scale` | Number; default `1` | Scale every absolute-pixel engine constant together for CSS zoom or deliberately enlarged UI systems. |
-| `className` | String; optional | Style the `MetalFx` wrapper, not the child. |
-| `style` | React CSS properties; optional | Size or style the wrapper surface directly. |
-| `ref` | React ref; optional | Access the forwarded wrapper `HTMLDivElement`. |
+| Prop                  | Values and default                          | Use                                                                                                                                                              |
+| --------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`            | One React host element; required            | Preserve the real button, link, chip, card, or icon control.                                                                                                     |
+| `variant`             | `"button"` default, `"circle"`              | Choose a 1 px pill-style baseline at shader scale `1.6`, or a 2 px compact-circle baseline at scale `1.3`. The measured child still controls the rendered size.  |
+| `preset`              | `"chromatic"` default, `"silver"`, `"gold"` | Choose iridescent rainbow, cool steel, or warm gold. Each includes dark and light tuning.                                                                        |
+| `theme`               | `"auto"` default, `"dark"`, `"light"`       | Follow live `prefers-color-scheme` changes or pin the effect to the app theme. SSR starts dark, then resolves on the client.                                     |
+| `strength`            | Number `0..1`; default `1`                  | Scale canvas and glow opacity. Use lower values for idle states and stronger values for active states.                                                           |
+| `paused`              | Boolean; default `false`                    | Freeze this instance on its current shader frame while keeping the silhouette visible.                                                                           |
+| `borderRadius`        | Number in CSS pixels; optional              | Override the radius. When omitted, read the child's computed radius on resize.                                                                                   |
+| `normalizeHostStyles` | Boolean; default `true`                     | Remove the child's background, border, outline, and shadow so they do not fight the ring. Set `false` when preserving a custom focus outline or fallback border. |
+| `reflectionTargets`   | Array of React element refs; optional       | Cast a soft mirrored reflection onto selected neighbouring elements. Dark mode only.                                                                             |
+| `disableGlow`         | Boolean; default `false`                    | Remove the wandering halo while retaining the shader ring.                                                                                                       |
+| `shaderScale`         | Number; variant baseline by default         | Increase to zoom into larger metal pattern features; decrease to zoom out.                                                                                       |
+| `ringCssPx`           | Number; variant baseline by default         | Override the visible ring thickness in CSS pixels.                                                                                                               |
+| `scale`               | Number; default `1`                         | Scale every absolute-pixel engine constant together for CSS zoom or deliberately enlarged UI systems.                                                            |
+| `className`           | String; optional                            | Style the `MetalFx` wrapper, not the child.                                                                                                                      |
+| `style`               | React CSS properties; optional              | Size or style the wrapper surface directly.                                                                                                                      |
+| `ref`                 | React ref; optional                         | Access the forwarded wrapper `HTMLDivElement`.                                                                                                                   |
 
 Other valid `HTMLDivElement` attributes are forwarded to the wrapper.
 
@@ -232,10 +221,7 @@ To make the frame larger than the child, size the wrapper and stretch the child:
 
 ```tsx
 <MetalFx style={{ width: 44, height: 44 }} variant="circle">
-  <button
-    style={{ width: "100%", height: "100%" }}
-    aria-label="Send"
-  >
+  <button style={{ width: '100%', height: '100%' }} aria-label="Send">
     ↑
   </button>
 </MetalFx>
@@ -248,7 +234,7 @@ The wrapper uses `display: inline-flex`. Do not create cyclic percentage sizing 
 Pass only explicit refs to neighbouring elements:
 
 ```tsx
-import { useRef } from "react";
+import { useRef } from 'react';
 
 const chipRef = useRef<HTMLButtonElement>(null);
 
@@ -257,7 +243,7 @@ const chipRef = useRef<HTMLButtonElement>(null);
   <MetalFx variant="circle" reflectionTargets={[chipRef]}>
     <button aria-label="Send">↑</button>
   </MetalFx>
-</>
+</>;
 ```
 
 Omit `reflectionTargets` to disable reflection work. In light mode, reflections are skipped automatically.

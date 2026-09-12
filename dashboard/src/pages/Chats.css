@@ -11,8 +11,8 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background: radial-gradient(ellipse 90% 70% at 50% 30%, rgba(var(--accent-rgb), 0.04) 0%, transparent 65%),
-              var(--color-canvas);
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 30%, rgba(var(--accent-rgb), 0.04) 0%, transparent 65%), var(--color-canvas);
 }
 
 .chats-page .chats-layout {
@@ -27,7 +27,6 @@
   margin: 0;
   position: relative;
 }
-
 
 /* =============================================================================
    SIDEBAR: Right Column (User Messages & Chats List - 35% Sidebar)
@@ -73,7 +72,9 @@
   font-size: 0.8125rem;
   outline: none;
   cursor: pointer;
-  transition: border-color 160ms var(--ease-out, ease-out), background-color 160ms var(--ease-out, ease-out);
+  transition:
+    border-color 160ms var(--ease-out, ease-out),
+    background-color 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .sidebar-session-select:hover {
@@ -146,7 +147,9 @@
   font-size: 0.8125rem;
   cursor: pointer;
   outline: none;
-  transition: border-color 160ms var(--ease-out, ease-out), background-color 160ms var(--ease-out, ease-out);
+  transition:
+    border-color 160ms var(--ease-out, ease-out),
+    background-color 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .session-selector:hover {
@@ -192,7 +195,10 @@
   justify-content: center;
   gap: 4px;
   white-space: nowrap;
-  transition: background-color 160ms var(--ease-out, ease-out), color 160ms var(--ease-out, ease-out), transform 120ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out);
 }
 
 .chats-page .chats-tab:hover {
@@ -222,7 +228,10 @@
   border-radius: 9999px;
   padding: 0.45rem 0.875rem 0.45rem 2.2rem;
   box-shadow: none;
-  transition: border-color 160ms var(--ease-out, ease-out), background-color 160ms var(--ease-out, ease-out), box-shadow 160ms var(--ease-out, ease-out);
+  transition:
+    border-color 160ms var(--ease-out, ease-out),
+    background-color 160ms var(--ease-out, ease-out),
+    box-shadow 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .chat-search-input:focus-within {
@@ -344,7 +353,9 @@
   width: 3.5px;
   border-radius: 9999px;
   background: var(--accent);
-  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.90), 0 0 16px rgba(var(--accent-rgb), 0.40);
+  box-shadow:
+    0 0 8px rgba(var(--accent-rgb), 0.9),
+    0 0 16px rgba(var(--accent-rgb), 0.4);
 }
 
 .chats-page .chat-avatar {
@@ -360,7 +371,9 @@
   flex-shrink: 0;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-  transition: border-color 160ms var(--ease-out, ease-out), transform 160ms var(--ease-out, ease-out);
+  transition:
+    border-color 160ms var(--ease-out, ease-out),
+    transform 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .chat-avatar img {
@@ -372,7 +385,7 @@
 }
 
 .chats-page .chat-item-card.active .chat-avatar {
-  border-color: rgba(var(--accent-rgb), 0.50);
+  border-color: rgba(var(--accent-rgb), 0.5);
 }
 
 .chats-page .chat-item-info {
@@ -468,7 +481,12 @@
   cursor: pointer;
   opacity: 0.5;
   transform: scale(0.95);
-  transition: background-color 160ms var(--ease-out, ease-out), border-color 160ms var(--ease-out, ease-out), color 160ms var(--ease-out, ease-out), opacity 160ms var(--ease-out, ease-out), transform 160ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    border-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out),
+    opacity 160ms var(--ease-out, ease-out),
+    transform 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .chat-item-card:hover .chat-item-quick-action,
@@ -500,8 +518,14 @@
 }
 
 @keyframes badgePop {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .chats-page .chat-kind-badge {
@@ -543,7 +567,9 @@
   overflow: hidden;
   order: 1;
   border-right: none;
-  transition: width 220ms var(--ease-out, ease-out), flex 220ms var(--ease-out, ease-out);
+  transition:
+    width 220ms var(--ease-out, ease-out),
+    flex 220ms var(--ease-out, ease-out);
 }
 
 .chats-page .chats-room.full-width-pane {
@@ -611,7 +637,7 @@
 }
 
 .chats-page .left-pane-tab.active .tab-pill-count {
-  background: rgba(var(--accent-rgb), 0.30);
+  background: rgba(var(--accent-rgb), 0.3);
   color: var(--accent);
 }
 
@@ -683,13 +709,18 @@
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  transition: border-color 160ms var(--ease-out, ease-out), background-color 160ms var(--ease-out, ease-out), box-shadow 160ms var(--ease-out, ease-out);
+  transition:
+    border-color 160ms var(--ease-out, ease-out),
+    background-color 160ms var(--ease-out, ease-out),
+    box-shadow 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .chats-hero-search-input:focus-within {
   border-color: var(--primary, var(--accent));
   background: rgba(255, 255, 255, 0.07);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15), 0 8px 30px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 0 0 3px rgba(var(--accent-rgb), 0.15),
+    0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
 .chats-page .chats-hero-search-input svg {
@@ -701,8 +732,14 @@
 }
 
 @keyframes scaleIn {
-  0% { transform: scale(0.96); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .chats-page .chats-hero-title {
@@ -799,7 +836,10 @@
   color: var(--text-secondary);
   cursor: pointer;
   flex-shrink: 0;
-  transition: background-color 160ms var(--ease-out, ease-out), color 160ms var(--ease-out, ease-out), transform 120ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out);
 }
 
 .chats-page .room-back:hover {
@@ -890,7 +930,11 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
-  transition: background-color 160ms var(--ease-out, ease-out), border-color 160ms var(--ease-out, ease-out), color 160ms var(--ease-out, ease-out), transform 120ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    border-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out);
 }
 
 .chats-page .room-archive-btn:hover {
@@ -917,11 +961,15 @@
   border: 1px solid rgba(var(--accent-rgb), 0.28);
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: background-color 160ms var(--ease-out, ease-out), border-color 160ms var(--ease-out, ease-out), color 160ms var(--ease-out, ease-out), transform 120ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    border-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out);
 }
 
 .chats-page .bubble-popout-btn:hover {
-  background: rgba(var(--accent-rgb), 0.20);
+  background: rgba(var(--accent-rgb), 0.2);
   border-color: rgba(var(--accent-rgb), 0.45);
   transform: translateY(-1px);
 }
@@ -960,16 +1008,27 @@
   background: var(--bg-elevated);
   color: var(--text-primary, #ffffff);
   border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.16));
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), var(--rim-top);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.5),
+    var(--rim-top);
   cursor: pointer;
-  transition: background-color 160ms var(--ease-out, ease-out), border-color 160ms var(--ease-out, ease-out), transform 120ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    border-color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out);
   padding: 0;
   animation: chats-jumpIn 180ms var(--ease-spring, cubic-bezier(0.175, 0.885, 0.32, 1.1));
 }
 
 @keyframes jumpIn {
-  from { opacity: 0; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .chats-page .scroll-to-bottom-btn:hover {
@@ -1014,8 +1073,14 @@
 }
 
 @keyframes bubbleFadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chats-page .message-bubble-wrapper.incoming {
@@ -1059,16 +1124,20 @@
   color: var(--text-primary, #ffffff);
   border-bottom-left-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), var(--rim-top, inset 0 1px 0 0 rgba(255, 255, 255, 0.07));
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.35),
+    var(--rim-top, inset 0 1px 0 0 rgba(255, 255, 255, 0.07));
 }
 
 /* Outgoing Bubble: Obsidian Emerald Glow */
 .chats-page .message-bubble.outgoing {
-  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.20) 0%, rgba(18, 140, 126, 0.16) 100%), #121820;
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.2) 0%, rgba(18, 140, 126, 0.16) 100%), #121820;
   color: #f1f5f9;
   border-bottom-right-radius: 4px;
   border: 1px solid rgba(var(--accent-rgb), 0.32);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(var(--accent-rgb), 0.25);
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 0 rgba(var(--accent-rgb), 0.25);
 }
 
 .chats-page .message-text {
@@ -1131,7 +1200,9 @@
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.16));
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), var(--rim-top);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.45),
+    var(--rim-top);
   border-radius: 24px;
   padding: 3px 6px;
   z-index: 10;
@@ -1139,8 +1210,14 @@
 }
 
 @keyframes actionScaleIn {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .chats-page .message-bubble-container:hover .message-actions-menu {
@@ -1157,7 +1234,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 140ms var(--ease-out, ease-out), color 140ms var(--ease-out, ease-out), transform 100ms var(--ease-out, ease-out);
+  transition:
+    background-color 140ms var(--ease-out, ease-out),
+    color 140ms var(--ease-out, ease-out),
+    transform 100ms var(--ease-out, ease-out);
 }
 
 .chats-page .action-btn:hover {
@@ -1189,7 +1269,9 @@
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.18));
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), var(--rim-top);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    var(--rim-top);
   border-radius: 30px;
   padding: 0.375rem 0.625rem;
   gap: 0.375rem;
@@ -1204,8 +1286,14 @@
 }
 
 @keyframes popoverBounce {
-  from { opacity: 0; transform: translateX(-50%) translateY(-2px) scale(0.92); }
-  to { opacity: 1; transform: translateX(-50%) translateY(-8px) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-2px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-8px) scale(1);
+  }
 }
 
 .chats-page .reaction-quick-popover::after {
@@ -1229,7 +1317,9 @@
   padding: 2px 4px;
   cursor: pointer;
   border-radius: 8px;
-  transition: transform 120ms var(--ease-spring, cubic-bezier(0.175, 0.885, 0.32, 1.1)), background-color 120ms var(--ease-out, ease-out);
+  transition:
+    transform 120ms var(--ease-spring, cubic-bezier(0.175, 0.885, 0.32, 1.1)),
+    background-color 120ms var(--ease-out, ease-out);
 }
 
 .chats-page .reaction-quick-popover button:hover {
@@ -1345,14 +1435,19 @@
   color: var(--text-primary, #ffffff);
   outline: none;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
-  transition: border-color 160ms var(--ease-out, ease-out), background-color 160ms var(--ease-out, ease-out), box-shadow 160ms var(--ease-out, ease-out);
+  transition:
+    border-color 160ms var(--ease-out, ease-out),
+    background-color 160ms var(--ease-out, ease-out),
+    box-shadow 160ms var(--ease-out, ease-out);
   box-sizing: border-box;
 }
 
 .chats-page .message-text-input:focus {
   border-color: var(--primary, var(--accent));
   background: rgba(255, 255, 255, 0.07);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 0 0 3px rgba(var(--accent-rgb), 0.15),
+    inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .chats-page .message-text-input::placeholder {
@@ -1373,13 +1468,16 @@
   flex-shrink: 0;
   box-shadow: 0 3px 12px rgba(var(--accent-rgb), 0.35);
   padding: 0;
-  transition: background-color 160ms var(--ease-out, ease-out), transform 120ms var(--ease-out, ease-out), box-shadow 160ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out),
+    box-shadow 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .btn-send-message:hover:not(:disabled) {
   background: var(--primary-hover, var(--accent-hover));
   transform: scale(1.06);
-  box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.50);
+  box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.5);
 }
 
 .chats-page .btn-send-message:active:not(:disabled) {
@@ -1404,7 +1502,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 160ms var(--ease-out, ease-out), color 160ms var(--ease-out, ease-out), transform 120ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out);
   flex-shrink: 0;
 }
 
@@ -1438,8 +1539,14 @@
 }
 
 @keyframes bannerSlideUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chats-page .preview-thumbnail {
@@ -1494,7 +1601,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 160ms var(--ease-out, ease-out), color 160ms var(--ease-out, ease-out), transform 120ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out);
 }
 
 .chats-page .btn-remove-attachment:hover,
@@ -1551,7 +1661,9 @@
   z-index: 50;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 20px 48px -12px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   animation: emojiPickerPop 180ms cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: bottom left;
 }
@@ -1578,7 +1690,9 @@
   overflow: hidden;
   background: var(--bg-card, #1e293b);
   border: 1px solid var(--border, #334155);
-  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 20px 48px -12px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   animation: emojiPickerPop 180ms cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: bottom left;
   display: flex;
@@ -1611,7 +1725,7 @@
 }
 
 .chats-page .chats-template-picker-header .btn-close-picker:hover {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text-primary, #f8fafc);
 }
 
@@ -1636,7 +1750,7 @@
 }
 
 .chats-page .chats-template-item:hover {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .chats-page .chats-template-item-title {
@@ -1714,7 +1828,11 @@
   position: relative;
   opacity: 0.55;
   filter: grayscale(25%);
-  transition: opacity 140ms ease-out, transform 120ms cubic-bezier(0.16, 1, 0.3, 1), filter 140ms ease-out, background-color 140ms ease-out;
+  transition:
+    opacity 140ms ease-out,
+    transform 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 140ms ease-out,
+    background-color 140ms ease-out;
 }
 
 .chats-page .chats-emoji-picker .EmojiPickerReact .epr-cat-btn .epr-emoji-img {
@@ -1754,7 +1872,7 @@
   height: 2px;
   border-radius: 2px;
   background: var(--primary, var(--accent));
-  box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.60);
+  box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.6);
 }
 
 .chats-page .emoji-grid {
@@ -1773,7 +1891,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 120ms var(--ease-spring, cubic-bezier(0.175, 0.885, 0.32, 1.1)), background-color 120ms var(--ease-out, ease-out);
+  transition:
+    transform 120ms var(--ease-spring, cubic-bezier(0.175, 0.885, 0.32, 1.1)),
+    background-color 120ms var(--ease-out, ease-out);
 }
 
 .chats-page .emoji-btn:hover {
@@ -1817,7 +1937,9 @@
   font-family: inherit;
   margin-bottom: 0.25rem;
   cursor: pointer;
-  transition: background-color 160ms var(--ease-out, ease-out), border-color 160ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    border-color 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .message-media-omitted:hover:not(:disabled) {
@@ -1854,7 +1976,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 0.375rem;
-  transition: background-color 160ms var(--ease-out, ease-out), border-color 160ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    border-color 160ms var(--ease-out, ease-out);
   word-break: break-all;
 }
 
@@ -2014,7 +2138,9 @@
   border-radius: 7px;
   cursor: pointer;
   color: var(--text-secondary);
-  transition: background-color 160ms var(--ease-out, ease-out), color 160ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .status-compose-modal .compose-type-toggle button.active {
@@ -2050,7 +2176,9 @@
   outline: none;
   box-sizing: border-box;
   font-family: inherit;
-  transition: border-color 160ms var(--ease-out, ease-out), box-shadow 160ms var(--ease-out, ease-out);
+  transition:
+    border-color 160ms var(--ease-out, ease-out),
+    box-shadow 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .status-compose-modal textarea:focus,
@@ -2150,8 +2278,10 @@
   background: linear-gradient(180deg, rgba(16, 21, 32, 0.94) 0%, rgba(10, 13, 20, 0.96) 100%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
-  box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05),
-              inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 24px 64px -12px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
   animation: glassScaleUp 240ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));
@@ -2198,10 +2328,11 @@
   font-weight: 600;
   line-height: 1;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-  transition: background-color 160ms var(--ease-out, ease-out),
-              border-color 160ms var(--ease-out, ease-out),
-              color 160ms var(--ease-out, ease-out),
-              transform 120ms var(--ease-out, ease-out);
+  transition:
+    background-color 160ms var(--ease-out, ease-out),
+    border-color 160ms var(--ease-out, ease-out),
+    color 160ms var(--ease-out, ease-out),
+    transform 120ms var(--ease-out, ease-out);
 }
 
 .chats-page .chats-glass-popup-close-btn:hover {
@@ -2229,7 +2360,9 @@
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.04em;
-  transition: color 160ms var(--ease-out, ease-out), background-color 160ms var(--ease-out, ease-out);
+  transition:
+    color 160ms var(--ease-out, ease-out),
+    background-color 160ms var(--ease-out, ease-out);
 }
 
 .chats-page .chats-glass-popup-close-btn:hover .esc-key-badge {
@@ -2300,4 +2433,3 @@
     padding: 0.75rem 1rem;
   }
 }
-

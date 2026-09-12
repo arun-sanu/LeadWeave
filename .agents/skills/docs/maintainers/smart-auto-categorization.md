@@ -7,6 +7,7 @@ The skill collection now uses intelligent auto-categorization to eliminate "unca
 ## Current Status
 
 ✅ Current repository indexed through the generated catalog
+
 - Most skills are in meaningful categories
 - A smaller tail still needs manual review or better keyword coverage
 - `skills_index.json` is the source of truth for current category labels and counts
@@ -35,7 +36,9 @@ NODE
 ## How It Works
 
 ### 1. **Keyword-Based Analysis**
+
 The system analyzes skill names and descriptions for keywords:
+
 - **Backend**: nodejs, express, fastapi, django, server, api, database
 - **Web Dev**: react, vue, angular, frontend, css, html, tailwind
 - **AI/ML**: ai, machine learning, tensorflow, nlp, gpt
@@ -43,27 +46,32 @@ The system analyzes skill names and descriptions for keywords:
 - And more...
 
 ### 2. **Priority System**
+
 Frontmatter category > Detected Keywords > Fallback (uncategorized)
 
 If a skill already has a category in frontmatter, that's preserved.
 
 ### 3. **Scope-Based Matching**
+
 - Exact phrase matches weighted 2x higher than partial matches
 - Uses word boundaries to avoid false positives
 
 ## Using the Auto-Categorization
 
 ### Run on Uncategorized Skills
+
 ```bash
 python tools/scripts/auto_categorize_skills.py
 ```
 
 ### Preview Changes First (Dry Run)
+
 ```bash
 python tools/scripts/auto_categorize_skills.py --dry-run
 ```
 
 ### Output
+
 ```
 ======================================================================
 AUTO-CATEGORIZATION REPORT
@@ -87,11 +95,14 @@ Sample changes:
 ## Web App Improvements
 
 ### Category Filter
+
 **Before:**
+
 - Unordered list including "uncategorized"
 - No indication of category size
 
 **After:**
+
 - Categories sorted by skill count (most first, "uncategorized" last)
 - Shows counts from the generated index instead of hard-coded documentation numbers
 - Much easier to browse
@@ -99,6 +110,7 @@ Sample changes:
 ### Example Dropdowns
 
 **Sorted Order:**
+
 1. All Categories
 2. Highest-count generated category
 3. Next generated category
@@ -110,18 +122,20 @@ Sample changes:
 ### When Adding a New Skill
 
 Include category in frontmatter:
+
 ```yaml
 ---
 name: my-skill
-description: "..."
+description: '...'
 category: web-development
-date_added: "2026-03-06"
+date_added: '2026-03-06'
 ---
 ```
 
 ### If You're Not Sure
 
 The system will automatically categorize on next index regeneration:
+
 ```bash
 python tools/scripts/generate_index.py
 ```
@@ -170,6 +184,7 @@ CATEGORY_KEYWORDS = {
 ```
 
 Then re-run:
+
 ```bash
 python tools/scripts/auto_categorize_skills.py
 python tools/scripts/generate_index.py
@@ -182,6 +197,7 @@ python tools/scripts/generate_index.py
 Some skills may be too generic or unique. You can:
 
 1. **Manually set category** in the skill's frontmatter:
+
 ```yaml
 category: your-chosen-category
 ```
@@ -189,6 +205,7 @@ category: your-chosen-category
 2. **Add keywords** to CATEGORY_KEYWORDS config
 
 3. **Move to folder** if it fits a broader category:
+
 ```
 skills/backend/my-new-skill/SKILL.md
 ```
@@ -196,11 +213,13 @@ skills/backend/my-new-skill/SKILL.md
 ### Regenerating Index
 
 After making changes to SKILL.md files:
+
 ```bash
 python tools/scripts/generate_index.py
 ```
 
 This will:
+
 - Parse frontmatter categories
 - Fallback to folder structure
 - Generate new skills_index.json

@@ -27,9 +27,9 @@ const particles = {
   size: [4, 12],
   opacity: [0.18, 0.62],
   rotation: [-0.8, 0.8],
-  mode: "recycle",
+  mode: 'recycle',
   pointerRadius: 110,
-  maxDpr: 2
+  maxDpr: 2,
 };
 ```
 

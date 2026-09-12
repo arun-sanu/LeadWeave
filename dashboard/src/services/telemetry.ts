@@ -9,13 +9,7 @@
 import { auditApi, type AuditLog } from './api.ts';
 import { idbGet, idbSet } from '../utils/indexedDbStore.ts';
 
-export type TelemetryCategory =
-  | 'click'
-  | 'performance'
-  | 'network'
-  | 'error'
-  | 'audit'
-  | 'system';
+export type TelemetryCategory = 'click' | 'performance' | 'network' | 'error' | 'audit' | 'system';
 
 export type TelemetrySeverity = 'info' | 'warn' | 'error' | 'critical' | 'telemetry' | 'perf' | 'debug';
 
@@ -114,9 +108,7 @@ class TelemetryService {
   public getPerformanceStats(): PerformanceStats {
     this.updateMemoryStats();
     if (this.networkLatencies.length > 0) {
-      const avg =
-        this.networkLatencies.reduce((a, b) => a + b, 0) /
-        this.networkLatencies.length;
+      const avg = this.networkLatencies.reduce((a, b) => a + b, 0) / this.networkLatencies.length;
       this.performanceStats.avgNetworkLatencyMs = Math.round(avg);
     }
     const errors = this.events.filter(e => e.severity === 'error' || e.severity === 'critical').length;
@@ -133,7 +125,7 @@ class TelemetryService {
     title: string,
     details?: Record<string, unknown> | string,
     durationMs?: number,
-    source?: string
+    source?: string,
   ) {
     const event: TelemetryEvent = {
       id: `evt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -166,11 +158,18 @@ class TelemetryService {
   }
 
   public logPerformance(metricName: string, valueMs: number, meta?: Record<string, unknown>) {
-    this.logEvent('performance', valueMs > 3000 ? 'warn' : 'perf', `Perf: ${metricName} = ${Math.round(valueMs)}ms`, {
-      metric: metricName,
+    this.logEvent(
+      'performance',
+      valueMs > 3000 ? 'warn' : 'perf',
+      `Perf: ${metricName} = ${Math.round(valueMs)}ms`,
+      {
+        metric: metricName,
+        valueMs,
+        ...meta,
+      },
       valueMs,
-      ...meta,
-    }, valueMs, 'web_vitals');
+      'web_vitals',
+    );
   }
 
   public logNetwork(method: string, url: string, status: number, durationMs: number) {
@@ -184,7 +183,7 @@ class TelemetryService {
       `${method} ${url} [${status}] (${Math.round(durationMs)}ms)`,
       { method, url, status, durationMs },
       durationMs,
-      'http_client'
+      'http_client',
     );
   }
 
@@ -224,9 +223,9 @@ class TelemetryService {
       // Merge avoiding duplicates
       const existingIds = new Set(this.events.map(e => e.id));
       const newItems = auditEvents.filter(e => !existingIds.has(e.id));
-      this.events = [...newItems, ...this.events].sort(
-        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-      ).slice(0, this.maxEvents);
+      this.events = [...newItems, ...this.events]
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+        .slice(0, this.maxEvents);
 
       return this.events;
     } catch (err) {
@@ -252,7 +251,9 @@ class TelemetryService {
         r =>
           r.title.toLowerCase().includes(q) ||
           r.category.toLowerCase().includes(q) ||
-          JSON.stringify(r.details || '').toLowerCase().includes(q)
+          JSON.stringify(r.details || '')
+            .toLowerCase()
+            .includes(q),
       );
     }
 
@@ -287,7 +288,7 @@ class TelemetryService {
 
     rows.forEach((evt, idx) => {
       lines.push(
-        `[#${String(idx + 1).padStart(4, '0')}] [${evt.timestamp}] [${evt.severity.toUpperCase().padEnd(9, ' ')}] [${evt.category.toUpperCase().padEnd(11, ' ')}] ${evt.title}`
+        `[#${String(idx + 1).padStart(4, '0')}] [${evt.timestamp}] [${evt.severity.toUpperCase().padEnd(9, ' ')}] [${evt.category.toUpperCase().padEnd(11, ' ')}] ${evt.title}`,
       );
       if (evt.route) {
         lines.push(`    Route   : ${evt.route}`);
@@ -300,9 +301,7 @@ class TelemetryService {
       }
       if (evt.details) {
         const detailsStr =
-          typeof evt.details === 'string'
-            ? evt.details
-            : JSON.stringify(evt.details, null, 2).replace(/\n/g, '\n    ');
+          typeof evt.details === 'string' ? evt.details : JSON.stringify(evt.details, null, 2).replace(/\n/g, '\n    ');
         lines.push(`    Details : ${detailsStr}`);
       }
       lines.push('');
@@ -450,11 +449,19 @@ class TelemetryService {
 
           const tagName = element.tagName.toLowerCase();
           const htmlEl = element as HTMLElement;
-          const text = (htmlEl.textContent || (element as HTMLInputElement).value || (element as HTMLInputElement).placeholder || '')
+          const text = (
+            htmlEl.textContent ||
+            (element as HTMLInputElement).value ||
+            (element as HTMLInputElement).placeholder ||
+            ''
+          )
             .trim()
             .slice(0, 50);
           const id = element.id ? `#${element.id}` : '';
-          const className = element.className && typeof element.className === 'string' ? `.${element.className.split(' ').slice(0, 2).join('.')}` : '';
+          const className =
+            element.className && typeof element.className === 'string'
+              ? `.${element.className.split(' ').slice(0, 2).join('.')}`
+              : '';
 
           const targetDescriptor = `<${tagName}${id}${className}> "${text.replace(/\s+/g, ' ')}"`;
 
@@ -469,7 +476,7 @@ class TelemetryService {
           // avoid breaking UI
         }
       },
-      { capture: true, passive: true }
+      { capture: true, passive: true },
     );
   }
 
@@ -482,18 +489,14 @@ class TelemetryService {
           filename: event.filename,
           lineno: event.lineno,
           colno: event.colno,
-        }
+        },
       );
     });
 
     window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
       const reason = event.reason;
       const message =
-        reason instanceof Error
-          ? reason.message
-          : typeof reason === 'string'
-          ? reason
-          : 'Unhandled Promise Rejection';
+        reason instanceof Error ? reason.message : typeof reason === 'string' ? reason : 'Unhandled Promise Rejection';
       const stack = reason instanceof Error ? reason.stack : undefined;
       this.logError(`Unhandled Promise: ${message}`, stack, { reason: String(reason) });
     });
@@ -539,7 +542,7 @@ class TelemetryService {
                     name: entry.name,
                   },
                   entry.duration,
-                  'browser_engine'
+                  'browser_engine',
                 );
               }
             }
@@ -575,7 +578,11 @@ class TelemetryService {
 
   private updateMemoryStats() {
     try {
-      const perfMemory = (performance as unknown as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+      const perfMemory = (
+        performance as unknown as {
+          memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number };
+        }
+      ).memory;
       if (perfMemory) {
         this.performanceStats.jsHeapUsedMB = Math.round((perfMemory.usedJSHeapSize / (1024 * 1024)) * 10) / 10;
         this.performanceStats.jsHeapTotalMB = Math.round((perfMemory.totalJSHeapSize / (1024 * 1024)) * 10) / 10;

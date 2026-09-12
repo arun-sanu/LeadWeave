@@ -59,12 +59,12 @@ export function FloatingChatDrawer({
   // Real-time sync for new messages while drawer is open
   useEffect(() => {
     if (bubble.lastMessageObject) {
-      setMessages((prev) => {
+      setMessages(prev => {
         if (
           prev.some(
-            (m) =>
+            m =>
               m.id === bubble.lastMessageObject?.id ||
-              (bubble.lastMessageObject?.waMessageId && m.waMessageId === bubble.lastMessageObject.waMessageId)
+              (bubble.lastMessageObject?.waMessageId && m.waMessageId === bubble.lastMessageObject.waMessageId),
           )
         ) {
           return prev;
@@ -98,7 +98,7 @@ export function FloatingChatDrawer({
   };
 
   const handleTemplateClick = (text: string) => {
-    setInputText((prev) => (prev ? prev + '\n' + text : text));
+    setInputText(prev => (prev ? prev + '\n' + text : text));
     setShowTemplatePicker(false);
   };
 
@@ -169,7 +169,7 @@ export function FloatingChatDrawer({
               media: { mimetype, filename, data: b64Data },
             },
           };
-          setMessages((prev) => [...prev, newMsg]);
+          setMessages(prev => [...prev, newMsg]);
         }
         clearAttachment();
       } else {
@@ -190,7 +190,7 @@ export function FloatingChatDrawer({
             from: 'me',
             to: bubble.chatId,
           };
-          setMessages((prev) => [...prev, newMsg]);
+          setMessages(prev => [...prev, newMsg]);
         }
       }
     } catch (err) {
@@ -259,7 +259,7 @@ export function FloatingChatDrawer({
             <p style={{ fontSize: '13px', margin: 0 }}>No recent messages</p>
           </div>
         ) : (
-          messages.map((msg) => {
+          messages.map(msg => {
             const hasMedia = msg.metadata?.media && msg.metadata.media.data;
             const mediaSrc = hasMedia
               ? `data:${msg.metadata!.media!.mimetype};base64,${msg.metadata!.media!.data}`
@@ -315,7 +315,7 @@ export function FloatingChatDrawer({
               </button>
             </div>
             <div className="floating-template-list">
-              {messageTemplates.map((template) => (
+              {messageTemplates.map(template => (
                 <button
                   key={template.id}
                   type="button"
@@ -358,12 +358,7 @@ export function FloatingChatDrawer({
           >
             <Paperclip size={16} />
           </button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleFileChange}
-          />
+          <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
 
           <button
             type="button"
@@ -388,7 +383,7 @@ export function FloatingChatDrawer({
             className="floating-drawer-input"
             placeholder={attachment ? 'Add a caption...' : 'Type a message...'}
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={e => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
           />
           <button
@@ -414,4 +409,3 @@ export function FloatingChatDrawer({
     </div>
   );
 }
-

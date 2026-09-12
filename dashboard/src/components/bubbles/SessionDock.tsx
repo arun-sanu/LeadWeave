@@ -10,8 +10,8 @@ import { FloatingNewChatDrawer } from './FloatingNewChatDrawer';
 
 export function SessionDock({ session }: { session: Session }) {
   const store = useBubbleStore();
-  const sessionBubbles = store.bubbles.filter((b) => b.sessionId === session.id);
-  const activeBubble = sessionBubbles.find((b) => b.isOpen);
+  const sessionBubbles = store.bubbles.filter(b => b.sessionId === session.id);
+  const activeBubble = sessionBubbles.find(b => b.isOpen);
   const isDockExpanded = !!store.expandedDocks[session.id];
   const navigate = useNavigate();
 
@@ -85,11 +85,7 @@ export function SessionDock({ session }: { session: Session }) {
           </div>
         )}
 
-        {totalUnread > 0 && (
-          <span className="pill-unread-badge">
-            {totalUnread > 99 ? '99+' : totalUnread}
-          </span>
-        )}
+        {totalUnread > 0 && <span className="pill-unread-badge">{totalUnread > 99 ? '99+' : totalUnread}</span>}
 
         {sessionBubbles.length > 0 && (
           <span className="pill-toggle-indicator">
@@ -101,7 +97,7 @@ export function SessionDock({ session }: { session: Session }) {
       {isDockExpanded && (
         <div className="bubble-stack-container">
           {/* New Chat Button */}
-          <div 
+          <div
             className={`floating-bubble-item ${isNewChatOpen ? 'active' : ''}`}
             onClick={() => {
               setIsNewChatOpen(!isNewChatOpen);
@@ -109,11 +105,13 @@ export function SessionDock({ session }: { session: Session }) {
             }}
             title="New Message"
           >
-            <span className="floating-bubble-initials"><Plus size={20} /></span>
+            <span className="floating-bubble-initials">
+              <Plus size={20} />
+            </span>
           </div>
 
           {showOverflow && (
-            <div 
+            <div
               className="floating-bubble-item overflow-bubble"
               onClick={() => {
                 bubbleStore.closeDrawer();
@@ -122,28 +120,24 @@ export function SessionDock({ session }: { session: Session }) {
               title={`View ${overflowCount} more active chats`}
               style={{ background: 'rgba(255,255,255,0.1)' }}
             >
-              <span className="floating-bubble-initials" style={{ color: '#fff' }}>+{overflowCount}</span>
+              <span className="floating-bubble-initials" style={{ color: '#fff' }}>
+                +{overflowCount}
+              </span>
             </div>
           )}
 
           {visibleBubbles.map((bubble, index) => (
-            <BubbleItem
-              key={bubble.chatId}
-              bubble={bubble}
-              index={index}
-            />
+            <BubbleItem key={bubble.chatId} bubble={bubble} index={index} />
           ))}
         </div>
       )}
 
-      {livelyAlert && !activeBubble && (
-        <LivelyMessagePopup alert={livelyAlert} />
-      )}
+      {livelyAlert && !activeBubble && <LivelyMessagePopup alert={livelyAlert} />}
 
       {activeBubble && !isNewChatOpen && <FloatingChatDrawer bubble={activeBubble} navigate={navigate} />}
 
       {isNewChatOpen && (
-        <FloatingNewChatDrawer 
+        <FloatingNewChatDrawer
           sessionId={session.id}
           onClose={() => setIsNewChatOpen(false)}
           onChatStarted={(chatId, name, text, msg) => {
@@ -163,4 +157,3 @@ export function SessionDock({ session }: { session: Session }) {
     </div>
   );
 }
-

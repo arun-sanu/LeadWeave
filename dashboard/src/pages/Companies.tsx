@@ -20,7 +20,6 @@ import { LeadWeaveLogo } from '../components/LeadWeaveLogo';
 import { supabase, isSupabaseConfigured } from '../services/supabase';
 import './Companies.css';
 
-
 export function Companies() {
   const [companies, setCompanies] = useState<SaaSCompany[]>(saasStore.getCompanies());
   const [search, setSearch] = useState('');
@@ -32,7 +31,7 @@ export function Companies() {
   const [loginId, setLoginId] = useState('');
   const [companyEmail, setCompanyEmail] = useState('');
   const [supabaseStatus, setSupabaseStatus] = useState<'checking' | 'connected' | 'error' | 'disconnected'>(
-    isSupabaseConfigured ? 'checking' : 'disconnected'
+    isSupabaseConfigured ? 'checking' : 'disconnected',
   );
 
   // Form state — Contact
@@ -61,7 +60,12 @@ export function Companies() {
     setSupabaseStatus('checking');
     try {
       const { error: pingError } = await supabase.from('companies').select('id', { count: 'exact', head: true });
-      if (pingError && (pingError.message.includes('fetch') || pingError.message.includes('network') || pingError.message.includes('Failed to fetch'))) {
+      if (
+        pingError &&
+        (pingError.message.includes('fetch') ||
+          pingError.message.includes('network') ||
+          pingError.message.includes('Failed to fetch'))
+      ) {
         setSupabaseStatus('error');
       } else {
         setSupabaseStatus('connected');
@@ -98,9 +102,19 @@ export function Companies() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setName(''); setLoginId(''); setCompanyEmail(''); setAddress(''); setPhone(''); setAltPhone('');
-    setAdminUsername(''); setAdminEmail('');
-    setMaxUsers(5); setMaxSessions(1); setMaxAdmins(1); setMaxHr(0); setMonthlyPrice(0);
+    setName('');
+    setLoginId('');
+    setCompanyEmail('');
+    setAddress('');
+    setPhone('');
+    setAltPhone('');
+    setAdminUsername('');
+    setAdminEmail('');
+    setMaxUsers(5);
+    setMaxSessions(1);
+    setMaxAdmins(1);
+    setMaxHr(0);
+    setMonthlyPrice(0);
   };
 
   const handleCreateCompany = async (e: React.FormEvent) => {
@@ -231,19 +245,29 @@ export function Companies() {
                     <div className="company-name-cell">
                       <span className="company-name">{company.name}</span>
                       <span className="company-slug">admin: {company.adminEmail}</span>
-                      {company.phone && (
-                        <span className="company-slug">📞 {company.phone}</span>
-                      )}
+                      {company.phone && <span className="company-slug">📞 {company.phone}</span>}
                     </div>
                   </td>
                   <td>
-                    <code style={{ fontSize: 13, background: 'rgba(255, 255, 255, 0.1)', color: '#e2e8f0', padding: '2px 8px', borderRadius: 4 }}>
+                    <code
+                      style={{
+                        fontSize: 13,
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        color: '#e2e8f0',
+                        padding: '2px 8px',
+                        borderRadius: 4,
+                      }}
+                    >
                       {company.loginId}
                     </code>
                   </td>
                   <td style={{ fontSize: 13 }}>
-                    <div><strong>{company.activeUsersCount}</strong>/{company.maxUsers} Users</div>
-                    <div style={{ color: '#64748b' }}>{company.maxSessions} Sessions · {company.maxAdmins} Admins · {company.maxHr} HR</div>
+                    <div>
+                      <strong>{company.activeUsersCount}</strong>/{company.maxUsers} Users
+                    </div>
+                    <div style={{ color: '#64748b' }}>
+                      {company.maxSessions} Sessions · {company.maxAdmins} Admins · {company.maxHr} HR
+                    </div>
                   </td>
                   <td>
                     <span style={{ fontWeight: 700, color: '#e2e8f0' }}>
@@ -269,7 +293,11 @@ export function Companies() {
                         onClick={() => saasStore.toggleCompanyStatus(company.id)}
                         title={company.status === 'active' ? 'Suspend Company' : 'Activate Company'}
                       >
-                        {company.status === 'active' ? <Ban size={16} strokeWidth={2.5} color="#ffffff" /> : <CheckCircle2 size={16} strokeWidth={2.5} color="#ffffff" />}
+                        {company.status === 'active' ? (
+                          <Ban size={16} strokeWidth={2.5} color="#ffffff" />
+                        ) : (
+                          <CheckCircle2 size={16} strokeWidth={2.5} color="#ffffff" />
+                        )}
                       </button>
                       <button
                         className="btn-action-icon danger"
@@ -295,7 +323,6 @@ export function Companies() {
       {isModalOpen && (
         <div className="modal-backdrop" onClick={closeModal}>
           <div className="modal-box company-modal-box" onClick={e => e.stopPropagation()}>
-
             {/* Modal Logo Header */}
             <div className="modal-logo-header">
               <LeadWeaveLogo size={28} withText glow />
@@ -309,7 +336,9 @@ export function Companies() {
               <Building2 size={20} />
               <div>
                 <h2>Add New Client Company</h2>
-                <p>New company admin default password: <code>Welcome123!</code></p>
+                <p>
+                  New company admin default password: <code>Welcome123!</code>
+                </p>
               </div>
             </div>
 
@@ -337,8 +366,12 @@ export function Companies() {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Login ID *
-                      <span className="form-hint"> (e.g. <code>apex</code>)</span>
+                    <label>
+                      Login ID *
+                      <span className="form-hint">
+                        {' '}
+                        (e.g. <code>apex</code>)
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -512,10 +545,10 @@ export function Companies() {
                     supabaseStatus === 'connected'
                       ? 'DBLink: Connected (Click to re-test)'
                       : supabaseStatus === 'checking'
-                      ? 'DBLink: Checking connectivity...'
-                      : supabaseStatus === 'error'
-                      ? 'DBLink: Offline or Unreachable (Click to retry)'
-                      : 'DBLink: Not configured'
+                        ? 'DBLink: Checking connectivity...'
+                        : supabaseStatus === 'error'
+                          ? 'DBLink: Offline or Unreachable (Click to retry)'
+                          : 'DBLink: Not configured'
                   }
                   aria-label={`DBLink status: ${supabaseStatus}`}
                   style={{ position: 'static', transform: 'none' }}
@@ -524,17 +557,19 @@ export function Companies() {
                   <svg className="supabase-badge-icon" viewBox="0 0 24 24" width="13" height="13" fill="none">
                     <path
                       d="M21.362 9.354H12V.312a.312.312 0 0 0-.543-.21L.343 12.378a.312.312 0 0 0 .221.534H12v9.042a.312.312 0 0 0 .543.21l11.114-12.276a.312.312 0 0 0-.221-.534z"
-                      fill={supabaseStatus === 'connected' ? '#3ECF8E' : supabaseStatus === 'error' ? '#ef4444' : '#94a3b8'}
+                      fill={
+                        supabaseStatus === 'connected' ? '#3ECF8E' : supabaseStatus === 'error' ? '#ef4444' : '#94a3b8'
+                      }
                     />
                   </svg>
                   <span className="supabase-status-text">
                     {supabaseStatus === 'connected'
                       ? 'DBLink'
                       : supabaseStatus === 'checking'
-                      ? 'Checking...'
-                      : supabaseStatus === 'error'
-                      ? 'Offline'
-                      : 'Unconfigured'}
+                        ? 'Checking...'
+                        : supabaseStatus === 'error'
+                          ? 'Offline'
+                          : 'Unconfigured'}
                   </span>
                 </button>
               </div>

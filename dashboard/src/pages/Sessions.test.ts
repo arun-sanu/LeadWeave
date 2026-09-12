@@ -215,7 +215,11 @@ function renderSessions(): { container: HTMLElement } {
     createElement(
       QueryClientProvider,
       { client: queryClient },
-      createElement(RoleProvider, { initialRole: 'admin' }, createElement(ToastProvider, null, createElement(Sessions))),
+      createElement(
+        RoleProvider,
+        { initialRole: 'admin' },
+        createElement(ToastProvider, null, createElement(Sessions)),
+      ),
     ),
   );
 }

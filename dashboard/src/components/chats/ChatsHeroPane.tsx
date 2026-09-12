@@ -92,7 +92,9 @@ export function ChatsHeroPane({
                 const session = sessions.find(s => s.id === selectedSessionId);
                 if (!session) return null;
                 return (
-                  <div className={`sidebar-session-switcher chats-hero-session-switcher ${sessions.length === 1 ? 'single-session' : ''}`}>
+                  <div
+                    className={`sidebar-session-switcher chats-hero-session-switcher ${sessions.length === 1 ? 'single-session' : ''}`}
+                  >
                     <select
                       value={selectedSessionId}
                       onChange={e => onSelectSessionId(e.target.value)}
@@ -111,7 +113,10 @@ export function ChatsHeroPane({
             ) : (
               <div className="chats-hero-empty-state">
                 <p className="chats-hero-empty-desc">
-                  {t('chats.noSessionsDesc', 'No connected WhatsApp session. Please connect or start a session to use chat.')}
+                  {t(
+                    'chats.noSessionsDesc',
+                    'No connected WhatsApp session. Please connect or start a session to use chat.',
+                  )}
                 </p>
                 <button
                   type="button"
@@ -133,7 +138,8 @@ export function ChatsHeroPane({
             <div className="chats-hero-session-pill">
               <span className="session-status-dot" />
               <span>
-                {allSessions.length} {t('sessions.title', 'Sessions')} ({sessions.length} {t('sessionStatus.ready', 'Ready')})
+                {allSessions.length} {t('sessions.title', 'Sessions')} ({sessions.length}{' '}
+                {t('sessionStatus.ready', 'Ready')})
               </span>
             </div>
           )}

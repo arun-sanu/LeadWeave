@@ -9,7 +9,9 @@
   border-radius: 16px;
   padding: 1.75rem 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 25px rgba(245, 158, 11, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 25px rgba(245, 158, 11, 0.08);
   position: relative;
   overflow: hidden;
   transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -17,7 +19,9 @@
 
 .storage-dedicated-logs-section:hover {
   border-color: rgba(245, 158, 11, 0.55);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(245, 158, 11, 0.15);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    0 0 35px rgba(245, 158, 11, 0.15);
 }
 
 .dedicated-logs-header {
@@ -115,9 +119,15 @@
   color: #f1f5f9;
 }
 
-.retention-val.accent-amber { color: #fbbf24; }
-.retention-val.accent-cyan { color: #38bdf8; }
-.retention-val.accent-emerald { color: var(--success); }
+.retention-val.accent-amber {
+  color: #fbbf24;
+}
+.retention-val.accent-cyan {
+  color: #38bdf8;
+}
+.retention-val.accent-emerald {
+  color: var(--success);
+}
 
 /* 91-Day Daily Archive List */
 .daily-archives-card-section {
@@ -226,8 +236,12 @@
 }
 
 @keyframes glassFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Auth Glass Modal */
@@ -237,15 +251,24 @@
   background: rgba(13, 17, 26, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 40px rgba(245, 158, 11, 0.12);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 0 40px rgba(245, 158, 11, 0.12);
   overflow: hidden;
   animation: glassPopIn 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   position: relative;
 }
 
 @keyframes glassPopIn {
-  0% { transform: scale(0.94) translateY(12px); opacity: 0; }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
+  0% {
+    transform: scale(0.94) translateY(12px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }
 
 .glass-auth-header {
@@ -430,7 +453,9 @@
   background: rgba(10, 14, 23, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -592,10 +617,18 @@
   color: #f1f5f9;
 }
 
-.hud-value.accent-cyan { color: #38bdf8; }
-.hud-value.accent-emerald { color: var(--success); }
-.hud-value.accent-amber { color: #fbbf24; }
-.hud-value.accent-rose { color: #f43f5e; }
+.hud-value.accent-cyan {
+  color: #38bdf8;
+}
+.hud-value.accent-emerald {
+  color: var(--success);
+}
+.hud-value.accent-amber {
+  color: #fbbf24;
+}
+.hud-value.accent-rose {
+  color: #f43f5e;
+}
 
 /* Filter & Controls Toolbar */
 .glass-logs-toolbar {
@@ -715,13 +748,41 @@
   display: inline-block;
 }
 
-.sev-info { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
-.sev-warn { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-.sev-error { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-.sev-critical { background: rgba(225, 29, 72, 0.2); color: #fda4af; border: 1px solid rgba(225, 29, 72, 0.4); }
-.sev-telemetry { background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-.sev-perf { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-.sev-debug { background: rgba(148, 163, 184, 0.1); color: var(--text-secondary); border: 1px solid rgba(148, 163, 184, 0.2); }
+.sev-info {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+.sev-warn {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.sev-error {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.sev-critical {
+  background: rgba(225, 29, 72, 0.2);
+  color: #fda4af;
+  border: 1px solid rgba(225, 29, 72, 0.4);
+}
+.sev-telemetry {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+.sev-perf {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.sev-debug {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text-secondary);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
 
 .log-badge-cat {
   font-size: 0.625rem;

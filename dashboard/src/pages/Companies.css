@@ -40,7 +40,9 @@
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
 }
 
 .companies-page .btn-create-company:hover {
@@ -582,7 +584,8 @@
 }
 
 @keyframes statusPulseGreen {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
     box-shadow: 0 0 7px rgba(16, 185, 129, 0.75);
@@ -595,7 +598,8 @@
 }
 
 @keyframes statusPulseAmber {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
     box-shadow: 0 0 7px rgba(245, 158, 11, 0.65);
@@ -608,7 +612,8 @@
 }
 
 @keyframes statusPulseRed {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
     box-shadow: 0 0 8px rgba(239, 68, 68, 0.75);

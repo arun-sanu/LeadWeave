@@ -1,10 +1,11 @@
 ---
 paths:
-  - "**/*.fs"
-  - "**/*.fsx"
-  - "**/*.fsproj"
-  - "**/appsettings*.json"
+  - '**/*.fs'
+  - '**/*.fsx'
+  - '**/*.fsproj'
+  - '**/appsettings*.json'
 ---
+
 # F# Security
 
 > This file extends [common/security.md](common-security.md) with F#-specific content.

@@ -147,19 +147,19 @@ Once installed, just talk to your AI naturally.
 
 ## 🔌 Supported Tools
 
-| Tool            | Status          | Path                                                                  |
-| :-------------- | :-------------- | :-------------------------------------------------------------------- |
-| **Claude Code** | ✅ Full Support | `.claude/skills/` or install via `/plugin marketplace add sickn33/agentic-awesome-skills` |
-| **Gemini CLI**  | ✅ Full Support | `.gemini/skills/`                                                     |
-| **Codex CLI**   | ✅ Full Support | `.codex/skills/` or use the repo-local plugin metadata described in [plugins.md](plugins.md) |
-| **Kiro CLI**    | ✅ Full Support | Global: `~/.kiro/skills/` · Workspace: `.kiro/skills/`                |
-| **Kiro IDE**    | ✅ Full Support | Global: `~/.kiro/skills/` · Workspace: `.kiro/skills/`                |
-| **Antigravity** | ✅ Native       | Global: `~/.agents/skills/` · Workspace: `.agent/skills/` |
-| **Antigravity CLI (`agy`)** | ✅ Full Support | Global slash-command directories: `~/.gemini/antigravity-cli/skills/<skill>/SKILL.md` |
-| **Cursor**      | ✅ Native       | `.cursor/skills/`                                                     |
-| **OpenCode**    | ✅ Full Support | `.agents/skills/` (prefer reduced installs with `--risk`, `--category`, or `--tags`) |
-| **AdaL CLI**    | ✅ Full Support | `.adal/skills/`                                                       |
-| **Copilot**     | ✅ Native (preview) | `gh skill install ... --agent github-copilot` at project or user scope |
+| Tool                        | Status              | Path                                                                                         |
+| :-------------------------- | :------------------ | :------------------------------------------------------------------------------------------- |
+| **Claude Code**             | ✅ Full Support     | `.claude/skills/` or install via `/plugin marketplace add sickn33/agentic-awesome-skills`    |
+| **Gemini CLI**              | ✅ Full Support     | `.gemini/skills/`                                                                            |
+| **Codex CLI**               | ✅ Full Support     | `.codex/skills/` or use the repo-local plugin metadata described in [plugins.md](plugins.md) |
+| **Kiro CLI**                | ✅ Full Support     | Global: `~/.kiro/skills/` · Workspace: `.kiro/skills/`                                       |
+| **Kiro IDE**                | ✅ Full Support     | Global: `~/.kiro/skills/` · Workspace: `.kiro/skills/`                                       |
+| **Antigravity**             | ✅ Native           | Global: `~/.agents/skills/` · Workspace: `.agent/skills/`                                    |
+| **Antigravity CLI (`agy`)** | ✅ Full Support     | Global slash-command directories: `~/.gemini/antigravity-cli/skills/<skill>/SKILL.md`        |
+| **Cursor**                  | ✅ Native           | `.cursor/skills/`                                                                            |
+| **OpenCode**                | ✅ Full Support     | `.agents/skills/` (prefer reduced installs with `--risk`, `--category`, or `--tags`)         |
+| **AdaL CLI**                | ✅ Full Support     | `.adal/skills/`                                                                              |
+| **Copilot**                 | ✅ Native (preview) | `gh skill install ... --agent github-copilot` at project or user scope                       |
 
 ---
 

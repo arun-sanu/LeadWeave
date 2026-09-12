@@ -16,12 +16,15 @@ Do not build a square heightfield. A long lens sees a narrow wedge, so a square 
 Sample on a polar grid centred under the camera, with radial rings that get further apart as they recede:
 
 ```js
-const AN = 900, RN = 52, R0 = 2.0, R1 = 700;   // angular, radial, near, far
+const AN = 900,
+  RN = 52,
+  R0 = 2.0,
+  R1 = 700; // angular, radial, near, far
 for (let r = 0; r <= RN; r++) {
   const t = r / RN;
-  const rad = R0 + (R1 - R0) * Math.pow(t, 2.4);   // dense near, sparse far
+  const rad = R0 + (R1 - R0) * Math.pow(t, 2.4); // dense near, sparse far
   for (let a = 0; a < AN; a++) {
-    const th = a / AN * Math.PI * 2;
+    const th = (a / AN) * Math.PI * 2;
     push(Math.cos(th) * rad, landH(x, z), Math.sin(th) * rad);
   }
 }
@@ -37,10 +40,10 @@ Plain fBm reads as crumpled paper. Warping the sample position with another nois
 
 ```js
 function landH(x, z) {
-  const wx = x + fbm(x * 0.012, z * 0.012, 3) * 26;   // domain warp
+  const wx = x + fbm(x * 0.012, z * 0.012, 3) * 26; // domain warp
   const wz = z + fbm(x * 0.012 + 41, z * 0.012 - 17, 3) * 26;
-  let h = fbm(wx * 0.0075, wz * 0.0075, 5) * 34;      // broad landforms
-  h += ridged(wx * 0.021, wz * 0.021, 3) * 9;         // ridge lines
+  let h = fbm(wx * 0.0075, wz * 0.0075, 5) * 34; // broad landforms
+  h += ridged(wx * 0.021, wz * 0.021, 3) * 9; // ridge lines
   return h;
 }
 ```
@@ -54,9 +57,10 @@ Ridge layers have to scale with distance. A ridge amplitude that reads well at 4
 A tiled ground texture always announces itself. Compute a vertex colour from the terrain's own properties instead:
 
 ```js
-const slope = 1 - normal.y;                      // steep = rock
-const moist = smoothstep(-4, 6, -height);        // low = wet, green
-const c = rock.clone()
+const slope = 1 - normal.y; // steep = rock
+const moist = smoothstep(-4, 6, -height); // low = wet, green
+const c = rock
+  .clone()
   .lerp(grass, (1 - slope * 3.2) * (0.35 + moist * 0.65))
   .lerp(sand, Math.max(0, 0.5 - moist) * 0.6);
 ```
@@ -68,25 +72,30 @@ You get cliffs that go stony, hollows that go green and ridges that go pale, for
 100k blades is a single `InstancedMesh` of a five-segment ribbon. Every bend, lean, taper and gust happens in the vertex shader, so the wind costs nothing on the CPU:
 
 ```js
-const geo = new THREE.BufferGeometry();          // 11 verts: a strip + a tip
+const geo = new THREE.BufferGeometry(); // 11 verts: a strip + a tip
 const mesh = new THREE.InstancedMesh(geo, mat, 104000);
 mat.onBeforeCompile = sh => {
   Object.assign(sh.uniforms, grassUni);
-  sh.vertexShader = `
+  sh.vertexShader =
+    `
     uniform float uTime, uWindAmp; uniform vec2 uWind;
     attribute vec4 aParams;                      // height, phase, tint, lean
     varying float vT; varying float vTint;
-  ` + sh.vertexShader.replace('#include <begin_vertex>', `
+  ` +
+    sh.vertexShader.replace(
+      '#include <begin_vertex>',
+      `
     float gT = position.y;                       // 0 at root, 1 at tip
     float gBend = uRestBend + sin(uTime * 1.7 + aParams.y) * uWindAmp;
     vec2  gRib  = ... ;                          // sweep the blade along an arc
     vec3 transformed = vec3(gRib.x, gT * aParams.x, gRib.y);
-  `);
+  `,
+    );
 };
-mat.customProgramCacheKey = () => 'grass';       // or every instance recompiles
+mat.customProgramCacheKey = () => 'grass'; // or every instance recompiles
 ```
 
-Anchor the field to the camera. Keep a fixed grid of blades around the viewer and move the *grid*, snapping to cell size, rather than growing the field outward. The player never reaches the edge and you never pay for grass behind them.
+Anchor the field to the camera. Keep a fixed grid of blades around the viewer and move the _grid_, snapping to cell size, rather than growing the field outward. The player never reaches the edge and you never pay for grass behind them.
 
 **Do not hard-code the blade colour in the fragment shader and then expect the material colour to change it.** `diffuseColor.rgb *= mix(base, tip, t)` multiplies whatever the material gave you, so a white material times a green constant is still green. If anything — settled snow, a season, a night palette — has to recolour the grass, that mix needs its own uniform. This costs an hour to find because every debug print says the material is white.
 
@@ -95,7 +104,8 @@ Anchor the field to the camera. Keep a fixed grid of blades around the viewer an
 Scatter with rejection sampling against slope, then `setMatrixAt` on an `InstancedMesh`. Weld the icosphere and scale it flat so they read as embedded rather than dropped:
 
 ```js
-geo.scale(1, 0.62, 1); geo.translate(0, 0.3, 0);   // sunk, not resting
+geo.scale(1, 0.62, 1);
+geo.translate(0, 0.3, 0); // sunk, not resting
 ```
 
 A few thousand at three or four sizes is enough. They matter most near the subject, where they give the eye something to measure scale against.
@@ -106,12 +116,13 @@ Paint a vertical gradient into a tiny canvas and map it to a back-side sphere. R
 
 ```js
 const grd = ctx.createLinearGradient(0, 0, 0, 512);
-[0, 0.30, 0.52, 0.68, 0.84, 1].forEach((s, i) => grd.addColorStop(s, cols[i]));
-ctx.fillStyle = grd; ctx.fillRect(0, 0, 8, 512);
+[0, 0.3, 0.52, 0.68, 0.84, 1].forEach((s, i) => grd.addColorStop(s, cols[i]));
+ctx.fillStyle = grd;
+ctx.fillRect(0, 0, 8, 512);
 skyMat.map.needsUpdate = true;
 ```
 
-Six stops is the number. Three gives you a CSS gradient; ten and you cannot tune it. Put the horizon stop slightly *below* the geometric horizon so the fog colour and the sky meet without a visible line.
+Six stops is the number. Three gives you a CSS gradient; ten and you cannot tune it. Put the horizon stop slightly _below_ the geometric horizon so the fog colour and the sky meet without a visible line.
 
 ## Stars: confine them to the band the camera can reach
 
@@ -138,7 +149,7 @@ function applyState(A, B, t) {
 }
 ```
 
-When the user switches mid-transition, freeze the *current interpolated* state as the new `A` rather than snapping to the last preset. Otherwise every impatient click jumps.
+When the user switches mid-transition, freeze the _current interpolated_ state as the new `A` rather than snapping to the last preset. Otherwise every impatient click jumps.
 
 Keep weather as a multiplier layered on top of this, never as more presets. Four times of day × four weathers is four states and four modifiers, not sixteen.
 

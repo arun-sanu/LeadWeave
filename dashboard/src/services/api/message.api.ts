@@ -79,4 +79,3 @@ export const messageApi = {
       body: JSON.stringify(data),
     }),
 };
-

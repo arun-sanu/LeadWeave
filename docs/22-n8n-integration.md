@@ -47,8 +47,8 @@ Execute operations on your LeadWeave server.
 
 #### Credentials Setup
 
-| Field      | Description                      | Example                  |
-| ---------- | -------------------------------- | ------------------------ |
+| Field      | Description                         | Example                  |
+| ---------- | ----------------------------------- | ------------------------ |
 | Server URL | LeadWeave server URL (without /api) | `https://wa.example.com` |
 | API Key    | API key from LeadWeave dashboard    | `owa_xxxxxxxx...`        |
 

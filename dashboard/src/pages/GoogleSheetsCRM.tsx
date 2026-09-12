@@ -11,7 +11,9 @@ const formatPhoneForDisplay = (p: string) => {
   if (!p) return '';
   const noAt = p.split('@')[0];
   if (noAt.length > 10) {
-    return '+' + noAt.substring(0, 1) + ' (' + noAt.substring(1, 4) + ') ' + noAt.substring(4, 7) + '-' + noAt.substring(7);
+    return (
+      '+' + noAt.substring(0, 1) + ' (' + noAt.substring(1, 4) + ') ' + noAt.substring(4, 7) + '-' + noAt.substring(7)
+    );
   }
   return '+' + noAt;
 };
@@ -25,7 +27,7 @@ export function GoogleSheetsCRM() {
   useDocumentTitle('Google Sheets CRM - LeadWeave');
   const { success, error } = useToast();
   const { data: allSessions = [] } = useSessionsQuery();
-  const readySessions = allSessions.filter((s) => (s as { status: string; id: string }).status === 'ready');
+  const readySessions = allSessions.filter(s => (s as { status: string; id: string }).status === 'ready');
 
   // Google Sheets Integration Modal State
   const [showSheetsModal, setShowSheetsModal] = useState(false);
@@ -38,18 +40,22 @@ export function GoogleSheetsCRM() {
   const [sheetUrlInput, setSheetUrlInput] = useState('');
 
   useEffect(() => {
-    idbGet<SheetInfo[]>(SHEETS_STORAGE_KEY).then(stored => {
-      if (stored && Array.isArray(stored) && stored.length > 0) {
-        setSavedSheets(stored);
-        idbGet<string>(ACTIVE_SHEET_KEY).then(active => {
-          if (active && stored.some(s => s.id === active)) {
-            setActiveSheetId(active);
-          } else {
-            setActiveSheetId(stored[0]?.id || '');
-          }
-        }).catch(() => {});
-      }
-    }).catch(() => {});
+    idbGet<SheetInfo[]>(SHEETS_STORAGE_KEY)
+      .then(stored => {
+        if (stored && Array.isArray(stored) && stored.length > 0) {
+          setSavedSheets(stored);
+          idbGet<string>(ACTIVE_SHEET_KEY)
+            .then(active => {
+              if (active && stored.some(s => s.id === active)) {
+                setActiveSheetId(active);
+              } else {
+                setActiveSheetId(stored[0]?.id || '');
+              }
+            })
+            .catch(() => {});
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const activeSheet = savedSheets.find(s => s.id === activeSheetId);
@@ -104,7 +110,11 @@ export function GoogleSheetsCRM() {
 
           <button
             className="btn-tool"
-            style={{ background: 'var(--primary-soft)', color: 'var(--primary)', borderColor: 'rgba(37, 211, 102, 0.3)' }}
+            style={{
+              background: 'var(--primary-soft)',
+              color: 'var(--primary)',
+              borderColor: 'rgba(37, 211, 102, 0.3)',
+            }}
             onClick={async () => {
               setShowSheetsModal(true);
               setIsLoadingScript(true);
@@ -125,7 +135,18 @@ export function GoogleSheetsCRM() {
         </div>
 
         {/* URL Input Bar */}
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', background: '#0f172a', padding: '0.6rem', borderRadius: 8, border: '1px solid var(--studio-border)', marginBottom: '1rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+            alignItems: 'center',
+            background: '#0f172a',
+            padding: '0.6rem',
+            borderRadius: 8,
+            border: '1px solid var(--studio-border)',
+            marginBottom: '1rem',
+          }}
+        >
           <Globe size={18} className="text-primary" style={{ marginLeft: '0.35rem' }} />
           <input
             type="text"
@@ -144,16 +165,26 @@ export function GoogleSheetsCRM() {
 
         {/* Sheet Tabs */}
         {savedSheets.length > 0 && (
-          <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', marginBottom: '1rem', paddingBottom: '0.25rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: '0.5rem',
+              overflowX: 'auto',
+              marginBottom: '1rem',
+              paddingBottom: '0.25rem',
+            }}
+          >
             {savedSheets.map(sheet => (
-              <div 
+              <div
                 key={sheet.id}
                 onClick={() => {
                   setActiveSheetId(sheet.id);
                   localStorage.setItem('leadweave_active_sheet', sheet.id);
                 }}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
                   padding: '0.5rem 0.85rem',
                   background: activeSheetId === sheet.id ? 'var(--primary-soft)' : 'rgba(255,255,255,0.03)',
                   border: `1px solid ${activeSheetId === sheet.id ? 'rgba(37, 211, 102, 0.4)' : 'var(--studio-border)'}`,
@@ -162,14 +193,21 @@ export function GoogleSheetsCRM() {
                   color: activeSheetId === sheet.id ? 'var(--text-primary)' : 'var(--text-secondary)',
                   fontWeight: activeSheetId === sheet.id ? 600 : 400,
                   fontSize: '0.875rem',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
                 }}
               >
                 <FileSpreadsheet size={14} className={activeSheetId === sheet.id ? 'text-primary' : ''} />
                 <span>{sheet.name}</span>
                 <button
-                  onClick={(e) => handleRemoveSheet(sheet.id, e)}
-                  style={{ background: 'none', border: 'none', color: 'inherit', padding: 2, cursor: 'pointer', opacity: 0.6 }}
+                  onClick={e => handleRemoveSheet(sheet.id, e)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'inherit',
+                    padding: 2,
+                    cursor: 'pointer',
+                    opacity: 0.6,
+                  }}
                   title="Remove Sheet"
                 >
                   <X size={14} />
@@ -181,7 +219,16 @@ export function GoogleSheetsCRM() {
 
         {/* Embedded iframe Container */}
         {activeSheet ? (
-          <div style={{ width: '100%', height: '650px', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--studio-border)', background: '#ffffff' }}>
+          <div
+            style={{
+              width: '100%',
+              height: '650px',
+              borderRadius: 8,
+              overflow: 'hidden',
+              border: '1px solid var(--studio-border)',
+              background: '#ffffff',
+            }}
+          >
             <iframe
               src={activeSheet.url}
               title="LeadWeave Embedded Google Sheet"
@@ -192,7 +239,15 @@ export function GoogleSheetsCRM() {
             />
           </div>
         ) : (
-          <div style={{ padding: '4rem 2rem', textAlign: 'center', background: 'rgba(255,255,255,0.01)', borderRadius: 8, border: '1px dashed var(--studio-border)' }}>
+          <div
+            style={{
+              padding: '4rem 2rem',
+              textAlign: 'center',
+              background: 'rgba(255,255,255,0.01)',
+              borderRadius: 8,
+              border: '1px dashed var(--studio-border)',
+            }}
+          >
             <FileSpreadsheet size={40} color="#64748b" style={{ margin: '0 auto 1rem' }} />
             <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>No Google Sheet connected</h3>
             <p style={{ fontSize: '0.8125rem', color: '#94a3b8', maxWidth: 450, margin: '0.25rem auto 1.5rem' }}>
@@ -241,7 +296,15 @@ export function GoogleSheetsCRM() {
             <Loader2 size={28} className="spin-icon text-primary" />
           </div>
         ) : trackedLeads.length === 0 ? (
-          <div style={{ padding: '3rem 2rem', textAlign: 'center', background: 'rgba(255,255,255,0.01)', borderRadius: 8, border: '1px dashed var(--studio-border)' }}>
+          <div
+            style={{
+              padding: '3rem 2rem',
+              textAlign: 'center',
+              background: 'rgba(255,255,255,0.01)',
+              borderRadius: 8,
+              border: '1px dashed var(--studio-border)',
+            }}
+          >
             <Users2 size={36} color="#64748b" style={{ margin: '0 auto 0.75rem' }} />
             <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#f8fafc' }}>No tracked leads in pipeline yet</h3>
             <p style={{ fontSize: '0.8125rem', color: '#94a3b8', margin: '0.25rem 0' }}>
@@ -266,8 +329,12 @@ export function GoogleSheetsCRM() {
                 {trackedLeads.map((lead, idx) => (
                   <tr key={lead.id}>
                     <td style={{ textAlign: 'center', color: '#64748b' }}>{idx + 1}</td>
-                    <td><strong style={{ color: '#f8fafc' }}>{lead.leadName || 'Lead'}</strong></td>
-                    <td><code style={{ color: '#38bdf8' }}>{formatPhoneForDisplay(lead.phoneNumber)}</code></td>
+                    <td>
+                      <strong style={{ color: '#f8fafc' }}>{lead.leadName || 'Lead'}</strong>
+                    </td>
+                    <td>
+                      <code style={{ color: '#38bdf8' }}>{formatPhoneForDisplay(lead.phoneNumber)}</code>
+                    </td>
                     <td>
                       <span
                         style={{
@@ -279,18 +346,18 @@ export function GoogleSheetsCRM() {
                             lead.status === 'REPLIED'
                               ? 'rgba(34, 197, 94, 0.15)'
                               : lead.status === 'OPT_OUT'
-                              ? 'rgba(239, 68, 68, 0.15)'
-                              : lead.status === 'W-RNR'
-                              ? 'rgba(245, 158, 11, 0.15)'
-                              : 'rgba(59, 130, 246, 0.15)',
+                                ? 'rgba(239, 68, 68, 0.15)'
+                                : lead.status === 'W-RNR'
+                                  ? 'rgba(245, 158, 11, 0.15)'
+                                  : 'rgba(59, 130, 246, 0.15)',
                           color:
                             lead.status === 'REPLIED'
                               ? '#22c55e'
                               : lead.status === 'OPT_OUT'
-                              ? '#ef4444'
-                              : lead.status === 'W-RNR'
-                              ? '#f59e0b'
-                              : '#3b82f6',
+                                ? '#ef4444'
+                                : lead.status === 'W-RNR'
+                                  ? '#f59e0b'
+                                  : '#3b82f6',
                         }}
                       >
                         {lead.status}
@@ -323,7 +390,9 @@ export function GoogleSheetsCRM() {
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', padding: '0.5rem 0' }}>
             <p style={{ fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.5 }}>
-              Connect your Google Sheet directly to LeadWeave. Sales reps can click any row to verify WhatsApp registration, trigger personalized greetings, auto-handle <strong>STOP</strong> opt-outs, and track <strong>20h W-RNR</strong> timeouts!
+              Connect your Google Sheet directly to LeadWeave. Sales reps can click any row to verify WhatsApp
+              registration, trigger personalized greetings, auto-handle <strong>STOP</strong> opt-outs, and track{' '}
+              <strong>20h W-RNR</strong> timeouts!
             </p>
 
             {isLoadingScript ? (
@@ -332,27 +401,31 @@ export function GoogleSheetsCRM() {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div style={{ 
-                  background: '#0b141a', 
-                  borderRadius: 8, 
-                  border: '1px solid var(--studio-border)',
-                  overflow: 'hidden' 
-                }}>
-                  <pre style={{ 
-                    margin: 0, 
-                    padding: '1rem', 
-                    fontFamily: 'monospace', 
-                    fontSize: '0.75rem', 
-                    color: '#22c55e', 
-                    overflowY: 'auto', 
-                    maxHeight: '350px',
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-word'
-                  }}>
+                <div
+                  style={{
+                    background: '#0b141a',
+                    borderRadius: 8,
+                    border: '1px solid var(--studio-border)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <pre
+                    style={{
+                      margin: 0,
+                      padding: '1rem',
+                      fontFamily: 'monospace',
+                      fontSize: '0.75rem',
+                      color: '#22c55e',
+                      overflowY: 'auto',
+                      maxHeight: '350px',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word',
+                    }}
+                  >
                     {sheetsScript}
                   </pre>
                 </div>
-                
+
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <button
                     className="btn-tool btn-primary"

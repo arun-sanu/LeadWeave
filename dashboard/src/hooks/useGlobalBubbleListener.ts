@@ -53,46 +53,50 @@ export function useGlobalBubbleListener() {
     bubbleStore.batchAddOrUpdateBubbles(bubbleUpdates);
   }, []);
 
-  const handleMessage = useCallback((event: { sessionId?: string; message?: Record<string, unknown> }) => {
-    if (!event?.message) return;
+  const handleMessage = useCallback(
+    (event: { sessionId?: string; message?: Record<string, unknown> }) => {
+      if (!event?.message) return;
 
-    const raw = event.message as unknown as RawIncomingMessage;
-    const isIncoming = raw.direction === 'incoming' || raw.fromMe === false || (!raw.fromMe && raw.direction !== 'outgoing');
-    const targetChatId = raw.chatId || raw.from || raw.to;
+      const raw = event.message as unknown as RawIncomingMessage;
+      const isIncoming =
+        raw.direction === 'incoming' || raw.fromMe === false || (!raw.fromMe && raw.direction !== 'outgoing');
+      const targetChatId = raw.chatId || raw.from || raw.to;
 
-    if (!isIncoming || !targetChatId) return;
+      if (!isIncoming || !targetChatId) return;
 
-    // Avoid duplicate updates when Chats.tsx is already handling active room events
-    if (window.location.pathname.includes('/chats')) return;
+      // Avoid duplicate updates when Chats.tsx is already handling active room events
+      if (window.location.pathname.includes('/chats')) return;
 
-    const mappedMsg: ChatMessage = {
-      id: raw.id || `msg-${Date.now()}`,
-      waMessageId: raw.waMessageId || raw.id || `wamid-${Date.now()}`,
-      chatId: targetChatId,
-      from: raw.from || targetChatId,
-      to: raw.to || 'me',
-      body: raw.body || '',
-      type: (raw.type as ChatMessage['type']) || 'text',
-      direction: 'incoming',
-      status: 'delivered',
-      timestamp: raw.timestamp || Math.floor(Date.now() / 1000),
-      createdAt: new Date().toISOString(),
-      metadata: raw.metadata as ChatMessage['metadata'],
-    };
+      const mappedMsg: ChatMessage = {
+        id: raw.id || `msg-${Date.now()}`,
+        waMessageId: raw.waMessageId || raw.id || `wamid-${Date.now()}`,
+        chatId: targetChatId,
+        from: raw.from || targetChatId,
+        to: raw.to || 'me',
+        body: raw.body || '',
+        type: (raw.type as ChatMessage['type']) || 'text',
+        direction: 'incoming',
+        status: 'delivered',
+        timestamp: raw.timestamp || Math.floor(Date.now() / 1000),
+        createdAt: new Date().toISOString(),
+        metadata: raw.metadata as ChatMessage['metadata'],
+      };
 
-    // Batch message updates: accumulate and flush on a timer to avoid
-    // 200+ synchronous DOM re-renders when multiple messages arrive
-    const dedupeKey = `${targetChatId}`;
-    pendingMessageBatchRef.current.set(dedupeKey, {
-      message: mappedMsg,
-      sessionId: event.sessionId || 'default',
-    });
+      // Batch message updates: accumulate and flush on a timer to avoid
+      // 200+ synchronous DOM re-renders when multiple messages arrive
+      const dedupeKey = `${targetChatId}`;
+      pendingMessageBatchRef.current.set(dedupeKey, {
+        message: mappedMsg,
+        sessionId: event.sessionId || 'default',
+      });
 
-    if (batchFlushTimeoutRef.current) {
-      clearTimeout(batchFlushTimeoutRef.current);
-    }
-    batchFlushTimeoutRef.current = setTimeout(flushMessageBatch, 50);
-  }, [flushMessageBatch]);
+      if (batchFlushTimeoutRef.current) {
+        clearTimeout(batchFlushTimeoutRef.current);
+      }
+      batchFlushTimeoutRef.current = setTimeout(flushMessageBatch, 50);
+    },
+    [flushMessageBatch],
+  );
 
   // Referentially stable wsEvents object to prevent useWebSocket re-attaching listeners on every render
   const wsEvents = useMemo(
@@ -134,11 +138,11 @@ export function useGlobalBubbleListener() {
                 const chats = await sessionApi.getChats(sess.id);
                 if (Array.isArray(chats)) {
                   const topChats = chats.slice(0, 15);
-                  const bubbleItems = topChats.map((chat) => {
+                  const bubbleItems = topChats.map(chat => {
                     const displayName =
                       chat.name && !/^\+?\d+$/.test(chat.name.replace(/[\s()-]/g, '')) && !chat.name.includes('@')
                         ? chat.name
-                        : (formatPhoneForDisplay(chat.name || chat.id) || chat.name || chat.id.split('@')[0]);
+                        : formatPhoneForDisplay(chat.name || chat.id) || chat.name || chat.id.split('@')[0];
 
                     return {
                       chatId: chat.id,

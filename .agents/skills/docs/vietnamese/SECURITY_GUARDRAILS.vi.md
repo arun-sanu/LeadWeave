@@ -21,7 +21,7 @@ Mỗi skill tấn công **BẮT BUỘC** phải bắt đầu bằng tuyên bố 
 
 Các skill tấn công **KHÔNG BAO GIỜ** được chạy hoàn toàn tự động một cách tự ý (autonomously).
 
-- **Yêu cầu**: Mô tả hoặc hướng dẫn của skill phải yêu cầu agent (trợ lý AI) *hỏi xác nhận của người dùng* trước khi thực thi bất kỳ lệnh khai thác hoặc tấn công nào.
+- **Yêu cầu**: Mô tả hoặc hướng dẫn của skill phải yêu cầu agent (trợ lý AI) _hỏi xác nhận của người dùng_ trước khi thực thi bất kỳ lệnh khai thác hoặc tấn công nào.
 - **Hướng dẫn cho Agent**: "Yêu cầu người dùng xác minh URL/IP mục tiêu trước khi chạy."
 
 ### 3. Thiết kế để An toàn

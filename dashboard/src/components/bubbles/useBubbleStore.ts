@@ -86,7 +86,7 @@ class BubbleStore {
     }
     this.notifyTimeout = setTimeout(() => {
       this.notifyTimeout = null;
-      this.listeners.forEach((listener) => listener());
+      this.listeners.forEach(listener => listener());
     }, 50);
   }
 
@@ -117,14 +117,12 @@ class BubbleStore {
     const isExpanded = !!this.expandedDocks[sessionId];
     this.expandedDocks = {
       ...this.expandedDocks,
-      [sessionId]: !isExpanded
+      [sessionId]: !isExpanded,
     };
-    
+
     if (isExpanded) {
       // If collapsing the dock, also close any open drawer for this session
-      this.bubbles = this.bubbles.map((b) => 
-        b.sessionId === sessionId ? { ...b, isOpen: false } : b
-      );
+      this.bubbles = this.bubbles.map(b => (b.sessionId === sessionId ? { ...b, isOpen: false } : b));
       if (this.activeBubbleId) {
         const activeBubble = this.bubbles.find(b => b.chatId === this.activeBubbleId);
         if (activeBubble && activeBubble.sessionId === sessionId) {
@@ -138,13 +136,11 @@ class BubbleStore {
   public setDockExpanded(sessionId: string, expanded: boolean) {
     this.expandedDocks = {
       ...this.expandedDocks,
-      [sessionId]: expanded
+      [sessionId]: expanded,
     };
-    
+
     if (!expanded) {
-      this.bubbles = this.bubbles.map((b) => 
-        b.sessionId === sessionId ? { ...b, isOpen: false } : b
-      );
+      this.bubbles = this.bubbles.map(b => (b.sessionId === sessionId ? { ...b, isOpen: false } : b));
       if (this.activeBubbleId) {
         const activeBubble = this.bubbles.find(b => b.chatId === this.activeBubbleId);
         if (activeBubble && activeBubble.sessionId === sessionId) {
@@ -157,10 +153,11 @@ class BubbleStore {
 
   public updateBubbleName(chatId: string, name: string) {
     if (!name) return;
-    const existingIndex = this.bubbles.findIndex((b) => b.chatId === chatId);
+    const existingIndex = this.bubbles.findIndex(b => b.chatId === chatId);
     if (existingIndex >= 0) {
       const existing = this.bubbles[existingIndex];
-      const isExistingNumeric = !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) || existing.name.includes('@');
+      const isExistingNumeric =
+        !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) || existing.name.includes('@');
       const isNewBetter = name && !/^\+?\d+$/.test(name.replace(/[\s()-]/g, '')) && !name.includes('@');
       if (isNewBetter || isExistingNumeric) {
         this.bubbles = [
@@ -184,16 +181,19 @@ class BubbleStore {
     lastMessageObject?: ChatMessage;
     showLivelyAlert?: boolean;
   }) {
-    const existingIndex = this.bubbles.findIndex((b) => b.chatId === data.chatId);
+    const existingIndex = this.bubbles.findIndex(b => b.chatId === data.chatId);
 
     if (existingIndex >= 0) {
       const existing = this.bubbles[existingIndex];
-      const isExistingNumeric = !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) || existing.name.includes('@');
+      const isExistingNumeric =
+        !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) || existing.name.includes('@');
       const isNewBetter = data.name && !/^\+?\d+$/.test(data.name.replace(/[\s()-]/g, '')) && !data.name.includes('@');
-      const resolvedName = isNewBetter ? data.name : (!isExistingNumeric ? existing.name : data.name);
+      const resolvedName = isNewBetter ? data.name : !isExistingNumeric ? existing.name : data.name;
       const updatedUnread = data.incrementUnread
         ? existing.unreadCount + 1
-        : (data.unreadCount !== undefined ? data.unreadCount : existing.unreadCount);
+        : data.unreadCount !== undefined
+          ? data.unreadCount
+          : existing.unreadCount;
 
       const updated: ChatBubble = {
         ...existing,
@@ -204,15 +204,9 @@ class BubbleStore {
         lastMessageObject: data.lastMessageObject || existing.lastMessageObject,
         timestamp: Date.now(),
       };
-      this.bubbles = [
-        ...this.bubbles.slice(0, existingIndex),
-        updated,
-        ...this.bubbles.slice(existingIndex + 1),
-      ];
+      this.bubbles = [...this.bubbles.slice(0, existingIndex), updated, ...this.bubbles.slice(existingIndex + 1)];
     } else {
-      const initialUnread = data.incrementUnread
-        ? 1
-        : (data.unreadCount !== undefined ? data.unreadCount : 0);
+      const initialUnread = data.incrementUnread ? 1 : data.unreadCount !== undefined ? data.unreadCount : 0;
 
       const newBubble: ChatBubble = {
         chatId: data.chatId,
@@ -227,8 +221,8 @@ class BubbleStore {
       };
       this.bubbles = [newBubble, ...this.bubbles];
       if (this.bubbles.length > MAX_BUBBLES) {
-        const open = this.bubbles.filter((b) => b.isOpen);
-        const closed = this.bubbles.filter((b) => !b.isOpen);
+        const open = this.bubbles.filter(b => b.isOpen);
+        const closed = this.bubbles.filter(b => !b.isOpen);
         this.bubbles = [...open, ...closed.slice(0, Math.max(0, MAX_BUBBLES - open.length))];
       }
     }
@@ -268,18 +262,14 @@ class BubbleStore {
     let latestAlertData: (typeof items)[0] | null = null;
 
     for (const data of items) {
-      const existingIndex = updatedBubbles.findIndex((b) => b.chatId === data.chatId);
+      const existingIndex = updatedBubbles.findIndex(b => b.chatId === data.chatId);
 
       if (existingIndex >= 0) {
         const existing = updatedBubbles[existingIndex];
         const isExistingNumeric =
-          !existing.name ||
-          /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) ||
-          existing.name.includes('@');
+          !existing.name || /^\+?\d+$/.test(existing.name.replace(/[\s()-]/g, '')) || existing.name.includes('@');
         const isNewBetter =
-          data.name &&
-          !/^\+?\d+$/.test(data.name.replace(/[\s()-]/g, '')) &&
-          !data.name.includes('@');
+          data.name && !/^\+?\d+$/.test(data.name.replace(/[\s()-]/g, '')) && !data.name.includes('@');
         const resolvedName = isNewBetter ? data.name : !isExistingNumeric ? existing.name : data.name;
         const updatedUnread = data.incrementUnread
           ? existing.unreadCount + 1
@@ -309,11 +299,7 @@ class BubbleStore {
         updatedBubbles[existingIndex] = updated;
       } else {
         hasChanges = true;
-        const initialUnread = data.incrementUnread
-          ? 1
-          : data.unreadCount !== undefined
-            ? data.unreadCount
-            : 0;
+        const initialUnread = data.incrementUnread ? 1 : data.unreadCount !== undefined ? data.unreadCount : 0;
 
         const newBubble: ChatBubble = {
           chatId: data.chatId,
@@ -335,8 +321,8 @@ class BubbleStore {
     }
 
     if (updatedBubbles.length > MAX_BUBBLES) {
-      const open = updatedBubbles.filter((b) => b.isOpen);
-      const closed = updatedBubbles.filter((b) => !b.isOpen);
+      const open = updatedBubbles.filter(b => b.isOpen);
+      const closed = updatedBubbles.filter(b => !b.isOpen);
       updatedBubbles = [...open, ...closed.slice(0, Math.max(0, MAX_BUBBLES - open.length))];
     }
 
@@ -383,7 +369,7 @@ class BubbleStore {
   }
 
   public removeBubble(chatId: string) {
-    this.bubbles = this.bubbles.filter((b) => b.chatId !== chatId);
+    this.bubbles = this.bubbles.filter(b => b.chatId !== chatId);
     if (this.activeBubbleId === chatId) {
       this.activeBubbleId = null;
     }
@@ -392,7 +378,7 @@ class BubbleStore {
 
   public openDrawer(chatId: string) {
     this.dismissLivelyAlert();
-    this.bubbles = this.bubbles.map((b) => ({
+    this.bubbles = this.bubbles.map(b => ({
       ...b,
       isOpen: b.chatId === chatId,
       unreadCount: b.chatId === chatId ? 0 : b.unreadCount,
@@ -403,11 +389,11 @@ class BubbleStore {
 
   public toggleBubbleOpen(chatId: string) {
     this.dismissLivelyAlert();
-    const target = this.bubbles.find((b) => b.chatId === chatId);
+    const target = this.bubbles.find(b => b.chatId === chatId);
     if (!target) return;
 
     const willOpen = !target.isOpen;
-    this.bubbles = this.bubbles.map((b) => ({
+    this.bubbles = this.bubbles.map(b => ({
       ...b,
       isOpen: b.chatId === chatId ? willOpen : false,
       unreadCount: b.chatId === chatId ? 0 : b.unreadCount,
@@ -417,15 +403,13 @@ class BubbleStore {
   }
 
   public closeDrawer() {
-    this.bubbles = this.bubbles.map((b) => ({ ...b, isOpen: false }));
+    this.bubbles = this.bubbles.map(b => ({ ...b, isOpen: false }));
     this.activeBubbleId = null;
     this.notify();
   }
 
   public markAsRead(chatId: string) {
-    this.bubbles = this.bubbles.map((b) =>
-      b.chatId === chatId ? { ...b, unreadCount: 0 } : b
-    );
+    this.bubbles = this.bubbles.map(b => (b.chatId === chatId ? { ...b, unreadCount: 0 } : b));
     this.notify();
   }
 }

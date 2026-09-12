@@ -1,9 +1,10 @@
 ---
 paths:
-  - "**/*.ets"
-  - "**/*.ts"
-  - "**/module.json5"
+  - '**/*.ets'
+  - '**/*.ts'
+  - '**/module.json5'
 ---
+
 # HarmonyOS / ArkTS Security
 
 > This file extends [common/security.md](common-security.md) with HarmonyOS-specific security practices.
@@ -16,18 +17,18 @@ All system API calls requiring permissions must be declared:
 
 ```json5
 {
-  "module": {
-    "requestPermissions": [
+  module: {
+    requestPermissions: [
       {
-        "name": "ohos.permission.INTERNET",
-        "reason": "$string:internet_permission_reason",
-        "usedScene": {
-          "abilities": ["EntryAbility"],
-          "when": "always"
-        }
-      }
-    ]
-  }
+        name: 'ohos.permission.INTERNET',
+        reason: '$string:internet_permission_reason',
+        usedScene: {
+          abilities: ['EntryAbility'],
+          when: 'always',
+        },
+      },
+    ],
+  },
 }
 ```
 
@@ -48,7 +49,7 @@ import { abilityAccessCtrl, bundleManager, Permissions } from '@kit.AbilityKit';
 async function checkAndRequestPermission(permission: Permissions): Promise<boolean> {
   const atManager = abilityAccessCtrl.createAtManager();
   const bundleInfo = await bundleManager.getBundleInfoForSelf(
-    bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
+    bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION,
   );
   const tokenId = bundleInfo.appInfo.accessTokenId;
   const grantStatus = await atManager.checkAccessToken(tokenId, permission);
@@ -79,7 +80,12 @@ const endpoint = BuildProfile.API_ENDPOINT;
 
 // GOOD: use HUKS to encrypt/decrypt data without exposing key material
 import { huks } from '@kit.UniversalKeystoreKit';
-async function decryptWithKeystore(alias: string, nonce: Uint8Array, aad: Uint8Array, cipherData: Uint8Array): Promise<Uint8Array> {
+async function decryptWithKeystore(
+  alias: string,
+  nonce: Uint8Array,
+  aad: Uint8Array,
+  cipherData: Uint8Array,
+): Promise<Uint8Array> {
   const options: huks.HuksOptions = {
     properties: [
       { tag: huks.HuksTag.HUKS_TAG_ALGORITHM, value: huks.HuksKeyAlg.HUKS_ALG_AES },
@@ -87,9 +93,9 @@ async function decryptWithKeystore(alias: string, nonce: Uint8Array, aad: Uint8A
       { tag: huks.HuksTag.HUKS_TAG_BLOCK_MODE, value: huks.HuksCipherMode.HUKS_MODE_GCM },
       { tag: huks.HuksTag.HUKS_TAG_PADDING, value: huks.HuksKeyPadding.HUKS_PADDING_NONE },
       { tag: huks.HuksTag.HUKS_TAG_NONCE, value: nonce },
-      { tag: huks.HuksTag.HUKS_TAG_ASSOCIATED_DATA, value: aad }
+      { tag: huks.HuksTag.HUKS_TAG_ASSOCIATED_DATA, value: aad },
     ],
-    inData: cipherData
+    inData: cipherData,
   };
   const handle = await huks.initSession(alias, options);
   const result = await huks.finishSession(handle.handle, options);

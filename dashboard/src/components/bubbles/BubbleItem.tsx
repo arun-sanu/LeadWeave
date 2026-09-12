@@ -7,7 +7,7 @@ export function BubbleItem({ bubble, index }: { bubble: ChatBubble; index: numbe
   const displayName = getBubbleDisplayName(bubble.chatId, bubble.name);
   const initials = displayName
     .split(' ')
-    .map((n) => n[0])
+    .map(n => n[0])
     .join('')
     .substring(0, 2);
 
@@ -21,7 +21,7 @@ export function BubbleItem({ bubble, index }: { bubble: ChatBubble; index: numbe
       <button
         type="button"
         className="floating-bubble-close-btn"
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           bubbleStore.removeBubble(bubble.chatId);
         }}
@@ -36,10 +36,7 @@ export function BubbleItem({ bubble, index }: { bubble: ChatBubble; index: numbe
         <span className="floating-bubble-initials">{initials}</span>
       )}
 
-      {bubble.unreadCount > 0 && (
-        <span className="floating-bubble-badge">{bubble.unreadCount}</span>
-      )}
+      {bubble.unreadCount > 0 && <span className="floating-bubble-badge">{bubble.unreadCount}</span>}
     </div>
   );
 }
-

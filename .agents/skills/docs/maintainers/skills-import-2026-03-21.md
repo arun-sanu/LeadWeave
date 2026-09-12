@@ -17,6 +17,7 @@ This note records the skill import and normalization work completed on 2026-03-2
 - `internal-comms`
 
 Note:
+
 - `docx`, `pdf`, `pptx`, and `xlsx` were not re-imported as separate directories because this repository already exposes those aliases as symlinks to `*-official` skill directories.
 
 ### `coreyhaines31/marketingskills`

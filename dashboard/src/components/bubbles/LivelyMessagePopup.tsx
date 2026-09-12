@@ -7,7 +7,7 @@ export function LivelyMessagePopup({ alert }: { alert: LivelyAlert }) {
   const displayName = getBubbleDisplayName(alert.chatId, alert.name);
   const initials = displayName
     .split(' ')
-    .map((n) => n[0])
+    .map(n => n[0])
     .join('')
     .substring(0, 2);
 
@@ -24,11 +24,7 @@ export function LivelyMessagePopup({ alert }: { alert: LivelyAlert }) {
   return (
     <div className="lively-message-popup" onClick={handleClick} role="alert">
       <div className="lively-popup-avatar">
-        {alert.avatarUrl ? (
-          <img src={alert.avatarUrl} alt={displayName} />
-        ) : (
-          <span>{initials}</span>
-        )}
+        {alert.avatarUrl ? <img src={alert.avatarUrl} alt={displayName} /> : <span>{initials}</span>}
       </div>
       <div className="lively-popup-content">
         <div className="lively-popup-header">
@@ -47,4 +43,3 @@ export function LivelyMessagePopup({ alert }: { alert: LivelyAlert }) {
     </div>
   );
 }
-

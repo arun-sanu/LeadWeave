@@ -66,7 +66,10 @@ export const NotepadSearchModal: React.FC<NotepadSearchModalProps> = ({ onClose 
       <div className="notepad-search-modal" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="notepad-search-header">
-          <div className="notepad-search-brand" style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingRight: '4px' }}>
+          <div
+            className="notepad-search-brand"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingRight: '4px' }}
+          >
             <LeadWeaveLogo size={24} />
           </div>
 
@@ -82,22 +85,14 @@ export const NotepadSearchModal: React.FC<NotepadSearchModalProps> = ({ onClose 
               aria-label="Search notes"
             />
             {searchQuery && (
-              <button
-                className="search-clear-btn"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
-              >
+              <button className="search-clear-btn" onClick={() => setSearchQuery('')} aria-label="Clear search">
                 <X size={14} />
               </button>
             )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button
-              className="notepad-btn-add"
-              onClick={handleCreateWithTitle}
-              title="Create New Note"
-            >
+            <button className="notepad-btn-add" onClick={handleCreateWithTitle} title="Create New Note">
               <Plus size={15} />
               <span>New Note</span>
             </button>
@@ -175,7 +170,10 @@ export const NotepadSearchModal: React.FC<NotepadSearchModalProps> = ({ onClose 
                       {note.isOpen && <span className="badge-open">Open Window</span>}
                       {note.isPinned && <span className="badge-pinned">📌 Pinned</span>}
                       {note.alertAt && (
-                        <span className="badge-alert" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                        <span
+                          className="badge-alert"
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}
+                        >
                           <Bell size={11} color="#facc15" fill="#facc15" />
                           <span>Alert</span>
                         </span>
@@ -274,4 +272,3 @@ export const NotepadSearchModal: React.FC<NotepadSearchModalProps> = ({ onClose 
     </div>
   );
 };
-

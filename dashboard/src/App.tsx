@@ -19,9 +19,15 @@ const Chats = lazy(() => import('./pages/Chats').then(m => ({ default: m.Chats }
 const Logs = lazy(() => import('./pages/Logs').then(m => ({ default: m.Logs })));
 const ApiKeys = lazy(() => import('./pages/ApiKeys').then(m => ({ default: m.ApiKeys })));
 const MessageTester = lazy(() => import('./pages/MessageTester').then(m => ({ default: m.MessageTester })));
-const CreateCampaignWizard = lazy(() => import('./pages/CreateCampaignWizard').then(m => ({ default: m.CreateCampaignWizard })));
-const AudienceDataSelection = lazy(() => import('./pages/AudienceDataSelection').then(m => ({ default: m.AudienceDataSelection })));
-const BroadcastTemplates = lazy(() => import('./pages/BroadcastTemplates').then(m => ({ default: m.BroadcastTemplates })));
+const CreateCampaignWizard = lazy(() =>
+  import('./pages/CreateCampaignWizard').then(m => ({ default: m.CreateCampaignWizard })),
+);
+const AudienceDataSelection = lazy(() =>
+  import('./pages/AudienceDataSelection').then(m => ({ default: m.AudienceDataSelection })),
+);
+const BroadcastTemplates = lazy(() =>
+  import('./pages/BroadcastTemplates').then(m => ({ default: m.BroadcastTemplates })),
+);
 const BroadcastSettings = lazy(() => import('./pages/BroadcastSettings').then(m => ({ default: m.BroadcastSettings })));
 const CampaignAnalytics = lazy(() => import('./pages/CampaignAnalytics').then(m => ({ default: m.CampaignAnalytics })));
 const Infrastructure = lazy(() => import('./pages/Infrastructure').then(m => ({ default: m.Infrastructure })));
@@ -30,7 +36,9 @@ const Profile = lazy(() => import('./pages/Profile').then(m => ({ default: m.Pro
 const Companies = lazy(() => import('./pages/Companies').then(m => ({ default: m.Companies })));
 const Subscriptions = lazy(() => import('./pages/Subscriptions').then(m => ({ default: m.Subscriptions })));
 const DatabaseUsage = lazy(() => import('./pages/DatabaseUsage').then(m => ({ default: m.DatabaseUsage })));
-const ManagementDashboard = lazy(() => import('./pages/ManagementDashboard').then(m => ({ default: m.ManagementDashboard })));
+const ManagementDashboard = lazy(() =>
+  import('./pages/ManagementDashboard').then(m => ({ default: m.ManagementDashboard })),
+);
 const NoticeBoard = lazy(() => import('./pages/NoticeBoard').then(m => ({ default: m.NoticeBoard })));
 const Storage = lazy(() => import('./pages/Storage').then(m => ({ default: m.Storage })));
 

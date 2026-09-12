@@ -1,6 +1,6 @@
 ---
 paths:
-  - "**/*.vue"
+  - '**/*.vue'
 ---
 
 # Vue Coding Style
@@ -42,9 +42,9 @@ paths:
 
 ```vue
 <script setup lang="ts">
-const props = defineProps<{ id: number }>()
-const emit = defineEmits<{ change: [id: number] }>()
-const open = defineModel<boolean>('open', { default: false })
+const props = defineProps<{ id: number }>();
+const emit = defineEmits<{ change: [id: number] }>();
+const open = defineModel<boolean>('open', { default: false });
 </script>
 ```
 

@@ -11,8 +11,8 @@ New skills can include a `date_added` field in `SKILL.md` frontmatter:
 ```yaml
 ---
 name: skill-name
-description: "Description"
-date_added: "2026-03-06"
+description: 'Description'
+date_added: '2026-03-06'
 ---
 ```
 

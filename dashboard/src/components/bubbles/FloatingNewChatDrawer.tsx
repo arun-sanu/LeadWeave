@@ -21,7 +21,7 @@ export function FloatingNewChatDrawer({
     try {
       const cleaned = phone.replace(/\D/g, '');
       const chatId = `${cleaned}@s.whatsapp.net`;
-      
+
       const res = await messageApi.sendText(sessionId, chatId, text.trim());
       if (res) {
         const newMsg: ChatMessage = {
@@ -59,21 +59,23 @@ export function FloatingNewChatDrawer({
           </button>
         </div>
       </div>
-      
+
       <div className="floating-drawer-messages" style={{ padding: '20px', gap: '12px' }}>
         <div>
-          <label style={{ fontSize: '12px', color: '#9da3b4', marginBottom: '4px', display: 'block' }}>To (WhatsApp Number)</label>
+          <label style={{ fontSize: '12px', color: '#9da3b4', marginBottom: '4px', display: 'block' }}>
+            To (WhatsApp Number)
+          </label>
           <input
             type="text"
             className="floating-drawer-input"
             style={{ width: '100%' }}
             placeholder="e.g. 1234567890"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={e => setPhone(e.target.value)}
           />
           <p style={{ fontSize: '11px', color: '#606778', marginTop: '6px' }}>Include country code, no + or spaces.</p>
         </div>
-        
+
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <label style={{ fontSize: '12px', color: '#9da3b4', marginBottom: '4px', display: 'block' }}>Message</label>
           <textarea
@@ -81,10 +83,10 @@ export function FloatingNewChatDrawer({
             style={{ width: '100%', flex: 1, resize: 'none', padding: '10px' }}
             placeholder="Type your message..."
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={e => setText(e.target.value)}
           />
         </div>
-        
+
         <button
           className="floating-drawer-send-btn"
           style={{ width: '100%', borderRadius: '12px', height: '40px', marginTop: '10px' }}
@@ -97,4 +99,3 @@ export function FloatingNewChatDrawer({
     </div>
   );
 }
-

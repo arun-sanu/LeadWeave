@@ -55,9 +55,9 @@ bun test --watch
 
 ```typescript
 // test/example.test.ts
-import { expect, test } from "bun:test";
+import { expect, test } from 'bun:test';
 
-test("add", () => {
+test('add', () => {
   expect(1 + 2).toBe(3);
 });
 ```
@@ -65,13 +65,13 @@ test("add", () => {
 ### Runtime API
 
 ```typescript
-const file = Bun.file("package.json");
+const file = Bun.file('package.json');
 const json = await file.json();
 
 Bun.serve({
   port: 3000,
   fetch(req) {
-    return new Response("Hello");
+    return new Response('Hello');
   },
 });
 ```

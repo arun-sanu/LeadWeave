@@ -140,7 +140,7 @@ interface ServerErrorFrame {
 const getSocketUrl = (): string => {
   if (import.meta.env.VITE_WS_URL) return import.meta.env.VITE_WS_URL;
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '');
-  
+
   // Use window.location.origin in both dev (proxied by Vite) and production
   return window.location.origin;
 };
@@ -177,11 +177,7 @@ export function useWebSocket(events: WebSocketEvents = {}) {
       return;
     }
 
-    const authPayload = supabaseToken
-      ? { token: supabaseToken }
-      : apiKey
-      ? { apiKey }
-      : undefined;
+    const authPayload = supabaseToken ? { token: supabaseToken } : apiKey ? { apiKey } : undefined;
 
     const extraHeaders: Record<string, string> = {
       'X-Requested-With': 'XMLHttpRequest',

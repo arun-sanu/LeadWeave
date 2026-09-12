@@ -23,7 +23,10 @@
   margin-left: -0.5rem; /* Optical alignment */
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 150ms var(--ease-out), color 150ms var(--ease-out), transform 150ms var(--ease-out);
+  transition:
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out),
+    transform 150ms var(--ease-out);
 }
 
 .campaign-studio-layout .wizard-back-btn:hover {
@@ -55,7 +58,9 @@
   width: 100%;
   max-width: 800px;
   outline: none;
-  transition: border-color 200ms var(--ease-out), color 200ms var(--ease-out);
+  transition:
+    border-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
 }
 
 .campaign-studio-layout .wizard-campaign-name-input::placeholder {
@@ -94,7 +99,11 @@
   font-weight: 600;
   color: var(--text-secondary);
   text-decoration: none;
-  transition: transform 160ms var(--ease-out), background-color 200ms var(--ease-out), border-color 200ms var(--ease-out), color 200ms var(--ease-out);
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
   white-space: nowrap;
 }
 

@@ -6,8 +6,8 @@ LeadWeave signs webhook deliveries when a webhook is configured with a secret. R
 
 LeadWeave sends these system headers with webhook deliveries:
 
-| Header                     | Description                                                        |
-| -------------------------- | ------------------------------------------------------------------ |
+| Header                        | Description                                                        |
+| ----------------------------- | ------------------------------------------------------------------ |
 | `X-LeadWeave-Signature`       | HMAC-SHA256 signature, present only when the webhook has a secret  |
 | `X-LeadWeave-Event`           | Event name, for example `message.received`                         |
 | `X-LeadWeave-Idempotency-Key` | Stable key for duplicate detection                                 |

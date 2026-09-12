@@ -1,8 +1,8 @@
 ---
 paths:
-  - "**/nuxt.config.*"
-  - "**/app.config.*"
-  - "**/server/**/*.ts"
+  - '**/nuxt.config.*'
+  - '**/app.config.*'
+  - '**/server/**/*.ts'
 ---
 
 # Nuxt Security

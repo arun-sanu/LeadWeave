@@ -91,8 +91,8 @@ try {
 }
 ```
 
-| Class                           | HTTP | Meaning                                                 |
-| ------------------------------- | ---- | ------------------------------------------------------- |
+| Class                              | HTTP | Meaning                                                 |
+| ---------------------------------- | ---- | ------------------------------------------------------- |
 | `LeadWeaveAuthError`               | 401  | Missing or invalid API key                              |
 | `LeadWeaveForbiddenError`          | 403  | API key role insufficient                               |
 | `LeadWeaveNotFoundError`           | 404  | Resource not found                                      |
