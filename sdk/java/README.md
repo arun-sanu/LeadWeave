@@ -29,9 +29,9 @@ implementation 'com.arun-sanu:leadweave:0.5.0'
 ## Quickstart
 
 ```java
-import com.arun-sanu.leadweave.LeadWeaveClient;
-import com.arun-sanu.leadweave.model.MessageResponse;
-import com.arun-sanu.leadweave.model.SendTextRequest;
+import com.arunsanu.leadweave.LeadWeaveClient;
+import com.arunsanu.leadweave.model.MessageResponse;
+import com.arunsanu.leadweave.model.SendTextRequest;
 
 LeadWeaveClient client = new LeadWeaveClient("http://localhost:2785", "owa_k1_…");
 
@@ -50,7 +50,7 @@ For full control over configuration (timeout, default headers, a custom
 transport), build a `ClientConfig`:
 
 ```java
-import com.arun-sanu.leadweave.ClientConfig;
+import com.arunsanu.leadweave.ClientConfig;
 import java.time.Duration;
 
 LeadWeaveClient client = new LeadWeaveClient(ClientConfig.builder()
@@ -79,8 +79,8 @@ Errors are a typed, unchecked hierarchy — branch with `instanceof` or on
 `.status()`:
 
 ```java
-import com.arun-sanu.leadweave.errors.LeadWeaveConflictError;
-import com.arun-sanu.leadweave.errors.LeadWeaveNotFoundError;
+import com.arunsanu.leadweave.errors.LeadWeaveConflictError;
+import com.arunsanu.leadweave.errors.LeadWeaveNotFoundError;
 
 try {
     client.messages.sendText("my-session", body);
@@ -142,7 +142,7 @@ Sonatype Central Publishing plugin — a plain `mvn verify` never runs any of it
 One-time setup (repository secrets):
 
 - `MAVEN_CENTRAL_USERNAME` / `MAVEN_CENTRAL_PASSWORD` — the two halves of a
-  Sonatype Central Portal user token for the verified `com.rmyndharis`
+  Sonatype Central Portal user token for the verified `com.arun-sanu`
   namespace.
 - `GPG_PRIVATE_KEY` — ASCII-armored signing key.
 - `GPG_PASSPHRASE` — passphrase for that key.
