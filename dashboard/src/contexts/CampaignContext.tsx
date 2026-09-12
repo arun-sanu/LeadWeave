@@ -31,6 +31,8 @@ interface CampaignContextType {
   setScheduleType: React.Dispatch<React.SetStateAction<'now' | 'later'>>;
   scheduleDateTime: string;
   setScheduleDateTime: React.Dispatch<React.SetStateAction<string>>;
+  dispatchMode: 'automated' | 'manual';
+  setDispatchMode: React.Dispatch<React.SetStateAction<'automated' | 'manual'>>;
 
   // Batch Monitors
   activeBatches: { sessionId: string; batchId: string }[];
@@ -62,6 +64,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
   const [simulateTyping, setSimulateTyping] = useState(true);
   const [scheduleType, setScheduleType] = useState<'now' | 'later'>('now');
   const [scheduleDateTime, setScheduleDateTime] = useState('');
+  const [dispatchMode, setDispatchMode] = useState<'automated' | 'manual'>('automated');
 
   // Active batches
   const [activeBatches, setActiveBatches] = useState<{ sessionId: string; batchId: string }[]>([]);
@@ -81,6 +84,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
         simulateTyping, setSimulateTyping,
         scheduleType, setScheduleType,
         scheduleDateTime, setScheduleDateTime,
+        dispatchMode, setDispatchMode,
         activeBatches, setActiveBatches,
         batchStatusMap, setBatchStatusMap,
         isLaunching, setIsLaunching,

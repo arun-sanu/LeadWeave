@@ -27,6 +27,8 @@ export interface CampaignPacingConfig {
   minDelayMs: number;
   maxDelayMs: number;
   simulateTyping: boolean;
+  breatherMinMs?: number;
+  breatherMaxMs?: number;
 }
 
 @Entity('campaigns')
@@ -46,6 +48,9 @@ export class Campaign {
 
   @Column({ type: 'varchar', default: CampaignStatus.DRAFT })
   status!: CampaignStatus;
+
+  @Column({ name: 'dispatch_mode', type: 'varchar', default: 'automated' })
+  dispatchMode!: 'automated' | 'manual';
 
   @Column({ type: 'text' })
   template!: string;

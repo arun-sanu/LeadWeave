@@ -38,50 +38,15 @@ export function NoticeBoard() {
   useDocumentTitle('Notice Board & Calendar - LeadWeave');
   const { success, actionToast } = useToast();
 
-  // Tasks state with IndexedDB persistence and fallback
-  const [tasks, setTasks] = useState<NoticeTask[]>(() => {
-    // Seed initial demo data for realistic user experience
-    const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
-    
-    const futureDate = new Date();
-    futureDate.setDate(today.getDate() + 3);
-    const futureStr = futureDate.toISOString().split('T')[0];
-
-    return [
-      {
-        id: 'task_1',
-        title: 'Customer callback requested (Discuss Pro Plan)',
-        contactName: 'Sarah Jenkins',
-        contactPhone: '+1 (555) 234-5678',
-        dueDate: futureStr,
-        dueTime: '14:00',
-        type: 'call',
-        priority: 'high',
-        notes: 'Asked to call back in 3 days at 2 PM after discussing budget with manager.',
-        completed: false,
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'task_2',
-        title: 'Send WhatsApp onboarding brochure',
-        contactName: 'David Miller',
-        contactPhone: '+1 (555) 890-1234',
-        dueDate: todayStr,
-        dueTime: '16:30',
-        type: 'whatsapp',
-        priority: 'medium',
-        notes: 'Interested in API integrations. Send developer catalog.',
-        completed: false,
-        createdAt: new Date().toISOString(),
-      }
-    ];
-  });
+  // Tasks state with IndexedDB persistence
+  const [tasks, setTasks] = useState<NoticeTask[]>([]);
 
   useEffect(() => {
     idbGet<NoticeTask[]>(STORAGE_KEY).then(stored => {
-      if (stored && Array.isArray(stored) && stored.length > 0) {
-        setTasks(stored);
+      if (stored && Array.isArray(stored)) {
+        const cleanTasks = stored.filter(t => t.id !== 'task_1' && t.id !== 'task_2');
+        setTasks(cleanTasks);
+        idbSet(STORAGE_KEY, cleanTasks).catch(() => {});
       }
     }).catch(() => {});
   }, []);
@@ -186,12 +151,6 @@ export function NoticeBoard() {
     setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
   };
 
-  const handleToday = () => {
-    const now = new Date();
-    setCurrentDate(now);
-    setSelectedDate(now.toISOString().split('T')[0]);
-  };
-
   const handleToggleComplete = (id: string) => {
     setTasks(prev =>
       prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t))
@@ -284,22 +243,19 @@ export function NoticeBoard() {
       {/* Main Grid: Calendar & Agenda List */}
       <div className="noticeboard-grid">
         {/* Calendar Card */}
-        <div className="nb-card">
+        <div className="nb-card calendar-card-flat">
           <div className="nb-card-header">
             <h2 className="nb-card-title">
               <CalendarIcon size={18} style={{ color: 'var(--primary, #25d366)' }} />
               <span>{monthNames[currentMonth]} {currentYear}</span>
             </h2>
 
-            <div className="calendar-controls">
-              <button className="cal-today-btn" onClick={handleToday}>
-                Today
+            <div className="calendar-controls-bar">
+              <button className="cal-control-btn cal-nav-btn" onClick={handlePrevMonth} title="Previous Month" aria-label="Previous Month">
+                <ChevronLeft size={16} strokeWidth={2.2} />
               </button>
-              <button className="cal-nav-btn" onClick={handlePrevMonth} title="Previous Month">
-                <ChevronLeft size={16} />
-              </button>
-              <button className="cal-nav-btn" onClick={handleNextMonth} title="Next Month">
-                <ChevronRight size={16} />
+              <button className="cal-control-btn cal-nav-btn" onClick={handleNextMonth} title="Next Month" aria-label="Next Month">
+                <ChevronRight size={16} strokeWidth={2.2} />
               </button>
             </div>
           </div>

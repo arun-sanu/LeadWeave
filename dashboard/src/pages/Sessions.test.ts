@@ -227,19 +227,19 @@ test('the session list renders, and action buttons gate on engineLoaded rather t
   resetFetchCalls();
   renderSessions();
 
-  await screen.findByText('new-device');
-  await screen.findByText('stale-engine');
+  await screen.findByRole('heading', { name: 'new-device' });
+  await screen.findByRole('heading', { name: 'stale-engine' });
 
   // stale-engine is `disconnected` (a status the old fallback rule treats as not-started, offering
   // Start) but engineLoaded: true — the card must offer Stop/Unlink/Kill Stuck instead, and never
   // Start, proving the gate reads engineLoaded rather than inferring it from status.
-  const staleCard = screen.getByText('stale-engine').closest('.session-card') as HTMLElement;
+  const staleCard = screen.getByRole('heading', { name: 'stale-engine' }).closest('.session-card') as HTMLElement;
   within(staleCard).getByRole('button', { name: 'Stop' });
   within(staleCard).getByRole('button', { name: 'Unlink' });
   within(staleCard).getByRole('button', { name: 'Kill Stuck' });
   assert.equal(within(staleCard).queryByRole('button', { name: 'Start' }), null);
 
-  const qrCard = screen.getByText('new-device').closest('.session-card') as HTMLElement;
+  const qrCard = screen.getByRole('heading', { name: 'new-device' }).closest('.session-card') as HTMLElement;
   within(qrCard).getByRole('button', { name: 'Show QR' });
 });
 
@@ -248,7 +248,7 @@ test('creating a session issues POST /api/sessions with the entered name', async
   resetFetchCalls();
   renderSessions();
 
-  await screen.findByText('new-device');
+  await screen.findByRole('heading', { name: 'new-device' });
   fireEvent.click(screen.getByRole('button', { name: 'New Session' }));
 
   const dialog = await screen.findByRole('dialog');
@@ -262,7 +262,7 @@ test('creating a session issues POST /api/sessions with the entered name', async
     assert.deepEqual(call!.body, { name: 'backup-bot' });
   });
 
-  await screen.findByText('backup-bot');
+  await screen.findByRole('heading', { name: 'backup-bot' });
 });
 
 test('a typed pairing phone number survives toggling to the QR tab and back', async () => {
@@ -270,8 +270,8 @@ test('a typed pairing phone number survives toggling to the QR tab and back', as
   resetFetchCalls();
   renderSessions();
 
-  await screen.findByText('new-device');
-  const qrCard = screen.getByText('new-device').closest('.session-card') as HTMLElement;
+  await screen.findByRole('heading', { name: 'new-device' });
+  const qrCard = screen.getByRole('heading', { name: 'new-device' }).closest('.session-card') as HTMLElement;
   fireEvent.click(within(qrCard).getByRole('button', { name: 'Show QR' }));
 
   // Wait for the eager GET .../qr fetch triggered by opening the modal to settle before driving
@@ -298,8 +298,8 @@ test('stopping a session dismisses its own open QR modal', async () => {
   resetFetchCalls();
   renderSessions();
 
-  await screen.findByText('new-device');
-  const qrCard = screen.getByText('new-device').closest('.session-card') as HTMLElement;
+  await screen.findByRole('heading', { name: 'new-device' });
+  const qrCard = screen.getByRole('heading', { name: 'new-device' }).closest('.session-card') as HTMLElement;
   fireEvent.click(within(qrCard).getByRole('button', { name: 'Show QR' }));
 
   // Wait for the eager GET .../qr fetch triggered by opening the modal to settle, same as the
@@ -331,7 +331,7 @@ test('a restricted session shows the restriction on its card, even while it is r
   resetFetchCalls();
   renderSessions();
 
-  const card = (await screen.findByText('limited-bot')).closest('.session-card') as HTMLElement;
+  const card = (await screen.findByRole('heading', { name: 'limited-bot' })).closest('.session-card') as HTMLElement;
 
   within(card).getByText('Restriction');
   const value = within(card).getByText('New chats blocked');
@@ -346,7 +346,7 @@ test('an unrestricted session shows no restriction row', async () => {
   resetFetchCalls();
   renderSessions();
 
-  const card = (await screen.findByText('stale-engine')).closest('.session-card') as HTMLElement;
+  const card = (await screen.findByRole('heading', { name: 'stale-engine' })).closest('.session-card') as HTMLElement;
 
   assert.equal(within(card).queryByText('Restriction'), null);
 });
@@ -355,7 +355,7 @@ test('an unrestricted session shows no restriction row', async () => {
 
 async function openDetailFor(name: string): Promise<HTMLInputElement> {
   const { screen, within } = rtl;
-  const card = (await screen.findByText(name)).closest('.session-card') as HTMLElement;
+  const card = (await screen.findByRole('heading', { name })).closest('.session-card') as HTMLElement;
   rtl.fireEvent.click(within(card).getByRole('button', { name: 'View' }));
   // The config is fetched when the modal opens, so the toggle only appears once that read lands —
   // findBy, not getBy.

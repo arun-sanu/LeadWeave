@@ -3,23 +3,32 @@ import { test, before, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { Campaign, CampaignLead, CampaignAnalytics as ICampaignAnalytics } from '../services/api';
+import type { Campaign, CampaignLead, CampaignStats, CampaignAnalytics as ICampaignAnalytics } from '../services/api';
 import type { installJsdomGlobals as installJsdomGlobalsFn } from '../test-helpers/jsdom.ts';
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
+
+const STATS: CampaignStats = {
+  total: 150,
+  sent: 120,
+  delivered: 110,
+  read: 95,
+  replied: 30,
+  failed: 5,
+  pending: 25,
+  deliveryRate: 91.6,
+  readRate: 79.1,
+  replyRate: 25.0,
+};
 
 const CAMPAIGNS: Campaign[] = [
   {
     id: 'camp-1',
     name: 'Summer Sale Broadcast',
     status: 'running',
-    sessionId: 'session-1',
-    templateId: 'tmpl-1',
-    totalLeads: 150,
-    sentCount: 120,
-    deliveredCount: 110,
-    readCount: 95,
-    failedCount: 5,
+    sessionIds: ['session-1'],
+    template: 'Hello {{name}}',
+    stats: STATS,
     createdAt: '2026-06-01T00:00:00.000Z',
     updatedAt: '2026-06-01T00:00:00.000Z',
   },
@@ -27,28 +36,27 @@ const CAMPAIGNS: Campaign[] = [
     id: 'camp-2',
     name: 'VIP Outreach',
     status: 'completed',
-    sessionId: 'session-1',
-    totalLeads: 50,
-    sentCount: 50,
-    deliveredCount: 48,
-    readCount: 45,
-    failedCount: 0,
+    sessionIds: ['session-1'],
+    template: 'VIP exclusive {{name}}',
+    stats: { ...STATS, total: 50, sent: 50, delivered: 48, read: 45, failed: 0, pending: 0 },
     createdAt: '2026-05-01T00:00:00.000Z',
     updatedAt: '2026-05-01T00:00:00.000Z',
   },
 ];
 
 const ANALYTICS: ICampaignAnalytics = {
-  totalLeads: 150,
-  sentCount: 120,
-  deliveredCount: 110,
-  readCount: 95,
-  failedCount: 5,
-  deliveryRate: 91.6,
-  readRate: 79.1,
+  campaign: CAMPAIGNS[0],
+  stats: STATS,
+  funnel: [
+    { stage: 'Total', count: 150, percent: 100 },
+    { stage: 'Sent', count: 120, percent: 80 },
+    { stage: 'Delivered', count: 110, percent: 73.3 },
+    { stage: 'Read', count: 95, percent: 63.3 },
+    { stage: 'Replied', count: 30, percent: 20 },
+  ],
   timeline: [
-    { timestamp: '10:00', sent: 30, delivered: 28, read: 25 },
-    { timestamp: '11:00', sent: 50, delivered: 46, read: 40 },
+    { time: '10:00', replies: 12, optOuts: 1 },
+    { time: '11:00', replies: 18, optOuts: 0 },
   ],
 };
 
@@ -113,10 +121,12 @@ function installFetchStub(): void {
 type RTL = typeof import('@testing-library/react');
 type CampaignAnalyticsModule = typeof import('./CampaignAnalytics.tsx');
 type ToastProviderModule = typeof import('../components/Toast.tsx');
+type RoleModule = typeof import('../components/RoleProvider.tsx');
 
 let rtl: RTL;
 let CampaignAnalytics: CampaignAnalyticsModule['CampaignAnalytics'];
 let ToastProvider: ToastProviderModule['ToastProvider'];
+let RoleProvider: RoleModule['RoleProvider'];
 let installJsdomGlobals: typeof installJsdomGlobalsFn;
 
 before(async () => {
@@ -130,6 +140,7 @@ before(async () => {
   rtl = await import('@testing-library/react');
   ({ CampaignAnalytics } = await import('./CampaignAnalytics.tsx'));
   ({ ToastProvider } = await import('../components/Toast.tsx'));
+  ({ RoleProvider } = await import('../components/RoleProvider.tsx'));
 });
 
 afterEach(() => {
@@ -146,7 +157,11 @@ function renderAnalytics() {
     createElement(
       QueryClientProvider,
       { client: queryClient },
-      createElement(ToastProvider, null, createElement(CampaignAnalytics)),
+      createElement(
+        RoleProvider,
+        { initialRole: 'admin' },
+        createElement(ToastProvider, null, createElement(CampaignAnalytics)),
+      ),
     ),
   );
 }
@@ -168,7 +183,7 @@ test('renders leads table with contacts and statuses', async () => {
   const leadName = await rtl.screen.findByText('John Doe');
   assert.ok(leadName);
 
-  const phone = await rtl.screen.findByText('15551234567');
+  const phone = await rtl.screen.findByText(/15551234567/);
   assert.ok(phone);
 
   const failedLead = await rtl.screen.findByText('Jane Smith');

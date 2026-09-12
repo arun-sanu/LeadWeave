@@ -571,3 +571,11 @@
 .profile-page .fade-in {
   animation: hudFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Embedded Pages (Team & Webhooks) inside Profile HUD Pane */
+.profile-page .profile-hud-pane .team-page,
+.profile-page .profile-hud-pane .webhooks-page {
+  padding: 0;
+  max-width: 100%;
+}
+

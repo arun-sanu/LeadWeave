@@ -24,6 +24,7 @@ export interface LivelyAlert {
 }
 
 const STORAGE_KEY = 'leadweave_active_bubbles';
+const MAX_BUBBLES = 30;
 
 class BubbleStore {
   private bubbles: ChatBubble[] = [];
@@ -31,6 +32,7 @@ class BubbleStore {
   private expandedDocks: Record<string, boolean> = {}; // sessionId -> expanded
   private livelyAlert: LivelyAlert | null = null;
   private alertTimeout: ReturnType<typeof setTimeout> | null = null;
+  private saveTimeout: ReturnType<typeof setTimeout> | null = null;
   private listeners: Set<() => void> = new Set();
 
   constructor() {
@@ -43,7 +45,7 @@ class BubbleStore {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          this.bubbles = parsed;
+          this.bubbles = parsed.slice(0, MAX_BUBBLES);
         }
       }
     } catch {
@@ -59,8 +61,18 @@ class BubbleStore {
     }
   }
 
+  private saveToStorageDebounced() {
+    if (this.saveTimeout) {
+      clearTimeout(this.saveTimeout);
+    }
+    this.saveTimeout = setTimeout(() => {
+      this.saveTimeout = null;
+      this.saveToStorage();
+    }, 300);
+  }
+
   private notify() {
-    this.saveToStorage();
+    this.saveToStorageDebounced();
     this.listeners.forEach((listener) => listener());
   }
 
@@ -195,6 +207,11 @@ class BubbleStore {
         timestamp: Date.now(),
       };
       this.bubbles = [newBubble, ...this.bubbles];
+      if (this.bubbles.length > MAX_BUBBLES) {
+        const open = this.bubbles.filter((b) => b.isOpen);
+        const closed = this.bubbles.filter((b) => !b.isOpen);
+        this.bubbles = [...open, ...closed.slice(0, Math.max(0, MAX_BUBBLES - open.length))];
+      }
     }
 
     if (data.showLivelyAlert && data.lastMessage) {
@@ -210,6 +227,116 @@ class BubbleStore {
     }
 
     this.notify();
+  }
+
+  public batchAddOrUpdateBubbles(
+    items: Array<{
+      chatId: string;
+      sessionId: string;
+      name: string;
+      avatarUrl?: string;
+      incrementUnread?: boolean;
+      unreadCount?: number;
+      lastMessage?: string;
+      lastMessageObject?: ChatMessage;
+      showLivelyAlert?: boolean;
+    }>,
+  ) {
+    if (!items || items.length === 0) return;
+
+    let updatedBubbles = [...this.bubbles];
+    let hasChanges = false;
+    let latestAlertData: (typeof items)[0] | null = null;
+
+    for (const data of items) {
+      const existingIndex = updatedBubbles.findIndex((b) => b.chatId === data.chatId);
+
+      if (existingIndex >= 0) {
+        const existing = updatedBubbles[existingIndex];
+        const isExistingNumeric =
+          !existing.name ||
+          /^\+?\d+$/.test(existing.name.replace(/[\s()\-]/g, '')) ||
+          existing.name.includes('@');
+        const isNewBetter =
+          data.name &&
+          !/^\+?\d+$/.test(data.name.replace(/[\s()\-]/g, '')) &&
+          !data.name.includes('@');
+        const resolvedName = isNewBetter ? data.name : !isExistingNumeric ? existing.name : data.name;
+        const updatedUnread = data.incrementUnread
+          ? existing.unreadCount + 1
+          : data.unreadCount !== undefined
+            ? data.unreadCount
+            : existing.unreadCount;
+
+        if (
+          existing.name === (resolvedName || existing.name || data.name) &&
+          existing.unreadCount === updatedUnread &&
+          existing.lastMessage === (data.lastMessage || existing.lastMessage) &&
+          existing.avatarUrl === (data.avatarUrl || existing.avatarUrl)
+        ) {
+          continue;
+        }
+
+        hasChanges = true;
+        const updated: ChatBubble = {
+          ...existing,
+          name: resolvedName || existing.name || data.name,
+          avatarUrl: data.avatarUrl || existing.avatarUrl,
+          unreadCount: updatedUnread,
+          lastMessage: data.lastMessage || existing.lastMessage,
+          lastMessageObject: data.lastMessageObject || existing.lastMessageObject,
+          timestamp: Date.now(),
+        };
+        updatedBubbles[existingIndex] = updated;
+      } else {
+        hasChanges = true;
+        const initialUnread = data.incrementUnread
+          ? 1
+          : data.unreadCount !== undefined
+            ? data.unreadCount
+            : 0;
+
+        const newBubble: ChatBubble = {
+          chatId: data.chatId,
+          sessionId: data.sessionId,
+          name: data.name,
+          avatarUrl: data.avatarUrl,
+          unreadCount: initialUnread,
+          isOpen: false,
+          lastMessage: data.lastMessage,
+          lastMessageObject: data.lastMessageObject,
+          timestamp: Date.now(),
+        };
+        updatedBubbles.unshift(newBubble);
+      }
+
+      if (data.showLivelyAlert && data.lastMessage) {
+        latestAlertData = data;
+      }
+    }
+
+    if (updatedBubbles.length > MAX_BUBBLES) {
+      const open = updatedBubbles.filter((b) => b.isOpen);
+      const closed = updatedBubbles.filter((b) => !b.isOpen);
+      updatedBubbles = [...open, ...closed.slice(0, Math.max(0, MAX_BUBBLES - open.length))];
+    }
+
+    if (hasChanges) {
+      this.bubbles = updatedBubbles;
+      if (latestAlertData) {
+        this.triggerLivelyAlert({
+          id: `alert-${Date.now()}`,
+          chatId: latestAlertData.chatId,
+          sessionId: latestAlertData.sessionId,
+          name: latestAlertData.name,
+          text: latestAlertData.lastMessage!,
+          avatarUrl: latestAlertData.avatarUrl,
+          timestamp: Date.now(),
+        });
+      } else {
+        this.notify();
+      }
+    }
   }
 
   public triggerLivelyAlert(alert: LivelyAlert) {

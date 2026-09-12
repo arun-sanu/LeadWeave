@@ -46,6 +46,13 @@ const sqliteDataSourceOptions: DataSourceOptions = {
   migrations: dataMigrations,
   synchronize: false,
   logging: process.env.DATABASE_LOGGING === 'true',
+  enableWAL: true,
+  timeout: 5000,
+  prepareDatabase: (db: any) => {
+    db.pragma('journal_mode = WAL');
+    db.pragma('busy_timeout = 5000');
+    db.pragma('synchronous = NORMAL');
+  },
 };
 
 // PostgreSQL configuration.

@@ -1,3 +1,4 @@
+/* cspell:words Kowalski */
 /* =============================================================================
    FLOATING REALTIME CHATS PILL & BUBBLE DOCK
    Obsidian Glass Aesthetic • Emil Kowalski Spring Physics • Micro-Interactions
@@ -6,18 +7,16 @@
 /* Floating Bubble Dock Container */
 .floating-bubble-dock-container {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 20px;
+  right: 20px;
   z-index: 9990;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   gap: 16px;
-  pointer-events: none;
-}
-
-.floating-bubble-dock-container * {
-  pointer-events: auto;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
+  pointer-events: none !important;
 }
 
 .floating-bubble-dock {
@@ -26,10 +25,16 @@
   flex-direction: column-reverse;
   align-items: center;
   gap: 10px;
-  pointer-events: none;
+  pointer-events: none !important;
 }
 
-.floating-bubble-dock * {
+/* Explicitly enable pointer events ONLY on interactive elements */
+.floating-chats-pill,
+.floating-bubble-item,
+.bubble-stack-container *,
+.lively-message-popup-bubble,
+.floating-chat-drawer-container,
+.floating-new-chat-drawer {
   pointer-events: auto;
 }
 
@@ -42,14 +47,15 @@
   gap: 7px;
   padding: 10px 13px;
   background: rgba(18, 22, 32, 0.88);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.14));
   border-radius: 999px;
   color: var(--text-primary, #ffffff);
   cursor: pointer;
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.65), 0 0 20px -3px rgba(var(--accent-rgb), 0.25), var(--rim-top, inset 0 1px 0 0 rgba(255, 255, 255, 0.15));
   transition: transform 140ms var(--ease-out, ease-out), background-color 160ms var(--ease-out, ease-out), border-color 160ms var(--ease-out, ease-out), box-shadow 160ms var(--ease-out, ease-out);
+  -webkit-user-select: none;
   user-select: none;
   animation: pillSpringIn 280ms var(--ease-spring, cubic-bezier(0.175, 0.885, 0.32, 1.1));
 }
@@ -189,8 +195,8 @@
   gap: 10px;
   padding: 10px 14px;
   background: rgba(18, 22, 32, 0.95);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border: 1px solid rgba(var(--accent-rgb), 0.35);
   border-radius: 16px;
   box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.75), 0 0 25px -4px rgba(var(--accent-rgb), 0.35), var(--rim-top);
@@ -306,8 +312,8 @@
   height: 46px;
   border-radius: 50%;
   background: rgba(18, 22, 32, 0.92);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.14));
   box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.65), var(--rim-top);
   cursor: pointer;
@@ -424,8 +430,8 @@
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 110px);
   background: rgba(15, 18, 26, 0.96);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.14));
   border-radius: 20px;
   box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85), var(--rim-top);
@@ -724,8 +730,8 @@
   display: flex;
   flex-direction: column;
   background: rgba(18, 22, 32, 0.98);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
   max-height: 190px;
   animation: templateSlideDown 160ms var(--ease-out, ease-out);

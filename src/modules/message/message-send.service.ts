@@ -738,12 +738,20 @@ export class MessageSendService {
   private async simulateTypingIfEnabled(engine: IWhatsAppEngine, chatId: string, text: string): Promise<void> {
     const { simulateTyping, simulateTypingMaxMs } = resolveFeatureFlags(this.configService);
     if (!simulateTyping) return;
+    if (typeof engine.sendChatState === 'function') {
+      try {
+        await engine.sendChatState(chatId, 'typing');
+      } catch (error) {
+        this.logger.warn(`simulateTyping presence skipped: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
     try {
-      await engine.sendChatState(chatId, 'typing');
       const planned = calculateTypingDuration(text, 500, simulateTypingMaxMs);
-      await new Promise(resolve => setTimeout(resolve, planned));
+      if (planned > 0) {
+        await new Promise(resolve => setTimeout(resolve, planned));
+      }
     } catch (error) {
-      this.logger.warn(`simulateTyping skipped: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.warn(`simulateTyping delay skipped: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -753,12 +761,20 @@ export class MessageSendService {
   private async simulateRecordingIfEnabled(engine: IWhatsAppEngine, chatId: string): Promise<void> {
     const { simulateTyping, simulateTypingMaxMs } = resolveFeatureFlags(this.configService);
     if (!simulateTyping) return;
+    if (typeof engine.sendChatState === 'function') {
+      try {
+        await engine.sendChatState(chatId, 'recording');
+      } catch (error) {
+        this.logger.warn(`simulateRecording presence skipped: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
     try {
-      await engine.sendChatState(chatId, 'recording');
       const planned = calculateHumanDelay(800, Math.min(2500, simulateTypingMaxMs));
-      await new Promise(resolve => setTimeout(resolve, planned));
+      if (planned > 0) {
+        await new Promise(resolve => setTimeout(resolve, planned));
+      }
     } catch (error) {
-      this.logger.warn(`simulateRecording skipped: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.warn(`simulateRecording delay skipped: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

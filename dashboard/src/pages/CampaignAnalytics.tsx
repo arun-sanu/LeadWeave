@@ -1,3 +1,4 @@
+/* cspell:words leadweave deepdive spintax */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useToast } from '../hooks/useToast';
@@ -37,6 +38,7 @@ import {
   ArrowLeft,
   Calendar,
   Layers,
+  Pencil,
 } from 'lucide-react';
 import './CampaignAnalytics.css';
 
@@ -75,7 +77,19 @@ function EditableCell({ initialValue, onSave }: { initialValue: string, onSave: 
   );
 }
 
-export function CampaignAnalytics() {
+function getErrorMessage(err: unknown, fallback: string): string {
+  if (err && typeof err === 'object') {
+    const errorObj = err as { response?: { data?: { message?: string } }; message?: string };
+    return errorObj.response?.data?.message || errorObj.message || fallback;
+  }
+  return fallback;
+}
+
+export interface CampaignAnalyticsProps {
+  initialViewMode?: 'directory' | 'deepdive';
+}
+
+export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnalyticsProps = {}) {
   useDocumentTitle('Campaign Analytics & Spreadsheet CRM - LeadWeave');
   const { success, error, info } = useToast();
 
@@ -85,7 +99,7 @@ export function CampaignAnalytics() {
   const currentCompany = sessionStorage.getItem('leadweave_company_name') || '';
 
   // Directory vs Deep-Dive View Mode
-  const [viewMode, setViewMode] = useState<'directory' | 'deepdive'>('directory');
+  const [viewMode, setViewMode] = useState<'directory' | 'deepdive'>(initialViewMode);
   const [directoryTab, setDirectoryTab] = useState<'all' | 'live' | 'assigned' | 'shared' | 'previous'>('all');
   const [directorySearch, setDirectorySearch] = useState<string>('');
 
@@ -114,6 +128,25 @@ export function CampaignAnalytics() {
   // Reply Detail Modal State
   const [selectedLeadForReply, setSelectedLeadForReply] = useState<CampaignLead | null>(null);
 
+  // Edit Campaign Modal State
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [editModalTab, setEditModalTab] = useState<'content' | 'settings'>('content');
+  const [editingCampaign, setEditingCampaign] = useState<Campaign | null>(null);
+  const [editName, setEditName] = useState<string>('');
+  const [editTemplate, setEditTemplate] = useState<string>('');
+  const [editMediaUrl, setEditMediaUrl] = useState<string>('');
+  const [editSessions, setEditSessions] = useState<string[]>([]);
+  const [editScheduledAt, setEditScheduledAt] = useState<string>('');
+  const [editMinDelay, setEditMinDelay] = useState<number>(3);
+  const [editMaxDelay, setEditMaxDelay] = useState<number>(6);
+  const [editSimulateTyping, setEditSimulateTyping] = useState<boolean>(true);
+  const [editDispatchMode, setEditDispatchMode] = useState<'automated' | 'manual'>('automated');
+  const [isSavingEdit, setIsSavingEdit] = useState<boolean>(false);
+
+  // Manual 1-by-1 Send State
+  const [sendingLeadId, setSendingLeadId] = useState<string | null>(null);
+  const [isSendingNext, setIsSendingNext] = useState<boolean>(false);
+
   // Dynamic Custom Columns
   const [customColumns, setCustomColumns] = useState<string[]>([]);
 
@@ -123,16 +156,16 @@ export function CampaignAnalytics() {
 
   useEffect(() => {
     if (!leads || leads.length === 0) return;
-    const cols = new Set<string>(customColumns);
-    leads.forEach(lead => {
-      if (lead.customVariables) {
-        Object.keys(lead.customVariables).forEach(k => cols.add(k));
-      }
+    setCustomColumns(prevCols => {
+      const cols = new Set<string>(prevCols);
+      leads.forEach(lead => {
+        if (lead.customVariables) {
+          Object.keys(lead.customVariables).forEach(k => cols.add(k));
+        }
+      });
+      const newCols = Array.from(cols);
+      return newCols.length > prevCols.length ? newCols : prevCols;
     });
-    const newCols = Array.from(cols);
-    if (newCols.length > customColumns.length) {
-      setCustomColumns(newCols);
-    }
   }, [leads]);
 
   const handleCellEdit = async (leadId: string, field: 'name' | string, value: string, isCustom: boolean = false) => {
@@ -149,7 +182,7 @@ export function CampaignAnalytics() {
       const data = isCustom ? { customVariables: { [field]: value } } : { name: value };
       await campaignApi.updateLead(selectedCampaignId, leadId, data);
       success('Cell updated');
-    } catch (err: any) {
+    } catch {
       error('Failed to save edit');
     }
   };
@@ -162,7 +195,7 @@ export function CampaignAnalytics() {
       if (res.items && res.items.length > 0 && !selectedCampaignId) {
         setSelectedCampaignId(res.items[0].id);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to load campaigns', err);
     }
   }, [selectedCampaignId]);
@@ -177,7 +210,7 @@ export function CampaignAnalytics() {
     try {
       const data = await campaignApi.getAnalytics(campaignId);
       setAnalyticsData(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to load campaign analytics', err);
     }
   }, []);
@@ -196,14 +229,17 @@ export function CampaignAnalytics() {
         setIsLoadingLeads(true);
       }
       try {
-        const params: any = { page: pageNum, limit: 50 };
+        const params: { page: number; limit: number; status?: string; search?: string } = {
+          page: pageNum,
+          limit: 50,
+        };
         if (filter && filter !== 'ALL') params.status = filter;
         if (search.trim()) params.search = search.trim();
 
         const res = await campaignApi.listLeads(campaignId, params);
         setLeads(res.items || []);
         setLeadsTotal(res.total || 0);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Failed to load campaign leads', err);
       } finally {
         if (!isBackground) {
@@ -240,8 +276,8 @@ export function CampaignAnalytics() {
       success('Campaign launched / resumed successfully.');
       loadAnalytics(selectedCampaignId);
       loadCampaigns();
-    } catch (err: any) {
-      error(err?.message || 'Failed to start campaign');
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Failed to start campaign'));
     }
   };
 
@@ -252,8 +288,8 @@ export function CampaignAnalytics() {
       info('Campaign paused.');
       loadAnalytics(selectedCampaignId);
       loadCampaigns();
-    } catch (err: any) {
-      error(err?.message || 'Failed to pause campaign');
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Failed to pause campaign'));
     }
   };
 
@@ -265,8 +301,57 @@ export function CampaignAnalytics() {
       info('Campaign cancelled.');
       loadAnalytics(selectedCampaignId);
       loadCampaigns();
-    } catch (err: any) {
-      error(err?.message || 'Failed to cancel campaign');
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Failed to cancel campaign'));
+    }
+  };
+
+  // Manual 1-by-1 Spreadsheet Send Handlers
+  const handleSendSingleLead = async (leadId: string) => {
+    if (!selectedCampaignId) return;
+    setSendingLeadId(leadId);
+    try {
+      const res = await campaignApi.sendSingleLead(selectedCampaignId, leadId);
+      if (res.success) {
+        success(`Message sent to +${res.lead.phoneNumber}!`);
+      } else if (res.pauseReason) {
+        info(`Pacing governor pause: ${res.pauseReason}`);
+      } else {
+        error(res.lead.errorMessage || 'Failed to dispatch message');
+      }
+      setLeads(prev => prev.map(l => l.id === leadId ? res.lead : l));
+      loadAnalytics(selectedCampaignId);
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Error sending lead'));
+    } finally {
+      setSendingLeadId(null);
+    }
+  };
+
+  const handleSendNextLead = async () => {
+    if (!selectedCampaignId) return;
+    setIsSendingNext(true);
+    try {
+      const res = await campaignApi.sendNextLead(selectedCampaignId);
+      if (res.hasMore && res.lead) {
+        if (res.success) {
+          success(`Sent 1-by-1 to +${res.lead.phoneNumber}! (${res.remainingPending} pending remaining)`);
+        } else if (res.pauseReason) {
+          info(`Pacing governor pause: ${res.pauseReason}`);
+        } else {
+          error(res.lead.errorMessage || 'Send failure');
+        }
+        loadLeads(selectedCampaignId, statusFilter, searchQuery, page, false);
+        loadAnalytics(selectedCampaignId);
+      } else {
+        info(res.message || 'All leads have already been dispatched!');
+        loadLeads(selectedCampaignId, statusFilter, searchQuery, page, false);
+        loadAnalytics(selectedCampaignId);
+      }
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Error sending next lead'));
+    } finally {
+      setIsSendingNext(false);
     }
   };
 
@@ -278,8 +363,8 @@ export function CampaignAnalytics() {
       success('Campaign launched / resumed.');
       loadCampaigns();
       if (selectedCampaignId === id) loadAnalytics(id);
-    } catch (err: any) {
-      error(err?.message || 'Failed to start campaign');
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Failed to start campaign'));
     }
   };
 
@@ -290,8 +375,79 @@ export function CampaignAnalytics() {
       info('Campaign paused.');
       loadCampaigns();
       if (selectedCampaignId === id) loadAnalytics(id);
-    } catch (err: any) {
-      error(err?.message || 'Failed to pause campaign');
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Failed to pause campaign'));
+    }
+  };
+
+  const handleOpenEditModal = (camp: Campaign, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setEditModalTab('content');
+    setEditingCampaign(camp);
+    setEditName(camp.name || '');
+    setEditTemplate(camp.template || '');
+    setEditMediaUrl(camp.mediaUrl || '');
+    setEditSessions(camp.sessionIds || []);
+    if (camp.scheduledAt) {
+      try {
+        const d = new Date(camp.scheduledAt);
+        if (!isNaN(d.getTime())) {
+          const formatted = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+          setEditScheduledAt(formatted);
+        } else {
+          setEditScheduledAt('');
+        }
+      } catch {
+        setEditScheduledAt('');
+      }
+    } else {
+      setEditScheduledAt('');
+    }
+    setEditMinDelay(Math.round((camp.pacing?.minDelayMs ?? 3000) / 1000));
+    setEditMaxDelay(Math.round((camp.pacing?.maxDelayMs ?? 6000) / 1000));
+    setEditSimulateTyping(camp.pacing?.simulateTyping ?? true);
+    setEditDispatchMode(camp.dispatchMode || 'automated');
+    setShowEditModal(true);
+  };
+
+  const handleSaveCampaignEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCampaign) return;
+    if (!editName.trim()) {
+      error('Campaign name is required');
+      return;
+    }
+    if (editSessions.length === 0) {
+      error('Please select at least one WhatsApp sender session');
+      return;
+    }
+
+    setIsSavingEdit(true);
+    try {
+      await campaignApi.update(editingCampaign.id, {
+        name: editName.trim(),
+        template: editTemplate,
+        mediaUrl: editMediaUrl.trim() || undefined,
+        sessionIds: editSessions,
+        dispatchMode: editDispatchMode,
+        scheduledAt: editScheduledAt ? new Date(editScheduledAt).toISOString() : undefined,
+        pacing: {
+          minDelayMs: editMinDelay * 1000,
+          maxDelayMs: editMaxDelay * 1000,
+          simulateTyping: editSimulateTyping,
+        },
+      });
+
+      success('Campaign updated successfully');
+      setShowEditModal(false);
+      loadCampaigns();
+      if (selectedCampaignId === editingCampaign.id) {
+        loadAnalytics(editingCampaign.id);
+      }
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Failed to update campaign'));
+    } finally {
+      setIsSavingEdit(false);
     }
   };
 
@@ -435,15 +591,26 @@ export function CampaignAnalytics() {
       setSingleName('');
       loadAnalytics(selectedCampaignId);
       loadLeads(selectedCampaignId, statusFilter, searchQuery, 1);
-    } catch (err: any) {
-      error(err?.message || 'Failed to append numbers');
+    } catch (err: unknown) {
+      error(getErrorMessage(err, 'Failed to append numbers'));
     } finally {
       setIsAddingLeads(false);
     }
   };
 
   const currentCampaign = analyticsData?.campaign || campaigns.find((c) => c.id === selectedCampaignId);
-  const stats = analyticsData?.stats || currentCampaign?.stats;
+  const stats = analyticsData?.stats || currentCampaign?.stats || (currentCampaign ? {
+    total: (currentCampaign as any).totalLeads ?? 0,
+    sent: (currentCampaign as any).sentCount ?? 0,
+    delivered: (currentCampaign as any).deliveredCount ?? 0,
+    read: (currentCampaign as any).readCount ?? 0,
+    failed: (currentCampaign as any).failedCount ?? 0,
+    pending: 0,
+    replied: 0,
+    deliveryRate: 0,
+    readRate: 0,
+    replyRate: 0,
+  } : undefined);
 
   // Compute status badges
   const getStatusBadge = (status?: string) => {
@@ -693,8 +860,17 @@ export function CampaignAnalytics() {
                             )}
                           </div>
                         </div>
-                        <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                           {getStatusBadge(camp.status)}
+                          {camp.dispatchMode === 'manual' ? (
+                            <span style={{ fontSize: '0.625rem', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: 4, background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)', textTransform: 'uppercase' }}>
+                              Manual
+                            </span>
+                          ) : (
+                            <span style={{ fontSize: '0.625rem', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: 4, background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', border: '1px solid rgba(34, 197, 94, 0.3)', textTransform: 'uppercase' }}>
+                              Auto
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -752,6 +928,16 @@ export function CampaignAnalytics() {
                             disabled={camp.status === 'completed'}
                           >
                             <Play size={13} />
+                          </button>
+                        )}
+
+                        {['draft', 'scheduled', 'paused'].includes(camp.status) && (
+                          <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={(e) => handleOpenEditModal(camp, e)}
+                            title="Edit Campaign Settings"
+                          >
+                            <Pencil size={13} />
                           </button>
                         )}
                         <a
@@ -826,9 +1012,67 @@ export function CampaignAnalytics() {
             )}
           </select>
           {getStatusBadge(currentCampaign?.status)}
+          {currentCampaign?.dispatchMode === 'manual' ? (
+            <span
+              style={{
+                fontSize: '0.6875rem',
+                fontWeight: 700,
+                padding: '0.2rem 0.5rem',
+                borderRadius: 4,
+                background: 'rgba(56, 189, 248, 0.15)',
+                color: '#38bdf8',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+              }}
+              title="Manual Mode: Messages dispatched 1-by-1 directly from spreadsheet"
+            >
+              Manual (1-by-1)
+            </span>
+          ) : (
+            <span
+              style={{
+                fontSize: '0.6875rem',
+                fontWeight: 700,
+                padding: '0.2rem 0.5rem',
+                borderRadius: 4,
+                background: 'rgba(34, 197, 94, 0.15)',
+                color: '#22c55e',
+                border: '1px solid rgba(34, 197, 94, 0.3)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+              }}
+              title="Automated Mode: Continuous background pacing with anti-ban delays"
+            >
+              Automated
+            </span>
+          )}
         </div>
 
         <div className="analytics-actions-group">
+          <button
+            className="btn btn-sm btn-primary"
+            onClick={handleSendNextLead}
+            disabled={!selectedCampaignId || isSendingNext || (stats?.pending === 0)}
+            title="Send next pending lead 1-by-1 from queue"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: currentCampaign?.dispatchMode === 'manual' 
+                ? 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)' 
+                : undefined,
+              borderColor: currentCampaign?.dispatchMode === 'manual' ? '#38bdf8' : undefined,
+            }}
+          >
+            {isSendingNext ? (
+              <Loader2 size={15} className="animate-spin" />
+            ) : (
+              <Send size={15} />
+            )}
+            <span>Send Next (1-by-1)</span>
+          </button>
+
           {currentCampaign?.status === 'running' ? (
             <button className="btn btn-secondary btn-sm" onClick={handlePauseCampaign} title="Pause Campaign">
               <Pause size={15} />
@@ -848,6 +1092,17 @@ export function CampaignAnalytics() {
             <button className="btn btn-secondary btn-sm" onClick={handleCancelCampaign} title="Stop Campaign">
               <Square size={15} />
               <span>Cancel</span>
+            </button>
+          )}
+
+          {currentCampaign && ['draft', 'scheduled', 'paused'].includes(currentCampaign.status) && (
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={() => handleOpenEditModal(currentCampaign)}
+              title="Edit Campaign Settings"
+            >
+              <Pencil size={15} />
+              <span>Edit</span>
             </button>
           )}
 
@@ -1024,15 +1279,18 @@ export function CampaignAnalytics() {
                   </linearGradient>
                 </defs>
                 {/* Render bars for each time slot */}
-                {(analyticsData?.timeline || []).map((item: { time: string; replies: number; optOuts: number }, idx: number, arr: Array<{ time: string; replies: number; optOuts: number }>) => {
-                  const maxCount = Math.max(...arr.map((x: { replies: number; optOuts: number }) => x.replies + x.optOuts), 1);
-                  const barWidth = Math.max(8, 380 / arr.length - 4);
-                  const x = 10 + idx * (380 / arr.length);
-                  const hReplies = (item.replies / maxCount) * 110;
-                  const hOpt = (item.optOuts / maxCount) * 110;
+                {(analyticsData?.timeline || []).map((item: any, idx: number, arr: Array<any>) => {
+                  const replies = Number(item.replies ?? item.sent ?? 0) || 0;
+                  const optOuts = Number(item.optOuts ?? item.failed ?? 0) || 0;
+                  const key = item.time || item.timestamp || `slot-${idx}`;
+                  const maxCount = Math.max(...arr.map((x: any) => (Number(x.replies ?? x.sent ?? 0) || 0) + (Number(x.optOuts ?? x.failed ?? 0) || 0)), 1);
+                  const barWidth = Math.max(8, 380 / (arr.length || 1) - 4);
+                  const x = 10 + idx * (380 / (arr.length || 1));
+                  const hReplies = (replies / maxCount) * 110;
+                  const hOpt = (optOuts / maxCount) * 110;
 
                   return (
-                    <g key={item.time}>
+                    <g key={key}>
                       <rect
                         x={x}
                         y={140 - hReplies}
@@ -1042,9 +1300,9 @@ export function CampaignAnalytics() {
                         rx="3"
                         opacity="0.85"
                       >
-                        <title>{`${item.time}: ${item.replies} replies`}</title>
+                        <title>{`${key}: ${replies} replies`}</title>
                       </rect>
-                      {item.optOuts > 0 && (
+                      {optOuts > 0 && (
                         <rect
                           x={x}
                           y={140 - hReplies - hOpt}
@@ -1053,7 +1311,7 @@ export function CampaignAnalytics() {
                           fill="#ef4444"
                           rx="3"
                         >
-                          <title>{`${item.time}: ${item.optOuts} opt-outs`}</title>
+                          <title>{`${key}: ${optOuts} opt-outs`}</title>
                         </rect>
                       )}
                     </g>
@@ -1130,6 +1388,7 @@ export function CampaignAnalytics() {
                   <th key={col}>{col}</th>
                 ))}
                 <th>Status</th>
+                <th>Action</th>
                 <th>Sent At</th>
                 <th>Response / Reply</th>
                 <th>Last Updated</th>
@@ -1138,14 +1397,14 @@ export function CampaignAnalytics() {
             <tbody>
               {isLoadingLeads ? (
                 <tr>
-                  <td colSpan={7 + customColumns.length} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                  <td colSpan={8 + customColumns.length} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
                     <Loader2 size={24} className="animate-spin" style={{ display: 'inline-block', marginBottom: '0.5rem' }} />
                     <p>Loading spreadsheet records...</p>
                   </td>
                 </tr>
               ) : leads.length === 0 ? (
                 <tr>
-                  <td colSpan={7 + customColumns.length} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                  <td colSpan={8 + customColumns.length} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
                     No recipient records match the selected filter.
                   </td>
                 </tr>
@@ -1156,7 +1415,7 @@ export function CampaignAnalytics() {
                       {(page - 1) * 50 + idx + 1}
                     </td>
                     <td style={{ fontWeight: 600 }}>
-                      +{lead.phoneNumber}
+                      +{String(lead.phone || lead.phoneNumber || '').replace(/^\+/, '')}
                     </td>
                     <td>
                       <EditableCell 
@@ -1173,6 +1432,45 @@ export function CampaignAnalytics() {
                       </td>
                     ))}
                     <td>{getLeadStatusBadge(lead.status)}</td>
+                    <td>
+                      {lead.status === 'PENDING' || lead.status === 'FAILED' ? (
+                        <button
+                          className="btn btn-sm btn-primary"
+                          onClick={() => handleSendSingleLead(lead.id)}
+                          disabled={sendingLeadId === lead.id || isSendingNext}
+                          title={lead.status === 'FAILED' ? 'Retry sending message to this lead' : 'Send message 1-by-1 to this lead'}
+                          style={{
+                            padding: '0.2rem 0.55rem',
+                            fontSize: '0.75rem',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            borderRadius: 4,
+                          }}
+                        >
+                          {sendingLeadId === lead.id ? (
+                            <Loader2 size={12} className="animate-spin" />
+                          ) : (
+                            <Send size={12} />
+                          )}
+                          <span>{lead.status === 'FAILED' ? 'Retry' : 'Send'}</span>
+                        </button>
+                      ) : (
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.3rem',
+                            fontSize: '0.75rem',
+                            color: 'var(--text-muted)',
+                          }}
+                          title="Message dispatched"
+                        >
+                          <CheckCheck size={14} style={{ color: '#22c55e' }} />
+                          <span>Sent</span>
+                        </span>
+                      )}
+                    </td>
                     <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                       {lead.sentAt ? new Date(lead.sentAt).toLocaleTimeString() : '—'}
                     </td>
@@ -1324,8 +1622,239 @@ export function CampaignAnalytics() {
           </div>
         )}
       </Modal>
+
         </div>
       )}
+
+      {/* EDIT CAMPAIGN MODAL */}
+      <Modal
+        title={`Edit Campaign: ${editingCampaign?.name || ''}`}
+        onClose={() => setShowEditModal(false)}
+        open={showEditModal}
+        className="edit-campaign-dialog"
+      >
+        {/* Minimal Tab Navigation */}
+        <div className="minimal-tab-bar">
+          <button
+            type="button"
+            className={`minimal-tab-btn ${editModalTab === 'content' ? 'active' : ''}`}
+            onClick={() => setEditModalTab('content')}
+          >
+            <MessageSquare size={14} />
+            <span>Message & Content</span>
+          </button>
+          <button
+            type="button"
+            className={`minimal-tab-btn ${editModalTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setEditModalTab('settings')}
+          >
+            <Send size={14} />
+            <span>Senders & Delivery ({editSessions.length})</span>
+          </button>
+        </div>
+
+        <form onSubmit={handleSaveCampaignEdit} className="minimal-form">
+          {editModalTab === 'content' ? (
+            <>
+              <div className="minimal-field">
+                <label htmlFor="edit-campaign-name">Campaign Name</label>
+                <input
+                  id="edit-campaign-name"
+                  type="text"
+                  className="minimal-input"
+                  required
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="e.g. Q4 Black Friday Promo"
+                />
+              </div>
+
+              <div className="minimal-field">
+                <div className="minimal-tag-bar">
+                  <label htmlFor="edit-campaign-template">Message Template</label>
+                  <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Insert Tag:</span>
+                    {['{{Name}}', '{{phone}}', '{Hi|Hello|Hey}'].map((tag) => (
+                      <button
+                        key={tag}
+                        type="button"
+                        className="minimal-tag-chip"
+                        onClick={() => setEditTemplate((prev) => prev + (prev && !prev.endsWith(' ') ? ' ' : '') + tag)}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  id="edit-campaign-template"
+                  className="minimal-input minimal-textarea"
+                  rows={5}
+                  value={editTemplate}
+                  onChange={(e) => setEditTemplate(e.target.value)}
+                  placeholder="Enter message text with {Spintax|Variants} and {{Variable}} tags..."
+                />
+              </div>
+
+              <div className="minimal-field">
+                <label htmlFor="edit-media-url">Media Attachment URL (Optional)</label>
+                <input
+                  id="edit-media-url"
+                  type="text"
+                  className="minimal-input"
+                  placeholder="https://example.com/image.png"
+                  value={editMediaUrl}
+                  onChange={(e) => setEditMediaUrl(e.target.value)}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="minimal-field">
+                <label>Assigned WhatsApp Senders ({editSessions.length} selected)</label>
+                <div className="minimal-senders-list">
+                  {allSessions.length === 0 ? (
+                    <span style={{ fontSize: '0.8125rem', color: '#64748b', padding: '0.4rem 0' }}>
+                      No connected WhatsApp sessions available
+                    </span>
+                  ) : (
+                    allSessions.map((session) => {
+                      const isChecked = editSessions.includes(session.id);
+                      return (
+                        <label key={session.id} className="minimal-sender-item">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setEditSessions((prev) => [...prev, session.id]);
+                              } else {
+                                setEditSessions((prev) => prev.filter((id) => id !== session.id));
+                              }
+                            }}
+                          />
+                          <span>
+                            <strong>{session.name || session.id}</strong> ({session.phone || session.status || 'Connected'})
+                          </span>
+                        </label>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+
+              <div className="minimal-field">
+                <label htmlFor="edit-scheduled-at">Schedule Date & Time</label>
+                <input
+                  id="edit-scheduled-at"
+                  type="datetime-local"
+                  className="minimal-input"
+                  value={editScheduledAt}
+                  onChange={(e) => setEditScheduledAt(e.target.value)}
+                />
+              </div>
+
+              <div className="minimal-field">
+                <label>Dispatch Mode</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', marginTop: '0.25rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => setEditDispatchMode('automated')}
+                    style={{
+                      padding: '0.6rem',
+                      borderRadius: 6,
+                      border: editDispatchMode === 'automated' ? '1px solid #22c55e' : '1px solid #334155',
+                      background: editDispatchMode === 'automated' ? 'rgba(34, 197, 94, 0.1)' : '#1e293b',
+                      color: editDispatchMode === 'automated' ? '#22c55e' : '#94a3b8',
+                      cursor: 'pointer',
+                      fontSize: '0.8125rem',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    ⚡ Automated (Auto-Paced)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditDispatchMode('manual')}
+                    style={{
+                      padding: '0.6rem',
+                      borderRadius: 6,
+                      border: editDispatchMode === 'manual' ? '1px solid #38bdf8' : '1px solid #334155',
+                      background: editDispatchMode === 'manual' ? 'rgba(56, 189, 248, 0.1)' : '#1e293b',
+                      color: editDispatchMode === 'manual' ? '#38bdf8' : '#94a3b8',
+                      cursor: 'pointer',
+                      fontSize: '0.8125rem',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    👆 Manual (1-by-1 Send)
+                  </button>
+                </div>
+              </div>
+
+              <div className="minimal-field">
+                <label>Anti-Ban Pacing & Delays</label>
+                <div className="minimal-pacing-row">
+                  <div className="minimal-pacing-group">
+                    <span>Delay:</span>
+                    <input
+                      type="number"
+                      aria-label="Minimum delay in seconds"
+                      className="minimal-input minimal-num-input"
+                      min={1}
+                      max={60}
+                      value={editMinDelay}
+                      onChange={(e) => setEditMinDelay(Number(e.target.value))}
+                    />
+                    <span>to</span>
+                    <input
+                      type="number"
+                      aria-label="Maximum delay in seconds"
+                      className="minimal-input minimal-num-input"
+                      min={1}
+                      max={120}
+                      value={editMaxDelay}
+                      onChange={(e) => setEditMaxDelay(Number(e.target.value))}
+                    />
+                    <span>sec</span>
+                  </div>
+
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', cursor: 'pointer', fontSize: '0.8125rem', color: '#e2e8f0' }}>
+                    <input
+                      type="checkbox"
+                      checked={editSimulateTyping}
+                      onChange={(e) => setEditSimulateTyping(e.target.checked)}
+                    />
+                    <span>Simulate typing</span>
+                  </label>
+                </div>
+              </div>
+            </>
+          )}
+
+          <div className="minimal-footer">
+            <button
+              type="button"
+              className="btn-minimal-cancel"
+              onClick={() => setShowEditModal(false)}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn-minimal-save" disabled={isSavingEdit}>
+              {isSavingEdit ? <Loader2 size={15} className="animate-spin" /> : <Pencil size={14} />}
+              <span>Save Changes</span>
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

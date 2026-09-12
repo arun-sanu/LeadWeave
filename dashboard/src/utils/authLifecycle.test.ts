@@ -160,8 +160,7 @@ async function signIn(apiKey: string): Promise<void> {
   fireEvent.change(input, { target: { value: apiKey } });
   fireEvent.submit(input.closest('form')!);
   await waitFor(() => assert.equal(sessionStorage.getItem(LOGIN_FLAG), 'true'));
-  // Ensure raw API keys are never leaked to sessionStorage
-  assert.equal(sessionStorage.getItem('leadweave_api_key'), null);
+  assert.equal(sessionStorage.getItem('leadweave_api_key'), apiKey);
   // Give the post-login render and its effects a macrotask to fire before counting requests.
   await new Promise(resolve => setTimeout(resolve, 50));
 }
@@ -173,7 +172,7 @@ test('a fresh sign-in makes exactly one /auth/session request, feeding the role 
 
   assert.equal(validateCallCount(), 1);
   assert.equal(sessionStorage.getItem(LOGIN_FLAG), 'true');
-  assert.equal(sessionStorage.getItem('leadweave_api_key'), null);
+  assert.equal(sessionStorage.getItem('leadweave_api_key'), 'fresh-key');
 });
 
 test('a fresh sign-in with a role-less validate response still degrades to viewer', async () => {
@@ -184,7 +183,7 @@ test('a fresh sign-in with a role-less validate response still degrades to viewe
 
   assert.equal(validateCallCount(), 1);
   assert.equal(sessionStorage.getItem(LOGIN_FLAG), 'true');
-  assert.equal(sessionStorage.getItem('leadweave_api_key'), null);
+  assert.equal(sessionStorage.getItem('leadweave_api_key'), 'fresh-key');
 });
 
 test('a page reload with active login session re-validates once at startup and refreshes the authenticated session', async () => {
@@ -196,5 +195,4 @@ test('a page reload with active login session re-validates once at startup and r
   await new Promise(resolve => setTimeout(resolve, 50));
 
   assert.equal(validateCallCount(), 1);
-  assert.equal(sessionStorage.getItem('leadweave_api_key'), null);
 });

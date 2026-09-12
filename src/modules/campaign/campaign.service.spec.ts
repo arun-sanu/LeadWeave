@@ -212,4 +212,163 @@ describe('CampaignService', () => {
       expect(mockLeadRepo.count).toHaveBeenCalled();
     });
   });
+
+  describe('updateCampaign', () => {
+    it('should update campaign fields for paused, draft, or scheduled campaigns', async () => {
+      const mockCampaign = {
+        id: 'camp-100',
+        name: 'Old Name',
+        template: 'Old Template',
+        sessionIds: ['session_1'],
+        status: CampaignStatus.PAUSED,
+        pacing: { minDelayMs: 3000, maxDelayMs: 6000, simulateTyping: true },
+      };
+
+      mockCampaignRepo.findOne.mockResolvedValue(mockCampaign);
+      mockLeadRepo.find.mockResolvedValue([]);
+
+      const updated = await service.updateCampaign('camp-100', {
+        name: 'New Name',
+        template: 'New Template',
+        pacing: { minDelayMs: 2000, maxDelayMs: 5000, simulateTyping: false },
+      });
+
+      expect(updated.name).toBe('New Name');
+      expect(updated.template).toBe('New Template');
+      expect(updated.pacing.minDelayMs).toBe(2000);
+      expect(mockCampaignRepo.save).toHaveBeenCalledWith(mockCampaign);
+    });
+
+    it('should reject editing a campaign in RUNNING status', async () => {
+      const mockCampaign = {
+        id: 'camp-101',
+        name: 'Active Campaign',
+        status: CampaignStatus.RUNNING,
+      };
+
+      mockCampaignRepo.findOne.mockResolvedValue(mockCampaign);
+
+      await expect(
+        service.updateCampaign('camp-101', { name: 'Updated Name' }),
+      ).rejects.toThrow('Campaign cannot be edited while in \'running\' state');
+    });
+  });
+
+  describe('Manual 1-by-1 Spreadsheet Sending', () => {
+    it('does not launch background loop on startCampaign when dispatchMode is manual', async () => {
+      const manualCamp = {
+        id: 'camp-manual-1',
+        name: 'Manual Campaign',
+        status: CampaignStatus.DRAFT,
+        dispatchMode: 'manual',
+        sessionIds: ['session_1'],
+        template: 'Hello {{name}}',
+      };
+
+      mockCampaignRepo.findOne.mockResolvedValue(manualCamp);
+      const dispatchSpy = jest.spyOn(service as any, 'dispatchCampaignLeads');
+
+      const result = await service.startCampaign('camp-manual-1');
+      expect(result.status).toBe(CampaignStatus.RUNNING);
+      expect(dispatchSpy).not.toHaveBeenCalled();
+    });
+
+    it('sendSingleLead dispatches the requested lead and refreshes stats', async () => {
+      const camp = {
+        id: 'camp-manual-2',
+        name: 'Manual Send Single',
+        status: CampaignStatus.RUNNING,
+        dispatchMode: 'manual',
+        sessionIds: ['session_1'],
+        template: 'Hello {{name}}',
+        pacing: { simulateTyping: false },
+      };
+
+      const lead = {
+        id: 'lead-single-1',
+        campaignId: 'camp-manual-2',
+        sessionId: 'session_1',
+        phoneNumber: '1234567890',
+        chatId: '1234567890@c.us',
+        name: 'John',
+        status: CampaignLeadStatus.PENDING,
+      };
+
+      const mockEngine = {
+        checkNumberExists: jest.fn().mockResolvedValue(true),
+        sendTextMessage: jest.fn().mockResolvedValue({ id: 'msg-1' }),
+      };
+      mockEngineRegistry.get.mockReturnValue(mockEngine);
+
+      mockCampaignRepo.findOne.mockResolvedValue(camp);
+      mockLeadRepo.findOne.mockResolvedValue(lead);
+      mockLeadRepo.count.mockResolvedValue(0); // 0 remaining after this send
+
+      const outcome = await service.sendSingleLead('camp-manual-2', 'lead-single-1');
+
+      expect(outcome.success).toBe(true);
+      expect(lead.status).toBe(CampaignLeadStatus.SENT);
+      expect(mockEngine.sendTextMessage).toHaveBeenCalledWith('1234567890@c.us', 'Hello John');
+      expect(camp.status).toBe(CampaignStatus.COMPLETED);
+    });
+
+    it('sendNextLead dispatches the next FIFO pending lead', async () => {
+      const camp = {
+        id: 'camp-manual-3',
+        name: 'Manual Send Next',
+        status: CampaignStatus.RUNNING,
+        dispatchMode: 'manual',
+        sessionIds: ['session_1'],
+        template: 'Hi {{name}}',
+        pacing: { simulateTyping: false },
+      };
+
+      const leadNext = {
+        id: 'lead-next-1',
+        campaignId: 'camp-manual-3',
+        sessionId: 'session_1',
+        phoneNumber: '9876543210',
+        chatId: '9876543210@c.us',
+        name: 'Sara',
+        status: CampaignLeadStatus.PENDING,
+      };
+
+      const mockEngine = {
+        checkNumberExists: jest.fn().mockResolvedValue(true),
+        sendTextMessage: jest.fn().mockResolvedValue({ id: 'msg-2' }),
+      };
+      mockEngineRegistry.get.mockReturnValue(mockEngine);
+
+      mockCampaignRepo.findOne.mockResolvedValue(camp);
+      mockLeadRepo.findOne.mockResolvedValue(leadNext);
+      mockLeadRepo.count.mockResolvedValue(3); // 3 remaining
+
+      const outcome = await service.sendNextLead('camp-manual-3');
+
+      expect(outcome.success).toBe(true);
+      expect(outcome.hasMore).toBe(true);
+      expect(outcome.lead?.id).toBe('lead-next-1');
+      expect(leadNext.status).toBe(CampaignLeadStatus.SENT);
+      expect(mockEngine.sendTextMessage).toHaveBeenCalledWith('9876543210@c.us', 'Hi Sara');
+    });
+
+    it('sendNextLead returns hasMore: false when all leads are processed', async () => {
+      const camp = {
+        id: 'camp-manual-4',
+        name: 'Finished Campaign',
+        status: CampaignStatus.RUNNING,
+        dispatchMode: 'manual',
+        sessionIds: ['session_1'],
+      };
+
+      mockCampaignRepo.findOne.mockResolvedValue(camp);
+      mockLeadRepo.findOne.mockResolvedValue(null); // No more pending leads
+      mockLeadRepo.count.mockResolvedValue(0);
+
+      const outcome = await service.sendNextLead('camp-manual-4');
+
+      expect(outcome.hasMore).toBe(false);
+      expect(outcome.message).toContain('No more pending leads');
+    });
+  });
 });

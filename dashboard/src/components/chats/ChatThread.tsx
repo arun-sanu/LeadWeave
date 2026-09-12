@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useState, memo, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, CornerUpLeft, Loader2, MessageSquare, Smile, Trash2 } from 'lucide-react';
 import { Emoji, EmojiStyle } from 'emoji-picker-react';
@@ -31,6 +31,256 @@ interface ChatThreadProps {
   onReact: (message: ChatMessageView, emoji: string) => void;
   onDelete: (message: ChatMessageView) => void;
 }
+
+interface MessageBubbleItemProps {
+  msg: ChatMessageView;
+  sessionId: string | null;
+  isMe: boolean;
+  showSender: boolean;
+  formattedTime: string;
+  mediaFetchState?: 'loading' | 'failed';
+  downloadMedia: (message: ChatMessageView) => void;
+  onMediaLoad: () => void;
+  onOpenImage: (id: string) => void;
+  onReply: (message: ChatMessageView) => void;
+  onReact: (message: ChatMessageView, emoji: string) => void;
+  onDelete: (message: ChatMessageView) => void;
+}
+
+const MessageBubbleItem = memo(function MessageBubbleItem({
+  msg,
+  sessionId,
+  isMe,
+  showSender,
+  formattedTime,
+  mediaFetchState,
+  downloadMedia,
+  onMediaLoad,
+  onOpenImage,
+  onReply,
+  onReact,
+  onDelete,
+}: MessageBubbleItemProps) {
+  const { t } = useTranslation();
+  const isMediaMessage = msg.type !== 'text';
+  const mediaInfo = msg.metadata?.media;
+
+  const renderMedia = () => {
+    if (msg.type === 'revoked') return null;
+    if (msg.type === 'location') {
+      const thumb = msg.body && msg.body.length > 100 ? `data:image/jpeg;base64,${msg.body}` : '';
+      return (
+        <div className="message-location">
+          {thumb && (
+            <img
+              src={thumb}
+              alt=""
+              onLoad={onMediaLoad}
+              style={{ maxWidth: 220, borderRadius: 8, display: 'block', marginBottom: 4 }}
+            />
+          )}
+          <span className="message-media-omitted">📍 {t('chats.media.location')}</span>
+        </div>
+      );
+    }
+    if (msg.type === 'call') {
+      const call = msg.metadata?.call;
+      const callKey = call?.video
+        ? call.missed
+          ? 'callVideoMissed'
+          : 'callVideo'
+        : call?.missed
+          ? 'callMissed'
+          : 'call';
+      return (
+        <div className="message-media-omitted">
+          {`${call?.video ? '📹' : '📞'} ${t(`chats.media.${callKey}`)}`}
+        </div>
+      );
+    }
+    if (!mediaInfo) return null;
+    if (mediaInfo.omitted) {
+      return (
+        <button
+          type="button"
+          className="message-media-omitted"
+          onClick={() => void downloadMedia(msg)}
+          disabled={!sessionId || !msg.waMessageId || mediaFetchState === 'loading'}
+        >
+          {mediaFetchState === 'loading' ? (
+            <Loader2 size={14} className="animate-spin" />
+          ) : (
+            <>📎 {t(mediaFetchState === 'failed' ? 'chats.status.mediaUnavailable' : 'chats.media.omitted')}</>
+          )}
+        </button>
+      );
+    }
+    const mediaSrc = getMediaSrc(mediaInfo);
+    if (!mediaSrc) return null;
+
+    switch (msg.type) {
+      case 'image':
+      case 'sticker':
+        return (
+          <div className="message-media-image">
+            <img
+              src={mediaSrc}
+              alt={mediaInfo.filename || t('chats.media.image')}
+              className="chat-image-media"
+              loading="lazy"
+              decoding="async"
+              onLoad={onMediaLoad}
+              onClick={() => onOpenImage(msg.id)}
+            />
+          </div>
+        );
+      case 'video':
+        return (
+          <div className="message-media-video">
+            <video src={mediaSrc} controls className="chat-video-media" onLoadedData={onMediaLoad} />
+          </div>
+        );
+      case 'audio':
+      case 'voice':
+        return (
+          <div className="message-media-audio">
+            <audio src={mediaSrc} controls className="chat-audio-media" />
+          </div>
+        );
+      case 'document':
+      default:
+        return (
+          <div className="message-media-document">
+            <a href={mediaSrc} download={mediaInfo.filename || 'document'} className="chat-document-media">
+              📎 {mediaInfo.filename || t('chats.downloadDocument')}
+            </a>
+          </div>
+        );
+    }
+  };
+
+  const reactions = msg.metadata?.reactions || {};
+  const hasReactions = Object.keys(reactions).length > 0;
+  const isRevoked = msg.type === 'revoked';
+  const isMasked = msg.type === 'masked';
+
+  return (
+    <div
+      className={`message-bubble-wrapper ${isMe ? 'outgoing' : 'incoming'}`}
+      data-wa-message-id={msg.waMessageId}
+    >
+      <div className="message-bubble-container">
+        <div
+          className={`message-bubble ${isMe ? 'outgoing' : 'incoming'} ${msg.status} ${
+            isMediaMessage ? 'media-type' : ''
+          } ${isRevoked ? 'revoked-type' : ''}`}
+        >
+          {showSender && (
+            <div className="message-sender" style={{ color: senderColor(senderKey(msg)!) }}>
+              {msg.chatName}
+            </div>
+          )}
+
+          {msg.metadata?.quotedMessage && (
+            <div className="message-quote-box">
+              <MessageBody text={msg.metadata.quotedMessage.body} className="quote-body" />
+            </div>
+          )}
+
+          {renderMedia()}
+
+          {isRevoked ? (
+            <div className="message-text">{t('chats.messageDeleted')}</div>
+          ) : isMasked ? (
+            <div className="message-text message-masked">{t('chats.messageMasked')}</div>
+          ) : (
+            msg.body &&
+            (!mediaInfo || msg.body !== mediaInfo.filename) &&
+            msg.type !== 'location' &&
+            msg.type !== 'call' && <MessageBody text={msg.body} className="message-text" />
+          )}
+
+          <div className="message-meta">
+            <span className="message-time">{formattedTime}</span>
+            {isMe && (
+              <span
+                className={`message-status-icon ${msg.status}`}
+                role="img"
+                aria-label={t(`chats.messageStatus.${msg.status}`)}
+                title={t(`chats.messageStatus.${msg.status}`)}
+              >
+                {msg.status === 'pending' && <EmojiText text="🕒" />}
+                {msg.status === 'sent' && '✓'}
+                {msg.status === 'delivered' && '✓✓'}
+                {msg.status === 'read' && '✓✓'}
+                {msg.status === 'failed' && <EmojiText text="⚠️" />}
+              </span>
+            )}
+          </div>
+
+          {hasReactions && (
+            <div className="message-reactions-badge">
+              {Object.values(reactions)
+                .slice(0, 3)
+                .map((emoji, idx) => (
+                  <span key={idx} className="reaction-emoji-span">
+                    <EmojiText text={emoji} />
+                  </span>
+                ))}
+              {Object.keys(reactions).length > 1 && (
+                <span className="reactions-count-span">{Object.keys(reactions).length}</span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {!isRevoked && (
+          <div className="message-actions-menu">
+            <button
+              type="button"
+              className="action-btn"
+              onClick={() => onReply(msg)}
+              title={t('chats.actions.reply')}
+            >
+              <CornerUpLeft size={14} />
+            </button>
+
+            <div className="reaction-trigger-wrapper">
+              <button type="button" className="action-btn reaction-btn" title={t('chats.actions.react')}>
+                <Smile size={14} />
+              </button>
+              <div className="reaction-quick-popover">
+                {[
+                  { char: '👍', unified: '1f44d' },
+                  { char: '❤️', unified: '2764-fe0f' },
+                  { char: '😂', unified: '1f602' },
+                  { char: '😮', unified: '1f62e' },
+                  { char: '😢', unified: '1f622' },
+                  { char: '🙏', unified: '1f64f' },
+                ].map(item => (
+                  <button key={item.char} type="button" onClick={() => onReact(msg, item.char)}>
+                    <Emoji unified={item.unified} size={20} emojiStyle={EmojiStyle.FACEBOOK} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {isMe && msg.status !== 'pending' && (
+              <button
+                type="button"
+                className="action-btn delete-btn"
+                onClick={() => onDelete(msg)}
+                title={t('chats.actions.delete')}
+              >
+                <Trash2 size={14} />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
 
 // The messages area of the active chat room: the bubble list (media, quotes, reactions, hover
 // actions) plus the floating scroll-to-bottom button. The page owns the message query and the
@@ -176,240 +426,22 @@ function ChatThread({
             (!prev || prev.direction === 'outgoing' || senderKey(prev) !== senderKey(msg)),
           );
 
-          const isMediaMessage = msg.type !== 'text';
-          const mediaInfo = msg.metadata?.media;
-
-          const renderMedia = () => {
-            if (msg.type === 'revoked') return null;
-            // location/call have no downloadable media payload — render them before the
-            // mediaInfo gate. The raw body (a base64 thumbnail / empty token) is suppressed below.
-            if (msg.type === 'location') {
-              // WhatsApp location messages carry a base64 JPEG map-preview thumbnail in `body`.
-              const thumb = msg.body && msg.body.length > 100 ? `data:image/jpeg;base64,${msg.body}` : '';
-              return (
-                <div className="message-location">
-                  {thumb && (
-                    <img
-                      src={thumb}
-                      alt=""
-                      onLoad={onMediaLoad}
-                      style={{ maxWidth: 220, borderRadius: 8, display: 'block', marginBottom: 4 }}
-                    />
-                  )}
-                  <span className="message-media-omitted">📍 {t('chats.media.location')}</span>
-                </div>
-              );
-            }
-            if (msg.type === 'call') {
-              const call = msg.metadata?.call;
-              const callKey = call?.video
-                ? call.missed
-                  ? 'callVideoMissed'
-                  : 'callVideo'
-                : call?.missed
-                  ? 'callMissed'
-                  : 'call';
-              return (
-                <div className="message-media-omitted">
-                  {`${call?.video ? '📹' : '📞'} ${t(`chats.media.${callKey}`)}`}
-                </div>
-              );
-            }
-            if (!mediaInfo) return null;
-            if (mediaInfo.omitted) {
-              // Not a plain label: the bytes exist behind the per-message media route, so this is the
-              // only handle the viewer has on them.
-              const fetchState = msg.waMessageId ? mediaFetch[msg.waMessageId] : undefined;
-              return (
-                <button
-                  type="button"
-                  className="message-media-omitted"
-                  onClick={() => void downloadMedia(msg)}
-                  disabled={!sessionId || !msg.waMessageId || fetchState === 'loading'}
-                >
-                  {fetchState === 'loading' ? (
-                    <Loader2 size={14} className="animate-spin" />
-                  ) : (
-                    <>📎 {t(fetchState === 'failed' ? 'chats.status.mediaUnavailable' : 'chats.media.omitted')}</>
-                  )}
-                </button>
-              );
-            }
-            const mediaSrc = getMediaSrc(mediaInfo);
-            if (!mediaSrc) return null;
-
-            switch (msg.type) {
-              case 'image':
-              case 'sticker':
-                return (
-                  <div className="message-media-image">
-                    <img
-                      src={mediaSrc}
-                      alt={mediaInfo.filename || t('chats.media.image')}
-                      className="chat-image-media"
-                      loading="lazy"
-                      decoding="async"
-                      onLoad={onMediaLoad}
-                      onClick={() => onOpenImage(msg.id)}
-                    />
-                  </div>
-                );
-              case 'video':
-                return (
-                  <div className="message-media-video">
-                    <video src={mediaSrc} controls className="chat-video-media" onLoadedData={onMediaLoad} />
-                  </div>
-                );
-              case 'audio':
-              case 'voice':
-                return (
-                  <div className="message-media-audio">
-                    <audio src={mediaSrc} controls className="chat-audio-media" />
-                  </div>
-                );
-              case 'document':
-              default:
-                return (
-                  <div className="message-media-document">
-                    <a href={mediaSrc} download={mediaInfo.filename || 'document'} className="chat-document-media">
-                      📎 {mediaInfo.filename || t('chats.downloadDocument')}
-                    </a>
-                  </div>
-                );
-            }
-          };
-
-          const reactions = msg.metadata?.reactions || {};
-          const hasReactions = Object.keys(reactions).length > 0;
-          const isRevoked = msg.type === 'revoked';
-          const isMasked = msg.type === 'masked';
-
           return (
-            <div
+            <MessageBubbleItem
               key={msg.id}
-              className={`message-bubble-wrapper ${isMe ? 'outgoing' : 'incoming'}`}
-              data-wa-message-id={msg.waMessageId}
-            >
-              <div className="message-bubble-container">
-                <div
-                  className={`message-bubble ${isMe ? 'outgoing' : 'incoming'} ${msg.status} ${
-                    isMediaMessage ? 'media-type' : ''
-                  } ${isRevoked ? 'revoked-type' : ''}`}
-                >
-                  {/* Group sender label (WhatsApp-style: coloured name atop the bubble) */}
-                  {/* Group sender label (WhatsApp-style: coloured name atop the bubble).
-                      Colour keys on the stable sender id, so same-named participants
-                      still get distinct colours; the label shows the human name. */}
-                  {showSender && (
-                    <div className="message-sender" style={{ color: senderColor(senderKey(msg)!) }}>
-                      {msg.chatName}
-                    </div>
-                  )}
-
-                  {/* Quoted message display */}
-                  {msg.metadata?.quotedMessage && (
-                    <div className="message-quote-box">
-                      <MessageBody text={msg.metadata.quotedMessage.body} className="quote-body" />
-                    </div>
-                  )}
-
-                  {renderMedia()}
-
-                  {isRevoked ? (
-                    <div className="message-text">{t('chats.messageDeleted')}</div>
-                  ) : isMasked ? (
-                    <div className="message-text message-masked">{t('chats.messageMasked')}</div>
-                  ) : (
-                    msg.body &&
-                    (!mediaInfo || msg.body !== mediaInfo.filename) &&
-                    msg.type !== 'location' &&
-                    msg.type !== 'call' && <MessageBody text={msg.body} className="message-text" />
-                  )}
-
-                  <div className="message-meta">
-                    <span className="message-time">{formattedTime}</span>
-                    {/* delivered and read render the SAME glyph and differ only in colour, which
-                        carries the meaning nowhere a screen reader or a colour-blind reader can
-                        reach it. The status is spelled out for both. */}
-                    {isMe && (
-                      <span
-                        className={`message-status-icon ${msg.status}`}
-                        role="img"
-                        aria-label={t(`chats.messageStatus.${msg.status}`)}
-                        title={t(`chats.messageStatus.${msg.status}`)}
-                      >
-                        {msg.status === 'pending' && <EmojiText text="🕒" />}
-                        {msg.status === 'sent' && '✓'}
-                        {msg.status === 'delivered' && '✓✓'}
-                        {msg.status === 'read' && '✓✓'}
-                        {msg.status === 'failed' && <EmojiText text="⚠️" />}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Reactions display */}
-                  {hasReactions && (
-                    <div className="message-reactions-badge">
-                      {Object.values(reactions)
-                        .slice(0, 3)
-                        .map((emoji, idx) => (
-                          <span key={idx} className="reaction-emoji-span">
-                            <EmojiText text={emoji} />
-                          </span>
-                        ))}
-                      {Object.keys(reactions).length > 1 && (
-                        <span className="reactions-count-span">{Object.keys(reactions).length}</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Message actions menu (hover) */}
-                {!isRevoked && (
-                  <div className="message-actions-menu">
-                    <button
-                      type="button"
-                      className="action-btn"
-                      onClick={() => onReply(msg)}
-                      title={t('chats.actions.reply')}
-                    >
-                      <CornerUpLeft size={14} />
-                    </button>
-
-                    <div className="reaction-trigger-wrapper">
-                      <button type="button" className="action-btn reaction-btn" title={t('chats.actions.react')}>
-                        <Smile size={14} />
-                      </button>
-                      <div className="reaction-quick-popover">
-                        {[
-                          { char: '👍', unified: '1f44d' },
-                          { char: '❤️', unified: '2764-fe0f' },
-                          { char: '😂', unified: '1f602' },
-                          { char: '😮', unified: '1f62e' },
-                          { char: '😢', unified: '1f622' },
-                          { char: '🙏', unified: '1f64f' },
-                        ].map(item => (
-                          <button key={item.char} type="button" onClick={() => onReact(msg, item.char)}>
-                            <Emoji unified={item.unified} size={20} emojiStyle={EmojiStyle.FACEBOOK} />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {isMe && msg.status !== 'pending' && (
-                      <button
-                        type="button"
-                        className="action-btn delete-btn"
-                        onClick={() => onDelete(msg)}
-                        title={t('chats.actions.delete')}
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+              msg={msg}
+              sessionId={sessionId}
+              isMe={isMe}
+              showSender={showSender}
+              formattedTime={formattedTime}
+              mediaFetchState={msg.waMessageId ? mediaFetch[msg.waMessageId] : undefined}
+              downloadMedia={downloadMedia}
+              onMediaLoad={onMediaLoad}
+              onOpenImage={onOpenImage}
+              onReply={onReply}
+              onReact={onReact}
+              onDelete={onDelete}
+            />
           );
         })
       )}

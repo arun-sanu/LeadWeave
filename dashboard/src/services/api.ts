@@ -1458,6 +1458,7 @@ export interface Campaign {
   creatorName?: string | null;
   sessionIds: string[];
   status: 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'cancelled';
+  dispatchMode?: 'automated' | 'manual';
   template: string;
   mediaUrl?: string | null;
   scheduledAt?: string | null;
@@ -1492,11 +1493,32 @@ export const campaignApi = {
     columnsMetadata?: string[];
     leads: Array<{ phone: string; name?: string; variables?: Record<string, string> }>;
     autoLaunch?: boolean;
+    dispatchMode?: 'automated' | 'manual';
   }) =>
     request<Campaign>('/campaigns', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+
+  sendSingleLead: (campaignId: string, leadId: string) =>
+    request<{
+      success: boolean;
+      lead: CampaignLead;
+      pauseReason?: string;
+      remainingPending: number;
+      stats: CampaignStats;
+    }>(`/campaigns/${campaignId}/leads/${leadId}/send`, { method: 'POST' }),
+
+  sendNextLead: (campaignId: string) =>
+    request<{
+      hasMore: boolean;
+      success?: boolean;
+      lead?: CampaignLead;
+      message?: string;
+      pauseReason?: string;
+      remainingPending: number;
+      stats: CampaignStats;
+    }>(`/campaigns/${campaignId}/send-next`, { method: 'POST' }),
 
   list: (params?: { status?: string; page?: number; limit?: number }) => {
     const query = new URLSearchParams();
@@ -1508,6 +1530,23 @@ export const campaignApi = {
   },
 
   get: (id: string) => request<Campaign>(`/campaigns/${id}`),
+
+  update: (
+    id: string,
+    data: {
+      name?: string;
+      sessionIds?: string[];
+      template?: string;
+      mediaUrl?: string;
+      dispatchMode?: 'automated' | 'manual';
+      scheduledAt?: string;
+      pacing?: { minDelayMs?: number; maxDelayMs?: number; simulateTyping?: boolean };
+    },
+  ) =>
+    request<Campaign>(`/campaigns/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
 
   start: (id: string) => request<Campaign>(`/campaigns/${id}/start`, { method: 'POST' }),
 

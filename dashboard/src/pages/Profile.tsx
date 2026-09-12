@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   User,
   Mail,
@@ -16,17 +17,42 @@ import {
   Edit2,
   X,
   FileText,
+  Users,
+  Webhook as WebhookIcon,
 } from 'lucide-react';
 import { useRole } from '../hooks/useRole';
 import { supabase, isSupabaseConfigured } from '../services/supabase';
 import { TemplateManager } from '../components/profile/TemplateManager';
+import { CompanyTeam } from './CompanyTeam';
+import { Webhooks } from './Webhooks';
 import './Profile.css';
 
-type Tab = 'account' | 'hr' | 'support' | 'security' | 'templates';
+type Tab = 'account' | 'hr' | 'team' | 'webhooks' | 'support' | 'security' | 'templates';
 
 export function Profile() {
   const { role } = useRole();
-  const [activeTab, setActiveTab] = useState<Tab>('account');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab') as Tab | null;
+
+  const validTabs: Tab[] = ['account', 'hr', 'team', 'webhooks', 'support', 'security', 'templates'];
+
+  const [activeTab, setActiveTabState] = useState<Tab>(() => {
+    if (tabParam && validTabs.includes(tabParam)) {
+      return tabParam;
+    }
+    return 'account';
+  });
+
+  useEffect(() => {
+    if (tabParam && validTabs.includes(tabParam)) {
+      setActiveTabState(tabParam);
+    }
+  }, [tabParam]);
+
+  const setActiveTab = (tab: Tab) => {
+    setActiveTabState(tab);
+    setSearchParams({ tab });
+  };
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -149,6 +175,22 @@ export function Profile() {
             >
               <Building2 size={16} />
               <span>Workspace Matrix</span>
+            </button>
+
+            <button
+              className={`hud-menu-item ${activeTab === 'team' ? 'active' : ''}`}
+              onClick={() => setActiveTab('team')}
+            >
+              <Users size={16} />
+              <span>Global Users &amp; Team</span>
+            </button>
+
+            <button
+              className={`hud-menu-item ${activeTab === 'webhooks' ? 'active' : ''}`}
+              onClick={() => setActiveTab('webhooks')}
+            >
+              <WebhookIcon size={16} />
+              <span>Webhooks &amp; Integrations</span>
             </button>
 
             <button
@@ -484,6 +526,22 @@ export function Profile() {
                     {isTwoFactorEnabled ? '2FA Enabled' : 'Enable 2FA'}
                   </button>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'team' && (
+            <div className="cyber-panel fade-in" style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}>
+              <div className="cyber-panel-body" style={{ padding: 0 }}>
+                <CompanyTeam />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'webhooks' && (
+            <div className="cyber-panel fade-in" style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}>
+              <div className="cyber-panel-body" style={{ padding: 0 }}>
+                <Webhooks />
               </div>
             </div>
           )}

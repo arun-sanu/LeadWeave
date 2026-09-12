@@ -117,20 +117,22 @@ export function useGlobalBubbleListener() {
               try {
                 const chats = await sessionApi.getChats(sess.id);
                 if (Array.isArray(chats)) {
-                  chats.forEach((chat) => {
+                  const topChats = chats.slice(0, 15);
+                  const bubbleItems = topChats.map((chat) => {
                     const displayName =
                       chat.name && !/^\+?\d+$/.test(chat.name.replace(/[\s()\-]/g, '')) && !chat.name.includes('@')
                         ? chat.name
                         : (formatPhoneForDisplay(chat.name || chat.id) || chat.name || chat.id.split('@')[0]);
 
-                    bubbleStore.addOrUpdateBubble({
+                    return {
                       chatId: chat.id,
                       sessionId: sess.id,
                       name: displayName,
                       unreadCount: chat.unreadCount || 0,
                       lastMessage: chat.lastMessage || '',
-                    });
+                    };
                   });
+                  bubbleStore.batchAddOrUpdateBubbles(bubbleItems);
                 }
               } catch (chatErr) {
                 console.warn(`[GlobalBubbleListener] Failed to fetch chats for session ${sess.id}:`, chatErr);

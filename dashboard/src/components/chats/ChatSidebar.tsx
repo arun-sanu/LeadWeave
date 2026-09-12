@@ -1,13 +1,21 @@
 import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useTranslation } from 'react-i18next';
-import { AlertCircle, Archive, ArchiveRestore, CircleDashed, Loader2, Megaphone, Plus } from 'lucide-react';
+import { AlertCircle, Archive, ArchiveRestore, CircleDashed, Loader2, Megaphone, MessageSquare, Plus, Users } from 'lucide-react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { Channel, Chat, ContactStatusGroup } from '../../services/api';
 import ChatAvatar from './ChatAvatar';
 import EmojiText from './EmojiText';
 
 export type ChatsTab = 'chats' | 'groups' | 'channels' | 'status' | 'archive';
+
+const TAB_ICONS = {
+  chats: MessageSquare,
+  groups: Users,
+  channels: Megaphone,
+  status: CircleDashed,
+  archive: Archive,
+};
 
 interface ChatSidebarProps {
   activeTab: ChatsTab;
@@ -148,18 +156,22 @@ function ChatSidebar({
 
         {/* Chats / Groups / Channels / Status / Archive tabs */}
         <div className="chats-tabs" role="tablist">
-          {(['chats', 'groups', 'channels', 'status', 'archive'] as const).map(tab => (
-            <button
-              key={tab}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === tab}
-              className={`chats-tab ${activeTab === tab ? 'active' : ''}`}
-              onClick={() => onSwitchTab(tab)}
-            >
-              {t(`chats.tab.${tab}`)}
-            </button>
-          ))}
+          {(['chats', 'groups', 'channels', 'status', 'archive'] as const).map(tab => {
+            const Icon = TAB_ICONS[tab];
+            return (
+              <button
+                key={tab}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab}
+                className={`chats-tab ${activeTab === tab ? 'active' : ''}`}
+                onClick={() => onSwitchTab(tab)}
+              >
+                <Icon size={13} />
+                <span>{t(`chats.tab.${tab}`)}</span>
+              </button>
+            );
+          })}
         </div>
 
 

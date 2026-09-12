@@ -450,7 +450,7 @@ export function SessionsManager({
                     </div>
                     <div className="spec-row">
                       <span className="spec-label">{t('sessions.card.sessionId')}</span>
-                      <span className="spec-value mono">{session.id.substring(0, 14)}</span>
+                      <span className="spec-value">{session.name || session.phone || session.id}</span>
                     </div>
                     <div className="spec-row">
                       <span className="spec-label">{t('sessions.card.lastActive')}</span>

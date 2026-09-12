@@ -233,6 +233,7 @@ export const NotepadShareModal: React.FC<NotepadShareModalProps> = ({
                   <label style={{ fontSize: '11px', color: '#a1a1aa' }}>Select Session:</label>
                   <select
                     className="notepad-sort-select"
+                    aria-label="Select Session"
                     value={sessionId}
                     onChange={e => setSessionId(e.target.value)}
                     style={{ width: '100%', padding: '6px' }}

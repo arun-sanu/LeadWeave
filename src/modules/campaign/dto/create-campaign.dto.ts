@@ -3,6 +3,7 @@ import {
   IsArray,
   IsBoolean,
   IsDateString,
+  IsIn,
   IsNumber,
   IsObject,
   IsOptional,
@@ -30,6 +31,18 @@ export class CampaignPacingDto {
   @ToStrictBoolean()
   @IsBoolean()
   simulateTyping?: boolean = true;
+
+  @ApiPropertyOptional({ default: 12000, description: 'Batch breather minimum pause in milliseconds (every 10 messages)' })
+  @IsOptional()
+  @ToStrictNumber()
+  @IsNumber()
+  breatherMinMs?: number = 12000;
+
+  @ApiPropertyOptional({ default: 25000, description: 'Batch breather maximum pause in milliseconds (every 10 messages)' })
+  @IsOptional()
+  @ToStrictNumber()
+  @IsNumber()
+  breatherMaxMs?: number = 25000;
 }
 
 export class CampaignLeadInputDto {
@@ -95,4 +108,13 @@ export class CreateCampaignDto {
   @ToStrictBoolean()
   @IsBoolean()
   autoLaunch?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Dispatch mode: automated (background pacing) or manual (1-by-1 spreadsheet send)',
+    enum: ['automated', 'manual'],
+    default: 'automated',
+  })
+  @IsOptional()
+  @IsIn(['automated', 'manual'])
+  dispatchMode?: 'automated' | 'manual' = 'automated';
 }

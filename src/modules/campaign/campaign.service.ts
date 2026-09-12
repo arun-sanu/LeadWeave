@@ -5,12 +5,14 @@ import {
   BadRequestException,
   OnModuleInit,
   OnModuleDestroy,
+  Optional,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In, LessThanOrEqual, Like } from 'typeorm';
 import { Campaign, CampaignStatus, CampaignStats } from './entities/campaign.entity';
 import { CampaignLead, CampaignLeadStatus } from './entities/campaign-lead.entity';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
+import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { AddCampaignLeadsDto } from './dto/add-leads.dto';
 import { CampaignLeadsQueryDto, CampaignListQueryDto } from './dto/campaign-query.dto';
 import { UpdateCampaignLeadDto } from './dto/update-lead.dto';
@@ -23,29 +25,16 @@ import {
   calculateTypingDuration,
   calculateBatchBreather,
 } from '../../common/utils/human-jitter';
+import {
+  SendPacingService,
+  countsTowardSendBreaker,
+  isPacingLimitedError,
+} from '../message/send-pacing.service';
+
+import { parseSpintax } from './utils/spintax.util';
+import { cleanPhoneNumber } from './utils/phone-cleaner.util';
 
 const OPT_OUT_KEYWORDS = ['stop', 'unsubscribe', 'cancel', 'quit', 'optout', 'opt-out'];
-
-function parseSpintax(text: string): string {
-  if (!text) return '';
-  let result = text;
-  const spintaxRegex = /\{([^{}]+)\}/g;
-  while (spintaxRegex.test(result)) {
-    result = result.replace(spintaxRegex, (_match, group) => {
-      const options = group.split('|');
-      return options[Math.floor(Math.random() * options.length)];
-    });
-  }
-  return result;
-}
-
-function cleanPhoneNumber(raw: string): { cleaned: string; chatId: string } {
-  const digitsOnly = (raw || '').replace(/\D/g, '');
-  return {
-    cleaned: digitsOnly,
-    chatId: `${digitsOnly}@c.us`,
-  };
-}
 
 @Injectable()
 export class CampaignService implements OnModuleInit, OnModuleDestroy {
@@ -60,6 +49,8 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     private readonly leadRepo: Repository<CampaignLead>,
     private readonly engineRegistry: EngineRegistry,
     private readonly hookManager: HookManager,
+    @Optional()
+    private readonly pacing?: SendPacingService,
   ) {}
 
   onModuleInit() {
@@ -128,10 +119,13 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
       mediaUrl: dto.mediaUrl,
       scheduledAt: dto.scheduledAt ? new Date(dto.scheduledAt) : null,
       status,
+      dispatchMode: dto.dispatchMode ?? 'automated',
       pacing: {
         minDelayMs: dto.pacing?.minDelayMs ?? 3000,
         maxDelayMs: dto.pacing?.maxDelayMs ?? 6000,
         simulateTyping: dto.pacing?.simulateTyping ?? true,
+        breatherMinMs: dto.pacing?.breatherMinMs ?? 12000,
+        breatherMaxMs: dto.pacing?.breatherMaxMs ?? 25000,
       },
       columnsMetadata: dto.columnsMetadata || ['Phone', 'Name'],
       stats: initialStats,
@@ -202,7 +196,7 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     const updated = await this.campaignRepo.findOne({ where: { id: campaignId } });
 
     // If campaign is currently running, wake up the dispatch worker if it was idle
-    if (campaign.status === CampaignStatus.RUNNING && !this.runningLoops.has(campaignId)) {
+    if (campaign.status === CampaignStatus.RUNNING && campaign.dispatchMode !== 'manual' && !this.runningLoops.has(campaignId)) {
       this.dispatchCampaignLeads(campaignId).catch((err) => {
         this.logger.error('Error continuing campaign dispatch after adding leads', err instanceof Error ? err.stack : String(err), { campaignId });
       });
@@ -234,10 +228,12 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     }
     await this.campaignRepo.save(campaign);
 
-    // Trigger async non-blocking dispatch loop
-    this.dispatchCampaignLeads(campaignId).catch((err) => {
-      this.logger.error('Error during campaign execution loop', err instanceof Error ? err.stack : String(err), { campaignId });
-    });
+    // Trigger async non-blocking dispatch loop ONLY if automated
+    if (campaign.dispatchMode !== 'manual') {
+      this.dispatchCampaignLeads(campaignId).catch((err) => {
+        this.logger.error('Error during campaign execution loop', err instanceof Error ? err.stack : String(err), { campaignId });
+      });
+    }
 
     return campaign;
   }
@@ -252,6 +248,88 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     campaign.status = CampaignStatus.PAUSED;
     await this.campaignRepo.save(campaign);
     return campaign;
+  }
+
+  /**
+   * Update configuration of an unfinished (draft, scheduled) or paused campaign.
+   */
+  async updateCampaign(campaignId: string, dto: UpdateCampaignDto): Promise<Campaign> {
+    const campaign = await this.campaignRepo.findOne({ where: { id: campaignId } });
+    if (!campaign) throw new NotFoundException('Campaign not found');
+
+    const editableStatuses: CampaignStatus[] = [
+      CampaignStatus.DRAFT,
+      CampaignStatus.SCHEDULED,
+      CampaignStatus.PAUSED,
+    ];
+
+    if (!editableStatuses.includes(campaign.status)) {
+      throw new BadRequestException(
+        `Campaign cannot be edited while in '${campaign.status}' state. Please pause the campaign before editing.`
+      );
+    }
+
+    if (dto.name !== undefined) {
+      campaign.name = dto.name;
+    }
+
+    if (dto.template !== undefined) {
+      campaign.template = dto.template;
+    }
+
+    if (dto.mediaUrl !== undefined) {
+      campaign.mediaUrl = dto.mediaUrl || null;
+    }
+
+    if (dto.sessionIds !== undefined && dto.sessionIds.length > 0) {
+      campaign.sessionIds = dto.sessionIds;
+
+      // Re-assign pending leads across new sessionIds if sessions changed
+      const pendingLeads = await this.leadRepo.find({
+        where: { campaignId, status: CampaignLeadStatus.PENDING },
+      });
+      if (pendingLeads.length > 0) {
+        const sessionCount = dto.sessionIds.length;
+        pendingLeads.forEach((lead, idx) => {
+          lead.sessionId = dto.sessionIds![idx % sessionCount];
+        });
+        const chunkSize = 200;
+        for (let i = 0; i < pendingLeads.length; i += chunkSize) {
+          await this.leadRepo.save(pendingLeads.slice(i, i + chunkSize));
+        }
+      }
+    }
+
+    if (dto.scheduledAt !== undefined) {
+      if (dto.scheduledAt) {
+        const schedDate = new Date(dto.scheduledAt);
+        campaign.scheduledAt = schedDate;
+        if (schedDate > new Date() && campaign.status === CampaignStatus.DRAFT) {
+          campaign.status = CampaignStatus.SCHEDULED;
+        }
+      } else {
+        campaign.scheduledAt = null;
+        if (campaign.status === CampaignStatus.SCHEDULED) {
+          campaign.status = CampaignStatus.DRAFT;
+        }
+      }
+    }
+
+    if (dto.pacing) {
+      campaign.pacing = {
+        minDelayMs: dto.pacing.minDelayMs ?? campaign.pacing?.minDelayMs ?? 3000,
+        maxDelayMs: dto.pacing.maxDelayMs ?? campaign.pacing?.maxDelayMs ?? 6000,
+        simulateTyping: dto.pacing.simulateTyping ?? campaign.pacing?.simulateTyping ?? true,
+        breatherMinMs: dto.pacing.breatherMinMs ?? campaign.pacing?.breatherMinMs ?? 12000,
+        breatherMaxMs: dto.pacing.breatherMaxMs ?? campaign.pacing?.breatherMaxMs ?? 25000,
+      };
+    }
+
+    if (dto.dispatchMode) {
+      campaign.dispatchMode = dto.dispatchMode;
+    }
+
+    return this.campaignRepo.save(campaign);
   }
 
   /**
@@ -274,6 +352,7 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
     this.runningLoops.add(campaignId);
 
     try {
+      let consecutiveDispatches = 0;
       while (true) {
         // Fetch fresh campaign status
         const campaign = await this.campaignRepo.findOne({ where: { id: campaignId } });
@@ -301,30 +380,61 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
           break;
         }
 
-        let consecutiveDispatches = 0;
-        for (const lead of pendingLeads) {
+        let shouldBreakLoop = false;
+        for (let i = 0; i < pendingLeads.length; i++) {
+          const lead = pendingLeads[i];
           // Check if paused/cancelled mid-loop
           const fresh = await this.campaignRepo.findOne({ where: { id: campaignId } });
           if (!fresh || fresh.status !== CampaignStatus.RUNNING) {
+            shouldBreakLoop = true;
             break;
           }
 
-          await this.dispatchSingleLead(campaign, lead);
-          consecutiveDispatches++;
+          const outcome = await this.dispatchSingleLead(campaign, lead);
           await this.refreshCampaignStats(campaignId);
 
-          // Anti-ban randomized Gaussian pacing delay
-          const minD = campaign.pacing?.minDelayMs || 3000;
-          const maxD = campaign.pacing?.maxDelayMs || 6000;
-          const delay = calculateHumanDelay(minD, maxD);
-          await new Promise((resolve) => setTimeout(resolve, delay));
-
-          // Natural human batch breather (e.g. after every 10 sends take a 12-25s pause)
-          const breather = calculateBatchBreather(consecutiveDispatches, 10, 12000, 25000);
-          if (breather > 0) {
-            this.logger.log(`Natural batch breather pause (${Math.round(breather / 1000)}s) for campaign ${campaignId}`);
-            await new Promise((resolve) => setTimeout(resolve, breather));
+          if (outcome.pauseCampaignReason) {
+            this.logger.warn(`Pausing campaign ${campaignId}: ${outcome.pauseCampaignReason}`, {
+              campaignId,
+              reason: outcome.pauseCampaignReason,
+            });
+            campaign.status = CampaignStatus.PAUSED;
+            await this.campaignRepo.save(campaign);
+            shouldBreakLoop = true;
+            break;
           }
+
+          if (outcome.sent) {
+            consecutiveDispatches++;
+
+            // Check if there are further pending leads before taking a delay
+            const hasMore =
+              i < pendingLeads.length - 1 ||
+              (await this.leadRepo.count({
+                where: { campaignId, status: CampaignLeadStatus.PENDING },
+              })) > 0;
+
+            if (hasMore) {
+              // Anti-ban randomized Gaussian pacing delay
+              const minD = campaign.pacing?.minDelayMs || 3000;
+              const maxD = campaign.pacing?.maxDelayMs || 6000;
+              const delay = calculateHumanDelay(minD, maxD);
+              await new Promise((resolve) => setTimeout(resolve, delay));
+
+              // Natural human batch breather (e.g. after every 10 sends take a 12-25s pause)
+              const bMin = campaign.pacing?.breatherMinMs ?? 12000;
+              const bMax = campaign.pacing?.breatherMaxMs ?? 25000;
+              const breather = calculateBatchBreather(consecutiveDispatches, 10, bMin, bMax);
+              if (breather > 0) {
+                this.logger.log(`Natural batch breather pause (${Math.round(breather / 1000)}s) for campaign ${campaignId}`);
+                await new Promise((resolve) => setTimeout(resolve, breather));
+              }
+            }
+          }
+        }
+
+        if (shouldBreakLoop) {
+          break;
         }
       }
     } finally {
@@ -336,13 +446,24 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
   /**
    * Dispatch message to a single lead with number check and typing indicator.
    */
-  private async dispatchSingleLead(campaign: Campaign, lead: CampaignLead) {
-    const engine = this.engineRegistry.get(lead.sessionId);
+  private async dispatchSingleLead(
+    campaign: Campaign,
+    lead: CampaignLead,
+  ): Promise<{ sent: boolean; pauseCampaignReason?: string }> {
+    let engine = this.engineRegistry.get(lead.sessionId);
+    if (!engine && campaign.sessionIds?.length > 1) {
+      const altSession = campaign.sessionIds.find((id) => id !== lead.sessionId && this.engineRegistry.get(id));
+      if (altSession) {
+        lead.sessionId = altSession;
+        engine = this.engineRegistry.get(altSession);
+      }
+    }
+
     if (!engine) {
       lead.status = CampaignLeadStatus.FAILED;
       lead.errorMessage = `Session '${lead.sessionId}' is not active or ready.`;
       await this.leadRepo.save(lead);
-      return;
+      return { sent: false, pauseCampaignReason: `All sender sessions inactive for campaign` };
     }
 
     // 1. WhatsApp Number Pre-Validation
@@ -352,13 +473,35 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
         lead.status = CampaignLeadStatus.NOT_ON_WA;
         lead.errorMessage = 'Phone number is not registered on WhatsApp.';
         await this.leadRepo.save(lead);
-        return;
+        return { sent: false };
       }
     } catch {
       // If check fails, proceed to attempt send
     }
 
-    // 2. Prepare message text with spintax & placeholder variable interpolation
+    // 2. Anti-Ban Send Pacing Governor Check
+    if (this.pacing) {
+      try {
+        await this.pacing.assertSendAllowed(lead.sessionId, lead.chatId);
+      } catch (pacingErr: any) {
+        const message = pacingErr?.message || 'Send refused by anti-ban pacing governor';
+        if (isPacingLimitedError(pacingErr)) {
+          this.logger.warn(`Campaign ${campaign.id} auto-paused by pacing governor: ${message}`, {
+            campaignId: campaign.id,
+            sessionId: lead.sessionId,
+            chatId: lead.chatId,
+          });
+          // Leave lead as PENDING so it can resume once cooldown/quota resets
+          return { sent: false, pauseCampaignReason: message };
+        }
+        lead.status = CampaignLeadStatus.FAILED;
+        lead.errorMessage = message;
+        await this.leadRepo.save(lead);
+        return { sent: false };
+      }
+    }
+
+    // 3. Prepare message text with spintax & placeholder variable interpolation
     let messageText = parseSpintax(campaign.template);
     messageText = messageText.replace(/{{\s*phone\s*}}/gi, lead.phoneNumber || '');
     messageText = messageText.replace(/{{\s*name\s*}}/gi, lead.name || 'there');
@@ -370,20 +513,26 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
       }
     }
 
-    // 3. Human Typing Simulation
+    // 4. Human Typing Simulation
     if (campaign.pacing?.simulateTyping) {
-      try {
-        if (typeof engine.sendChatState === 'function') {
+      if (typeof engine.sendChatState === 'function') {
+        try {
           await engine.sendChatState(lead.chatId, 'typing');
-          const typingDuration = calculateTypingDuration(messageText, 1500, 5000);
+        } catch (error) {
+          this.logger.warn(`simulateTyping presence skipped: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      }
+      try {
+        const typingDuration = calculateTypingDuration(messageText, 1500, 5000);
+        if (typingDuration > 0) {
           await new Promise((resolve) => setTimeout(resolve, typingDuration));
         }
-      } catch {
-        // Non-fatal
+      } catch (error) {
+        this.logger.warn(`simulateTyping delay skipped: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
 
-    // 4. Send Message
+    // 5. Send Message
     try {
       let sendResult: any;
       if (campaign.mediaUrl) {
@@ -396,15 +545,22 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
         sendResult = await engine.sendTextMessage(lead.chatId, messageText);
       }
 
+      this.pacing?.recordSendSuccess(lead.sessionId);
+
       lead.status = CampaignLeadStatus.SENT;
       lead.sentAt = new Date();
       lead.waMessageId = sendResult?.id || sendResult?.key?.id || undefined;
       lead.errorMessage = undefined;
       await this.leadRepo.save(lead);
+      return { sent: true };
     } catch (err: any) {
+      if (countsTowardSendBreaker(err)) {
+        this.pacing?.recordSendFailure(lead.sessionId);
+      }
       lead.status = CampaignLeadStatus.FAILED;
       lead.errorMessage = err?.message || 'Failed to send message';
       await this.leadRepo.save(lead);
+      return { sent: false };
     }
   }
 
@@ -775,5 +931,98 @@ export class CampaignService implements OnModuleInit, OnModuleDestroy {
         reject(err);
       });
     });
+  }
+
+  /**
+   * Manually dispatch a single specific lead (1-by-1 spreadsheet send).
+   */
+  async sendSingleLead(campaignId: string, leadId: string) {
+    const campaign = await this.campaignRepo.findOne({ where: { id: campaignId } });
+    if (!campaign) throw new NotFoundException('Campaign not found');
+
+    const lead = await this.leadRepo.findOne({ where: { id: leadId, campaignId } });
+    if (!lead) throw new NotFoundException('Lead not found for this campaign');
+
+    if (!campaign.startedAt) {
+      campaign.startedAt = new Date();
+      if (campaign.status === CampaignStatus.DRAFT) {
+        campaign.status = CampaignStatus.RUNNING;
+      }
+      await this.campaignRepo.save(campaign);
+    }
+
+    const outcome = await this.dispatchSingleLead(campaign, lead);
+    const stats = await this.refreshCampaignStats(campaignId);
+
+    const remaining = await this.leadRepo.count({
+      where: { campaignId, status: CampaignLeadStatus.PENDING },
+    });
+
+    if (remaining === 0 && campaign.status === CampaignStatus.RUNNING) {
+      campaign.status = CampaignStatus.COMPLETED;
+      campaign.completedAt = new Date();
+      await this.campaignRepo.save(campaign);
+    }
+
+    return {
+      success: outcome.sent,
+      lead,
+      pauseReason: outcome.pauseCampaignReason,
+      remainingPending: remaining,
+      stats,
+    };
+  }
+
+  /**
+   * Manually dispatch the next pending lead in the spreadsheet (FIFO).
+   */
+  async sendNextLead(campaignId: string) {
+    const campaign = await this.campaignRepo.findOne({ where: { id: campaignId } });
+    if (!campaign) throw new NotFoundException('Campaign not found');
+
+    const nextLead = await this.leadRepo.findOne({
+      where: { campaignId, status: CampaignLeadStatus.PENDING },
+      order: { createdAt: 'ASC' },
+    });
+
+    if (!nextLead) {
+      const stats = await this.refreshCampaignStats(campaignId);
+      return {
+        hasMore: false,
+        message: 'No more pending leads in this campaign',
+        remainingPending: 0,
+        stats,
+      };
+    }
+
+    if (!campaign.startedAt) {
+      campaign.startedAt = new Date();
+      if (campaign.status === CampaignStatus.DRAFT) {
+        campaign.status = CampaignStatus.RUNNING;
+      }
+      await this.campaignRepo.save(campaign);
+    }
+
+    const outcome = await this.dispatchSingleLead(campaign, nextLead);
+    const stats = await this.refreshCampaignStats(campaignId);
+
+    const remaining = await this.leadRepo.count({
+      where: { campaignId, status: CampaignLeadStatus.PENDING },
+    });
+
+    if (remaining === 0 && campaign.status === CampaignStatus.RUNNING) {
+      campaign.status = CampaignStatus.COMPLETED;
+      campaign.completedAt = new Date();
+      await this.campaignRepo.save(campaign);
+    }
+
+    return {
+      hasMore: remaining > 0,
+      success: outcome.sent,
+      lead: nextLead,
+      pauseReason: outcome.pauseCampaignReason,
+      remainingPending: remaining,
+      stats,
+    };
   }
 }

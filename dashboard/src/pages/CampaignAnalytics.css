@@ -633,3 +633,224 @@
   justify-content: center;
   margin-bottom: 0.25rem;
 }
+
+/* Minimalist Edit Campaign Modal Styling */
+.campaign-analytics-container .modal.edit-campaign-dialog {
+  max-width: 580px !important;
+  width: 92vw;
+  border-radius: 14px;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+}
+
+.campaign-analytics-container .minimal-tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 1rem;
+}
+
+.campaign-analytics-container .minimal-tab-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+
+.campaign-analytics-container .minimal-tab-btn:hover {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.campaign-analytics-container .minimal-tab-btn.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.campaign-analytics-container .minimal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.campaign-analytics-container .minimal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.campaign-analytics-container .minimal-field label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.campaign-analytics-container .minimal-input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  color: #f8fafc;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.campaign-analytics-container .minimal-input:focus {
+  border-color: var(--primary, #25d366);
+  box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.12);
+}
+
+.campaign-analytics-container .minimal-textarea {
+  min-height: 130px;
+  line-height: 1.5;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.campaign-analytics-container .minimal-tag-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.15rem;
+}
+
+.campaign-analytics-container .minimal-tag-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #a1a1aa;
+  font-size: 0.7rem;
+  font-family: monospace;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.campaign-analytics-container .minimal-tag-chip:hover {
+  background: rgba(37, 211, 102, 0.12);
+  border-color: rgba(37, 211, 102, 0.3);
+  color: var(--primary, #25d366);
+  transform: translateY(-1px);
+}
+
+.campaign-analytics-container .minimal-tag-chip:active {
+  transform: scale(0.96);
+}
+
+.campaign-analytics-container .minimal-senders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 140px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.campaign-analytics-container .minimal-sender-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.8125rem;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.campaign-analytics-container .minimal-sender-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.campaign-analytics-container .minimal-pacing-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.9rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.campaign-analytics-container .minimal-pacing-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+}
+
+.campaign-analytics-container .minimal-num-input {
+  width: 64px !important;
+  text-align: center;
+  padding: 0.35rem;
+  height: 32px;
+  font-size: 0.8125rem;
+}
+
+.campaign-analytics-container .minimal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.campaign-analytics-container .btn-minimal-cancel {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.campaign-analytics-container .btn-minimal-cancel:hover {
+  color: #ffffff;
+}
+
+.campaign-analytics-container .btn-minimal-save {
+  background: var(--primary, #25d366);
+  color: #090d16;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 0.55rem 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: transform 0.16s ease-out, filter 0.16s ease;
+}
+
+.campaign-analytics-container .btn-minimal-save:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.campaign-analytics-container .btn-minimal-save:active {
+  transform: scale(0.97);
+}

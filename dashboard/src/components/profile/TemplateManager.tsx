@@ -9,6 +9,7 @@ import {
   useDeleteTemplateMutation,
   useSessionsQuery,
   useTemplatesQuery,
+  useAccountTemplatesQuery,
   useUpdateTemplateMutation,
 } from '../../hooks/queries';
 import { Modal } from '../../components/Modal';
@@ -54,7 +55,7 @@ export function TemplateManager() {
   const { t } = useTranslation();
   const { canWrite } = useRole();
   const { data: sessions = [], isLoading: loadingSessions } = useSessionsQuery();
-  const [selectedSessionId, setSelectedSessionId] = useState('');
+  const [selectedSessionId, setSelectedSessionId] = useState('all');
   const [form, setForm] = useState<TemplateForm>(emptyForm);
   const [editingTemplate, setEditingTemplate] = useState<MessageTemplate | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<MessageTemplate | null>(null);
@@ -63,14 +64,18 @@ export function TemplateManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
 
-  const { data: templates = [], isLoading: loadingTemplates } = useTemplatesQuery(
+  const sessionIds = useMemo(() => sessions.map(s => s.id), [sessions]);
+  const { data: accountTemplates = [], isLoading: loadingAccount } = useAccountTemplatesQuery(sessionIds, selectedSessionId === 'all');
+  const { data: singleTemplates = [], isLoading: loadingSingle } = useTemplatesQuery(
     selectedSessionId,
-    !!selectedSessionId,
+    selectedSessionId !== 'all' && !!selectedSessionId,
   );
+  const templates = selectedSessionId === 'all' ? accountTemplates : singleTemplates;
+  const loadingTemplates = selectedSessionId === 'all' ? loadingAccount : loadingSingle;
+
   const createMutation = useCreateTemplateMutation();
   const updateMutation = useUpdateTemplateMutation();
   const deleteMutation = useDeleteTemplateMutation();
-
 
   const placeholders = useMemo(() => extractPlaceholders(form), [form]);
   const preview = useMemo(() => renderPreview(form, previewValues), [form, previewValues]);
@@ -84,12 +89,6 @@ export function TemplateManager() {
     );
   }, [searchTerm, templates]);
   const isSaving = createMutation.isPending || updateMutation.isPending;
-
-  useEffect(() => {
-    if (!selectedSessionId && sessions.length > 0) {
-      setSelectedSessionId(sessions[0].id);
-    }
-  }, [selectedSessionId, sessions]);
 
   useEffect(() => {
     setPreviewValues(current => {
@@ -119,21 +118,34 @@ export function TemplateManager() {
   };
 
   const handleSave = async () => {
-    if (!selectedSessionId || !form.name.trim() || !form.body.trim()) return;
+    if (!form.name.trim() || !form.body.trim()) return;
+    const targetSessions = (selectedSessionId === 'all' || !selectedSessionId)
+      ? sessions
+      : sessions.filter(s => s.id === selectedSessionId);
+
+    if (targetSessions.length === 0) return;
 
     try {
       if (editingTemplate) {
-        await updateMutation.mutateAsync({
-          sessionId: selectedSessionId,
-          id: editingTemplate.id,
-          data: toPayload(form),
-        });
+        await Promise.allSettled(
+          targetSessions.map(s =>
+            updateMutation.mutateAsync({
+              sessionId: s.id,
+              id: editingTemplate.id,
+              data: toPayload(form),
+            }),
+          ),
+        );
         toast.success(t('templates.toasts.updated'));
       } else {
-        await createMutation.mutateAsync({
-          sessionId: selectedSessionId,
-          data: toPayload(form),
-        });
+        await Promise.allSettled(
+          targetSessions.map(s =>
+            createMutation.mutateAsync({
+              sessionId: s.id,
+              data: toPayload(form),
+            }),
+          ),
+        );
         toast.success(t('templates.toasts.created'));
       }
       resetForm();
@@ -147,9 +159,17 @@ export function TemplateManager() {
   };
 
   const handleDelete = async () => {
-    if (!selectedSessionId || !deleteTarget) return;
+    if (!deleteTarget) return;
+    const targetSessions = (selectedSessionId === 'all' || !selectedSessionId)
+      ? sessions
+      : sessions.filter(s => s.id === selectedSessionId);
+
     try {
-      await deleteMutation.mutateAsync({ sessionId: selectedSessionId, id: deleteTarget.id });
+      await Promise.allSettled(
+        targetSessions.map(s =>
+          deleteMutation.mutateAsync({ sessionId: s.id, id: deleteTarget.id }),
+        ),
+      );
       toast.success(t('templates.toasts.deleted'));
       if (editingTemplate?.id === deleteTarget.id) resetForm();
       setDeleteTarget(null);
@@ -194,9 +214,10 @@ export function TemplateManager() {
           style={{ background: 'rgba(15, 23, 42, 0.8)', color: '#fff', border: '1px solid #334155', borderRadius: '6px', padding: '6px 12px' }}
         >
           {sessions.length === 0 && <option value="">{t('templates.noSessions')}</option>}
+          {sessions.length > 0 && <option value="all">All Account Sessions (Universal Templates)</option>}
           {sessions.map(session => (
             <option key={session.id} value={session.id}>
-              {session.name}
+              {session.name}{session.phone ? ` (${session.phone})` : ''}
             </option>
           ))}
         </select>

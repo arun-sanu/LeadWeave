@@ -16,6 +16,14 @@ describe('SettingsController', () => {
     expect(settings.general).not.toHaveProperty('sessionTimeout');
     expect(settings).toHaveProperty('api');
     expect(settings).toHaveProperty('notifications');
+    expect(settings).toHaveProperty('pacing');
+    expect(settings.pacing).toHaveProperty('enabled');
+    expect(settings.pacing).toHaveProperty('warmupSchedule');
+    expect(settings.pacing).toHaveProperty('coldSchedule');
+    expect(settings.pacing).toHaveProperty('breakerThreshold');
+    expect(settings.pacing).toHaveProperty('breakerCooldownMs');
+    expect(settings.pacing).toHaveProperty('simulateTyping');
+    expect(settings.pacing).toHaveProperty('simulateTypingMaxMs');
   });
 
   it('reports enableDocs from the real ENABLE_SWAGGER gate, not a hardcoded true', () => {

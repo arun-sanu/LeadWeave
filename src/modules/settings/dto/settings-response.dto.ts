@@ -42,6 +42,35 @@ export class SettingsNotificationsDto {
   @ApiProperty({ example: true }) webhookAlerts!: boolean;
 }
 
+export class SettingsPacingDto {
+  @ApiProperty({ description: 'Whether the outbound send pacing governor is enabled.', example: true })
+  enabled!: boolean;
+
+  @ApiProperty({
+    description: 'Daily send allowance by session age in days.',
+    example: [20, 40, 80, 160, 320, 640, 1000],
+  })
+  warmupSchedule!: number[];
+
+  @ApiProperty({
+    description: 'Daily cold reachout allowance by session age in days.',
+    example: [5, 10, 20, 40, 60, 80, 100],
+  })
+  coldSchedule!: number[];
+
+  @ApiProperty({ description: 'Consecutive send failures that trip the breaker.', example: 5 })
+  breakerThreshold!: number;
+
+  @ApiProperty({ description: 'Cooldown duration in milliseconds for tripped breaker.', example: 900000 })
+  breakerCooldownMs!: number;
+
+  @ApiProperty({ description: 'Whether human typing simulation is enabled before sends.', example: true })
+  simulateTyping!: boolean;
+
+  @ApiProperty({ description: 'Upper bound in milliseconds on the humanising typing pause.', example: 5000 })
+  simulateTypingMaxMs!: number;
+}
+
 export class SettingsResponseDto {
   @ApiProperty({ type: SettingsGeneralDto })
   general!: SettingsGeneralDto;
@@ -51,4 +80,7 @@ export class SettingsResponseDto {
 
   @ApiProperty({ type: SettingsNotificationsDto })
   notifications!: SettingsNotificationsDto;
+
+  @ApiProperty({ type: SettingsPacingDto })
+  pacing!: SettingsPacingDto;
 }

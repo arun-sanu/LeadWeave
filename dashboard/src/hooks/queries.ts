@@ -11,6 +11,7 @@ import {
   statsApi,
   type Webhook,
   type WebhookFilters,
+  type MessageTemplate,
   type TemplatePayload,
   type CreateInstanceInput,
   type UpdateInstanceInput,
@@ -139,6 +140,32 @@ export function useTemplatesQuery(sessionId: string, enabled = true) {
   });
 }
 
+export function useAccountTemplatesQuery(sessionIds: string[], enabled = true) {
+  return useQuery({
+    queryKey: ['account-templates', sessionIds],
+    queryFn: async () => {
+      if (!sessionIds.length) return [];
+      const results = await Promise.allSettled(sessionIds.map(id => templateApi.list(id)));
+      const all: MessageTemplate[] = [];
+      const seen = new Set<string>();
+      for (const res of results) {
+        if (res.status === 'fulfilled' && Array.isArray(res.value)) {
+          for (const tpl of res.value) {
+            const key = `${tpl.name}-${tpl.body}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              all.push(tpl);
+            }
+          }
+        }
+      }
+      return all;
+    },
+    enabled: enabled && sessionIds.length > 0,
+    staleTime: 30_000,
+  });
+}
+
 export function useCreateTemplateMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -146,6 +173,7 @@ export function useCreateTemplateMutation() {
       templateApi.create(params.sessionId, params.data),
     onSuccess: (_template, params) => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.templates(params.sessionId) });
+      void queryClient.invalidateQueries({ queryKey: ['account-templates'] });
     },
   });
 }
@@ -157,6 +185,7 @@ export function useUpdateTemplateMutation() {
       templateApi.update(params.sessionId, params.id, params.data),
     onSuccess: (_template, params) => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.templates(params.sessionId) });
+      void queryClient.invalidateQueries({ queryKey: ['account-templates'] });
     },
   });
 }
@@ -167,6 +196,7 @@ export function useDeleteTemplateMutation() {
     mutationFn: (params: { sessionId: string; id: string }) => templateApi.delete(params.sessionId, params.id),
     onSuccess: (_template, params) => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.templates(params.sessionId) });
+      void queryClient.invalidateQueries({ queryKey: ['account-templates'] });
     },
   });
 }

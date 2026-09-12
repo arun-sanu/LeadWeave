@@ -178,6 +178,13 @@ if (process.env.LAN_MESH_ENABLED === 'true') {
           synchronize,
           migrationsRun: !synchronize,
           logging: configService.get<boolean>('database.logging', false),
+          enableWAL: true,
+          timeout: 5000,
+          prepareDatabase: (db: any) => {
+            db.pragma('journal_mode = WAL');
+            db.pragma('busy_timeout = 5000');
+            db.pragma('synchronous = NORMAL');
+          },
         };
       },
     }),
@@ -273,6 +280,13 @@ if (process.env.LAN_MESH_ENABLED === 'true') {
           database: configService.get<string>('dataDatabase.database', './data/leadweave.sqlite'),
           synchronize,
           migrationsRun: !synchronize,
+          enableWAL: true,
+          timeout: 5000,
+          prepareDatabase: (db: any) => {
+            db.pragma('journal_mode = WAL');
+            db.pragma('busy_timeout = 5000');
+            db.pragma('synchronous = NORMAL');
+          },
         };
       },
     }),

@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Body,
   Param,
   Query,
@@ -13,6 +14,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/
 import type { Response } from 'express';
 import { CampaignService } from './campaign.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
+import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { AddCampaignLeadsDto } from './dto/add-leads.dto';
 import { UpdateCampaignLeadDto } from './dto/update-lead.dto';
 import { CampaignLeadsQueryDto, CampaignListQueryDto } from './dto/campaign-query.dto';
@@ -44,6 +46,18 @@ export class CampaignController {
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
   async getCampaign(@Param('id') id: string, @CurrentApiKey() _apiKey?: ApiKey) {
     return this.campaignService.getCampaign(id);
+  }
+
+  @Patch(':id')
+  @RequireUnscopedKey()
+  @ApiOperation({ summary: 'Update configuration of an unfinished or paused campaign' })
+  @ApiParam({ name: 'id', description: 'Campaign UUID' })
+  async updateCampaign(
+    @Param('id') id: string,
+    @Body() dto: UpdateCampaignDto,
+    @CurrentApiKey() _apiKey?: ApiKey,
+  ) {
+    return this.campaignService.updateCampaign(id, dto);
   }
 
   @Post(':id/start')
@@ -94,6 +108,30 @@ export class CampaignController {
     @CurrentApiKey() _apiKey?: ApiKey,
   ) {
     return this.campaignService.updateLead(id, leadId, dto);
+  }
+
+  @Post(':id/leads/:leadId/send')
+  @RequireUnscopedKey()
+  @ApiOperation({ summary: 'Manually dispatch a specific lead 1-by-1 from the spreadsheet' })
+  @ApiParam({ name: 'id', description: 'Campaign UUID' })
+  @ApiParam({ name: 'leadId', description: 'Lead UUID' })
+  async sendSingleLead(
+    @Param('id') id: string,
+    @Param('leadId') leadId: string,
+    @CurrentApiKey() _apiKey?: ApiKey,
+  ) {
+    return this.campaignService.sendSingleLead(id, leadId);
+  }
+
+  @Post(':id/send-next')
+  @RequireUnscopedKey()
+  @ApiOperation({ summary: 'Manually dispatch the next pending lead 1-by-1 in the spreadsheet' })
+  @ApiParam({ name: 'id', description: 'Campaign UUID' })
+  async sendNextLead(
+    @Param('id') id: string,
+    @CurrentApiKey() _apiKey?: ApiKey,
+  ) {
+    return this.campaignService.sendNextLead(id);
   }
 
   @Get(':id/leads')

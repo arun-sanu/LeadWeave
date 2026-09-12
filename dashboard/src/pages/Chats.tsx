@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback, useRef, useMemo, Suspense } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+/* cspell:words Coalescer Acks refetches unarchived crossfade popout */
+import { useState, useEffect, useCallback, useRef, useMemo, useContext, Suspense } from 'react';
+import { UNSAFE_LocationContext, UNSAFE_NavigationContext } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { nextReconnectState } from '../utils/reconnectState';
@@ -113,7 +114,7 @@ const statusFontStyle = (font?: number): { fontFamily?: string; fontWeight?: num
 export function Chats() {
   const { t } = useTranslation();
   useDocumentTitle(t('nav.chats'));
-  const { error: showErrorToast, warning: showWarningToast, info: showInfoToast, success: showSuccessToast } = useToast();
+  const { error: showErrorToast, warning: showWarningToast, success: showSuccessToast } = useToast();
 
   // Request browser Notification permission on mount
   useEffect(() => {
@@ -137,18 +138,20 @@ export function Chats() {
     return 'chats';
   });
 
-  let locationSearch = '';
-  let navigateFn: ((to: string, options?: { replace?: boolean }) => void) | null = null;
-  try {
-    locationSearch = useLocation().search;
-  } catch {
-    locationSearch = typeof window !== 'undefined' ? window.location.search : '';
-  }
-  try {
-    navigateFn = useNavigate();
-  } catch {
-    navigateFn = null;
-  }
+  const locationContext = useContext(UNSAFE_LocationContext);
+  const navigationContext = useContext(UNSAFE_NavigationContext);
+  const locationSearch = locationContext?.location?.search ?? (typeof window !== 'undefined' ? window.location.search : '');
+  const navigateFn = useMemo(() => {
+    const nav = navigationContext?.navigator;
+    if (!nav) return null;
+    return (to: string, options?: { replace?: boolean }) => {
+      if (options?.replace) {
+        nav.replace(to);
+      } else {
+        nav.push(to);
+      }
+    };
+  }, [navigationContext]);
 
   // Sessions list & active session
   const sessionsQuery = useSessionsQuery();
@@ -418,7 +421,7 @@ export function Chats() {
         setLoadingChats(false);
       }
     },
-    [t, showErrorToast],
+    [t, showErrorToast, handleSetLeftPaneMode],
   );
 
   useEffect(() => {
@@ -544,7 +547,7 @@ export function Chats() {
         void loadChats(selectedSessionId);
       }
     },
-    [selectedSessionId, activeChat, loadChats, markChatRead, appendMessage, onMessageAppended, showInfoToast, t],
+    [selectedSessionId, activeChat, loadChats, markChatRead, appendMessage, onMessageAppended, t],
   );
 
   const handleIncomingMessageAck = useCallback(
@@ -674,7 +677,7 @@ export function Chats() {
   );
 
   const handleSessionStatusReceived = useCallback(
-    (_event: { sessionId: string; status: string }) => {
+    () => {
       void loadSessions();
     },
     [loadSessions],
@@ -861,7 +864,7 @@ export function Chats() {
         await sessionApi.archiveChat(selectedSessionId, chatToArchive.id, archive);
         showSuccessToast(archive ? t('chats.archivedSuccess') : t('chats.unarchivedSuccess'));
         queryClient.invalidateQueries({ queryKey: ['chats', selectedSessionId] });
-      } catch (err) {
+      } catch {
         // Rollback on failure
         setChats(prevChats =>
           prevChats.map(c => (c.id === chatToArchive.id ? { ...c, archived: !archive } : c)),
@@ -1221,6 +1224,7 @@ export function Chats() {
                       aria-label={activeChat.archived ? t('chats.unarchiveChat') : t('chats.archiveChat')}
                     >
                       {activeChat.archived ? <ArchiveRestore size={13} /> : <Archive size={13} />}
+                      <span>{activeChat.archived ? t('chats.unarchiveChat') : t('chats.archiveChat')}</span>
                     </button>
 
                     <button

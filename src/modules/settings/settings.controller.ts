@@ -5,6 +5,8 @@ import { ConfigService } from '@nestjs/config';
 import { RequireRole, RequireUnscopedKey } from '../auth/decorators/auth.decorators';
 import { ApiKeyRole } from '../auth/entities/api-key.entity';
 import { isSwaggerEnabled } from '../../config/bootstrap-security';
+import { resolveSendPacingConfig } from '../message/send-pacing.config';
+import { resolveFeatureFlags } from '../../config/feature-flags';
 
 interface Settings {
   general: {
@@ -22,6 +24,15 @@ interface Settings {
     notificationEmail: string;
     webhookAlerts: boolean;
   };
+  pacing: {
+    enabled: boolean;
+    warmupSchedule: number[];
+    coldSchedule: number[];
+    breakerThreshold: number;
+    breakerCooldownMs: number;
+    simulateTyping: boolean;
+    simulateTypingMaxMs: number;
+  };
 }
 
 @ApiTags('settings')
@@ -32,6 +43,8 @@ export class SettingsController {
   constructor(private readonly configService: ConfigService) {
     // Initialize with values from configuration (reads from .env)
     const port = this.configService.get<number>('port', 2785);
+    const pacingConfig = resolveSendPacingConfig(this.configService);
+    const featureFlags = resolveFeatureFlags(this.configService);
 
     this.settings = {
       general: {
@@ -55,6 +68,15 @@ export class SettingsController {
         emailEnabled: false,
         notificationEmail: '',
         webhookAlerts: true,
+      },
+      pacing: {
+        enabled: pacingConfig.enabled,
+        warmupSchedule: pacingConfig.warmupSchedule,
+        coldSchedule: pacingConfig.coldSchedule,
+        breakerThreshold: pacingConfig.breakerThreshold,
+        breakerCooldownMs: pacingConfig.breakerCooldownMs,
+        simulateTyping: featureFlags.simulateTyping,
+        simulateTypingMaxMs: featureFlags.simulateTypingMaxMs,
       },
     };
   }

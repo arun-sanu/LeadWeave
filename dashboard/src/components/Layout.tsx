@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard,
   MessageSquare,
-  Webhook,
   FileSpreadsheet,
  
   LogOut,
@@ -16,7 +15,6 @@ import {
   CreditCard,
   Database,
   HardDrive,
-  Users,
   User,
   Shield,
   Key,
@@ -100,17 +98,12 @@ export function Layout({ onLogout }: LayoutProps) {
   const isStandardUser = role === 'user';
 
   const mainNavItems = [
-    // === Workspace Tabs (all roles get Dashboard, Team, Chats with embedded Sessions) ===
+    // === Workspace Tabs (all roles get Dashboard, Chats with embedded Sessions) ===
     ...(isSuper || isSupport || isCompAdmin || isHr || isStandardUser
       ? [
           { to: '/', icon: LayoutDashboard, label: t('nav.dashboard', 'Dashboard') },
           { to: '#notepad', icon: StickyNote, label: 'Notepad', isNotepad: true },
-          { to: '/team', icon: Users, label: isSuper ? 'Global Users' : 'My Team' },
           { to: '/chats?tab=sessions', icon: MessageSquare, label: t('nav.chats', 'Chats') },
-          // Webhooks: superadmin, support, companyadmin, user
-          ...(isSuper || isSupport || isCompAdmin || isStandardUser
-            ? [{ to: '/webhooks', icon: Webhook, label: t('nav.webhooks', 'Webhooks') }]
-            : []),
           // Campaigns (Broadcast & CRM)
           ...(isSuper || isCompAdmin || isStandardUser
             ? [
@@ -160,7 +153,6 @@ export function Layout({ onLogout }: LayoutProps) {
       ? [
           { to: '/subscriptions', icon: CreditCard, label: 'Subscriptions' },
           { to: '/database-usage', icon: Database, label: 'Database & Usage' },
-          { to: '/team', icon: Users, label: 'Global Users' },
         ]
       : []),
   ];

@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSpreadsheetStore } from '../stores/useSpreadsheetStore';
 import { useCampaignContext } from '../contexts/CampaignContext';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useSessionsQuery } from '../hooks/queries';
 import { campaignApi } from '../services/api';
 import { useToast } from '../hooks/useToast';
-import { useNavigate } from 'react-router-dom';
-import { AlertCircle, Send, Calendar, Loader2, Play, Shield, Users } from 'lucide-react';
+import { AlertCircle, Send, Calendar, Loader2, Play, Shield, Users, Zap, MousePointerClick } from 'lucide-react';
 
 export function BroadcastSettings() {
   useDocumentTitle('Broadcast Settings - LeadWeave');
@@ -22,11 +22,12 @@ export function BroadcastSettings() {
     simulateTyping, setSimulateTyping,
     scheduleType, setScheduleType,
     scheduleDateTime, setScheduleDateTime,
+    dispatchMode, setDispatchMode,
     isLaunching, setIsLaunching
   } = useCampaignContext();
 
   const { data: allSessions = [] } = useSessionsQuery();
-  const readySessions = allSessions.filter((s: any) => s.status === 'ready');
+  const readySessions = allSessions.filter(s => s.status === 'ready');
   const { success, error, info } = useToast();
 
   const validatePhone = (raw: string): { isValid: boolean; cleaned: string } => {
@@ -40,8 +41,8 @@ export function BroadcastSettings() {
     return rows.filter(r => validatePhone(r.phone).isValid).length;
   }, [rows]);
 
-  const isWithinSafeWindow = (_phone: string): { isSafe: boolean; tzInfo?: string } => {
-    return { isSafe: true, tzInfo: 'UTC (Assumed)' };
+  const isWithinSafeWindow = (phone: string): { isSafe: boolean; tzInfo?: string } => {
+    return { isSafe: Boolean(phone), tzInfo: 'UTC (Assumed)' };
   };
 
   const timezoneStats = useMemo(() => {
@@ -113,7 +114,8 @@ export function BroadcastSettings() {
         },
         columnsMetadata: columns,
         leads: payloadLeads,
-        autoLaunch: scheduleType === 'now',
+        autoLaunch: scheduleType === 'now' && dispatchMode !== 'manual',
+        dispatchMode,
       };
 
       const res = await campaignApi.create(reqBody);
@@ -122,8 +124,12 @@ export function BroadcastSettings() {
       // Redirect to analytics view for this campaign
       navigate('/campaigns');
 
-    } catch (err: any) {
-      error(err.response?.data?.message || err.message || 'Failed to launch campaign');
+    } catch (err: unknown) {
+      const errorMsg =
+        (err as { response?: { data?: { message?: string } }; message?: string })?.response?.data?.message ||
+        (err instanceof Error ? err.message : String(err)) ||
+        'Failed to launch campaign';
+      error(errorMsg);
     } finally {
       setIsLaunching(false);
     }
@@ -157,21 +163,21 @@ export function BroadcastSettings() {
           </div>
         ) : (
           <div className="session-card-grid">
-            {readySessions.map((sess: any) => {
-              const isChecked = selectedSessions.includes(sess.id);
+            {readySessions.map(session => {
+              const isChecked = selectedSessions.includes(session.id);
               return (
                 <div
-                  key={sess.id}
+                  key={session.id}
                   className={`session-select-card ${isChecked ? 'selected' : ''}`}
                   onClick={() => {
                     if (isChecked) {
                       if (selectedSessions.length > 1) {
-                        setSelectedSessions(selectedSessions.filter(id => id !== sess.id));
+                        setSelectedSessions(selectedSessions.filter(id => id !== session.id));
                       } else {
                         info('Keep at least 1 session selected');
                       }
                     } else {
-                      setSelectedSessions([...selectedSessions, sess.id]);
+                      setSelectedSessions([...selectedSessions, session.id]);
                     }
                   }}
                 >
@@ -179,11 +185,14 @@ export function BroadcastSettings() {
                     type="checkbox"
                     checked={isChecked}
                     onChange={() => {}} // Handled by container click
-                    aria-label={`Select session ${sess.id}`}
+                    aria-label={`Select session ${session.name || session.phone || session.id}`}
                     style={{ accentColor: 'var(--primary)', cursor: 'pointer' }}
                   />
                   <div className="session-status-dot" />
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc' }}>{sess.id}</span>
+                  <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#f8fafc' }}>
+                    {session.name || session.phone || session.id}
+                    {session.phone && session.name && session.phone !== session.name ? ` (${session.phone})` : ''}
+                  </span>
                 </div>
               );
             })}
@@ -281,7 +290,52 @@ export function BroadcastSettings() {
         </div>
       </div>
 
-      {/* 3. DISPATCH SCHEDULE & LAUNCH CTA */}
+      {/* 3. DISPATCH AUTOMATION MODE */}
+      <div className="studio-card-container">
+        <div className="studio-card-header-row">
+          <div>
+            <h2 className="studio-card-title">
+              <MousePointerClick size={20} className="text-primary" />
+              <span>Dispatch Mode: Automated vs Manual</span>
+            </h2>
+            <p className="studio-card-subtitle">
+              Choose between hands-free automated background pacing or manual 1-by-1 spreadsheet dispatch.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+          <div
+            className={`session-select-card ${dispatchMode === 'automated' ? 'selected' : ''}`}
+            onClick={() => setDispatchMode('automated')}
+            style={{ padding: '1rem', cursor: 'pointer' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
+              <Zap size={18} color="var(--primary)" />
+              <strong style={{ fontSize: '0.875rem', color: '#f8fafc' }}>Automated Background Dispatch</strong>
+            </div>
+            <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0, lineHeight: 1.4 }}>
+              Autonomous paced auto-loop. Automatically iterates through spreadsheet leads with human-mimicking Gaussian delays ({minDelay}–{maxDelay}s), typing presence, and natural batch breathers.
+            </p>
+          </div>
+
+          <div
+            className={`session-select-card ${dispatchMode === 'manual' ? 'selected' : ''}`}
+            onClick={() => setDispatchMode('manual')}
+            style={{ padding: '1rem', cursor: 'pointer' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
+              <MousePointerClick size={18} color="#38bdf8" />
+              <strong style={{ fontSize: '0.875rem', color: '#f8fafc' }}>Manual 1-by-1 Spreadsheet Send</strong>
+            </div>
+            <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: 0, lineHeight: 1.4 }}>
+              Interactive spreadsheet CRM control. Review each lead and dispatch messages one-by-one by clicking "Send" on any row or using the "Send Next" step button.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. DISPATCH SCHEDULE & LAUNCH CTA */}
       <div className="studio-card-container">
         <div className="studio-card-header-row">
           <div>
@@ -327,8 +381,6 @@ export function BroadcastSettings() {
             />
           )}
 
-          {/* Active Batch Monitor Card - Removed in favor of backend campaign tracking */}
-
           {/* Launch Button */}
           <button
             type="button"
@@ -339,14 +391,16 @@ export function BroadcastSettings() {
             {isLaunching ? (
               <>
                 <Loader2 size={18} className="spin-icon" />
-                <span>Queuing Broadcast Across Sessions...</span>
+                <span>Saving Broadcast Across Sessions...</span>
               </>
             ) : (
               <>
                 <Play size={18} fill="#ffffff" />
                 <span>
-                  {scheduleType === 'now'
-                    ? `Save & Launch Campaign (${validContacts} Contacts, ${selectedSessions.length} Sender${selectedSessions.length !== 1 ? 's' : ''})`
+                  {dispatchMode === 'manual'
+                    ? `Save & Open Spreadsheet CRM (Manual 1-by-1 Mode · ${validContacts} Contacts)`
+                    : scheduleType === 'now'
+                    ? `Save & Launch Automated Campaign (${validContacts} Contacts, ${selectedSessions.length} Sender${selectedSessions.length !== 1 ? 's' : ''})`
                     : 'Save & Schedule Campaign'}
                 </span>
               </>

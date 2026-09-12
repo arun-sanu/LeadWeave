@@ -222,7 +222,7 @@ export function CompanyTeam() {
                               .filter(s => !(u.assignedSessions || []).includes(s.id))
                               .map(s => (
                                 <option key={s.id} value={s.id}>
-                                  {s.name}
+                                  {s.name}{s.phone ? ` (${s.phone})` : ''}
                                 </option>
                               ))}
                           </select>

@@ -450,7 +450,7 @@ class TelemetryService {
 
           const tagName = element.tagName.toLowerCase();
           const htmlEl = element as HTMLElement;
-          const text = (htmlEl.innerText || htmlEl.textContent || (element as HTMLInputElement).value || (element as HTMLInputElement).placeholder || '')
+          const text = (htmlEl.textContent || (element as HTMLInputElement).value || (element as HTMLInputElement).placeholder || '')
             .trim()
             .slice(0, 50);
           const id = element.id ? `#${element.id}` : '';

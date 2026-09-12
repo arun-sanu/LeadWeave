@@ -16,7 +16,6 @@ import { CampaignProvider } from './contexts/CampaignContext';
 const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
 const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
 const Chats = lazy(() => import('./pages/Chats').then(m => ({ default: m.Chats })));
-const Webhooks = lazy(() => import('./pages/Webhooks').then(m => ({ default: m.Webhooks })));
 const Logs = lazy(() => import('./pages/Logs').then(m => ({ default: m.Logs })));
 const ApiKeys = lazy(() => import('./pages/ApiKeys').then(m => ({ default: m.ApiKeys })));
 const MessageTester = lazy(() => import('./pages/MessageTester').then(m => ({ default: m.MessageTester })));
@@ -31,7 +30,6 @@ const Profile = lazy(() => import('./pages/Profile').then(m => ({ default: m.Pro
 const Companies = lazy(() => import('./pages/Companies').then(m => ({ default: m.Companies })));
 const Subscriptions = lazy(() => import('./pages/Subscriptions').then(m => ({ default: m.Subscriptions })));
 const DatabaseUsage = lazy(() => import('./pages/DatabaseUsage').then(m => ({ default: m.DatabaseUsage })));
-const CompanyTeam = lazy(() => import('./pages/CompanyTeam').then(m => ({ default: m.CompanyTeam })));
 const ManagementDashboard = lazy(() => import('./pages/ManagementDashboard').then(m => ({ default: m.ManagementDashboard })));
 const NoticeBoard = lazy(() => import('./pages/NoticeBoard').then(m => ({ default: m.NoticeBoard })));
 const Storage = lazy(() => import('./pages/Storage').then(m => ({ default: m.Storage })));
@@ -142,7 +140,7 @@ function AppContent() {
               <Route index element={<Dashboard />} />
               <Route path="sessions" element={<Navigate to="/chats?tab=sessions" replace />} />
               <Route path="chats" element={<Chats />} />
-              <Route path="webhooks" element={<Webhooks />} />
+              <Route path="webhooks" element={<Navigate to="/profile?tab=webhooks" replace />} />
               <Route path="campaigns">
                 <Route index element={<Navigate to="analytics" replace />} />
                 <Route path="analytics" element={<CampaignAnalytics />} />
@@ -166,7 +164,7 @@ function AppContent() {
               <Route path="companies" element={<Companies />} />
               <Route path="subscriptions" element={<Subscriptions />} />
               <Route path="database-usage" element={<DatabaseUsage />} />
-              <Route path="team" element={<CompanyTeam />} />
+              <Route path="team" element={<Navigate to="/profile?tab=team" replace />} />
               <Route path="api-keys" element={<ApiKeys />} />
               <Route path="logs" element={<Logs />} />
               <Route path="message-tester" element={<MessageTester />} />
