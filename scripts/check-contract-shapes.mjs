@@ -1076,9 +1076,9 @@ if (isDirectRun) {
       .filter(f => f.endsWith('.go') && !f.endsWith('_test.go'))
       .map(f => readFileSync(`${REPO_ROOT}sdk/go/${f}`, 'utf8'));
   const javaSources = () =>
-    readdirSync(`${REPO_ROOT}sdk/java/src/main/java/com/rmyndharis/leadweave/model`)
+    readdirSync(`${REPO_ROOT}sdk/java/src/main/java/com/arun-sanu/leadweave/model`)
       .filter(f => f.endsWith('.java'))
-      .map(f => readFileSync(`${REPO_ROOT}sdk/java/src/main/java/com/rmyndharis/leadweave/model/${f}`, 'utf8'));
+      .map(f => readFileSync(`${REPO_ROOT}sdk/java/src/main/java/com/arun-sanu/leadweave/model/${f}`, 'utf8'));
 
   const CLIENTS = [
     ...Object.entries(MAPPINGS).map(([file, mapping]) => ({

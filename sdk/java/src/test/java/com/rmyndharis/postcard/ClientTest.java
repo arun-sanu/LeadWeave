@@ -1,4 +1,4 @@
-package com.rmyndharis.leadweave;
+package com.arun-sanu.leadweave;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,12 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.rmyndharis.leadweave.errors.LeadWeaveError;
-import com.rmyndharis.leadweave.errors.LeadWeaveNotFoundError;
-import com.rmyndharis.leadweave.http.BinaryResponse;
-import com.rmyndharis.leadweave.http.HttpMethod;
-import com.rmyndharis.leadweave.model.SuccessResult;
-import com.rmyndharis.leadweave.support.MockTransport;
+import com.arun-sanu.leadweave.errors.LeadWeaveError;
+import com.arun-sanu.leadweave.errors.LeadWeaveNotFoundError;
+import com.arun-sanu.leadweave.http.BinaryResponse;
+import com.arun-sanu.leadweave.http.HttpMethod;
+import com.arun-sanu.leadweave.model.SuccessResult;
+import com.arun-sanu.leadweave.support.MockTransport;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;

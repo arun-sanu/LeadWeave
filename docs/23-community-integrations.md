@@ -3,7 +3,7 @@
 Third-party integrations and adapters built by the community on top of LeadWeave's REST API.
 
 > **Looking for Chatwoot, Typebot, and other first-party integrations?** Those ship as official
-> sandboxed plugins on the Integration Fabric — see the [LeadWeave-plugins](https://github.com/rmyndharis/LeadWeave-plugins)
+> sandboxed plugins on the Integration Fabric — see the [LeadWeave-plugins](https://github.com/arun-sanu/LeadWeave-plugins)
 > catalog. This page lists only community-built projects.
 
 > ⚠️ **These projects are community-maintained and are not affiliated with or endorsed by LeadWeave.**

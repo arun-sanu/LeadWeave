@@ -1,20 +1,20 @@
-package com.rmyndharis.leadweave;
+package com.arun-sanu.leadweave;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.rmyndharis.leadweave.model.AccountRestrictionKind;
-import com.rmyndharis.leadweave.model.BatchLifecycleStatus;
-import com.rmyndharis.leadweave.model.BatchMessageResult;
-import com.rmyndharis.leadweave.model.BatchMessageStatus;
-import com.rmyndharis.leadweave.model.ChatHistoryMessage;
-import com.rmyndharis.leadweave.model.ChatKind;
-import com.rmyndharis.leadweave.model.MemberAddMode;
-import com.rmyndharis.leadweave.model.MessageType;
-import com.rmyndharis.leadweave.model.PresenceState;
-import com.rmyndharis.leadweave.model.SessionResponse;
-import com.rmyndharis.leadweave.model.SessionStatus;
+import com.arun-sanu.leadweave.model.AccountRestrictionKind;
+import com.arun-sanu.leadweave.model.BatchLifecycleStatus;
+import com.arun-sanu.leadweave.model.BatchMessageResult;
+import com.arun-sanu.leadweave.model.BatchMessageStatus;
+import com.arun-sanu.leadweave.model.ChatHistoryMessage;
+import com.arun-sanu.leadweave.model.ChatKind;
+import com.arun-sanu.leadweave.model.MemberAddMode;
+import com.arun-sanu.leadweave.model.MessageType;
+import com.arun-sanu.leadweave.model.PresenceState;
+import com.arun-sanu.leadweave.model.SessionResponse;
+import com.arun-sanu.leadweave.model.SessionStatus;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -66,25 +66,25 @@ class EnumWireTest {
             "{\"chatId\":\"628@c.us\",\"status\":\"cancelled\"}", BatchMessageResult.class);
         assertEquals(BatchMessageStatus.CANCELLED, b.status());
 
-        com.rmyndharis.leadweave.model.BatchStatusResponse s = gson.fromJson(
+        com.arun-sanu.leadweave.model.BatchStatusResponse s = gson.fromJson(
             "{\"batchId\":\"b1\",\"status\":\"processing\",\"progress\":{\"total\":1,\"sent\":0,"
                 + "\"failed\":0,\"pending\":1,\"cancelled\":0},\"results\":[]}",
-            com.rmyndharis.leadweave.model.BatchStatusResponse.class);
+            com.arun-sanu.leadweave.model.BatchStatusResponse.class);
         assertEquals(BatchLifecycleStatus.PROCESSING, s.status());
 
-        com.rmyndharis.leadweave.model.ParticipantPresence p = gson.fromJson(
+        com.arun-sanu.leadweave.model.ParticipantPresence p = gson.fromJson(
             "{\"id\":\"628@c.us\",\"state\":\"recording\"}",
-            com.rmyndharis.leadweave.model.ParticipantPresence.class);
+            com.arun-sanu.leadweave.model.ParticipantPresence.class);
         assertEquals(PresenceState.RECORDING, p.state());
 
-        com.rmyndharis.leadweave.model.AccountRestriction a = gson.fromJson(
+        com.arun-sanu.leadweave.model.AccountRestriction a = gson.fromJson(
             "{\"kind\":\"proxy_block\",\"code\":\"X\"}",
-            com.rmyndharis.leadweave.model.AccountRestriction.class);
+            com.arun-sanu.leadweave.model.AccountRestriction.class);
         assertEquals(AccountRestrictionKind.PROXY_BLOCK, a.kind());
 
-        com.rmyndharis.leadweave.model.GroupInfo g = gson.fromJson(
+        com.arun-sanu.leadweave.model.GroupInfo g = gson.fromJson(
             "{\"id\":\"g\",\"name\":\"n\",\"memberAddMode\":\"admins\"}",
-            com.rmyndharis.leadweave.model.GroupInfo.class);
+            com.arun-sanu.leadweave.model.GroupInfo.class);
         assertEquals(MemberAddMode.ADMINS, g.memberAddMode());
     }
 

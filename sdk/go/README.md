@@ -1,11 +1,11 @@
 # LeadWeave Go SDK
 
-Idiomatic Go client for the [LeadWeave](https://github.com/rmyndharis/LeadWeave) WhatsApp
+Idiomatic Go client for the [LeadWeave](https://github.com/arun-sanu/LeadWeave) WhatsApp
 API Gateway. Stdlib-only (no dependencies), context-first, with typed errors and
 an injectable transport pipeline.
 
 ```bash
-go get github.com/rmyndharis/LeadWeave/sdk/go
+go get github.com/arun-sanu/LeadWeave/sdk/go
 ```
 
 Requires Go 1.22+.
@@ -19,7 +19,7 @@ import (
 	"context"
 	"log"
 
-	leadweave "github.com/rmyndharis/LeadWeave/sdk/go"
+	leadweave "github.com/arun-sanu/LeadWeave/sdk/go"
 )
 
 func main() {
@@ -185,7 +185,7 @@ The tag must carry the module's directory prefix, because the module lives in a
 subdirectory rather than at the repository root:
 
 ```bash
-# Correct — `sdk/go/` prefix, matching `module github.com/rmyndharis/LeadWeave/sdk/go`
+# Correct — `sdk/go/` prefix, matching `module github.com/arun-sanu/LeadWeave/sdk/go`
 git tag sdk/go/v0.5.0 && git push origin sdk/go/v0.5.0
 ```
 

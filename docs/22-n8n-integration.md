@@ -4,7 +4,7 @@
 
 LeadWeave provides official n8n community nodes for integrating WhatsApp automation into n8n workflows. This enables users to build powerful automations combining WhatsApp messaging with hundreds of other services available in n8n.
 
-**Repository:** https://github.com/rmyndharis/LeadWeave-n8n
+**Repository:** https://github.com/arun-sanu/LeadWeave-n8n
 **npm Package:** `@rmyndharis/n8n-nodes-leadweave`
 
 ## Architecture
@@ -295,7 +295,7 @@ Always use the correct format for chat IDs:
 ### Building from Source
 
 ```bash
-git clone https://github.com/rmyndharis/LeadWeave-n8n.git
+git clone https://github.com/arun-sanu/LeadWeave-n8n.git
 cd LeadWeave-n8n
 npm install
 npm run build

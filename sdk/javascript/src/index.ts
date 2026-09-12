@@ -5,7 +5,7 @@
  *
  * @example
  * ```typescript
- * import { LeadWeaveClient, LeadWeaveApiError } from '@rmyndharis/leadweave';
+ * import { LeadWeaveClient, LeadWeaveApiError } from '@arun-sanu/leadweave';
  *
  * const client = new LeadWeaveClient({
  *   baseUrl: 'http://localhost:2785',

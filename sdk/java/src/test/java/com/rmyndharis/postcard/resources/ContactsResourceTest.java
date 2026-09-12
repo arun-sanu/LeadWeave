@@ -1,16 +1,16 @@
-package com.rmyndharis.leadweave.resources;
+package com.arun-sanu.leadweave.resources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.rmyndharis.leadweave.ClientConfig;
-import com.rmyndharis.leadweave.LeadWeaveClient;
-import com.rmyndharis.leadweave.http.HttpMethod;
-import com.rmyndharis.leadweave.model.UpsertContactRequest;
-import com.rmyndharis.leadweave.model.ListContactsQuery;
-import com.rmyndharis.leadweave.model.ProfilePicturesResponse;
-import com.rmyndharis.leadweave.support.MockTransport;
+import com.arun-sanu.leadweave.ClientConfig;
+import com.arun-sanu.leadweave.LeadWeaveClient;
+import com.arun-sanu.leadweave.http.HttpMethod;
+import com.arun-sanu.leadweave.model.UpsertContactRequest;
+import com.arun-sanu.leadweave.model.ListContactsQuery;
+import com.arun-sanu.leadweave.model.ProfilePicturesResponse;
+import com.arun-sanu.leadweave.support.MockTransport;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,6 @@
 # LeadWeave Java SDK
 
-Official Java client for the [LeadWeave](https://github.com/rmyndharis/LeadWeave)
+Official Java client for the [LeadWeave](https://github.com/arun-sanu/LeadWeave)
 WhatsApp API Gateway.
 
 Hand-written against the exact API surface (paths, DTOs, response shapes) and
@@ -14,7 +14,7 @@ Java 17+, one runtime dependency ([Gson](https://github.com/google/gson)).
 
 ```xml
 <dependency>
-  <groupId>com.rmyndharis</groupId>
+  <groupId>com.arun-sanu</groupId>
   <artifactId>leadweave</artifactId>
   <version>0.5.0</version>
 </dependency>
@@ -23,15 +23,15 @@ Java 17+, one runtime dependency ([Gson](https://github.com/google/gson)).
 **Gradle**
 
 ```groovy
-implementation 'com.rmyndharis:leadweave:0.5.0'
+implementation 'com.arun-sanu:leadweave:0.5.0'
 ```
 
 ## Quickstart
 
 ```java
-import com.rmyndharis.leadweave.LeadWeaveClient;
-import com.rmyndharis.leadweave.model.MessageResponse;
-import com.rmyndharis.leadweave.model.SendTextRequest;
+import com.arun-sanu.leadweave.LeadWeaveClient;
+import com.arun-sanu.leadweave.model.MessageResponse;
+import com.arun-sanu.leadweave.model.SendTextRequest;
 
 LeadWeaveClient client = new LeadWeaveClient("http://localhost:2785", "owa_k1_…");
 
@@ -50,7 +50,7 @@ For full control over configuration (timeout, default headers, a custom
 transport), build a `ClientConfig`:
 
 ```java
-import com.rmyndharis.leadweave.ClientConfig;
+import com.arun-sanu.leadweave.ClientConfig;
 import java.time.Duration;
 
 LeadWeaveClient client = new LeadWeaveClient(ClientConfig.builder()
@@ -79,8 +79,8 @@ Errors are a typed, unchecked hierarchy — branch with `instanceof` or on
 `.status()`:
 
 ```java
-import com.rmyndharis.leadweave.errors.LeadWeaveConflictError;
-import com.rmyndharis.leadweave.errors.LeadWeaveNotFoundError;
+import com.arun-sanu.leadweave.errors.LeadWeaveConflictError;
+import com.arun-sanu.leadweave.errors.LeadWeaveNotFoundError;
 
 try {
     client.messages.sendText("my-session", body);

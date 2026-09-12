@@ -1,21 +1,21 @@
-package com.rmyndharis.leadweave.resources;
+package com.arun-sanu.leadweave.resources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.rmyndharis.leadweave.ClientConfig;
-import com.rmyndharis.leadweave.LeadWeaveClient;
-import com.rmyndharis.leadweave.http.HttpMethod;
-import com.rmyndharis.leadweave.model.ChatState;
-import com.rmyndharis.leadweave.model.ArchiveChatRequest;
-import com.rmyndharis.leadweave.model.DeleteChatRequest;
-import com.rmyndharis.leadweave.model.MuteChatRequest;
-import com.rmyndharis.leadweave.model.PinChatRequest;
-import com.rmyndharis.leadweave.model.ListChatsQuery;
-import com.rmyndharis.leadweave.model.MarkChatReadRequest;
-import com.rmyndharis.leadweave.model.MarkChatRequest;
-import com.rmyndharis.leadweave.model.SendChatStateRequest;
-import com.rmyndharis.leadweave.support.MockTransport;
+import com.arun-sanu.leadweave.ClientConfig;
+import com.arun-sanu.leadweave.LeadWeaveClient;
+import com.arun-sanu.leadweave.http.HttpMethod;
+import com.arun-sanu.leadweave.model.ChatState;
+import com.arun-sanu.leadweave.model.ArchiveChatRequest;
+import com.arun-sanu.leadweave.model.DeleteChatRequest;
+import com.arun-sanu.leadweave.model.MuteChatRequest;
+import com.arun-sanu.leadweave.model.PinChatRequest;
+import com.arun-sanu.leadweave.model.ListChatsQuery;
+import com.arun-sanu.leadweave.model.MarkChatReadRequest;
+import com.arun-sanu.leadweave.model.MarkChatRequest;
+import com.arun-sanu.leadweave.model.SendChatStateRequest;
+import com.arun-sanu.leadweave.support.MockTransport;
 import org.junit.jupiter.api.Test;
 
 class ChatsResourceTest {

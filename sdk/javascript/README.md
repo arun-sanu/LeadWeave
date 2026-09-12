@@ -1,13 +1,13 @@
-# @rmyndharis/leadweave
+# @arun-sanu/leadweave
 
-Official JavaScript/TypeScript SDK for the [LeadWeave](https://github.com/rmyndharis/LeadWeave) WhatsApp API Gateway.
+Official JavaScript/TypeScript SDK for the [LeadWeave](https://github.com/arun-sanu/LeadWeave) WhatsApp API Gateway.
 
 Ships dual CJS + ESM builds with bundled type declarations.
 
 ## Install
 
 ```bash
-npm install @rmyndharis/leadweave
+npm install @arun-sanu/leadweave
 ```
 
 Requires Node.js >= 18 (relies on the global `fetch`).
@@ -15,7 +15,7 @@ Requires Node.js >= 18 (relies on the global `fetch`).
 ## Usage
 
 ```typescript
-import { LeadWeaveClient } from '@rmyndharis/leadweave';
+import { LeadWeaveClient } from '@arun-sanu/leadweave';
 
 const client = new LeadWeaveClient({
   baseUrl: 'https://your-gateway.example.com',
@@ -31,7 +31,7 @@ const result = await client.messages.sendText('my-session', {
 console.log(result.messageId);
 ```
 
-CommonJS consumers use `require('@rmyndharis/leadweave')` identically.
+CommonJS consumers use `require('@arun-sanu/leadweave')` identically.
 
 ## Messaging
 
@@ -58,10 +58,10 @@ automatically. Nothing long-lived exists to leak, expire, or migrate when
 2FA-bypass tokens lose direct publish in January 2027.
 
 One-time setup, required **before** the first tag — on npmjs.com, open the
-package settings for `@rmyndharis/leadweave` and add a Trusted Publisher:
+package settings for `@arun-sanu/leadweave` and add a Trusted Publisher:
 
 - Provider: **GitHub Actions**
-- Organization: `rmyndharis`
+- Organization: `arun-sanu`
 - Repository: `LeadWeave`
 - Workflow filename: `js-sdk-release.yml` (the extension is part of the value)
 

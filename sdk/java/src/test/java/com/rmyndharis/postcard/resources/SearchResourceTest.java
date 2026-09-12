@@ -1,4 +1,4 @@
-package com.rmyndharis.leadweave.resources;
+package com.arun-sanu.leadweave.resources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -6,14 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.rmyndharis.leadweave.ClientConfig;
-import com.rmyndharis.leadweave.LeadWeaveClient;
-import com.rmyndharis.leadweave.http.HttpMethod;
-import com.rmyndharis.leadweave.model.MessageDirection;
-import com.rmyndharis.leadweave.model.SearchHit;
-import com.rmyndharis.leadweave.model.SearchQuery;
-import com.rmyndharis.leadweave.model.SearchResults;
-import com.rmyndharis.leadweave.support.MockTransport;
+import com.arun-sanu.leadweave.ClientConfig;
+import com.arun-sanu.leadweave.LeadWeaveClient;
+import com.arun-sanu.leadweave.http.HttpMethod;
+import com.arun-sanu.leadweave.model.MessageDirection;
+import com.arun-sanu.leadweave.model.SearchHit;
+import com.arun-sanu.leadweave.model.SearchQuery;
+import com.arun-sanu.leadweave.model.SearchResults;
+import com.arun-sanu.leadweave.support.MockTransport;
 import org.junit.jupiter.api.Test;
 
 class SearchResourceTest {

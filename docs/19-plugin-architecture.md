@@ -511,7 +511,7 @@ the one version gate is `validateIngressManifest`, which refuses a manifest decl
 decision across a restart; the decision is persisted separately as `enabledByOperator`. On
 `onApplicationBootstrap` — after the rest of the app is wired — the loader re-enables every non-built-in
 plugin carrying that flag, so an upgrade, host reboot or container restart no longer silently switches
-off every extension ([#856](https://github.com/rmyndharis/LeadWeave/issues/856)). Restoring is best-effort
+off every extension ([#856](https://github.com/arun-sanu/LeadWeave/issues/856)). Restoring is best-effort
 and sequential: a plugin that fails is logged (`plugin_restore_failed`), left in `ERROR`, and never
 holds up startup. Built-ins are skipped — `EngineFactory` enables the engine named by `engine.type`.
 

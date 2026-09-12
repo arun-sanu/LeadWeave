@@ -21,7 +21,7 @@ lines receive no backports — please upgrade older deployments.
 Report it privately through either channel:
 
 - **GitHub Security Advisories** (preferred) — open a private report at
-  <https://github.com/rmyndharis/LeadWeave/security/advisories/new>
+  <https://github.com/arun-sanu/LeadWeave/security/advisories/new>
 - **Email** — yudhi@rmyndharis.com
 
 Please include, where possible:

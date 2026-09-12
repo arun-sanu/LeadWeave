@@ -1,4 +1,4 @@
-package com.rmyndharis.leadweave.errors;
+package com.arun-sanu.leadweave.errors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

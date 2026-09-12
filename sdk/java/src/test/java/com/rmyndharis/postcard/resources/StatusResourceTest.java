@@ -1,4 +1,4 @@
-package com.rmyndharis.leadweave.resources;
+package com.arun-sanu.leadweave.resources;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,18 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.rmyndharis.leadweave.ClientConfig;
-import com.rmyndharis.leadweave.LeadWeaveClient;
-import com.rmyndharis.leadweave.errors.LeadWeaveNotFoundError;
-import com.rmyndharis.leadweave.http.BinaryResponse;
-import com.rmyndharis.leadweave.http.HttpMethod;
-import com.rmyndharis.leadweave.model.SendImageStatusRequest;
-import com.rmyndharis.leadweave.model.SendTextStatusRequest;
-import com.rmyndharis.leadweave.model.SendVideoStatusRequest;
-import com.rmyndharis.leadweave.model.SendVoiceStatusRequest;
-import com.rmyndharis.leadweave.model.StatusMediaInput;
-import com.rmyndharis.leadweave.model.StatusRecord;
-import com.rmyndharis.leadweave.support.MockTransport;
+import com.arun-sanu.leadweave.ClientConfig;
+import com.arun-sanu.leadweave.LeadWeaveClient;
+import com.arun-sanu.leadweave.errors.LeadWeaveNotFoundError;
+import com.arun-sanu.leadweave.http.BinaryResponse;
+import com.arun-sanu.leadweave.http.HttpMethod;
+import com.arun-sanu.leadweave.model.SendImageStatusRequest;
+import com.arun-sanu.leadweave.model.SendTextStatusRequest;
+import com.arun-sanu.leadweave.model.SendVideoStatusRequest;
+import com.arun-sanu.leadweave.model.SendVoiceStatusRequest;
+import com.arun-sanu.leadweave.model.StatusMediaInput;
+import com.arun-sanu.leadweave.model.StatusRecord;
+import com.arun-sanu.leadweave.support.MockTransport;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;

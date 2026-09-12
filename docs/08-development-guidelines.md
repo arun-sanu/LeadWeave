@@ -625,7 +625,7 @@ Add a new one only when the condition is engine-agnostic and recurs; a one-off s
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/rmyndharis/LeadWeave.git
+git clone https://github.com/arun-sanu/LeadWeave.git
 cd LeadWeave
 
 # 2. Install the locked dependencies (also installs dashboard dependencies)

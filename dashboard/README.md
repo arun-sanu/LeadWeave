@@ -96,4 +96,4 @@ VITE_WS_URL=http://localhost:2785
 
 ## 📄 License
 
-MIT License - Part of the [LeadWeave](https://github.com/rmyndharis/LeadWeave) project.
+MIT License - Part of the [LeadWeave](https://github.com/arun-sanu/LeadWeave) project.

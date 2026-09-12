@@ -16,13 +16,13 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/rmyndharis/LeadWeave/actions/workflows/ci.yml"><img src="https://github.com/rmyndharis/LeadWeave/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"/></a>
-  <img src="https://img.shields.io/github/package-json/v/rmyndharis/LeadWeave?label=version&color=blue" alt="Version"/>
+  <a href="https://github.com/arun-sanu/LeadWeave/actions/workflows/ci.yml"><img src="https://github.com/arun-sanu/LeadWeave/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"/></a>
+  <img src="https://img.shields.io/github/package-json/v/arun-sanu/LeadWeave?label=version&color=blue" alt="Version"/>
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"/>
   <img src="https://img.shields.io/badge/node-22_LTS-brightgreen.svg" alt="Node"/>
-  <img src="https://img.shields.io/github/package-json/dependency-version/rmyndharis/LeadWeave/@nestjs/core?label=NestJS&color=red" alt="NestJS"/>
+  <img src="https://img.shields.io/github/package-json/dependency-version/arun-sanu/LeadWeave/@nestjs/core?label=NestJS&color=red" alt="NestJS"/>
   <img src="https://img.shields.io/badge/docker-ready-blue.svg" alt="Docker"/>
-  <img src="https://img.shields.io/github/package-json/dependency-version/rmyndharis/LeadWeave/dev/typescript?label=TypeScript&color=3178C6" alt="TypeScript"/>
+  <img src="https://img.shields.io/github/package-json/dependency-version/arun-sanu/LeadWeave/dev/typescript?label=TypeScript&color=3178C6" alt="TypeScript"/>
 </p>
 
 ---
@@ -40,7 +40,7 @@ Built on a **pluggable architecture**, LeadWeave lets you select database engine
 | 🖥️ **Full Dashboard**         | Modern React UI for session, webhook, and API key management                                                                             |
 | 🔹 **Multi-Session Ready**    | Run multiple WhatsApp sessions concurrently on one instance                                                                              |
 | 🐳 **Docker Native**          | Production-ready with zero configuration                                                                                                 |
-| 🧩 **Official Plugins**       | Chatwoot, Typebot & more as sandboxed plugins on the Integration Fabric — [LeadWeave-plugins](https://github.com/rmyndharis/LeadWeave-plugins) |
+| 🧩 **Official Plugins**       | Chatwoot, Typebot & more as sandboxed plugins on the Integration Fabric — [LeadWeave-plugins](https://github.com/arun-sanu/LeadWeave-plugins) |
 | 🔗 **n8n Integration**        | Community nodes for workflow automation                                                                                                  |
 | 🧩 **Community Adapters**     | Third-party integrations (e.g. ioBroker) — see [docs](./docs/23-community-integrations.md)                                               |
 
@@ -78,7 +78,7 @@ These are practical guardrails, not guarantees — but they materially reduce th
 
 A few things that look like bugs but are actually server-side WhatsApp policy, not LeadWeave defects — we track them separately so we can distinguish them from real bugs:
 
-- **First message to a brand-new contact sometimes never arrives.** The API returns success because the message leaves LeadWeave, but WhatsApp's server-side reach-out / trust policy drops it at delivery. This is independent of LeadWeave. We track it in [#830](https://github.com/rmyndharis/LeadWeave/issues/830).
+- **First message to a brand-new contact sometimes never arrives.** The API returns success because the message leaves LeadWeave, but WhatsApp's server-side reach-out / trust policy drops it at delivery. This is independent of LeadWeave. We track it in [#830](https://github.com/arun-sanu/LeadWeave/issues/830).
 - **Accounts that get restricted cannot be "unrestricted" by us.** If WhatsApp disables a number, you need to appeal through their channels — LeadWeave has no lever to pull.
 
 ### Compliance
@@ -147,7 +147,7 @@ For any deployment where ethical, legal, or regulatory compliance matters (healt
 
 ```bash
 # Clone and start
-git clone https://github.com/rmyndharis/LeadWeave.git
+git clone https://github.com/arun-sanu/LeadWeave.git
 cd LeadWeave
 docker compose -f docker-compose.dev.yml up -d
 
@@ -172,7 +172,7 @@ docker compose -f docker-compose.dev.yml up -d
 
 ```bash
 # Clone repository
-git clone https://github.com/rmyndharis/LeadWeave.git
+git clone https://github.com/arun-sanu/LeadWeave.git
 cd LeadWeave
 
 # Install the locked dependencies (includes dashboard)
@@ -452,7 +452,7 @@ See [LICENSE](./LICENSE) for details.
 
 **LeadWeave** – Free, Open Source WhatsApp API Gateway
 
-[📖 Documentation](./docs/README.md) · [🔌 API Docs](http://localhost:2785/api/docs) · [🐛 Report Bug](https://github.com/rmyndharis/LeadWeave/issues) · [💡 Request Feature](https://github.com/rmyndharis/LeadWeave/issues)
+[📖 Documentation](./docs/README.md) · [🔌 API Docs](http://localhost:2785/api/docs) · [🐛 Report Bug](https://github.com/arun-sanu/LeadWeave/issues) · [💡 Request Feature](https://github.com/arun-sanu/LeadWeave/issues)
 
 <br/>
 

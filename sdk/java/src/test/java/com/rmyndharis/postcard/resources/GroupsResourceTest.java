@@ -1,19 +1,19 @@
-package com.rmyndharis.leadweave.resources;
+package com.arun-sanu.leadweave.resources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.rmyndharis.leadweave.ClientConfig;
-import com.rmyndharis.leadweave.LeadWeaveClient;
-import com.rmyndharis.leadweave.http.HttpMethod;
-import com.rmyndharis.leadweave.model.SetGroupPictureRequest;
-import com.rmyndharis.leadweave.model.CreateGroupRequest;
-import com.rmyndharis.leadweave.model.GroupSettings;
-import com.rmyndharis.leadweave.model.ListGroupsQuery;
-import com.rmyndharis.leadweave.model.MembershipRequestActionRequest;
-import com.rmyndharis.leadweave.support.MockTransport;
+import com.arun-sanu.leadweave.ClientConfig;
+import com.arun-sanu.leadweave.LeadWeaveClient;
+import com.arun-sanu.leadweave.http.HttpMethod;
+import com.arun-sanu.leadweave.model.SetGroupPictureRequest;
+import com.arun-sanu.leadweave.model.CreateGroupRequest;
+import com.arun-sanu.leadweave.model.GroupSettings;
+import com.arun-sanu.leadweave.model.ListGroupsQuery;
+import com.arun-sanu.leadweave.model.MembershipRequestActionRequest;
+import com.arun-sanu.leadweave.support.MockTransport;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 

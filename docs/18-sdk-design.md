@@ -6,13 +6,13 @@ LeadWeave ships five official, hand-written client libraries for the REST API. T
 
 | Language                | Package                                                                                | Install                              | Notes                                                                            |
 | ----------------------- | -------------------------------------------------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------- |
-| JavaScript / TypeScript | [`@rmyndharis/leadweave`](https://www.npmjs.com/package/@rmyndharis/leadweave)               | `npm install @rmyndharis/leadweave`     | Dual ESM + CJS, bundled `.d.ts` types, Node 18+                                  |
-| Python                  | [`rmyndharis-leadweave`](https://pypi.org/project/rmyndharis-leadweave/)                     | `pip install rmyndharis-leadweave`      | Synchronous (httpx), PEP 561 typed, Python 3.9+                                  |
-| PHP                     | [`rmyndharis/leadweave`](https://packagist.org/packages/rmyndharis/leadweave)                | `composer require rmyndharis/leadweave` | Synchronous (Guzzle 7), PSR-4, PHP 8.1+                                          |
-| Java                    | [`com.rmyndharis:leadweave`](https://central.sonatype.com/artifact/com.rmyndharis/leadweave) | Maven Central                        | Sync, `java.net.http`. See [`sdk/java/README.md`](../sdk/java/README.md).        |
-| Go                      | [`github.com/rmyndharis/LeadWeave/sdk/go`](../sdk/go)                                     | `go get`                             | Stdlib-only, no third-party deps. See [`sdk/go/README.md`](../sdk/go/README.md). |
+| JavaScript / TypeScript | [`@arun-sanu/leadweave`](https://www.npmjs.com/package/@arun-sanu/leadweave)               | `npm install @arun-sanu/leadweave`     | Dual ESM + CJS, bundled `.d.ts` types, Node 18+                                  |
+| Python                  | [`arun-sanu-leadweave`](https://pypi.org/project/arun-sanu-leadweave/)                     | `pip install arun-sanu-leadweave`      | Synchronous (httpx), PEP 561 typed, Python 3.9+                                  |
+| PHP                     | [`arun-sanu/leadweave`](https://packagist.org/packages/arun-sanu/leadweave)                | `composer require arun-sanu/leadweave` | Synchronous (Guzzle 7), PSR-4, PHP 8.1+                                          |
+| Java                    | [`com.arun-sanu:leadweave`](https://central.sonatype.com/artifact/com.arun-sanu/leadweave) | Maven Central                        | Sync, `java.net.http`. See [`sdk/java/README.md`](../sdk/java/README.md).        |
+| Go                      | [`github.com/arun-sanu/LeadWeave/sdk/go`](../sdk/go)                                     | `go get`                             | Stdlib-only, no third-party deps. See [`sdk/go/README.md`](../sdk/go/README.md). |
 
-> The import names differ from the dist names where the ecosystem requires it. Python installs `rmyndharis-leadweave` but imports `leadweave`; the client class is `LeadWeaveClient` in JS/Python and `LeadWeave\Client` in PHP.
+> The import names differ from the dist names where the ecosystem requires it. Python installs `arun-sanu-leadweave` but imports `leadweave`; the client class is `LeadWeaveClient` in JS/Python and `LeadWeave\Client` in PHP.
 
 ### Design Principles
 
@@ -49,18 +49,18 @@ All five SDKs expose the same fluent surface:
 
 ## 18.2 TypeScript / JavaScript SDK
 
-The official JavaScript/TypeScript SDK is published as **`@rmyndharis/leadweave`**. It is a pure promise-based HTTP client: a single `LeadWeaveClient` exposes every API resource as a typed property. There is no event model — the SDK does not open WebSockets, emit events, or expose `client.on(...)`. To receive inbound messages and acks, configure a webhook (see the `webhooks` resource) and host your own HTTP receiver.
+The official JavaScript/TypeScript SDK is published as **`@arun-sanu/leadweave`**. It is a pure promise-based HTTP client: a single `LeadWeaveClient` exposes every API resource as a typed property. There is no event model — the SDK does not open WebSockets, emit events, or expose `client.on(...)`. To receive inbound messages and acks, configure a webhook (see the `webhooks` resource) and host your own HTTP receiver.
 
 The package ships **dual CJS + ESM** with bundled `.d.ts` types, so it is consumable from both `require()` and `import`.
 
 ### Installation
 
 ```bash
-npm install @rmyndharis/leadweave
+npm install @arun-sanu/leadweave
 # or
-yarn add @rmyndharis/leadweave
+yarn add @arun-sanu/leadweave
 # or
-pnpm add @rmyndharis/leadweave
+pnpm add @arun-sanu/leadweave
 ```
 
 > **Node 18+ required.** The transport uses the global `fetch` (and `AbortController`), both built into Node 18 and later. To run on an older runtime, pass your own `fetch` implementation via the client constructor (see [Client Configuration](#client-configuration)).
@@ -68,7 +68,7 @@ pnpm add @rmyndharis/leadweave
 ### Quick Start
 
 ```typescript
-import { LeadWeaveClient } from '@rmyndharis/leadweave';
+import { LeadWeaveClient } from '@arun-sanu/leadweave';
 
 const client = new LeadWeaveClient({
   baseUrl: 'http://localhost:2785',
@@ -96,7 +96,7 @@ main();
 CommonJS consumers use the same API via `require`:
 
 ```javascript
-const { LeadWeaveClient } = require('@rmyndharis/leadweave');
+const { LeadWeaveClient } = require('@arun-sanu/leadweave');
 ```
 
 ### Client Configuration
@@ -370,7 +370,7 @@ import {
   LeadWeaveRateLimitError,
   LeadWeaveTimeoutError,
   LeadWeaveApiError,
-} from '@rmyndharis/leadweave';
+} from '@arun-sanu/leadweave';
 
 try {
   await client.messages.sendText('my-session', {
@@ -413,14 +413,14 @@ The Python SDK is a **synchronous** client built on [`httpx`](https://www.python
 The PyPI distribution name and the import package differ:
 
 ```bash
-pip install rmyndharis-leadweave
+pip install arun-sanu-leadweave
 ```
 
 ```python
 from leadweave import LeadWeaveClient
 ```
 
-- **Distribution (PyPI):** `rmyndharis-leadweave`
+- **Distribution (PyPI):** `arun-sanu-leadweave`
 - **Import package:** `leadweave`
 - **Client class:** `LeadWeaveClient`
 - **Python:** `>=3.9` (per `pyproject.toml`)
@@ -776,7 +776,7 @@ The PHP SDK is a hand-written, synchronous client built on Guzzle 7. It mirrors 
 ### Installation
 
 ```bash
-composer require rmyndharis/leadweave
+composer require arun-sanu/leadweave
 ```
 
 Requirements:
@@ -1108,7 +1108,7 @@ try {
 - **No automatic retries.** A failed request throws immediately; wrap calls in your own backoff if you need retries (notably for `429`). The injectable `httpClient` is the extension point for retry/observability middleware.
 - **Empty/204 responses return `null`.** A `204` or empty body decodes to `null`; resource methods that promise an `array` coalesce this to `[]` (or to the resource object for single-item gets).
 - **Testing without the network.** Inject a Guzzle client built on a `GuzzleHttp\Handler\MockHandler` via the `httpClient` config key — no global state, no live calls. The shipped test suite asserts on the exact path, method, and body.
-- **PSR-4 autoloading.** Everything lives under the `LeadWeave\` namespace mapped to `src/`; `composer require rmyndharis/leadweave` wires up the autoloader.
+- **PSR-4 autoloading.** Everything lives under the `LeadWeave\` namespace mapped to `src/`; `composer require arun-sanu/leadweave` wires up the autoloader.
 
 ## 18.5 n8n Community Node
 
@@ -1127,11 +1127,11 @@ The five SDKs are versioned **independently of the gateway** and of each other, 
 
 | SDK                   | Registry             | Package                               |
 | --------------------- | -------------------- | ------------------------------------- |
-| JavaScript/TypeScript | npm                  | `@rmyndharis/leadweave`                  |
-| Python                | PyPI                 | `rmyndharis-leadweave`                   |
-| PHP                   | Packagist            | `rmyndharis/leadweave`                   |
-| Java                  | Maven Central        | `com.rmyndharis:leadweave`               |
-| Go                    | (none — module path) | `github.com/rmyndharis/LeadWeave/sdk/go` |
+| JavaScript/TypeScript | npm                  | `@arun-sanu/leadweave`                  |
+| Python                | PyPI                 | `arun-sanu-leadweave`                   |
+| PHP                   | Packagist            | `arun-sanu/leadweave`                   |
+| Java                  | Maven Central        | `com.arun-sanu:leadweave`               |
+| Go                    | (none — module path) | `github.com/arun-sanu/LeadWeave/sdk/go` |
 
 ### Contract-drift protection
 

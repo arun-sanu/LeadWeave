@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: 📚 Documentation
-    url: https://github.com/rmyndharis/LeadWeave/tree/main/docs
+    url: https://github.com/arun-sanu/LeadWeave/tree/main/docs
     about: Setup, API specification, and operational guides.
   - name: 🔒 Report a security vulnerability
     url: https://github.com/rmyndharis/LeadWeave/security/advisories/new

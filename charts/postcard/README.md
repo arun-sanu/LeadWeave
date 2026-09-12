@@ -1,6 +1,6 @@
 # LeadWeave
 
-Helm chart for [LeadWeave](https://github.com/rmyndharis/LeadWeave) — WhatsApp API.
+Helm chart for [LeadWeave](https://github.com/arun-sanu/LeadWeave) — WhatsApp API.
 
 > **Single instance only.** A session lease stops two pods from launching the same session,
 > but API-key socket eviction, WS rate-limit buckets and in-flight bulk batches are still

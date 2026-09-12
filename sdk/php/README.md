@@ -1,13 +1,13 @@
-# rmyndharis/leadweave
+# arun-sanu/leadweave
 
-Official PHP SDK for the [LeadWeave](https://github.com/rmyndharis/LeadWeave) WhatsApp API Gateway.
+Official PHP SDK for the [LeadWeave](https://github.com/arun-sanu/LeadWeave) WhatsApp API Gateway.
 
 A synchronous client built on [Guzzle](https://docs.guzzlephp.org/), PSR-4 autoloaded.
 
 ## Install
 
 ```bash
-composer require rmyndharis/leadweave
+composer require arun-sanu/leadweave
 ```
 
 Requires PHP 8.1+ and Guzzle 7. The namespace is `LeadWeave\`.
@@ -79,7 +79,7 @@ try {
 ## Releasing
 
 Packagist installs this SDK from the mirror repository
-[`rmyndharis/leadweave-php`](https://github.com/rmyndharis/leadweave-php), not from the
+[`arun-sanu/leadweave-php`](https://github.com/arun-sanu/leadweave-php), not from the
 monorepo — Composer needs `composer.json` at a repository root and does not
 support subdirectories. Two workflows keep that mirror correct:
 

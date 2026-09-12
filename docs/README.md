@@ -16,12 +16,12 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/package-json/v/rmyndharis/LeadWeave?label=version&color=blue" alt="Version"/>
+  <img src="https://img.shields.io/github/package-json/v/arun-sanu/LeadWeave?label=version&color=blue" alt="Version"/>
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"/>
   <img src="https://img.shields.io/badge/node-22_LTS-brightgreen.svg" alt="Node"/>
-  <img src="https://img.shields.io/github/package-json/dependency-version/rmyndharis/LeadWeave/@nestjs/core?label=NestJS&color=red" alt="NestJS"/>
+  <img src="https://img.shields.io/github/package-json/dependency-version/arun-sanu/LeadWeave/@nestjs/core?label=NestJS&color=red" alt="NestJS"/>
   <img src="https://img.shields.io/badge/docker-ready-blue.svg" alt="Docker"/>
-  <img src="https://img.shields.io/github/package-json/dependency-version/rmyndharis/LeadWeave/dev/typescript?label=TypeScript&color=3178C6" alt="TypeScript"/>
+  <img src="https://img.shields.io/github/package-json/dependency-version/arun-sanu/LeadWeave/dev/typescript?label=TypeScript&color=3178C6" alt="TypeScript"/>
 </p>
 
 ---
@@ -79,7 +79,7 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/rmyndharis/LeadWeave.git
+git clone https://github.com/arun-sanu/LeadWeave.git
 cd LeadWeave
 
 # Install the locked dependencies & configure
@@ -103,7 +103,7 @@ Access:
 
 ```bash
 # Clone repository
-git clone https://github.com/rmyndharis/LeadWeave.git
+git clone https://github.com/arun-sanu/LeadWeave.git
 cd LeadWeave
 
 # Start services

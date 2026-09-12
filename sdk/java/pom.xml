@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.rmyndharis</groupId>
+  <groupId>com.arun-sanu</groupId>
   <artifactId>leadweave</artifactId>
   <version>0.5.0</version>
   <packaging>jar</packaging>
 
   <name>LeadWeave Java SDK</name>
   <description>Official Java SDK for the LeadWeave WhatsApp API Gateway</description>
-  <url>https://github.com/rmyndharis/LeadWeave</url>
+  <url>https://github.com/arun-sanu/LeadWeave</url>
 
   <licenses>
     <license>
@@ -25,9 +25,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:https://github.com/rmyndharis/LeadWeave.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/rmyndharis/LeadWeave.git</developerConnection>
-    <url>https://github.com/rmyndharis/LeadWeave</url>
+    <connection>scm:git:https://github.com/arun-sanu/LeadWeave.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/arun-sanu/LeadWeave.git</developerConnection>
+    <url>https://github.com/arun-sanu/LeadWeave</url>
   </scm>
 
   <properties>

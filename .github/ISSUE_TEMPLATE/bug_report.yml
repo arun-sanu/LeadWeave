@@ -10,7 +10,7 @@ body:
         version, deployment, and logs make a huge difference for triage.
 
         ⚠️ **Do not report security vulnerabilities here.** See
-        [SECURITY.md](https://github.com/rmyndharis/LeadWeave/blob/main/SECURITY.md).
+        [SECURITY.md](https://github.com/arun-sanu/LeadWeave/blob/main/SECURITY.md).
   - type: checkboxes
     attributes:
       label: Pre-flight

@@ -1,18 +1,18 @@
-package com.rmyndharis.leadweave.resources;
+package com.arun-sanu.leadweave.resources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.rmyndharis.leadweave.ClientConfig;
-import com.rmyndharis.leadweave.LeadWeaveClient;
-import com.rmyndharis.leadweave.http.HttpMethod;
-import com.rmyndharis.leadweave.model.ChannelMessageQuery;
-import com.rmyndharis.leadweave.model.ChannelMessageRecord;
-import com.rmyndharis.leadweave.model.ChannelRecord;
-import com.rmyndharis.leadweave.model.SubscribeChannelRequest;
-import com.rmyndharis.leadweave.support.MockTransport;
-import com.rmyndharis.leadweave.model.DemoteChannelAdminRequest;
-import com.rmyndharis.leadweave.model.TransferChannelOwnershipRequest;
+import com.arun-sanu.leadweave.ClientConfig;
+import com.arun-sanu.leadweave.LeadWeaveClient;
+import com.arun-sanu.leadweave.http.HttpMethod;
+import com.arun-sanu.leadweave.model.ChannelMessageQuery;
+import com.arun-sanu.leadweave.model.ChannelMessageRecord;
+import com.arun-sanu.leadweave.model.ChannelRecord;
+import com.arun-sanu.leadweave.model.SubscribeChannelRequest;
+import com.arun-sanu.leadweave.support.MockTransport;
+import com.arun-sanu.leadweave.model.DemoteChannelAdminRequest;
+import com.arun-sanu.leadweave.model.TransferChannelOwnershipRequest;
 import org.junit.jupiter.api.Test;
 
 class ChannelsResourceTest {

@@ -1,13 +1,13 @@
-# rmyndharis-leadweave
+# arun-sanu-leadweave
 
-Official Python SDK for the [LeadWeave](https://github.com/rmyndharis/LeadWeave) WhatsApp API Gateway.
+Official Python SDK for the [LeadWeave](https://github.com/arun-sanu/LeadWeave) WhatsApp API Gateway.
 
 A synchronous client built on [httpx](https://www.python-httpx.org/), with bundled type hints (PEP 561).
 
 ## Install
 
 ```bash
-pip install rmyndharis-leadweave
+pip install arun-sanu-leadweave
 ```
 
 Requires Python 3.9+. The importable module is `leadweave`.
@@ -101,7 +101,7 @@ to leak or rotate.
 One-time setup, required **before** the first tag — on pypi.org, open the
 project's publishing settings and add a GitHub trusted publisher:
 
-- Owner: `rmyndharis`
+- Owner: `arun-sanu`
 - Repository: `LeadWeave`
 - Workflow name: `python-sdk-release.yml`
 

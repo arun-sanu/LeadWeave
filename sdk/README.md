@@ -1,6 +1,6 @@
 # LeadWeave SDKs
 
-Official client libraries for the [LeadWeave](https://github.com/rmyndharis/LeadWeave)
+Official client libraries for the [LeadWeave](https://github.com/arun-sanu/LeadWeave)
 WhatsApp API Gateway.
 
 All five SDKs are **hand-written** against the exact API surface (paths, DTOs,
@@ -12,11 +12,11 @@ hand-written resource methods.
 
 | Language                | Package                                      | Notes                                                       |
 | ----------------------- | -------------------------------------------- | ----------------------------------------------------------- |
-| JavaScript / TypeScript | [`@rmyndharis/leadweave`](javascript/)          | dual ESM/CJS, bundled types                                 |
-| Python                  | [`rmyndharis-leadweave`](python/)               | sync (httpx), PEP 561 typed                                 |
-| PHP                     | [`rmyndharis/leadweave`](php/)                  | sync (Guzzle, PHP 8.1+)                                     |
-| Java                    | [`com.rmyndharis:leadweave`](java/)             | sync (java.net.http + Gson, Java 17)                        |
-| Go                      | [`github.com/rmyndharis/LeadWeave/sdk/go`](go/) | stdlib-only, context-first, injectable transport (Go 1.22+) |
+| JavaScript / TypeScript | [`@arun-sanu/leadweave`](javascript/)          | dual ESM/CJS, bundled types                                 |
+| Python                  | [`arun-sanu-leadweave`](python/)               | sync (httpx), PEP 561 typed                                 |
+| PHP                     | [`arun-sanu/leadweave`](php/)                  | sync (Guzzle, PHP 8.1+)                                     |
+| Java                    | [`com.arun-sanu:leadweave`](java/)             | sync (java.net.http + Gson, Java 17)                        |
+| Go                      | [`github.com/arun-sanu/LeadWeave/sdk/go`](go/) | stdlib-only, context-first, injectable transport (Go 1.22+) |
 
 ## Coverage
 
@@ -64,11 +64,11 @@ All five SDKs expose the same fluent resource surface:
 ## JavaScript / TypeScript
 
 ```bash
-npm install @rmyndharis/leadweave
+npm install @arun-sanu/leadweave
 ```
 
 ```typescript
-import { LeadWeaveClient } from '@rmyndharis/leadweave';
+import { LeadWeaveClient } from '@arun-sanu/leadweave';
 
 const client = new LeadWeaveClient({
   baseUrl: 'http://localhost:2785',
@@ -86,7 +86,7 @@ console.log(result.messageId);
 Errors are typed — branch with `instanceof`:
 
 ```typescript
-import { LeadWeaveNotFoundError, LeadWeaveConflictError } from '@rmyndharis/leadweave';
+import { LeadWeaveNotFoundError, LeadWeaveConflictError } from '@arun-sanu/leadweave';
 try {
   await client.messages.sendText(/* … */);
 } catch (e) {
@@ -102,7 +102,7 @@ try {
 ## Python
 
 ```bash
-pip install rmyndharis-leadweave
+pip install arun-sanu-leadweave
 ```
 
 ```python
@@ -127,7 +127,7 @@ monkey-patching required.
 ## PHP
 
 ```bash
-composer require rmyndharis/leadweave
+composer require arun-sanu/leadweave
 ```
 
 ```php
@@ -154,16 +154,16 @@ handler is a `MockHandler` — no global state, no network.
 
 ```xml
 <dependency>
-  <groupId>com.rmyndharis</groupId>
+  <groupId>com.arun-sanu</groupId>
   <artifactId>leadweave</artifactId>
   <version>0.5.0</version>
 </dependency>
 ```
 
 ```java
-import com.rmyndharis.leadweave.LeadWeaveClient;
-import com.rmyndharis.leadweave.model.MessageResponse;
-import com.rmyndharis.leadweave.model.SendTextRequest;
+import com.arun-sanu.leadweave.LeadWeaveClient;
+import com.arun-sanu.leadweave.model.MessageResponse;
+import com.arun-sanu.leadweave.model.SendTextRequest;
 
 LeadWeaveClient client = new LeadWeaveClient("http://localhost:2785", "owa_k1_…");
 
@@ -184,7 +184,7 @@ custom `HttpTransport` that records the request — no network. See
 ## Go
 
 ```bash
-go get github.com/rmyndharis/LeadWeave/sdk/go
+go get github.com/arun-sanu/LeadWeave/sdk/go
 ```
 
 ```go
@@ -193,7 +193,7 @@ import (
     "fmt"
     "log"
 
-    leadweave "github.com/rmyndharis/LeadWeave/sdk/go"
+    leadweave "github.com/arun-sanu/LeadWeave/sdk/go"
 )
 
 client, err := leadweave.New("http://localhost:2785", "owa_k1_…")

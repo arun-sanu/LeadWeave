@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	leadweave "github.com/rmyndharis/LeadWeave/sdk/go"
+	leadweave "github.com/arun-sanu/LeadWeave/sdk/go"
 )
 
 func ExampleNew() {

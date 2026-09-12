@@ -61,7 +61,7 @@ git clone https://github.com/YOUR_USERNAME/leadweave.git
 cd leadweave
 
 # 3. Add upstream remote
-git remote add upstream https://github.com/rmyndharis/LeadWeave.git
+git remote add upstream https://github.com/arun-sanu/LeadWeave.git
 
 # 4. Install dependencies
 npm install
@@ -415,7 +415,7 @@ pull requests.
 Report privately through either channel:
 
 1. **GitHub Security Advisories** (preferred) — open a private report at
-   <https://github.com/rmyndharis/LeadWeave/security/advisories/new>
+   <https://github.com/arun-sanu/LeadWeave/security/advisories/new>
 2. **Email** — yudhi@rmyndharis.com
 
 Include, where possible:

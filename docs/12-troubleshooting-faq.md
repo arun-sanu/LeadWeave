@@ -1351,8 +1351,8 @@ When creating GitHub issue, include:
 
 ### Community Resources
 
-- **GitHub Issues**: [github.com/rmyndharis/LeadWeave/issues](https://github.com/rmyndharis/LeadWeave/issues)
-- **Discussions**: [github.com/rmyndharis/LeadWeave/discussions](https://github.com/rmyndharis/LeadWeave/discussions)
+- **GitHub Issues**: [github.com/arun-sanu/LeadWeave/issues](https://github.com/arun-sanu/LeadWeave/issues)
+- **Discussions**: [github.com/arun-sanu/LeadWeave/discussions](https://github.com/arun-sanu/LeadWeave/discussions)
 - **Discord**: [discord.gg/leadweave](https://discord.gg/leadweave) (if available)
 - **Stack Overflow**: Tag with `leadweave`
 ---

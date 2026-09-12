@@ -572,11 +572,11 @@ in `0.2.2` and the five client SDKs across `0.7.3`–`0.8.19`; the rest remain o
 
 | Feature                | Priority | Status                                             | Description                     |
 | ---------------------- | -------- | -------------------------------------------------- | ------------------------------- |
-| JavaScript/Node.js SDK | P1       | ✅ Shipped (`@rmyndharis/leadweave`)                  | Official client library         |
-| Python SDK             | P2       | ✅ Shipped (`rmyndharis-leadweave`)                   | Python client library           |
-| PHP SDK                | P2       | ✅ Shipped (`rmyndharis/leadweave`)                   | PHP client library              |
-| Java SDK               | P2       | ✅ Shipped (`com.rmyndharis:leadweave`)               | Java client library             |
-| Go SDK                 | P2       | ✅ Shipped (`github.com/rmyndharis/LeadWeave/sdk/go`) | Go client library               |
+| JavaScript/Node.js SDK | P1       | ✅ Shipped (`@arun-sanu/leadweave`)                  | Official client library         |
+| Python SDK             | P2       | ✅ Shipped (`arun-sanu-leadweave`)                   | Python client library           |
+| PHP SDK                | P2       | ✅ Shipped (`arun-sanu/leadweave`)                   | PHP client library              |
+| Java SDK               | P2       | ✅ Shipped (`com.arun-sanu:leadweave`)               | Java client library             |
+| Go SDK                 | P2       | ✅ Shipped (`github.com/arun-sanu/LeadWeave/sdk/go`) | Go client library               |
 | Postman Collection     | P1       | ◐ cURL collection (doc 07); Postman export TBD     | Ready-to-use API collection     |
 | Docs Site              | P1       | ☐ Open                                             | Documentation website           |
 | Video Tutorials        | P2       | ☐ Open                                             | Getting started video series    |

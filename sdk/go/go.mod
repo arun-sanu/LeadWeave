@@ -1,3 +1,3 @@
-module github.com/rmyndharis/LeadWeave/sdk/go
+module github.com/arun-sanu/LeadWeave/sdk/go
 
 go 1.22
