@@ -23,7 +23,7 @@ export function extractSessionIdFromRequest(req: Request): string | null {
 
 /**
  * Middleware that checks session ownership locality across node replicas.
- * 
+ *
  * If a session request lands on a pod that does NOT host the live engine instance,
  * it inspects whether a peer node owns the active session. If nodeUrl is available,
  * it returns a clear 409 Conflict with node routing metadata so ingress / load balancers
@@ -35,7 +35,7 @@ export function createSessionRouterMiddleware(
 ) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const sessionId = extractSessionIdFromRequest(req);
-    
+
     // If no session ID in request, or if this process holds the active engine locally, proceed directly.
     if (!sessionId || engineRegistry.has(sessionId)) {
       return next();
@@ -43,23 +43,26 @@ export function createSessionRouterMiddleware(
 
     try {
       // Check if another node holds an active lease on this session
-      const isHeldElsewhere = await sessionOwnershipService.isHeldByOtherNode(sessionId);
+      const isHeldElsewhere = await sessionOwnershipService.isHeldElsewhere(sessionId);
       if (isHeldElsewhere) {
-        const heldSessions = await sessionOwnershipService.heldByOtherNodes();
-        const isHeld = heldSessions.includes(sessionId);
+        const heldMap = await sessionOwnershipService.heldByOthers();
+        const nodeData = heldMap.get(sessionId);
 
         logger.debug('Session request landed on node without local engine instance', {
           sessionId,
           thisNodeId: sessionOwnershipService.nodeId,
         });
 
+        if (nodeData && nodeData.nodeId) res.setHeader('X-Location-Node-Id', nodeData.nodeId);
+        if (nodeData && nodeData.nodeUrl) res.setHeader('X-Location-Node-Url', nodeData.nodeUrl);
+
         res.status(409).json({
           statusCode: 409,
           error: 'Conflict',
           code: 'SESSION_HOSTED_ON_PEER_NODE',
           message: `Session ${sessionId} is hosted on another peer node. Route request to owning node.`,
-          nodeId: null,
-          nodeUrl: null,
+          nodeId: nodeData ? nodeData.nodeId : null,
+          nodeUrl: nodeData ? nodeData.nodeUrl : null,
         });
         return;
       }
