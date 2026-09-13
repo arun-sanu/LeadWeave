@@ -125,7 +125,7 @@ function ConfigField({
   }
 
   if (field.type === 'object') {
-    const obj = value && typeof value === 'object' && !Array.isArray(value) ? (value as any) : {};
+    const obj = value && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
     const props = field.properties ?? {};
     return (
       <fieldset className="config-fieldset">
@@ -305,7 +305,7 @@ function PluginConfigUi({ plugin, sessionId }: { plugin: Plugin; sessionId?: str
     const onMessage = (e: MessageEvent) => {
       const frame = iframeRef.current?.contentWindow;
       if (!frame || e.source !== frame) return; // only our sandboxed iframe (its origin is opaque 'null')
-      const msg = e.data as { type?: string; config?: any };
+      const msg = e.data as { type?: string; config?: Record<string, unknown> };
       const post = (m: unknown) => frame.postMessage(m, '*');
       if (msg?.type === 'config:get') {
         setHandshakeReceived(true);
@@ -406,7 +406,7 @@ function SessionsTab({ plugin }: { plugin: Plugin }) {
   const hasUi = !!plugin.configUi;
   const lzProps = localizePlugin(plugin, i18n.language).configSchema?.properties;
   const [selSession, setSelSession] = useState<string>('');
-  const [overrideCfg, setOverrideCfg] = useState<any>({});
+  const [overrideCfg, setOverrideCfg] = useState<Record<string, unknown>>({});
   const [savingOverride, setSavingOverride] = useState(false);
   const overrideFormRef = useRef<HTMLFormElement>(null);
 
@@ -421,7 +421,7 @@ function SessionsTab({ plugin }: { plugin: Plugin }) {
       return;
     }
     const ov = plugin.sessionConfig?.[selSession] ?? {};
-    const seeded: any = {};
+    const seeded: Record<string, unknown> = {};
     for (const [key, field] of Object.entries(props)) {
       seeded[key] = key in ov ? ov[key] : (plugin.config[key] ?? emptyForField(field));
     }
@@ -570,7 +570,7 @@ export default function Plugins() {
   const [configTab, setConfigTab] = useState<'config' | 'sessions' | 'instances'>('config');
   const [savingConfig, setSavingConfig] = useState(false);
   // Values for a schema-driven (non-engine) plugin's config form, keyed by configSchema property.
-  const [schemaConfig, setSchemaConfig] = useState<any>({});
+  const [schemaConfig, setSchemaConfig] = useState<Record<string, unknown>>({});
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [installFile, setInstallFile] = useState<File | null>(null);
   const [installing, setInstalling] = useState(false);
@@ -648,7 +648,7 @@ export default function Plugins() {
     setConfigTab('config');
     // Seed the schema form from the plugin's saved config, falling back to each field's default.
     if (plugin.configSchema?.properties) {
-      const initial: any = {};
+      const initial: Record<string, unknown> = {};
       for (const [key, field] of Object.entries(plugin.configSchema.properties)) {
         initial[key] = plugin.config[key] ?? emptyForField(field);
       }

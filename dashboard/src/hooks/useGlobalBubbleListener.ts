@@ -17,7 +17,7 @@ interface RawIncomingMessage {
   direction?: 'incoming' | 'outgoing';
   contact?: { id?: string; name?: string; pushName?: string };
   chatName?: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 interface PendingBubbleMessage {
@@ -54,7 +54,7 @@ export function useGlobalBubbleListener() {
   }, []);
 
   const handleMessage = useCallback(
-    (event: { sessionId?: string; message?: any }) => {
+    (event: { sessionId?: string; message?: Record<string, unknown> }) => {
       if (!event?.message) return;
 
       const raw = event.message as unknown as RawIncomingMessage;

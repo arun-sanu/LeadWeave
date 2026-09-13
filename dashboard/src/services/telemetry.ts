@@ -19,7 +19,7 @@ export interface TelemetryEvent {
   category: TelemetryCategory;
   severity: TelemetrySeverity;
   title: string;
-  details?: any | string;
+  details?: Record<string, unknown> | string;
   source?: string;
   durationMs?: number;
   route?: string;
@@ -123,7 +123,7 @@ class TelemetryService {
     category: TelemetryCategory,
     severity: TelemetrySeverity,
     title: string,
-    details?: any | string,
+    details?: Record<string, unknown> | string,
     durationMs?: number,
     source?: string,
   ) {
@@ -153,11 +153,11 @@ class TelemetryService {
     });
   }
 
-  public logClick(target: string, meta?: any) {
+  public logClick(target: string, meta?: Record<string, unknown>) {
     this.logEvent('click', 'telemetry', `Click: ${target}`, meta, undefined, 'ui_interaction');
   }
 
-  public logPerformance(metricName: string, valueMs: number, meta?: any) {
+  public logPerformance(metricName: string, valueMs: number, meta?: Record<string, unknown>) {
     this.logEvent(
       'performance',
       valueMs > 3000 ? 'warn' : 'perf',
@@ -187,11 +187,11 @@ class TelemetryService {
     );
   }
 
-  public logError(message: string, stack?: string, details?: any) {
+  public logError(message: string, stack?: string, details?: Record<string, unknown>) {
     this.logEvent('error', 'error', message, { stack, ...details }, undefined, 'exception_tracker');
   }
 
-  public logSystem(title: string, details?: any | string) {
+  public logSystem(title: string, details?: Record<string, unknown> | string) {
     this.logEvent('system', 'info', title, details, undefined, 'system_engine');
   }
 

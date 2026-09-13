@@ -16,7 +16,7 @@ interface QRCodeEvent {
 
 interface MessageEvent {
   sessionId: string;
-  message: any;
+  message: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -117,7 +117,7 @@ interface ServerEventEnvelope {
   payload?: {
     event: string;
     sessionId: string;
-    data: any;
+    data: Record<string, unknown>;
   };
 }
 

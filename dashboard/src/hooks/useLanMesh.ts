@@ -99,7 +99,7 @@ export function useLanMesh(userName: string) {
       }
     });
 
-    socket.on('webrtc-signal', (data: { senderPeerId: string; signal: unknown }) => {
+    socket.on('webrtc-signal', (data: { senderPeerId: string; signal: SimplePeer.SignalData | string }) => {
       const { senderPeerId, signal } = data;
       let peer = webrtcPeersRef.current.get(senderPeerId);
 

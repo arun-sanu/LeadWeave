@@ -1,4 +1,3 @@
-// @ts-nocheck
 import '../test-helpers/register-hooks.ts';
 import { test, before, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
@@ -31,7 +30,7 @@ const PLUGINS: Plugin[] = [
     status: 'enabled',
     hasConfigUi: false,
     config: { apiKey: '***', minScore: 50 },
-    configSchema: { type: 'object' as const, 
+    configSchema: {
       properties: {
         apiKey: { title: 'API Key', type: 'string', secret: true },
         minScore: { title: 'Minimum Score', type: 'number', default: 50 },
@@ -45,7 +44,7 @@ const PLUGINS: Plugin[] = [
     type: 'storage',
     description: 'Persists chat history and media to PostgreSQL',
     author: 'LeadWeave',
-     
+    enabled: false,
     status: 'disabled',
     hasConfigUi: false,
     config: {},
@@ -61,7 +60,7 @@ const CATALOG: CatalogPlugin[] = [
     description: 'Sync WhatsApp incoming messages into Slack channels',
     author: 'Community',
     installed: false,
-     
+    stars: 120,
     downloads: 4500,
   },
 ];

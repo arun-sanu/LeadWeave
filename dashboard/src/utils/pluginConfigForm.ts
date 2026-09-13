@@ -12,7 +12,7 @@ export function emptyForField(field: PluginConfigField): unknown {
     case 'array':
       return [];
     case 'object': {
-      const obj: any = {};
+      const obj: Record<string, unknown> = {};
       if (field.properties) for (const [k, sub] of Object.entries(field.properties)) obj[k] = emptyForField(sub);
       return obj;
     }

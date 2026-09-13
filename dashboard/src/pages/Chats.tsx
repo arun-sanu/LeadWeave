@@ -494,7 +494,7 @@ export function Chats() {
 
   // 3. WebSocket integration for real-time messages
   const handleIncomingMessage = useCallback(
-    (event: { sessionId: string; message: any }) => {
+    (event: { sessionId: string; message: Record<string, unknown> }) => {
       if (event.sessionId !== selectedSessionId) return;
 
       const newMsg = event.message as unknown as IncomingWsMessage;

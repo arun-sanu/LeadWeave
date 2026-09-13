@@ -193,7 +193,7 @@ export interface AuditLog {
   /** Null when the action succeeded. */
   errorMessage: string | null;
   /** Free-form context whose shape varies per action. */
-  metadata: any | null;
+  metadata: Record<string, unknown> | null;
   createdAt: string;
 }
 
@@ -1238,7 +1238,7 @@ export interface Plugin {
   description?: string;
   author?: string;
   status: 'installed' | 'enabled' | 'disabled' | 'error';
-  config: any;
+  config: Record<string, unknown>;
   builtIn: boolean;
   provides: string[];
   /** Whether this plugin can host provisioned ingress instances (drives the Instances tab). */
@@ -1252,7 +1252,7 @@ export interface Plugin {
   /** Sessions the plugin is activated for; ['*'] = all numbers. */
   activeSessions: string[];
   /** Per-session config overrides, keyed by sessionId (secrets redacted per slice). */
-  sessionConfig?: Record<string, any>;
+  sessionConfig?: Record<string, Record<string, unknown>>;
   loadedAt?: string;
   enabledAt?: string;
   error?: string;
@@ -1304,7 +1304,7 @@ export const pluginsApi = {
     request<{ success: boolean; message: string }>(`/plugins/${id}/disable`, {
       method: 'POST',
     }),
-  updateConfig: (id: string, config: any) =>
+  updateConfig: (id: string, config: Record<string, unknown>) =>
     request<{ success: boolean; message: string }>(`/plugins/${id}/config`, {
       method: 'PUT',
       body: JSON.stringify({ config }),
@@ -1313,7 +1313,7 @@ export const pluginsApi = {
   setSessions: (id: string, sessions: string[]) =>
     request<Plugin>(`/plugins/${id}/sessions`, { method: 'PUT', body: JSON.stringify({ sessions }) }),
   /** Set (or clear, with an empty object) a plugin's config override for one session. */
-  updateSessionConfig: (id: string, sessionId: string, config: any) =>
+  updateSessionConfig: (id: string, sessionId: string, config: Record<string, unknown>) =>
     request<{ success: boolean; message: string }>(`/plugins/${id}/config/${encodeURIComponent(sessionId)}`, {
       method: 'PUT',
       body: JSON.stringify({ config }),
@@ -1352,7 +1352,7 @@ export interface InstanceView {
   sessionScope: string | null;
   secret: string; // '***' on reads; plaintext once on create/regenerate
   verifyToken: string | null;
-  config: any | null;
+  config: Record<string, unknown> | null;
   enabled: boolean;
   createdAt: string;
   updatedAt: string;
@@ -1367,13 +1367,13 @@ export interface CreateInstanceInput {
   verifyToken?: string;
   /** Provider-fixed webhook secret (e.g. Chatwoot's). Omit to auto-generate one (shown once). */
   secret?: string;
-  config?: any;
+  config?: Record<string, unknown>;
 }
 
 export interface UpdateInstanceInput {
   enabled?: boolean;
   sessionScope?: string;
-  config?: any;
+  config?: Record<string, unknown>;
 }
 
 export const pluginInstancesApi = {
