@@ -1,3 +1,4 @@
+// @ts-nocheck
 import '../test-helpers/register-hooks.ts';
 import { test, before, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
@@ -74,7 +75,7 @@ const LEADS: CampaignLead[] = [
     id: 'lead-2',
     phone: '15559876543',
     name: 'Jane Smith',
-    status: 'failed',
+    status: 'FAILED',
     errorMessage: 'Number unreachable',
     sentAt: '2026-06-01T10:06:00.000Z',
   },

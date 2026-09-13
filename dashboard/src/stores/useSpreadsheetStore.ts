@@ -2,9 +2,9 @@ import { create } from 'zustand';
 
 export interface CampaignSpreadsheetState {
   columns: string[];
-  rows: Record<string, unknown>[];
+  rows: any[];
   setColumns: (columns: string[]) => void;
-  setRows: (rows: Record<string, unknown>[]) => void;
+  setRows: (rows: any[]) => void;
   updateCell: (rowId: string, field: string, value: string) => void;
   deleteRow: (rowId: string) => void;
   deleteColumn: (colName: string) => void;

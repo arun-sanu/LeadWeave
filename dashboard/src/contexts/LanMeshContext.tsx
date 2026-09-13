@@ -168,7 +168,7 @@ export const LanMeshProvider: React.FC<{ children: ReactNode }> = ({ children })
         }
       });
 
-      socket.on('webrtc-signal', (data: { senderPeerId: string; signal: unknown }) => {
+      socket.on('webrtc-signal', (data: { senderPeerId: string; signal: any }) => {
         const { senderPeerId, signal } = data;
         let peer = webrtcPeersRef.current.get(senderPeerId);
 

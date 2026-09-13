@@ -4,7 +4,7 @@ export function isValidInstanceId(id: string): boolean {
   return INSTANCE_ID_PATTERN.test(id);
 }
 
-type ParseResult = { ok: true; value: Record<string, unknown> | undefined } | { ok: false };
+type ParseResult = { ok: true; value: any | undefined } | { ok: false };
 
 /** Blank → auto-generate (server-side). Otherwise must be a real secret (>= 16 chars), mirroring the server DTO. */
 export function isValidInstanceSecret(raw: string): boolean {
@@ -17,7 +17,7 @@ export function parseInstanceConfig(raw: string): ParseResult {
   try {
     const parsed: unknown = JSON.parse(raw);
     if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) return { ok: false };
-    return { ok: true, value: parsed as Record<string, unknown> };
+    return { ok: true, value: parsed as any };
   } catch {
     return { ok: false };
   }

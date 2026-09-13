@@ -11,7 +11,7 @@ const plugin = (over: Partial<Plugin> = {}): Plugin =>
     ...over,
   }) as Plugin;
 
-const schema = (properties: Record<string, unknown>) => ({ type: 'object', properties }) as Plugin['configSchema'];
+const schema = (properties: any) => ({ type: 'object', properties }) as Plugin['configSchema'];
 
 test('the config UI only ever sees SCHEMA-DECLARED keys', () => {
   // A plugin's stored config can hold keys its schema never declared. Sending the raw config would

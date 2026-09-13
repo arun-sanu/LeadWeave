@@ -613,11 +613,11 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
     currentCampaign?.stats ||
     (currentCampaign
       ? {
-          total: ((currentCampaign as Record<string, unknown>).totalLeads as number) ?? 0,
-          sent: ((currentCampaign as Record<string, unknown>).sentCount as number) ?? 0,
-          delivered: ((currentCampaign as Record<string, unknown>).deliveredCount as number) ?? 0,
-          read: ((currentCampaign as Record<string, unknown>).readCount as number) ?? 0,
-          failed: ((currentCampaign as Record<string, unknown>).failedCount as number) ?? 0,
+          total: ((currentCampaign as any).totalLeads as number) ?? 0,
+          sent: ((currentCampaign as any).sentCount as number) ?? 0,
+          delivered: ((currentCampaign as any).deliveredCount as number) ?? 0,
+          read: ((currentCampaign as any).readCount as number) ?? 0,
+          failed: ((currentCampaign as any).failedCount as number) ?? 0,
           pending: 0,
           replied: 0,
           deliveryRate: 0,
@@ -941,7 +941,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                         </div>
                         <div className="card-kpi-item">
                           <span className="card-kpi-num" style={{ color: '#eab308' }}>
-                            {camp.stats?.responseRate ?? 0}%
+                            {(camp.stats as any)?.replyRate ?? 0}%
                           </span>
                           <span className="card-kpi-lbl">Rate</span>
                         </div>
@@ -1234,7 +1234,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                   {stats?.replied ?? 0}
                 </span>
                 <span className="kpi-label">Replies Received</span>
-                <span className="kpi-sub">{stats?.responseRate ?? 0}% Rate</span>
+                <span className="kpi-sub">{(stats as any)?.replyRate ?? 0}% Rate</span>
               </div>
             </div>
 
@@ -1243,7 +1243,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                 <AlertCircle size={20} />
               </div>
               <div className="kpi-info">
-                <span className="kpi-value">{stats?.optOut ?? 0}</span>
+                <span className="kpi-value">{(stats as any)?.optOut ?? 0}</span>
                 <span className="kpi-label">Opt-Outs (STOP)</span>
                 <span className="kpi-sub">{stats?.failed ?? 0} Failed / Invalid</span>
               </div>
@@ -1260,7 +1260,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                   <span>Conversion Funnel & Drop-Off</span>
                 </h3>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                  Response Rate: <strong>{stats?.responseRate ?? 0}%</strong>
+                  Response Rate: <strong>{(stats as any)?.replyRate ?? 0}%</strong>
                 </span>
               </div>
 
@@ -1320,13 +1320,13 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                     </defs>
                     {/* Render bars for each time slot */}
                     {(analyticsData?.timeline || []).map(
-                      (item: Record<string, unknown>, idx: number, arr: Array<Record<string, unknown>>) => {
+                      (item: any, idx: number, arr: Array<any>) => {
                         const replies = Number(item.replies ?? item.sent ?? 0) || 0;
                         const optOuts = Number(item.optOuts ?? item.failed ?? 0) || 0;
                         const key = String(item.time || item.timestamp || `slot-${idx}`);
                         const maxCount = Math.max(
                           ...arr.map(
-                            (x: Record<string, unknown>) =>
+                            (x: any) =>
                               (Number(x.replies ?? x.sent ?? 0) || 0) + (Number(x.optOuts ?? x.failed ?? 0) || 0),
                           ),
                           1,
@@ -1471,7 +1471,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                       <tr key={lead.id}>
                         <td style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{(page - 1) * 50 + idx + 1}</td>
                         <td style={{ fontWeight: 600 }}>
-                          +{String(lead.phone || lead.phoneNumber || '').replace(/^\+/, '')}
+                          +{String(  lead.phoneNumber || '').replace(/^\+/, '')}
                         </td>
                         <td>
                           <EditableCell

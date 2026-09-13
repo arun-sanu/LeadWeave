@@ -90,7 +90,7 @@ export function GoogleSheetsCRM() {
   };
 
   // Live CRM Tracked Leads State
-  const [trackedLeads, setTrackedLeads] = useState<Record<string, unknown>[]>([]);
+  const [trackedLeads, setTrackedLeads] = useState<any[]>([]);
   const [isLoadingLeads, setIsLoadingLeads] = useState(false);
 
   return (

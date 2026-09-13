@@ -141,7 +141,7 @@ function installFetchStub(): void {
         // Per-test switch: the revert case needs the write to fail while the initial read succeeds,
         // which a single stub response cannot express.
         if (configPatchFails) return Promise.resolve(jsonResponse({ message: 'nope' }, 500));
-        Object.assign(sessionConfig, body as Record<string, unknown>);
+        Object.assign(sessionConfig, body as any);
         return Promise.resolve(jsonResponse({ ...sessionConfig }));
       }
     }

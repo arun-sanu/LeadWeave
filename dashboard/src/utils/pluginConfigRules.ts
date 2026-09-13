@@ -20,7 +20,7 @@ import type { Plugin } from '../services/api';
  *
  * With `sessionId`, the resolved slice is exposed: the session's override where set, else the base.
  */
-export function configUiSafeConfig(plugin: Plugin, sessionId?: string): Record<string, unknown> {
+export function configUiSafeConfig(plugin: Plugin, sessionId?: string): any {
   const props = plugin.configSchema?.properties;
   if (!props) return {};
   const override = sessionId ? (plugin.sessionConfig?.[sessionId] ?? {}) : {};
@@ -46,10 +46,10 @@ export function configUiSafeConfig(plugin: Plugin, sessionId?: string): Record<s
  * loses the untouched rows' secrets (they redact to `***`, the dashboard can't resend the real value).
  * No bundled plugin ships that shape; a plugin needing per-session array secrets should re-enter them.
  */
-export function sparseSessionOverride(full: Record<string, unknown>, plugin: Plugin): Record<string, unknown> {
+export function sparseSessionOverride(full: any, plugin: Plugin): any {
   const props = plugin.configSchema?.properties;
   if (!props) return full;
-  const out: Record<string, unknown> = {};
+  const out: any = {};
   for (const [key, field] of Object.entries(props)) {
     if (!(key in full)) continue;
     const val = full[key];

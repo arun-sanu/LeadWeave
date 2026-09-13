@@ -20,7 +20,7 @@ export async function installJsdomGlobals(url = 'http://localhost/'): Promise<vo
   }) as { window: Window & typeof globalThis };
   const { window } = dom;
 
-  const g = globalThis as Record<string, unknown>;
+  const g = globalThis as any;
   const define = (key: string, value: unknown): void => {
     // Some globals are getter-only on Node's globalThis (navigator) — plain assignment throws.
     Object.defineProperty(globalThis, key, { value, configurable: true, writable: true });
@@ -49,5 +49,5 @@ export async function installJsdomGlobals(url = 'http://localhost/'): Promise<vo
   }
   // React 19 only runs act() when this flag is set; Testing Library drives act through it.
   g.IS_REACT_ACT_ENVIRONMENT = true;
-  (window as unknown as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true;
+  (window as unknown as any).IS_REACT_ACT_ENVIRONMENT = true;
 }
