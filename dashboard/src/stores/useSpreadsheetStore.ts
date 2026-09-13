@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 
+export type SpreadsheetRow = Record<string, string>;
+
 export interface CampaignSpreadsheetState {
   columns: string[];
-  rows: Record<string, unknown>[];
+  rows: SpreadsheetRow[];
   setColumns: (columns: string[]) => void;
-  setRows: (rows: Record<string, unknown>[]) => void;
+  setRows: (rows: SpreadsheetRow[]) => void;
   updateCell: (rowId: string, field: string, value: string) => void;
   deleteRow: (rowId: string) => void;
   deleteColumn: (colName: string) => void;

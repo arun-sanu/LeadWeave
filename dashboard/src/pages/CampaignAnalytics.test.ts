@@ -14,11 +14,10 @@ const STATS: CampaignStats = {
   delivered: 110,
   read: 95,
   replied: 30,
+  optOut: 0,
   failed: 5,
   pending: 25,
-  deliveryRate: 91.6,
-  readRate: 79.1,
-  replyRate: 25.0,
+  responseRate: 25.0,
 };
 
 const CAMPAIGNS: Campaign[] = [
@@ -60,25 +59,25 @@ const ANALYTICS: ICampaignAnalytics = {
   ],
 };
 
-const LEADS: CampaignLead[] = [
+const LEADS = [
   {
     id: 'lead-1',
-    phone: '15551234567',
+    phoneNumber: '15551234567',
     name: 'John Doe',
-    status: 'read',
+    status: 'READ',
     sentAt: '2026-06-01T10:05:00.000Z',
     deliveredAt: '2026-06-01T10:05:30.000Z',
     readAt: '2026-06-01T10:10:00.000Z',
   },
   {
     id: 'lead-2',
-    phone: '15559876543',
+    phoneNumber: '15559876543',
     name: 'Jane Smith',
-    status: 'failed',
+    status: 'FAILED',
     errorMessage: 'Number unreachable',
     sentAt: '2026-06-01T10:06:00.000Z',
   },
-];
+] as unknown as CampaignLead[];
 
 interface FetchCall {
   method: string;

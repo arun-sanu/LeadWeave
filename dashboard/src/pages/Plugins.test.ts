@@ -18,7 +18,7 @@ const SESSIONS: Session[] = [
   },
 ];
 
-const PLUGINS: Plugin[] = [
+const PLUGINS = [
   {
     id: 'lead-enricher',
     name: 'Lead Enricher',
@@ -31,6 +31,7 @@ const PLUGINS: Plugin[] = [
     hasConfigUi: false,
     config: { apiKey: '***', minScore: 50 },
     configSchema: {
+      type: 'object' as const,
       properties: {
         apiKey: { title: 'API Key', type: 'string', secret: true },
         minScore: { title: 'Minimum Score', type: 'number', default: 50 },
@@ -49,9 +50,9 @@ const PLUGINS: Plugin[] = [
     hasConfigUi: false,
     config: {},
   },
-];
+] as unknown as Plugin[];
 
-const CATALOG: CatalogPlugin[] = [
+const CATALOG = [
   {
     id: 'slack-sync',
     name: 'Slack Sync',
@@ -63,7 +64,7 @@ const CATALOG: CatalogPlugin[] = [
     stars: 120,
     downloads: 4500,
   },
-];
+] as unknown as CatalogPlugin[];
 
 interface FetchCall {
   method: string;

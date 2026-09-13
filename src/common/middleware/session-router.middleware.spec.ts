@@ -1,11 +1,15 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { EngineRegistry } from '../../engine/engine-registry.service';
 import { SessionOwnershipService } from '../../modules/session/session-ownership.service';
 import { extractSessionIdFromRequest, createSessionRouterMiddleware } from './session-router.middleware';
 
 describe('SessionRouterMiddleware', () => {
-  let mockEngineRegistry: jest.Mocked<EngineRegistry>;
-  let mockSessionOwnershipService: jest.Mocked<SessionOwnershipService>;
+  let mockEngineRegistry: { has: jest.Mock };
+  let mockSessionOwnershipService: {
+    isHeldByOtherNode: jest.Mock;
+    heldByOtherNodes: jest.Mock;
+    nodeId: string;
+  };
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: jest.Mock;
@@ -13,13 +17,13 @@ describe('SessionRouterMiddleware', () => {
   beforeEach(() => {
     mockEngineRegistry = {
       has: jest.fn(),
-    } as any;
+    };
 
     mockSessionOwnershipService = {
       isHeldByOtherNode: jest.fn(),
       heldByOtherNodes: jest.fn(),
       nodeId: 'node-a',
-    } as any;
+    };
 
     req = {
       params: {},
@@ -43,7 +47,10 @@ describe('SessionRouterMiddleware', () => {
   });
 
   it('calls next() immediately when no sessionId is present in request', async () => {
-    const middleware = createSessionRouterMiddleware(mockEngineRegistry, mockSessionOwnershipService);
+    const middleware = createSessionRouterMiddleware(
+      mockEngineRegistry as unknown as EngineRegistry,
+      mockSessionOwnershipService as unknown as SessionOwnershipService,
+    );
     await middleware(req as Request, res as Response, next);
 
     expect(next).toHaveBeenCalledTimes(1);
@@ -54,7 +61,10 @@ describe('SessionRouterMiddleware', () => {
     req.params = { sessionId: 'sess-1' };
     mockEngineRegistry.has.mockReturnValue(true);
 
-    const middleware = createSessionRouterMiddleware(mockEngineRegistry, mockSessionOwnershipService);
+    const middleware = createSessionRouterMiddleware(
+      mockEngineRegistry as unknown as EngineRegistry,
+      mockSessionOwnershipService as unknown as SessionOwnershipService,
+    );
     await middleware(req as Request, res as Response, next);
 
     expect(mockEngineRegistry.has).toHaveBeenCalledWith('sess-1');
@@ -69,10 +79,13 @@ describe('SessionRouterMiddleware', () => {
 
     mockSessionOwnershipService.heldByOtherNodes.mockResolvedValue(['sess-peer']);
 
-    const middleware = createSessionRouterMiddleware(mockEngineRegistry, mockSessionOwnershipService);
+    const middleware = createSessionRouterMiddleware(
+      mockEngineRegistry as unknown as EngineRegistry,
+      mockSessionOwnershipService as unknown as SessionOwnershipService,
+    );
     await middleware(req as Request, res as Response, next);
 
-        expect(res.status).toHaveBeenCalledWith(409);
+    expect(res.status).toHaveBeenCalledWith(409);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({
         code: 'SESSION_HOSTED_ON_PEER_NODE',
@@ -88,7 +101,10 @@ describe('SessionRouterMiddleware', () => {
     mockEngineRegistry.has.mockReturnValue(false);
     mockSessionOwnershipService.isHeldByOtherNode.mockResolvedValue(false);
 
-    const middleware = createSessionRouterMiddleware(mockEngineRegistry, mockSessionOwnershipService);
+    const middleware = createSessionRouterMiddleware(
+      mockEngineRegistry as unknown as EngineRegistry,
+      mockSessionOwnershipService as unknown as SessionOwnershipService,
+    );
     await middleware(req as Request, res as Response, next);
 
     expect(next).toHaveBeenCalledTimes(1);

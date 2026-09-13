@@ -15,15 +15,16 @@ export function extractSessionIdFromRequest(req: Request): string | null {
   if (req.params && typeof req.params.id === 'string' && req.params.id.trim()) {
     return req.params.id.trim();
   }
-  if (req.body && typeof req.body.sessionId === 'string' && req.body.sessionId.trim()) {
-    return req.body.sessionId.trim();
+  const body = req.body as Record<string, unknown> | null | undefined;
+  if (body && typeof body.sessionId === 'string' && body.sessionId.trim()) {
+    return body.sessionId.trim();
   }
   return null;
 }
 
 /**
  * Middleware that checks session ownership locality across node replicas.
- * 
+ *
  * If a session request lands on a pod that does NOT host the live engine instance,
  * it inspects whether a peer node owns the active session. If nodeUrl is available,
  * it returns a clear 409 Conflict with node routing metadata so ingress / load balancers
@@ -35,7 +36,7 @@ export function createSessionRouterMiddleware(
 ) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const sessionId = extractSessionIdFromRequest(req);
-    
+
     // If no session ID in request, or if this process holds the active engine locally, proceed directly.
     if (!sessionId || engineRegistry.has(sessionId)) {
       return next();
@@ -45,9 +46,6 @@ export function createSessionRouterMiddleware(
       // Check if another node holds an active lease on this session
       const isHeldElsewhere = await sessionOwnershipService.isHeldByOtherNode(sessionId);
       if (isHeldElsewhere) {
-        const heldSessions = await sessionOwnershipService.heldByOtherNodes();
-        const isHeld = heldSessions.includes(sessionId);
-
         logger.debug('Session request landed on node without local engine instance', {
           sessionId,
           thisNodeId: sessionOwnershipService.nodeId,

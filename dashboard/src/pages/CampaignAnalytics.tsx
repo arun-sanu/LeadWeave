@@ -6,6 +6,7 @@ import {
   campaignApi,
   type Campaign,
   type CampaignLead,
+  type CampaignStats,
   type CampaignAnalytics as ICampaignAnalytics,
 } from '../services/api';
 import { Modal } from '../components/Modal';
@@ -612,18 +613,17 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
     analyticsData?.stats ||
     currentCampaign?.stats ||
     (currentCampaign
-      ? {
-          total: ((currentCampaign as Record<string, unknown>).totalLeads as number) ?? 0,
-          sent: ((currentCampaign as Record<string, unknown>).sentCount as number) ?? 0,
-          delivered: ((currentCampaign as Record<string, unknown>).deliveredCount as number) ?? 0,
-          read: ((currentCampaign as Record<string, unknown>).readCount as number) ?? 0,
-          failed: ((currentCampaign as Record<string, unknown>).failedCount as number) ?? 0,
+      ? ({
+          total: ((currentCampaign as unknown as Record<string, unknown>).totalLeads as number) ?? 0,
+          sent: ((currentCampaign as unknown as Record<string, unknown>).sentCount as number) ?? 0,
+          delivered: ((currentCampaign as unknown as Record<string, unknown>).deliveredCount as number) ?? 0,
+          read: ((currentCampaign as unknown as Record<string, unknown>).readCount as number) ?? 0,
+          failed: ((currentCampaign as unknown as Record<string, unknown>).failedCount as number) ?? 0,
           pending: 0,
           replied: 0,
-          deliveryRate: 0,
-          readRate: 0,
-          replyRate: 0,
-        }
+          optOut: 0,
+          responseRate: 0,
+        } as CampaignStats)
       : undefined);
 
   // Compute status badges
@@ -1470,9 +1470,7 @@ export function CampaignAnalytics({ initialViewMode = 'deepdive' }: CampaignAnal
                     leads.map((lead, idx) => (
                       <tr key={lead.id}>
                         <td style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{(page - 1) * 50 + idx + 1}</td>
-                        <td style={{ fontWeight: 600 }}>
-                          +{String(lead.phone || lead.phoneNumber || '').replace(/^\+/, '')}
-                        </td>
+                        <td style={{ fontWeight: 600 }}>+{String(lead.phoneNumber || '').replace(/^\+/, '')}</td>
                         <td>
                           <EditableCell
                             initialValue={lead.name || ''}

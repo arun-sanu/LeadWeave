@@ -90,7 +90,16 @@ export function GoogleSheetsCRM() {
   };
 
   // Live CRM Tracked Leads State
-  const [trackedLeads, setTrackedLeads] = useState<Record<string, unknown>[]>([]);
+  interface TrackedLead {
+    id?: string;
+    leadName?: string;
+    phoneNumber?: string;
+    status?: string;
+    lastSentAt?: string | number | null;
+    repliedAt?: string | number | null;
+    timeoutAt?: string | number | null;
+  }
+  const [trackedLeads, setTrackedLeads] = useState<TrackedLead[]>([]);
   const [isLoadingLeads, setIsLoadingLeads] = useState(false);
 
   return (
@@ -333,7 +342,7 @@ export function GoogleSheetsCRM() {
                       <strong style={{ color: '#f8fafc' }}>{lead.leadName || 'Lead'}</strong>
                     </td>
                     <td>
-                      <code style={{ color: '#38bdf8' }}>{formatPhoneForDisplay(lead.phoneNumber)}</code>
+                      <code style={{ color: '#38bdf8' }}>{formatPhoneForDisplay(lead.phoneNumber || '')}</code>
                     </td>
                     <td>
                       <span

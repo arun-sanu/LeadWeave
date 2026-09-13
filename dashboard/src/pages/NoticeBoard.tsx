@@ -25,8 +25,8 @@ export interface NoticeTask {
   contactPhone?: string;
   dueDate: string; // YYYY-MM-DD
   dueTime?: string; // HH:MM
-  type: 'call' | 'whatsapp' | 'followup' | 'other';
-  priority: 'low' | 'medium' | 'high';
+  type: 'call' | 'whatsapp' | 'followup' | 'other' | 'quote' | 'general';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   notes?: string;
   completed: boolean;
   createdAt: string;

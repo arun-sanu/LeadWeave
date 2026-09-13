@@ -20,3 +20,5 @@ sdk/python/*.egg-info/
 
 # sdk/java/.gitignore
 sdk/java/target/
+
+.venv/

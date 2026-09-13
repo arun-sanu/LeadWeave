@@ -180,7 +180,7 @@ if (process.env.LAN_MESH_ENABLED === 'true') {
           logging: configService.get<boolean>('database.logging', false),
           enableWAL: true,
           timeout: 5000,
-          prepareDatabase: (db: any) => {
+          prepareDatabase: (db: { pragma: (stmt: string) => unknown }) => {
             db.pragma('journal_mode = WAL');
             db.pragma('busy_timeout = 5000');
             db.pragma('synchronous = NORMAL');
@@ -282,7 +282,7 @@ if (process.env.LAN_MESH_ENABLED === 'true') {
           migrationsRun: !synchronize,
           enableWAL: true,
           timeout: 5000,
-          prepareDatabase: (db: any) => {
+          prepareDatabase: (db: { pragma: (stmt: string) => unknown }) => {
             db.pragma('journal_mode = WAL');
             db.pragma('busy_timeout = 5000');
             db.pragma('synchronous = NORMAL');
